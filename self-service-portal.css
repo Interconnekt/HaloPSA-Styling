@@ -1,0 +1,645 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   HaloPSA Self-Service Portal — Custom CSS
+   ═══════════════════════════════════════════════════════════════════════
+
+   Paste this into: Configuration > Self Service Portal > Custom CSS
+
+   Includes:
+   - Section 1: Font import & CSS variables (light + dark)
+   - Section 2: Global typography
+   - Section 3: Header & navigation
+   - Section 4: Search
+   - Section 5: Cards, panels, tiles
+   - Section 6: Buttons & tags
+   - Section 7: Announcements & footer
+   - Section 8: Article dark mode overrides
+   - Section 9: Responsive & mobile fixes
+   ═══════════════════════════════════════════════════════════════════════ */
+
+
+/* ─────────────────────────────────────────────────
+   1. FONT IMPORT & CSS VARIABLES
+   ───────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+:root {
+    /* Surfaces */
+    --portal-bg: #f4f5f7;
+    --portal-surface: #ffffff;
+    --portal-surface-hover: #f8f9fb;
+    --portal-surface-active: #eef1f6;
+
+    /* Text */
+    --portal-text: #1a1d23;
+    --portal-text-secondary: #5f6672;
+    --portal-text-muted: #8b919d;
+
+    /* Brand */
+    --portal-heading: #2F355E;
+    --portal-accent: #4088D4;
+    --portal-accent-hover: #3572b0;
+
+    /* Borders & shadows */
+    --portal-border: #e2e5ea;
+    --portal-border-light: #eef0f3;
+    --portal-shadow: 0 4px 8px rgba(0, 0, 0, .08);
+    --portal-shadow-hover: 0 20px 30px rgba(36, 50, 66, .14);
+    --portal-shadow-sm: 0 1px 3px rgba(0, 0, 0, .06);
+
+    /* Radii */
+    --portal-radius: 25px;
+    --portal-radius-sm: 15px;
+    --portal-radius-xs: 10px;
+}
+
+/* Dark mode variable overrides */
+.theme-dark {
+    --portal-bg: #353535;
+    --portal-surface: #404040;
+    --portal-surface-hover: #4a4a4a;
+    --portal-surface-active: #525252;
+    --portal-text: #ddd;
+    --portal-text-secondary: #aaa;
+    --portal-text-muted: #888;
+    --portal-heading: #a8b4ff;
+    --portal-accent: #6ba3e0;
+    --portal-accent-hover: #5a93d0;
+    --portal-border: #555;
+    --portal-border-light: #444;
+    --portal-shadow: 0 4px 8px rgba(0, 0, 0, .3);
+    --portal-shadow-hover: 0 20px 30px rgba(0, 0, 0, .4);
+    --portal-shadow-sm: 0 1px 3px rgba(0, 0, 0, .2);
+}
+
+
+/* ─────────────────────────────────────────────────
+   2. GLOBAL TYPOGRAPHY
+   ───────────────────────────────────────────────── */
+
+html, body {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--portal-text);
+}
+
+.tree-node {
+    font-family: 'Montserrat', sans-serif !important;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif !important;
+    color: var(--portal-heading);
+}
+
+h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 20px; }
+h2 { font-size: 2rem; font-weight: 600; margin-bottom: 18px; }
+h3 { font-size: 1.75rem; font-weight: 500; margin-bottom: 16px; }
+h4 { font-size: 1.5rem; font-weight: 500; margin-bottom: 14px; }
+h5 { font-size: 1.25rem; font-weight: 400; margin-bottom: 12px; }
+h6 { font-size: 1rem; font-weight: 400; margin-bottom: 10px; }
+
+/* Body text */
+p, span, li, a {
+    font-size: 16px;
+    font-weight: 400;
+}
+
+/* Header bar text override */
+header,
+.header,
+.portal-header {
+    background-color: #2F355E !important;
+    color: #fff;
+}
+
+header h1, header h2, header h3,
+.header h1, .header h2, .header h3,
+.portal-header h1, .portal-header h2, .portal-header h3 {
+    color: #fff !important;
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+    html, body { font-size: 15px; }
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.75rem; }
+    h3 { font-size: 1.5rem; }
+    h4 { font-size: 1.3rem; }
+    h5 { font-size: 1.1rem; }
+    h6 { font-size: 1rem; }
+    p, span, li, a { font-size: 15px; }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    html, body { font-size: 14px; }
+    h1 { font-size: 1.75rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.3rem; }
+    h4 { font-size: 1.2rem; }
+    h5 { font-size: 1rem; }
+    h6 { font-size: 0.9rem; }
+    p, span, li, a { font-size: 12px; }
+}
+
+
+/* ─────────────────────────────────────────────────
+   3. HEADER & NAVIGATION
+   ───────────────────────────────────────────────── */
+
+.portal .search-title {
+    font-size: 2.5rem;
+    font-weight: 500;
+    font-family: 'Montserrat', 'Poppins', sans-serif;
+    margin: 40px 0 -40px;
+    color: var(--portal-heading);
+}
+
+.portal .page-title h1,
+.portal .details-form .details-group-header.title {
+    font-family: 'Montserrat', 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 200;
+    color: var(--portal-heading);
+}
+
+
+/* ─────────────────────────────────────────────────
+   4. SEARCH
+   ───────────────────────────────────────────────── */
+
+.portal .searchbox,
+.searchbox {
+    border-radius: 50px !important;
+}
+
+.searchscreen .searchbox {
+    height: 60px;
+}
+
+.searchscreen .searchbox input[type=text] {
+    font-size: 16px !important;
+    border-radius: 50px !important;
+    padding: 8px 16px;
+    border: 1px solid var(--portal-border);
+    background: var(--portal-surface);
+    color: var(--portal-text);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.searchscreen .searchbox input[type=text]:hover {
+    border-color: var(--portal-text-muted);
+    border-radius: 50px !important;
+}
+
+.searchscreen .searchbox input[type=text]:focus {
+    border-color: var(--portal-accent);
+    outline: none;
+    border-radius: 50px !important;
+    box-shadow: 0 0 0 3px rgba(64, 136, 212, 0.2);
+}
+
+.searchscreen .searchbox input[type=text]:active {
+    border-radius: 50px !important;
+}
+
+#searchscreen-searchbar::placeholder {
+    color: var(--portal-text-muted);
+}
+
+
+/* ─────────────────────────────────────────────────
+   5. CARDS, PANELS & TILES
+   ───────────────────────────────────────────────── */
+
+.portal .dashbtn,
+.details-group.card-panel,
+searchboxinput,
+.details-form .details-group.card-panel {
+    border-radius: var(--portal-radius) !important;
+}
+
+.portal .dashbtn:hover {
+    background-color: var(--portal-surface-hover);
+    box-shadow: var(--portal-shadow-hover);
+}
+
+.details-group.card-panel {
+    box-shadow: var(--portal-shadow);
+    border-radius: var(--portal-radius);
+    background: var(--portal-surface);
+}
+
+/* Kanban cards */
+.react-kanban-column .card {
+    padding: 30px !important;
+    background: var(--portal-surface);
+}
+
+.react-kanban-column .card h4 {
+    font-size: 1.3rem !important;
+    color: var(--portal-heading);
+}
+
+/* Filter boxes */
+.css-13cymwt-control {
+    border-radius: 50px;
+}
+
+/* Tile widget bar */
+.tile-widget-bar {
+    border-bottom-left-radius: var(--portal-radius);
+    border-top-left-radius: var(--portal-radius);
+}
+
+/* Action history items */
+.action-history-item.tile-item {
+    border-radius: var(--portal-radius);
+}
+
+/* Attachment container */
+.attachment-container.edit {
+    border-radius: var(--portal-radius) !important;
+}
+
+
+/* ─────────────────────────────────────────────────
+   6. BUTTONS & TAGS
+   ───────────────────────────────────────────────── */
+
+/* Rounded buttons (Generate PDF, Share Link) */
+.solidbutton.fabtn,
+.solidbutton.fabtn.notext {
+    border-radius: var(--portal-radius) !important;
+}
+
+.solidbutton.fabtn {
+    font-family: 'Montserrat', 'Poppins', sans-serif;
+}
+
+/* Back button */
+.backbtn {
+    background-color: var(--portal-accent);
+    width: 50px;
+    height: 50px;
+    border: none;
+    margin: 5px 15px;
+    border-radius: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: var(--portal-shadow);
+    transition: all 0.3s ease;
+}
+
+.backbtn:hover {
+    background-color: var(--portal-accent-hover);
+    transform: scale(1.05);
+}
+
+/* Article tags */
+span.kbtags {
+    border-radius: var(--portal-radius);
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* View All buttons */
+.nhd-button curve {
+    background-color: var(--portal-accent);
+}
+
+
+
+/* ─────────────────────────────────────────────────
+   7. ANNOUNCEMENTS & FOOTER
+   ───────────────────────────────────────────────── */
+
+/* Web announcement */
+.web-announcement {
+    background: transparent;
+    padding: 0;
+}
+
+#text-scroll-container {
+    border-radius: 0 var(--portal-radius-sm) var(--portal-radius-sm) 0;
+    background: #fcf7d1;
+    border: 0;
+    padding: 10px;
+    font-weight: 900;
+    color: var(--portal-text);
+}
+
+.web-announcement-img-enhanced {
+    border-radius: var(--portal-radius-sm) 0 0 var(--portal-radius-sm);
+    background: #d1722a;
+    border: 0;
+    padding: 10px;
+}
+
+/* Dark mode announcements */
+.theme-dark #text-scroll-container {
+    background: #3d3820;
+    color: var(--portal-text);
+}
+
+.theme-dark .web-announcement-img-enhanced {
+    background: #8b4a1a;
+}
+
+/* Footer */
+footer {
+    background-color: var(--portal-surface);
+    text-align: center;
+    padding: 5px;
+}
+
+footer a {
+    font-family: 'Montserrat', sans-serif;
+    display: inline-block;
+    color: var(--portal-surface);
+    text-decoration: none;
+    font-size: 12px;
+    padding: 3px 6px;
+}
+
+footer a img,
+footer a svg {
+    width: 14px;
+    height: 14px;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
+
+/* ─────────────────────────────────────────────────
+   8. DESKTOP FULL WIDTH
+   ───────────────────────────────────────────────── */
+
+@media only screen and (min-width: 1293px) {
+    .portal .container-large {
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   9. ARTICLE LIGHT MODE OVERRIDES
+   ═══════════════════════════════════════════════════════════════════════
+
+   Confluence exports panels and status macros with inline style=""
+   attributes that override normal stylesheet rules. Using !important
+   with the .kbdetails ancestor gives us enough specificity to win.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Confluence Panels: per-type background colours ── */
+.kbdetails .confluence-information-macro-information .confluence-information-macro-body {
+    background: #deebff !important;
+    color: #1a1d23 !important;
+    border-left-color: #4088D4 !important;
+}
+
+.kbdetails .confluence-information-macro-note .confluence-information-macro-body {
+    background: #fffae6 !important;
+    color: #1a1d23 !important;
+    border-left-color: #e6c619 !important;
+}
+
+.kbdetails .confluence-information-macro-warning .confluence-information-macro-body {
+    background: #ffebe6 !important;
+    color: #1a1d23 !important;
+    border-left-color: #de350b !important;
+}
+
+.kbdetails .confluence-information-macro-tip .confluence-information-macro-body {
+    background: #e3fcef !important;
+    color: #1a1d23 !important;
+    border-left-color: #36b37e !important;
+}
+
+/* ── Status Macro Pills: coloured backgrounds ── */
+.kbdetails .status-macro.aui-lozenge {
+    display: inline-block !important;
+    padding: 4px 12px !important;
+    font-weight: 600 !important;
+    font-size: 0.75em !important;
+    line-height: 1 !important;
+    border-radius: 999px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.02em !important;
+}
+
+.kbdetails .status-macro.aui-lozenge-complete  { background-color: #deebff !important; color: #0747a6 !important; }
+.kbdetails .status-macro.aui-lozenge-success   { background-color: #e3fcef !important; color: #006644 !important; }
+.kbdetails .status-macro.aui-lozenge-current   { background-color: #fff0b3 !important; color: #974f0c !important; }
+.kbdetails .status-macro.aui-lozenge-error     { background-color: #ffebe6 !important; color: #bf2600 !important; }
+.kbdetails .status-macro.aui-lozenge-progress  { background-color: #eae6ff !important; color: #403294 !important; }
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   10. ARTICLE DARK MODE OVERRIDES
+   ═══════════════════════════════════════════════════════════════════════
+
+   These target article content within .kbdetails when dark mode is active.
+   Style Profiles can't use .theme-dark as an ancestor selector (due to
+   auto-scoping), so dark mode article styles live here in Custom CSS.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Headings: fix h1 border for dark mode ── */
+.theme-dark .kbdetails h1 {
+    border-bottom-color: var(--portal-border);
+}
+
+/* ── Links ── */
+.theme-dark .kbdetails a {
+    color: var(--portal-accent);
+}
+
+/* ── Tables: dark borders ── */
+.theme-dark .kbdetails .confluenceTable {
+    border-color: var(--portal-border);
+}
+
+.theme-dark .kbdetails .confluenceTable td,
+.theme-dark .kbdetails .confluenceTable th {
+    border-color: var(--portal-border);
+}
+
+.theme-dark .kbdetails .confluenceTable tr:nth-child(even) {
+    background-color: #3a3a3a;
+}
+
+/* ── Confluence Info Panel (blue) ── */
+.theme-dark .kbdetails .confluence-information-macro-information .confluence-information-macro-body {
+    background: #1a2744 !important;
+    color: #ddd !important;
+    border-left-color: #4088D4 !important;
+}
+
+/* ── Confluence Note Panel (yellow) ── */
+.theme-dark .kbdetails .confluence-information-macro-note .confluence-information-macro-body {
+    background: #3d3820 !important;
+    color: #ddd !important;
+    border-left-color: #b8a020 !important;
+}
+
+/* ── Confluence Error Panel (red) ── */
+.theme-dark .kbdetails .confluence-information-macro-warning .confluence-information-macro-body {
+    background: #3d2020 !important;
+    color: #ddd !important;
+    border-left-color: #de350b !important;
+}
+
+/* ── Confluence Success/Tip Panel (green) ── */
+.theme-dark .kbdetails .confluence-information-macro-tip .confluence-information-macro-body {
+    background: #1a3d2a !important;
+    color: #ddd !important;
+    border-left-color: #36b37e !important;
+}
+
+/* ── Generic Panels (.panel/.panelContent) — Confluence dark mode matching ──
+   Confluence sets inline bg per panel type (purple=Note, teal=Custom).
+   A ::before overlay darkens the hue while preserving it, matching Confluence's
+   own dark mode approach. panelContent set transparent so hued bg shows through. ── */
+.theme-dark .kbdetails .panel {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.theme-dark .kbdetails .panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 10, 10, 0.62);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.theme-dark .kbdetails .panel .panelHeader,
+.theme-dark .kbdetails .panel .panelContent {
+    position: relative;
+    z-index: 1;
+}
+
+.theme-dark .kbdetails .panel .panelHeader {
+    background: transparent !important;
+    color: #ddd !important;
+    font-weight: 600;
+}
+
+.theme-dark .kbdetails div.panelContent {
+    background: transparent !important;
+    color: #ddd !important;
+    padding: 15px 25px;
+}
+
+/* ── Images: dark border ── */
+.theme-dark .kbdetails img {
+    border-color: var(--portal-border);
+}
+
+/* ── Status Macros: dark mode pill colours ── */
+.theme-dark .kbdetails .status-macro.aui-lozenge-complete  { background-color: #1a3366 !important; color: #8bb3e0 !important; }
+.theme-dark .kbdetails .status-macro.aui-lozenge-success   { background-color: #1a3d2a !important; color: #57d9a3 !important; }
+.theme-dark .kbdetails .status-macro.aui-lozenge-current   { background-color: #3d3820 !important; color: #e6c619 !important; }
+.theme-dark .kbdetails .status-macro.aui-lozenge-error     { background-color: #3d2020 !important; color: #ff8f73 !important; }
+.theme-dark .kbdetails .status-macro.aui-lozenge-progress  { background-color: #2a2544 !important; color: #b8acf6 !important; }
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   11. RESPONSIVE & MOBILE FIXES
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Article Images: Fluid by default, desktop cap ── */
+.kbdetails img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+    border-radius: 10px;
+    border: 2px solid var(--portal-border);
+}
+
+@media (min-width: 1024px) {
+    .kbdetails img {
+        max-width: 1180px;
+    }
+}
+
+/* Images inside tables */
+.kbdetails .confluenceTable img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ── Tables: Horizontal scroll on smaller screens ── */
+.kbdetails .table-wrap,
+.kbdetails .confluenceTable-wrap {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 15px 0;
+}
+
+@media (max-width: 768px) {
+    .kbdetails .confluenceTable {
+        min-width: 500px;
+    }
+}
+
+/* ── Mobile Layout Fixes ── */
+@media (max-width: 480px) {
+    #app-container {
+        max-width: 100vw;
+        box-sizing: border-box;
+        word-wrap: break-word;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        overflow-x: hidden;
+    }
+
+    .portal .container-large,
+    .portal .col-md-9,
+    .portal .col-md-12,
+    .portal .kbdetails,
+    .portal .article,
+    .portal .content {
+        max-width: 100vw !important;
+        display: block;
+        margin: 0;
+        padding: 0 12px;
+    }
+
+    .kbdetails {
+        margin-left: 0 !important;
+    }
+
+    /* Tables on mobile */
+    .table-wrap {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .confluenceTable {
+        width: 95vw !important;
+        max-width: 95vw !important;
+        border-collapse: collapse;
+        box-sizing: border-box;
+    }
+
+    .confluenceTable td,
+    .confluenceTable th {
+        word-wrap: break-word;
+        white-space: normal;
+        padding: 8px;
+    }
+}

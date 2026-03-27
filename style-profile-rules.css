@@ -1,0 +1,273 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   HaloPSA Style Profile Rules — Knowledge Base Articles
+   ═══════════════════════════════════════════════════════════════════════
+
+   USAGE: Each block below maps to one Style Profile rule in HaloPSA.
+   - Copy the "Selector" value into the Selector field
+   - Copy the CSS properties into the Style field
+   - Set the Precedence number as indicated
+
+   These rules are auto-scoped under .kbdetails by HaloPSA.
+   They apply to BOTH the Self-Service Portal AND Agent Portal.
+
+   Headings use inherited colours (no hardcoded values) so they
+   adapt to both light and dark themes automatically.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+
+/* ═══════════════════════════════════════
+   Precedence: 10 | Selector: h1
+   ═══════════════════════════════════════ */
+margin-top: 35px;
+padding-bottom: 10px;
+font-family: 'Montserrat', sans-serif;
+font-weight: 800;
+font-size: 30px;
+border-bottom: 1px solid #e2e5ea;
+letter-spacing: -0.02em;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 11 | Selector: h2
+   ═══════════════════════════════════════ */
+margin-top: 30px;
+padding-bottom: 5px;
+font-family: 'Montserrat', sans-serif;
+font-weight: 700;
+letter-spacing: -0.01em;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 12 | Selector: h3
+   ═══════════════════════════════════════ */
+margin-top: 40px;
+margin-bottom: 10px;
+font-family: 'Montserrat', sans-serif;
+font-weight: 600;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 20 | Selector: p
+   ═══════════════════════════════════════ */
+font-family: 'Montserrat', sans-serif;
+line-height: 1.8;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 20 | Selector: article-details
+   ═══════════════════════════════════════ */
+font-family: 'Montserrat', sans-serif;
+line-height: 1.8;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 20 | Selector: a
+   ═══════════════════════════════════════ */
+color: #4088D4;
+text-decoration-thickness: 1px;
+text-underline-offset: 3px;
+transition: color 0.2s ease;
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   TABLES
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════
+   Precedence: 20 | Selector: .confluenceTable tr:first-child th
+   ═══════════════════════════════════════ */
+background-color: #e9f2fe !important;
+color: #1a1d23 !important;
+font-weight: 600;
+font-family: 'Montserrat', sans-serif;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 20 | Selector: .confluenceTable th.confluenceTh
+   ═══════════════════════════════════════ */
+background-color: #f0f1f2 !important;
+color: #1a1d23 !important;
+font-weight: 600;
+font-family: 'Montserrat', sans-serif;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 50 | Selector: .confluenceTable
+   ═══════════════════════════════════════ */
+border: 1px solid #e2e5ea;
+width: 100%;
+border-radius: 12px;
+overflow: hidden;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 50 | Selector: .confluenceTable td
+   ═══════════════════════════════════════ */
+padding: 12px 16px;
+border: 1px solid #e2e5ea;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 50 | Selector: .confluenceTable th
+   ═══════════════════════════════════════ */
+padding: 12px 16px;
+border: 1px solid #e2e5ea;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 50 | Selector: confluenceTable, .confluenceTable th, .confluenceTable td
+   ═══════════════════════════════════════ */
+border: 1px solid #e2e5ea;
+border-collapse: collapse;
+padding: 8px;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 50 | Selector: .confluenceTable tr:nth-child(even)
+   ═══════════════════════════════════════ */
+background-color: #f9fafb;
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   STATUS MACROS — Coloured pill badges (Confluence lozenge styles)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════
+   Precedence: 25 | Selector: .status-macro.aui-lozenge
+   ═══════════════════════════════════════ */
+display: inline-block;
+padding: 4px 12px;
+font-weight: 600;
+font-size: 0.75em;
+line-height: 1;
+border-radius: 999px;
+text-transform: uppercase;
+letter-spacing: 0.02em;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 25 | Selector: .status-macro.aui-lozenge-complete
+   ═══════════════════════════════════════ */
+background-color: #deebff !important;
+color: #0747a6 !important;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 25 | Selector: .status-macro.aui-lozenge-success
+   ═══════════════════════════════════════ */
+background-color: #e3fcef !important;
+color: #006644 !important;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 25 | Selector: .status-macro.aui-lozenge-current
+   ═══════════════════════════════════════ */
+background-color: #fff0b3 !important;
+color: #974f0c !important;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 25 | Selector: .status-macro.aui-lozenge-error
+   ═══════════════════════════════════════ */
+background-color: #ffebe6 !important;
+color: #bf2600 !important;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 25 | Selector: .status-macro.aui-lozenge-progress
+   ═══════════════════════════════════════ */
+background-color: #eae6ff !important;
+color: #403294 !important;
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CONFLUENCE PANELS — Per-type colours matching Confluence
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════
+   Precedence: 30 | Selector: .confluence-information-macro-information .confluence-information-macro-body
+   ═══════════════════════════════════════ */
+background: #deebff !important;
+color: #1a1d23 !important;
+padding: 15px 25px;
+border-radius: 12px;
+margin: 15px 0;
+border-left: 4px solid #4088D4;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 30 | Selector: .confluence-information-macro-note .confluence-information-macro-body
+   ═══════════════════════════════════════ */
+background: #fffae6 !important;
+color: #1a1d23 !important;
+padding: 15px 25px;
+border-radius: 12px;
+margin: 15px 0;
+border-left: 4px solid #e6c619;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 30 | Selector: .confluence-information-macro-warning .confluence-information-macro-body
+   ═══════════════════════════════════════ */
+background: #ffebe6 !important;
+color: #1a1d23 !important;
+padding: 15px 25px;
+border-radius: 12px;
+margin: 15px 0;
+border-left: 4px solid #de350b;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 30 | Selector: .confluence-information-macro-tip .confluence-information-macro-body
+   ═══════════════════════════════════════ */
+background: #e3fcef !important;
+color: #1a1d23 !important;
+padding: 15px 25px;
+border-radius: 12px;
+margin: 15px 0;
+border-left: 4px solid #36b37e;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 30 | Selector: div.panelContent
+   ═══════════════════════════════════════ */
+padding: 15px 25px;
+color: #1a1d23;
+border-radius: 12px;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 30 | Selector: .details-form .details-group .row .rich div
+   ═══════════════════════════════════════ */
+padding-top: 15px;
+padding-bottom: 15px;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 30 | Selector: dv.panel conf-macro output-block
+   ═══════════════════════════════════════ */
+padding: 10px 25px;
+margin: 10px 0;
+border-radius: 12px;
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   IMAGES — Fluid responsive, no hardcoded pixel widths
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════
+   Precedence: 50 | Selector: img
+   ═══════════════════════════════════════ */
+max-width: 100%;
+height: auto;
+border-radius: 10px;
+border: 2px solid #e2e5ea;
+display: block;
+margin: 20px auto;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 50 | Selector: .confluenceTable img
+   ═══════════════════════════════════════ */
+max-width: 100%;
+height: auto;

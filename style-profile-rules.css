@@ -169,21 +169,18 @@ margin: 32px 0;
    ═══════════════════════════════════════════════════════════════════════ */
 
 /* ═══════════════════════════════════════
-   Precedence: 20 | Selector: .confluenceTable tr:first-child th
-   ═══════════════════════════════════════ */
+   Precedence: 20 | Selector: .confluenceTable th
+   ═══════════════════════════════════════
+   Targets ALL th elements uniformly — header row AND first-column
+   numbered cells get the same styling. Explicit dark text colour
+   ensures readability in Agent Portal dark mode (light bg persists).
+   !important on all properties to beat HaloPSA built-in dark rules. */
 background-color: #f5f6f8 !important;
 color: #1a1d23 !important;
-font-weight: 600;
-font-family: 'Montserrat', sans-serif;
-
-
-/* ═══════════════════════════════════════
-   Precedence: 20 | Selector: .confluenceTable th.confluenceTh
-   ═══════════════════════════════════════ */
-background-color: #f5f6f8 !important;
-color: #1a1d23 !important;
-font-weight: 600;
-font-family: 'Montserrat', sans-serif;
+font-weight: 600 !important;
+font-family: 'Montserrat', sans-serif !important;
+padding: 12px 16px !important;
+border: 1px solid #e2e5ea !important;
 
 
 /* ═══════════════════════════════════════
@@ -196,13 +193,6 @@ border-collapse: collapse;
 
 /* ═══════════════════════════════════════
    Precedence: 50 | Selector: .confluenceTable td
-   ═══════════════════════════════════════ */
-padding: 12px 16px;
-border: 1px solid #e2e5ea;
-
-
-/* ═══════════════════════════════════════
-   Precedence: 50 | Selector: .confluenceTable th
    ═══════════════════════════════════════ */
 padding: 12px 16px;
 border: 1px solid #e2e5ea;

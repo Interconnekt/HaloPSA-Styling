@@ -505,18 +505,12 @@ footer a svg {
     padding: 12px 16px;
 }
 
-.kbdetails .confluenceTable tr:first-child th {
+/* All th elements: header row AND first-column numbered cells get same styling */
+.kbdetails .confluenceTable th {
     background-color: #f5f6f8 !important;
     color: #1a1d23 !important;
-    font-weight: 600;
-    font-family: 'Montserrat', sans-serif;
-}
-
-.kbdetails .confluenceTable th.confluenceTh {
-    background-color: #f5f6f8 !important;
-    color: #1a1d23 !important;
-    font-weight: 600;
-    font-family: 'Montserrat', sans-serif;
+    font-weight: 600 !important;
+    font-family: 'Montserrat', sans-serif !important;
 }
 
 /* Remove zebra stripes */
@@ -653,12 +647,7 @@ footer a svg {
     border-color: var(--portal-border) !important;
 }
 
-.theme-dark .kbdetails .confluenceTable tr:first-child th {
-    background-color: #3a3a3a !important;
-    color: #ddd !important;
-}
-
-.theme-dark .kbdetails .confluenceTable th.confluenceTh {
+.theme-dark .kbdetails .confluenceTable th {
     background-color: #3a3a3a !important;
     color: #ddd !important;
 }

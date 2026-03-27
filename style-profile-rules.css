@@ -136,7 +136,7 @@ background-color: #f9fafb;
    Precedence: 25 | Selector: .status-macro.aui-lozenge
    ═══════════════════════════════════════ */
 display: inline-block;
-padding: 4px 12px;
+padding: 6px 12px;
 font-weight: 600;
 font-size: 0.75em;
 line-height: 1;
@@ -187,16 +187,16 @@ color: #403294 !important;
 /* ═══════════════════════════════════════
    Precedence: 28 | Selector: .confluence-information-macro
    ═══════════════════════════════════════ */
-border-radius: 12px;
-overflow: hidden;
+border-radius: 12px !important;
+overflow: hidden !important;
 margin: 15px 0;
 
 
 /* ═══════════════════════════════════════
    Precedence: 28 | Selector: .panel
    ═══════════════════════════════════════ */
-border-radius: 12px;
-overflow: hidden;
+border-radius: 12px !important;
+overflow: hidden !important;
 margin: 15px 0;
 
 
@@ -208,43 +208,34 @@ margin: 15px 0;
    Precedence: 30 | Selector: .confluence-information-macro-information .confluence-information-macro-body
    ═══════════════════════════════════════ */
 background: #deebff !important;
-color: #1a1d23 !important;
 padding: 15px 25px;
-border-left: 4px solid #4088D4;
 
 
 /* ═══════════════════════════════════════
    Precedence: 30 | Selector: .confluence-information-macro-note .confluence-information-macro-body
    ═══════════════════════════════════════ */
 background: #fffae6 !important;
-color: #1a1d23 !important;
 padding: 15px 25px;
-border-left: 4px solid #e6c619;
 
 
 /* ═══════════════════════════════════════
    Precedence: 30 | Selector: .confluence-information-macro-warning .confluence-information-macro-body
    ═══════════════════════════════════════ */
 background: #ffebe6 !important;
-color: #1a1d23 !important;
 padding: 15px 25px;
-border-left: 4px solid #de350b;
 
 
 /* ═══════════════════════════════════════
    Precedence: 30 | Selector: .confluence-information-macro-tip .confluence-information-macro-body
    ═══════════════════════════════════════ */
 background: #e3fcef !important;
-color: #1a1d23 !important;
 padding: 15px 25px;
-border-left: 4px solid #36b37e;
 
 
 /* ═══════════════════════════════════════
    Precedence: 30 | Selector: div.panelContent
    ═══════════════════════════════════════ */
 padding: 15px 25px;
-color: #1a1d23;
 
 
 /* ═══════════════════════════════════════

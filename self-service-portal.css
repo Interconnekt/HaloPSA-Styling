@@ -403,14 +403,14 @@ footer a svg {
    wrapper (.panel) or from our rules on the body (.confluence-information-macro-body).
    overflow: hidden on the outer element clips that background to the border-radius. ── */
 .kbdetails .confluence-information-macro {
-    border-radius: 12px;
-    overflow: hidden;
+    border-radius: 12px !important;
+    overflow: hidden !important;
     margin: 15px 0;
 }
 
 .kbdetails .panel {
-    border-radius: 12px;
-    overflow: hidden;
+    border-radius: 12px !important;
+    overflow: hidden !important;
     margin: 15px 0;
 }
 
@@ -419,36 +419,28 @@ footer a svg {
    of whether the Style Profile rule has been entered in HaloPSA. ── */
 .kbdetails .confluence-information-macro-information .confluence-information-macro-body {
     background: #deebff !important;
-    color: #1a1d23 !important;
     padding: 15px 25px;
-    border-left: 4px solid #4088D4 !important;
 }
 
 .kbdetails .confluence-information-macro-note .confluence-information-macro-body {
     background: #fffae6 !important;
-    color: #1a1d23 !important;
     padding: 15px 25px;
-    border-left: 4px solid #e6c619 !important;
 }
 
 .kbdetails .confluence-information-macro-warning .confluence-information-macro-body {
     background: #ffebe6 !important;
-    color: #1a1d23 !important;
     padding: 15px 25px;
-    border-left: 4px solid #de350b !important;
 }
 
 .kbdetails .confluence-information-macro-tip .confluence-information-macro-body {
     background: #e3fcef !important;
-    color: #1a1d23 !important;
     padding: 15px 25px;
-    border-left: 4px solid #36b37e !important;
 }
 
 /* ── Status Macro Pills: coloured backgrounds ── */
 .kbdetails .status-macro.aui-lozenge {
     display: inline-block !important;
-    padding: 4px 12px !important;
+    padding: 6px 12px !important;
     font-weight: 600 !important;
     font-size: 0.75em !important;
     line-height: 1 !important;
@@ -501,28 +493,24 @@ footer a svg {
 .theme-dark .kbdetails .confluence-information-macro-information .confluence-information-macro-body {
     background: #1a2744 !important;
     color: #ddd !important;
-    border-left-color: #4088D4 !important;
 }
 
 /* ── Confluence Note Panel (yellow) ── */
 .theme-dark .kbdetails .confluence-information-macro-note .confluence-information-macro-body {
     background: #3d3820 !important;
     color: #ddd !important;
-    border-left-color: #b8a020 !important;
 }
 
 /* ── Confluence Error Panel (red) ── */
 .theme-dark .kbdetails .confluence-information-macro-warning .confluence-information-macro-body {
     background: #3d2020 !important;
     color: #ddd !important;
-    border-left-color: #de350b !important;
 }
 
 /* ── Confluence Success/Tip Panel (green) ── */
 .theme-dark .kbdetails .confluence-information-macro-tip .confluence-information-macro-body {
     background: #1a3d2a !important;
     color: #ddd !important;
-    border-left-color: #36b37e !important;
 }
 
 /* ── Generic Panels (.panel/.panelContent) — Confluence dark mode matching ──

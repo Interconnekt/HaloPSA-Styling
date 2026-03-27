@@ -261,7 +261,10 @@ color: #403294 !important;
 
 
 /* ═══════════════════════════════════════════════════════════════════════
-   CONFLUENCE PANELS — Outer wrappers (border-radius + overflow clipping)
+   CONFLUENCE PANELS — Outer wrappers
+   border-radius + overflow clipping + border-left accent on outer wrapper.
+   border: none kills Confluence's inline border, then per-type rules re-add
+   just the left accent. padding: 0 ensures only the body has padding.
    ═══════════════════════════════════════════════════════════════════════ */
 
 /* ═══════════════════════════════════════
@@ -269,7 +272,33 @@ color: #403294 !important;
    ═══════════════════════════════════════ */
 border-radius: 12px !important;
 overflow: hidden !important;
+border: none !important;
+padding: 0 !important;
 margin: 15px 0;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 28 | Selector: .confluence-information-macro-information
+   ═══════════════════════════════════════ */
+border-left: 4px solid #2684ff !important;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 28 | Selector: .confluence-information-macro-note
+   ═══════════════════════════════════════ */
+border-left: 4px solid #ffab00 !important;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 28 | Selector: .confluence-information-macro-warning
+   ═══════════════════════════════════════ */
+border-left: 4px solid #de350b !important;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 28 | Selector: .confluence-information-macro-tip
+   ═══════════════════════════════════════ */
+border-left: 4px solid #00875a !important;
 
 
 /* ═══════════════════════════════════════
@@ -278,11 +307,12 @@ margin: 15px 0;
 border-radius: 12px !important;
 overflow: hidden !important;
 border: none !important;
+padding: 0 !important;
 margin: 15px 0;
 
 
 /* ═══════════════════════════════════════════════════════════════════════
-   CONFLUENCE PANELS — Per-type colours with left border accent
+   CONFLUENCE PANELS — Per-type body colours
    ═══════════════════════════════════════════════════════════════════════ */
 
 /* ═══════════════════════════════════════
@@ -290,8 +320,7 @@ margin: 15px 0;
    ═══════════════════════════════════════ */
 background: #deebff !important;
 color: inherit !important;
-padding: 15px 25px;
-border-left: 4px solid #2684ff !important;
+padding: 15px 25px !important;
 
 
 /* ═══════════════════════════════════════
@@ -299,8 +328,7 @@ border-left: 4px solid #2684ff !important;
    ═══════════════════════════════════════ */
 background: #fffae6 !important;
 color: inherit !important;
-padding: 15px 25px;
-border-left: 4px solid #ffab00 !important;
+padding: 15px 25px !important;
 
 
 /* ═══════════════════════════════════════
@@ -308,8 +336,7 @@ border-left: 4px solid #ffab00 !important;
    ═══════════════════════════════════════ */
 background: #ffebe6 !important;
 color: inherit !important;
-padding: 15px 25px;
-border-left: 4px solid #de350b !important;
+padding: 15px 25px !important;
 
 
 /* ═══════════════════════════════════════
@@ -317,8 +344,7 @@ border-left: 4px solid #de350b !important;
    ═══════════════════════════════════════ */
 background: #e3fcef !important;
 color: inherit !important;
-padding: 15px 25px;
-border-left: 4px solid #00875a !important;
+padding: 15px 25px !important;
 
 
 /* ═══════════════════════════════════════

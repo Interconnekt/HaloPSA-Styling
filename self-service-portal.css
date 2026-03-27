@@ -423,47 +423,65 @@ footer a svg {
    with the .kbdetails ancestor gives us enough specificity to win.
    ═══════════════════════════════════════════════════════════════════════ */
 
-/* ── Panel outer wrappers: border-radius + overflow clipping ── */
+/* ── Panel outer wrappers: border-radius + overflow clipping + left border accent ──
+   border-left goes on the OUTER wrapper so it isn't clipped by overflow: hidden.
+   border: none first kills any Confluence inline border, then border-left re-adds just the accent.
+   padding: 0 on the wrapper ensures only the body has padding (consistent spacing). ── */
 .kbdetails .confluence-information-macro {
     border-radius: 12px !important;
     overflow: hidden !important;
+    border: none !important;
+    padding: 0 !important;
     margin: 15px 0;
+}
+
+.kbdetails .confluence-information-macro-information {
+    border-left: 4px solid #2684ff !important;
+}
+
+.kbdetails .confluence-information-macro-note {
+    border-left: 4px solid #ffab00 !important;
+}
+
+.kbdetails .confluence-information-macro-warning {
+    border-left: 4px solid #de350b !important;
+}
+
+.kbdetails .confluence-information-macro-tip {
+    border-left: 4px solid #00875a !important;
 }
 
 .kbdetails .panel {
     border-radius: 12px !important;
     overflow: hidden !important;
     border: none !important;
+    padding: 0 !important;
     margin: 15px 0;
 }
 
-/* ── Confluence Panels: per-type background + left border accent ── */
+/* ── Confluence Panels: per-type background colours ── */
 .kbdetails .confluence-information-macro-information .confluence-information-macro-body {
     background: #deebff !important;
     color: inherit !important;
-    padding: 15px 25px;
-    border-left: 4px solid #2684ff !important;
+    padding: 15px 25px !important;
 }
 
 .kbdetails .confluence-information-macro-note .confluence-information-macro-body {
     background: #fffae6 !important;
     color: inherit !important;
-    padding: 15px 25px;
-    border-left: 4px solid #ffab00 !important;
+    padding: 15px 25px !important;
 }
 
 .kbdetails .confluence-information-macro-warning .confluence-information-macro-body {
     background: #ffebe6 !important;
     color: inherit !important;
-    padding: 15px 25px;
-    border-left: 4px solid #de350b !important;
+    padding: 15px 25px !important;
 }
 
 .kbdetails .confluence-information-macro-tip .confluence-information-macro-body {
     background: #e3fcef !important;
     color: inherit !important;
-    padding: 15px 25px;
-    border-left: 4px solid #00875a !important;
+    padding: 15px 25px !important;
 }
 
 /* ── Tables: clean modern style (no border-radius, no zebra stripes) ── */
@@ -643,43 +661,47 @@ footer a svg {
     background-color: transparent !important;
 }
 
-/* ── Confluence Info Panel (blue) ── */
-.theme-dark .kbdetails .confluence-information-macro-information .confluence-information-macro-body {
-    background: #1a2744 !important;
-    color: #ddd !important;
+/* ── Confluence Panel outer wrappers: dark mode border-left accents ── */
+.theme-dark .kbdetails .confluence-information-macro-information {
     border-left: 4px solid #4c9aff !important;
 }
 
-/* ── Confluence Note Panel (yellow/amber) ── */
-.theme-dark .kbdetails .confluence-information-macro-note .confluence-information-macro-body {
-    background: #3d3820 !important;
-    color: #ddd !important;
+.theme-dark .kbdetails .confluence-information-macro-note {
     border-left: 4px solid #ffab00 !important;
 }
 
-/* ── Confluence Error Panel (red) ── */
-.theme-dark .kbdetails .confluence-information-macro-warning .confluence-information-macro-body {
-    background: #3d2020 !important;
-    color: #ddd !important;
+.theme-dark .kbdetails .confluence-information-macro-warning {
     border-left: 4px solid #ff5630 !important;
 }
 
-/* ── Confluence Success/Tip Panel (green) ── */
+.theme-dark .kbdetails .confluence-information-macro-tip {
+    border-left: 4px solid #36b37e !important;
+}
+
+/* ── Confluence Panel bodies: dark mode backgrounds ── */
+.theme-dark .kbdetails .confluence-information-macro-information .confluence-information-macro-body {
+    background: #1a2744 !important;
+    color: #ddd !important;
+}
+
+.theme-dark .kbdetails .confluence-information-macro-note .confluence-information-macro-body {
+    background: #3d3820 !important;
+    color: #ddd !important;
+}
+
+.theme-dark .kbdetails .confluence-information-macro-warning .confluence-information-macro-body {
+    background: #3d2020 !important;
+    color: #ddd !important;
+}
+
 .theme-dark .kbdetails .confluence-information-macro-tip .confluence-information-macro-body {
     background: #1a3d2a !important;
     color: #ddd !important;
-    border-left: 4px solid #36b37e !important;
 }
 
 /* ── Generic Panels (.panel/.panelContent) — dark overlay preserving hue ── */
 .theme-dark .kbdetails .panel {
     position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-/* Confluence info macro outer wrappers also need border-radius in dark mode */
-.theme-dark .kbdetails .confluence-information-macro {
     border-radius: 12px;
     overflow: hidden;
 }

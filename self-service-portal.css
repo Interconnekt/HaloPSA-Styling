@@ -436,18 +436,22 @@ footer a svg {
 }
 
 .kbdetails .confluence-information-macro-information {
+    border: none !important;
     border-left: 4px solid #2684ff !important;
 }
 
 .kbdetails .confluence-information-macro-note {
+    border: none !important;
     border-left: 4px solid #ffab00 !important;
 }
 
 .kbdetails .confluence-information-macro-warning {
+    border: none !important;
     border-left: 4px solid #de350b !important;
 }
 
 .kbdetails .confluence-information-macro-tip {
+    border: none !important;
     border-left: 4px solid #00875a !important;
 }
 
@@ -459,28 +463,31 @@ footer a svg {
     margin: 15px 0;
 }
 
-/* ── Confluence Panels: per-type background colours ── */
+/* ── Confluence Panels: per-type background colours ──
+   color: #1a1d23 (explicit dark text) rather than inherit — ensures readable
+   text in the Agent Portal dark mode where inherit picks up an unset value.
+   Self-Service Portal dark mode overrides this to #ddd in section 10. ── */
 .kbdetails .confluence-information-macro-information .confluence-information-macro-body {
     background: #deebff !important;
-    color: inherit !important;
+    color: #1a1d23 !important;
     padding: 15px 25px !important;
 }
 
 .kbdetails .confluence-information-macro-note .confluence-information-macro-body {
     background: #fffae6 !important;
-    color: inherit !important;
+    color: #1a1d23 !important;
     padding: 15px 25px !important;
 }
 
 .kbdetails .confluence-information-macro-warning .confluence-information-macro-body {
     background: #ffebe6 !important;
-    color: inherit !important;
+    color: #1a1d23 !important;
     padding: 15px 25px !important;
 }
 
 .kbdetails .confluence-information-macro-tip .confluence-information-macro-body {
     background: #e3fcef !important;
-    color: inherit !important;
+    color: #1a1d23 !important;
     padding: 15px 25px !important;
 }
 

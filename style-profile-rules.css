@@ -280,24 +280,28 @@ margin: 15px 0;
 /* ═══════════════════════════════════════
    Precedence: 28 | Selector: .confluence-information-macro-information
    ═══════════════════════════════════════ */
+border: none !important;
 border-left: 4px solid #2684ff !important;
 
 
 /* ═══════════════════════════════════════
    Precedence: 28 | Selector: .confluence-information-macro-note
    ═══════════════════════════════════════ */
+border: none !important;
 border-left: 4px solid #ffab00 !important;
 
 
 /* ═══════════════════════════════════════
    Precedence: 28 | Selector: .confluence-information-macro-warning
    ═══════════════════════════════════════ */
+border: none !important;
 border-left: 4px solid #de350b !important;
 
 
 /* ═══════════════════════════════════════
    Precedence: 28 | Selector: .confluence-information-macro-tip
    ═══════════════════════════════════════ */
+border: none !important;
 border-left: 4px solid #00875a !important;
 
 
@@ -319,7 +323,7 @@ margin: 15px 0;
    Precedence: 30 | Selector: .confluence-information-macro-information .confluence-information-macro-body
    ═══════════════════════════════════════ */
 background: #deebff !important;
-color: inherit !important;
+color: #1a1d23 !important;
 padding: 15px 25px !important;
 
 
@@ -327,7 +331,7 @@ padding: 15px 25px !important;
    Precedence: 30 | Selector: .confluence-information-macro-note .confluence-information-macro-body
    ═══════════════════════════════════════ */
 background: #fffae6 !important;
-color: inherit !important;
+color: #1a1d23 !important;
 padding: 15px 25px !important;
 
 
@@ -335,7 +339,7 @@ padding: 15px 25px !important;
    Precedence: 30 | Selector: .confluence-information-macro-warning .confluence-information-macro-body
    ═══════════════════════════════════════ */
 background: #ffebe6 !important;
-color: inherit !important;
+color: #1a1d23 !important;
 padding: 15px 25px !important;
 
 
@@ -343,15 +347,15 @@ padding: 15px 25px !important;
    Precedence: 30 | Selector: .confluence-information-macro-tip .confluence-information-macro-body
    ═══════════════════════════════════════ */
 background: #e3fcef !important;
-color: inherit !important;
+color: #1a1d23 !important;
 padding: 15px 25px !important;
 
 
 /* ═══════════════════════════════════════
    Precedence: 30 | Selector: div.panelContent
    ═══════════════════════════════════════ */
-color: inherit !important;
-padding: 15px 25px;
+color: #1a1d23 !important;
+padding: 15px 25px !important;
 
 
 /* ═══════════════════════════════════════

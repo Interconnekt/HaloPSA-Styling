@@ -121,7 +121,7 @@ HaloPSA adds `.theme-dark` to `div.app-container`, which is an **ancestor** of `
 
 All dark mode article overrides are therefore in `self-service-portal.css` using `.theme-dark .kbdetails ...` selectors (Custom CSS, Self-Service Portal only).
 
-The Agent Portal gets no dark mode article styling from this project — only HaloPSA's built-in dark rules apply there.
+The Agent Portal gets no dark mode article styling from this project — only HaloPSA's built-in dark rules apply there. Panel text uses explicit `color: #1a1d23 !important` (dark text on light panel backgrounds) to remain readable in both Agent Portal modes.
 
 ---
 
@@ -135,23 +135,27 @@ Confluence exports panels and status macros with inline `style="background-color
 
 Confluence panel structure:
 ```
-div.confluence-information-macro  ← outer wrapper (has the border-radius + overflow: hidden)
-  div.confluence-information-macro-body  ← inner content (has the background-color + border-left)
+div.confluence-information-macro              ← outer wrapper: border-radius, overflow:hidden, border:none, border-left accent
+  div.confluence-information-macro-body       ← inner content: background-color, text colour, padding
 ```
 
-Setting `border-radius` only on the inner element clips that element's own content but does not clip the outer wrapper's background. The outer wrapper needs `border-radius + overflow: hidden` to visually round the panel corners.
+The outer wrapper gets `border: none !important` (kills Confluence's inline border), then per-type rules on the outer wrapper re-add just `border-left: 4px solid #xxx`. `overflow: hidden` clips the background to the `border-radius`. `padding: 0` ensures only the body has padding.
 
 The same applies to generic `.panel` / `.panelContent` structures.
 
 ### Panel left border accents
 
-Each panel type has a coloured left border accent (4px solid) on the body element:
+Each panel type has a coloured left border accent (4px solid) on the **outer wrapper** (not the body):
 - Info: blue (#2684ff)
 - Note: amber (#ffab00)
 - Warning/Error: red (#de350b)
 - Tip/Success: green (#00875a)
 
-These provide a strong visual cue that helps users distinguish panel types at a glance, following the pattern used by Confluence, Notion, and GitHub callouts.
+The accent is on the outer wrapper so `overflow: hidden` doesn't clip it at rounded corners. `border: none !important` on both the base `.confluence-information-macro` and each per-type class kills Confluence's inline borders before re-adding just the left accent.
+
+### Panel text colour
+
+Panel body rules use `color: #1a1d23 !important` (explicit dark text) rather than `inherit`. This ensures readable text in the Agent Portal dark mode, where `inherit` resolves to an unset value (invisible text). The Self-Service Portal dark mode overrides this to `#ddd` in Custom CSS.
 
 ### Generic panels vs standard macro panels
 

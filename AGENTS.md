@@ -55,14 +55,14 @@ HaloPSA places `.theme-dark` on `div.app-container`, which is a DOM ancestor of 
 
 Confluence panels, status macros, and some tables are exported with inline `style="background-color: ..."` attributes. Inline styles have the highest specificity and cannot be overridden from a stylesheet without `!important`.
 
-**Rule:** All panel background colours, border-left accents, and status macro colour rules must use `!important`. Use the full `border-left: 4px solid #xxx !important` shorthand (not just `border-left-color`) — a colour property only works if a border already exists.
+**Rule:** All panel background colours, border-left accents, and status macro colour rules must use `!important`. Use the full `border-left: 4px solid #xxx !important` shorthand (not just `border-left-color`). Per-type wrapper rules also need `border: none !important` before the `border-left` to kill Confluence's inline border.
 
 ### 3. `border-radius` goes on the OUTER wrapper, not the inner content div
 
 Confluence panel structure:
 ```
-div.confluence-information-macro              ← needs: border-radius + overflow: hidden
-  div.confluence-information-macro-body       ← has: inline background-color + border-left accent
+div.confluence-information-macro              ← outer: border-radius, overflow:hidden, border:none, border-left accent
+  div.confluence-information-macro-body       ← inner: background-color, color: #1a1d23, padding
 ```
 ```
 div.panel                                     ← needs: border-radius + overflow: hidden
@@ -75,12 +75,12 @@ The Style Profile has Precedence 28 rules for `.confluence-information-macro` an
 
 ### 4. Panel types: standard macros vs generic panels
 
-- **Standard Confluence macros** have class names like `.confluence-information-macro-information`, `.confluence-information-macro-note`, `.confluence-information-macro-warning`, `.confluence-information-macro-tip`. These get explicit per-type colour rules with left border accents.
+- **Standard Confluence macros** have class names like `.confluence-information-macro-information`, `.confluence-information-macro-note`, `.confluence-information-macro-warning`, `.confluence-information-macro-tip`. These get explicit per-type colour rules on the body and left border accents on the outer wrapper. Each per-type wrapper has `border: none !important; border-left: 4px solid #xxx !important`.
 - **Generic panels** use `.panel` / `.panelContent` and carry whatever background Confluence exported inline. In dark mode, a `::before` overlay (`rgba(10,10,10,0.50)`) darkens these while preserving the hue, since there's no standard class to target for recolouring.
 
 ### 5. Agent Portal dark mode has no article styling from this project
 
-Custom CSS applies only to the Self-Service Portal. The Agent Portal gets Style Profile rules (light mode article styles only). Dark mode in the Agent Portal relies on HaloPSA's built-in `.theme-dark` rules — basic but functional. This is a known gap, not a bug.
+Custom CSS applies only to the Self-Service Portal. The Agent Portal gets Style Profile rules (light mode article styles only). Dark mode in the Agent Portal relies on HaloPSA's built-in `.theme-dark` rules. Panel text uses explicit `color: #1a1d23 !important` (dark text) rather than `inherit` — this ensures readable text on the light-coloured panel backgrounds in both Agent Portal modes. The Self-Service Portal dark mode overrides this to `#ddd` in Custom CSS.
 
 ### 6. Font loading gap in Agent Portal
 
@@ -165,5 +165,5 @@ Style Profile rules are applied in precedence order (lower = applied first, high
 | 22 | pre code (reset inline code styles inside pre blocks) |
 | 25 | Status macro (lozenge) styles |
 | 28 | Panel outer wrapper (border-radius + overflow) |
-| 30 | Panel body colours, border-left accents, and padding |
+| 30 | Panel body colours, text colour, padding |
 | 50 | Table structure, images |

@@ -25,11 +25,12 @@
 - [ ] border-collapse: collapse (no double borders)
 
 ### Panels (check all types)
-- [ ] Info Panel: blue bg (#deebff), blue left border (#2684ff), dark text
-- [ ] Note Panel: yellow bg (#fffae6), amber left border (#ffab00), dark text
-- [ ] Warning/Error Panel: pink bg (#ffebe6), red left border (#de350b), dark text
-- [ ] Tip/Success Panel: green bg (#e3fcef), green left border (#00875a), dark text
-- [ ] Generic Panel (.panel): keeps Confluence bg, rounded 12px, no outer border
+- [ ] Info Panel: blue bg (#deebff), blue left border only (#2684ff), dark text, no other borders
+- [ ] Note Panel: yellow bg (#fffae6), amber left border only (#ffab00), dark text, no other borders
+- [ ] Warning/Error Panel: pink bg (#ffebe6), red left border only (#de350b), dark text, no other borders
+- [ ] Tip/Success Panel: green bg (#e3fcef), green left border only (#00875a), dark text, no other borders
+- [ ] Generic Panel (.panel): keeps Confluence bg, rounded 12px, no borders
+- [ ] All panels: consistent padding (15px 25px), no stray Confluence borders
 
 ### Status Macros (check all 5 colours)
 - [ ] TAG BLUE: blue pill bg (#deebff), dark blue text
@@ -153,9 +154,11 @@
 
 ### Articles
 - [ ] Headings: readable (HaloPSA built-in #ddd)
-- [ ] Table headers: light grey bg persists from Style Profile — may show BLACK text (readable on light bg)
+- [ ] Table headers: light grey bg persists from Style Profile — BLACK text (#1a1d23) readable on light bg
 - [ ] Body text: inherited dark theme colour
-- [ ] Panels/macros: rely on HaloPSA built-in dark rules (basic, no left border accents)
+- [ ] Panel text: dark (#1a1d23) on light-coloured panel backgrounds — readable in both modes
+- [ ] Panel left border accents: visible (Style Profile sets border-left on outer wrapper)
+- [ ] Panel backgrounds: light colours persist (Style Profile can't set dark mode bg)
 - [ ] Code blocks: dark bg persists (good contrast in both modes)
 - [ ] Blockquotes: left border visible, bg may not adapt (Style Profile limitation)
 - [ ] Images: border may not adapt (Style Profile limitation)

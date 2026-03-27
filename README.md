@@ -164,7 +164,7 @@ Panel body rules use `color: #1a1d23 !important` (explicit dark text) rather tha
 
 ### Table design philosophy
 
-Tables use a clean modern style: thin 1px borders, `border-collapse: collapse`, no border-radius, no alternating row colours. Header rows get a very subtle grey background (#f5f6f8) to differentiate them without visual noise. This approach follows modern design systems (Notion, Linear, GitHub).
+Tables use a clean modern style: thin 1px borders, `border-collapse: collapse`, no border-radius, no alternating row colours. All `th` cells (header row and first-column numbered cells alike) are styled by a single unified `.confluenceTable th` rule at Precedence 20 with `!important` on all properties to beat HaloPSA built-in dark mode overrides. They share the same subtle grey background (#f5f6f8), font, and weight. This approach follows modern design systems (Notion, Linear, GitHub).
 
 ### Why `@import` only works in Custom CSS
 

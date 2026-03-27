@@ -161,9 +161,9 @@ Style Profile rules are applied in precedence order (lower = applied first, high
 | Range | Purpose |
 |-------|---------|
 | 10–12 | Headings (h1, h2, h3) |
-| 20 | Body text, links, lists, code, pre, blockquote, hr, table header colours |
+| 20 | Body text, links, lists, code, pre, blockquote, hr, table header colours (unified `.confluenceTable th` with !important on all properties) |
 | 22 | pre code (reset inline code styles inside pre blocks) |
 | 25 | Status macro (lozenge) styles |
 | 28 | Panel outer wrapper (border-radius + overflow) |
 | 30 | Panel body colours, text colour, padding |
-| 50 | Table structure, images |
+| 50 | Table structure (.confluenceTable, .confluenceTable td), images |

@@ -19,8 +19,7 @@
 - [ ] No border-radius (square corners, clean modern look)
 - [ ] No zebra striping (all rows transparent)
 - [ ] Thin 1px borders (#e2e5ea) on all cells
-- [ ] Header row: very light grey bg (#f5f6f8), dark text
-- [ ] confluenceTh cells: same light grey bg (#f5f6f8), dark text
+- [ ] Header row and first-column numbered cells: identical appearance — same bg (#f5f6f8), same font, same weight, same dark text (unified .confluenceTable th rule)
 - [ ] Cell padding comfortable (12px 16px)
 - [ ] border-collapse: collapse (no double borders)
 
@@ -85,8 +84,7 @@
 
 ### Tables
 - [ ] Borders adapt to #555
-- [ ] Header row: dark bg (#3a3a3a), light text (#ddd)
-- [ ] confluenceTh: dark bg (#3a3a3a), light text (#ddd)
+- [ ] Header row and first-column numbered cells: identical appearance — same dark bg (#3a3a3a), same light text (#ddd), same font and weight (unified .confluenceTable th rule)
 - [ ] No zebra stripes (transparent rows)
 - [ ] Clean thin borders throughout
 
@@ -138,7 +136,7 @@
 ### Articles
 - [ ] Headings: Montserrat, correct weights, theme colour
 - [ ] Tables: clean modern style, no border-radius, no zebra stripes, thin borders
-- [ ] Table headers: light grey bg (#f5f6f8)
+- [ ] Table headers (th): light grey bg (#f5f6f8) — header row and first-column numbered cells look identical
 - [ ] Panels: correct per-type colours with left border accents
 - [ ] Status macros: coloured pills
 - [ ] Inline code: grey bg, pink text, rounded pill
@@ -154,7 +152,7 @@
 
 ### Articles
 - [ ] Headings: readable (HaloPSA built-in #ddd)
-- [ ] Table headers: light grey bg persists from Style Profile — BLACK text (#1a1d23) readable on light bg
+- [ ] Table headers (th): light grey bg persists from Style Profile — header row and first-column numbered cells look identical; all th properties use !important to beat HaloPSA built-in dark mode overrides
 - [ ] Body text: inherited dark theme colour
 - [ ] Panel text: dark (#1a1d23) on light-coloured panel backgrounds — readable in both modes
 - [ ] Panel left border accents: visible (Style Profile sets border-left on outer wrapper)

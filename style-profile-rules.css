@@ -181,6 +181,26 @@ color: #403294 !important;
 
 
 /* ═══════════════════════════════════════════════════════════════════════
+   CONFLUENCE PANELS — Outer wrappers (border-radius + overflow clipping)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════
+   Precedence: 28 | Selector: .confluence-information-macro
+   ═══════════════════════════════════════ */
+border-radius: 12px;
+overflow: hidden;
+margin: 15px 0;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 28 | Selector: .panel
+   ═══════════════════════════════════════ */
+border-radius: 12px;
+overflow: hidden;
+margin: 15px 0;
+
+
+/* ═══════════════════════════════════════════════════════════════════════
    CONFLUENCE PANELS — Per-type colours matching Confluence
    ═══════════════════════════════════════════════════════════════════════ */
 
@@ -190,8 +210,6 @@ color: #403294 !important;
 background: #deebff !important;
 color: #1a1d23 !important;
 padding: 15px 25px;
-border-radius: 12px;
-margin: 15px 0;
 border-left: 4px solid #4088D4;
 
 
@@ -201,8 +219,6 @@ border-left: 4px solid #4088D4;
 background: #fffae6 !important;
 color: #1a1d23 !important;
 padding: 15px 25px;
-border-radius: 12px;
-margin: 15px 0;
 border-left: 4px solid #e6c619;
 
 
@@ -212,8 +228,6 @@ border-left: 4px solid #e6c619;
 background: #ffebe6 !important;
 color: #1a1d23 !important;
 padding: 15px 25px;
-border-radius: 12px;
-margin: 15px 0;
 border-left: 4px solid #de350b;
 
 
@@ -223,8 +237,6 @@ border-left: 4px solid #de350b;
 background: #e3fcef !important;
 color: #1a1d23 !important;
 padding: 15px 25px;
-border-radius: 12px;
-margin: 15px 0;
 border-left: 4px solid #36b37e;
 
 
@@ -233,7 +245,6 @@ border-left: 4px solid #36b37e;
    ═══════════════════════════════════════ */
 padding: 15px 25px;
 color: #1a1d23;
-border-radius: 12px;
 
 
 /* ═══════════════════════════════════════
@@ -241,14 +252,6 @@ border-radius: 12px;
    ═══════════════════════════════════════ */
 padding-top: 15px;
 padding-bottom: 15px;
-
-
-/* ═══════════════════════════════════════
-   Precedence: 30 | Selector: dv.panel conf-macro output-block
-   ═══════════════════════════════════════ */
-padding: 10px 25px;
-margin: 10px 0;
-border-radius: 12px;
 
 
 /* ═══════════════════════════════════════════════════════════════════════

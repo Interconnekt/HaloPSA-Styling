@@ -398,29 +398,51 @@ footer a svg {
    with the .kbdetails ancestor gives us enough specificity to win.
    ═══════════════════════════════════════════════════════════════════════ */
 
-/* ── Confluence Panels: per-type background colours ── */
+/* ── Panel outer wrappers: border-radius + overflow clipping ──
+   The background-color comes from Confluence inline styles on the outer
+   wrapper (.panel) or from our rules on the body (.confluence-information-macro-body).
+   overflow: hidden on the outer element clips that background to the border-radius. ── */
+.kbdetails .confluence-information-macro {
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.kbdetails .panel {
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+/* ── Confluence Panels: per-type background colours ──
+   Full border-left shorthand (not just color) so this works independently
+   of whether the Style Profile rule has been entered in HaloPSA. ── */
 .kbdetails .confluence-information-macro-information .confluence-information-macro-body {
     background: #deebff !important;
     color: #1a1d23 !important;
-    border-left-color: #4088D4 !important;
+    padding: 15px 25px;
+    border-left: 4px solid #4088D4 !important;
 }
 
 .kbdetails .confluence-information-macro-note .confluence-information-macro-body {
     background: #fffae6 !important;
     color: #1a1d23 !important;
-    border-left-color: #e6c619 !important;
+    padding: 15px 25px;
+    border-left: 4px solid #e6c619 !important;
 }
 
 .kbdetails .confluence-information-macro-warning .confluence-information-macro-body {
     background: #ffebe6 !important;
     color: #1a1d23 !important;
-    border-left-color: #de350b !important;
+    padding: 15px 25px;
+    border-left: 4px solid #de350b !important;
 }
 
 .kbdetails .confluence-information-macro-tip .confluence-information-macro-body {
     background: #e3fcef !important;
     color: #1a1d23 !important;
-    border-left-color: #36b37e !important;
+    padding: 15px 25px;
+    border-left: 4px solid #36b37e !important;
 }
 
 /* ── Status Macro Pills: coloured backgrounds ── */
@@ -506,9 +528,16 @@ footer a svg {
 /* ── Generic Panels (.panel/.panelContent) — Confluence dark mode matching ──
    Confluence sets inline bg per panel type (purple=Note, teal=Custom).
    A ::before overlay darkens the hue while preserving it, matching Confluence's
-   own dark mode approach. panelContent set transparent so hued bg shows through. ── */
+   own dark mode approach. panelContent set transparent so hued bg shows through.
+   Overlay at 50% (reduced from 62%) for better colour distinction. ── */
 .theme-dark .kbdetails .panel {
     position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Confluence info macro outer wrappers also need border-radius in dark mode */
+.theme-dark .kbdetails .confluence-information-macro {
     border-radius: 12px;
     overflow: hidden;
 }
@@ -517,7 +546,7 @@ footer a svg {
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(10, 10, 10, 0.62);
+    background: rgba(10, 10, 10, 0.50);
     pointer-events: none;
     z-index: 0;
 }

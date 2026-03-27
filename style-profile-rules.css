@@ -197,6 +197,7 @@ margin: 15px 0;
    ═══════════════════════════════════════ */
 border-radius: 12px !important;
 overflow: hidden !important;
+border: none !important;
 margin: 15px 0;
 
 
@@ -208,6 +209,7 @@ margin: 15px 0;
    Precedence: 30 | Selector: .confluence-information-macro-information .confluence-information-macro-body
    ═══════════════════════════════════════ */
 background: #deebff !important;
+color: inherit !important;
 padding: 15px 25px;
 
 
@@ -215,6 +217,7 @@ padding: 15px 25px;
    Precedence: 30 | Selector: .confluence-information-macro-note .confluence-information-macro-body
    ═══════════════════════════════════════ */
 background: #fffae6 !important;
+color: inherit !important;
 padding: 15px 25px;
 
 
@@ -222,6 +225,7 @@ padding: 15px 25px;
    Precedence: 30 | Selector: .confluence-information-macro-warning .confluence-information-macro-body
    ═══════════════════════════════════════ */
 background: #ffebe6 !important;
+color: inherit !important;
 padding: 15px 25px;
 
 
@@ -229,12 +233,14 @@ padding: 15px 25px;
    Precedence: 30 | Selector: .confluence-information-macro-tip .confluence-information-macro-body
    ═══════════════════════════════════════ */
 background: #e3fcef !important;
+color: inherit !important;
 padding: 15px 25px;
 
 
 /* ═══════════════════════════════════════
    Precedence: 30 | Selector: div.panelContent
    ═══════════════════════════════════════ */
+color: inherit !important;
 padding: 15px 25px;
 
 

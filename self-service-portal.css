@@ -2,18 +2,21 @@
    HaloPSA Self-Service Portal — Custom CSS
    ═══════════════════════════════════════════════════════════════════════
 
-   Paste this into: Configuration > Self Service Portal > Custom CSS
+   Loaded via @import in: Configuration > Self Service Portal > Custom CSS
 
-   Includes:
-   - Section 1: Font import & CSS variables (light + dark)
-   - Section 2: Global typography
-   - Section 3: Header & navigation
-   - Section 4: Search
-   - Section 5: Cards, panels, tiles
-   - Section 6: Buttons & tags
-   - Section 7: Announcements & footer
-   - Section 8: Article dark mode overrides
-   - Section 9: Responsive & mobile fixes
+   Sections:
+   1.  Font import & CSS variables (light + dark)
+   2.  Global typography
+   3.  Header & navigation
+   4.  Search
+   5.  Cards, panels & tiles
+   6.  Buttons & tags
+   7.  Announcements & footer
+   8.  Desktop full width
+   9.  Article light mode overrides (panels, status, code, blockquote, hr, lists)
+   10. Article dark mode overrides
+   11. Responsive & mobile fixes
+   12. Print styles
    ═══════════════════════════════════════════════════════════════════════ */
 
 
@@ -51,6 +54,17 @@
     --portal-radius: 25px;
     --portal-radius-sm: 15px;
     --portal-radius-xs: 10px;
+
+    /* Code */
+    --portal-code-bg: #f1f3f5;
+    --portal-code-text: #d6336c;
+    --portal-pre-bg: #1e1e2e;
+    --portal-pre-text: #cdd6f4;
+    --portal-pre-border: #313244;
+
+    /* Blockquote */
+    --portal-quote-border: var(--portal-accent);
+    --portal-quote-bg: #f8f9fc;
 }
 
 /* Dark mode variable overrides */
@@ -70,6 +84,17 @@
     --portal-shadow: 0 4px 8px rgba(0, 0, 0, .3);
     --portal-shadow-hover: 0 20px 30px rgba(0, 0, 0, .4);
     --portal-shadow-sm: 0 1px 3px rgba(0, 0, 0, .2);
+
+    /* Code (dark) */
+    --portal-code-bg: #2a2a3a;
+    --portal-code-text: #f08ca1;
+    --portal-pre-bg: #1e1e2e;
+    --portal-pre-text: #cdd6f4;
+    --portal-pre-border: #45475a;
+
+    /* Blockquote (dark) */
+    --portal-quote-border: var(--portal-accent);
+    --portal-quote-bg: #3a3a4a;
 }
 
 
@@ -142,7 +167,7 @@ header h1, header h2, header h3,
     h4 { font-size: 1.2rem; }
     h5 { font-size: 1rem; }
     h6 { font-size: 0.9rem; }
-    p, span, li, a { font-size: 12px; }
+    p, span, li, a { font-size: 14px; }
 }
 
 
@@ -398,10 +423,7 @@ footer a svg {
    with the .kbdetails ancestor gives us enough specificity to win.
    ═══════════════════════════════════════════════════════════════════════ */
 
-/* ── Panel outer wrappers: border-radius + overflow clipping ──
-   The background-color comes from Confluence inline styles on the outer
-   wrapper (.panel) or from our rules on the body (.confluence-information-macro-body).
-   overflow: hidden on the outer element clips that background to the border-radius. ── */
+/* ── Panel outer wrappers: border-radius + overflow clipping ── */
 .kbdetails .confluence-information-macro {
     border-radius: 12px !important;
     overflow: hidden !important;
@@ -415,31 +437,66 @@ footer a svg {
     margin: 15px 0;
 }
 
-/* ── Confluence Panels: per-type background colours ──
-   Full border-left shorthand (not just color) so this works independently
-   of whether the Style Profile rule has been entered in HaloPSA. ── */
+/* ── Confluence Panels: per-type background + left border accent ── */
 .kbdetails .confluence-information-macro-information .confluence-information-macro-body {
     background: #deebff !important;
     color: inherit !important;
     padding: 15px 25px;
+    border-left: 4px solid #2684ff !important;
 }
 
 .kbdetails .confluence-information-macro-note .confluence-information-macro-body {
     background: #fffae6 !important;
     color: inherit !important;
     padding: 15px 25px;
+    border-left: 4px solid #ffab00 !important;
 }
 
 .kbdetails .confluence-information-macro-warning .confluence-information-macro-body {
     background: #ffebe6 !important;
     color: inherit !important;
     padding: 15px 25px;
+    border-left: 4px solid #de350b !important;
 }
 
 .kbdetails .confluence-information-macro-tip .confluence-information-macro-body {
     background: #e3fcef !important;
     color: inherit !important;
     padding: 15px 25px;
+    border-left: 4px solid #00875a !important;
+}
+
+/* ── Tables: clean modern style (no border-radius, no zebra stripes) ── */
+.kbdetails .confluenceTable {
+    border: 1px solid var(--portal-border) !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+    border-collapse: collapse !important;
+}
+
+.kbdetails .confluenceTable td,
+.kbdetails .confluenceTable th {
+    border: 1px solid var(--portal-border) !important;
+    padding: 12px 16px;
+}
+
+.kbdetails .confluenceTable tr:first-child th {
+    background-color: #f5f6f8 !important;
+    color: #1a1d23 !important;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.kbdetails .confluenceTable th.confluenceTh {
+    background-color: #f5f6f8 !important;
+    color: #1a1d23 !important;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Remove zebra stripes */
+.kbdetails .confluenceTable tr:nth-child(even) {
+    background-color: transparent !important;
 }
 
 /* ── Status Macro Pills: coloured backgrounds ── */
@@ -459,6 +516,87 @@ footer a svg {
 .kbdetails .status-macro.aui-lozenge-current   { background-color: #fff0b3 !important; color: #974f0c !important; }
 .kbdetails .status-macro.aui-lozenge-error     { background-color: #ffebe6 !important; color: #bf2600 !important; }
 .kbdetails .status-macro.aui-lozenge-progress  { background-color: #eae6ff !important; color: #403294 !important; }
+
+/* ── Inline code ── */
+.kbdetails code {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.875em;
+    background: var(--portal-code-bg);
+    color: var(--portal-code-text);
+    padding: 2px 6px;
+    border-radius: 4px;
+    word-break: break-word;
+}
+
+/* ── Code blocks (pre) ── */
+.kbdetails pre {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.875em;
+    line-height: 1.6;
+    background: var(--portal-pre-bg);
+    color: var(--portal-pre-text);
+    border: 1px solid var(--portal-pre-border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: pre;
+    word-wrap: normal;
+}
+
+/* Reset inline code styles inside pre blocks */
+.kbdetails pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
+}
+
+/* ── Blockquotes ── */
+.kbdetails blockquote {
+    border-left: 4px solid var(--portal-quote-border);
+    background: var(--portal-quote-bg);
+    margin: 16px 0;
+    padding: 12px 20px;
+    border-radius: 0 8px 8px 0;
+    color: var(--portal-text-secondary);
+    font-style: italic;
+}
+
+.kbdetails blockquote p {
+    margin: 0;
+}
+
+/* ── Horizontal rules ── */
+.kbdetails hr {
+    border: none;
+    border-top: 1px solid var(--portal-border);
+    margin: 32px 0;
+}
+
+/* ── Lists ── */
+.kbdetails ul,
+.kbdetails ol {
+    padding-left: 24px;
+    margin: 12px 0;
+}
+
+.kbdetails li {
+    margin-bottom: 6px;
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.8;
+}
+
+.kbdetails ul li::marker {
+    color: var(--portal-accent);
+}
+
+.kbdetails ol li::marker {
+    color: var(--portal-text-secondary);
+    font-weight: 600;
+}
 
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -480,49 +618,60 @@ footer a svg {
     color: var(--portal-accent);
 }
 
-/* ── Tables: dark borders ── */
+/* ── Tables: dark mode ── */
 .theme-dark .kbdetails .confluenceTable {
-    border-color: var(--portal-border);
+    border-color: var(--portal-border) !important;
 }
 
 .theme-dark .kbdetails .confluenceTable td,
 .theme-dark .kbdetails .confluenceTable th {
-    border-color: var(--portal-border);
+    border-color: var(--portal-border) !important;
 }
 
+.theme-dark .kbdetails .confluenceTable tr:first-child th {
+    background-color: #3a3a3a !important;
+    color: #ddd !important;
+}
+
+.theme-dark .kbdetails .confluenceTable th.confluenceTh {
+    background-color: #3a3a3a !important;
+    color: #ddd !important;
+}
+
+/* Ensure no zebra stripes in dark mode either */
 .theme-dark .kbdetails .confluenceTable tr:nth-child(even) {
-    background-color: #3a3a3a;
+    background-color: transparent !important;
 }
 
 /* ── Confluence Info Panel (blue) ── */
 .theme-dark .kbdetails .confluence-information-macro-information .confluence-information-macro-body {
     background: #1a2744 !important;
     color: #ddd !important;
+    border-left: 4px solid #4c9aff !important;
 }
 
-/* ── Confluence Note Panel (yellow) ── */
+/* ── Confluence Note Panel (yellow/amber) ── */
 .theme-dark .kbdetails .confluence-information-macro-note .confluence-information-macro-body {
     background: #3d3820 !important;
     color: #ddd !important;
+    border-left: 4px solid #ffab00 !important;
 }
 
 /* ── Confluence Error Panel (red) ── */
 .theme-dark .kbdetails .confluence-information-macro-warning .confluence-information-macro-body {
     background: #3d2020 !important;
     color: #ddd !important;
+    border-left: 4px solid #ff5630 !important;
 }
 
 /* ── Confluence Success/Tip Panel (green) ── */
 .theme-dark .kbdetails .confluence-information-macro-tip .confluence-information-macro-body {
     background: #1a3d2a !important;
     color: #ddd !important;
+    border-left: 4px solid #36b37e !important;
 }
 
-/* ── Generic Panels (.panel/.panelContent) — Confluence dark mode matching ──
-   Confluence sets inline bg per panel type (purple=Note, teal=Custom).
-   A ::before overlay darkens the hue while preserving it, matching Confluence's
-   own dark mode approach. panelContent set transparent so hued bg shows through.
-   Overlay at 50% (reduced from 62%) for better colour distinction. ── */
+/* ── Generic Panels (.panel/.panelContent) — dark overlay preserving hue ── */
 .theme-dark .kbdetails .panel {
     position: relative;
     border-radius: 12px;
@@ -573,6 +722,27 @@ footer a svg {
 .theme-dark .kbdetails .status-macro.aui-lozenge-current   { background-color: #3d3820 !important; color: #e6c619 !important; }
 .theme-dark .kbdetails .status-macro.aui-lozenge-error     { background-color: #3d2020 !important; color: #ff8f73 !important; }
 .theme-dark .kbdetails .status-macro.aui-lozenge-progress  { background-color: #2a2544 !important; color: #b8acf6 !important; }
+
+/* ── Blockquotes: dark mode ── */
+.theme-dark .kbdetails blockquote {
+    background: var(--portal-quote-bg);
+    border-left-color: var(--portal-quote-border);
+    color: var(--portal-text-secondary);
+}
+
+/* ── Horizontal rules: dark mode ── */
+.theme-dark .kbdetails hr {
+    border-top-color: var(--portal-border);
+}
+
+/* ── Lists: dark mode marker colours ── */
+.theme-dark .kbdetails ul li::marker {
+    color: var(--portal-accent);
+}
+
+.theme-dark .kbdetails ol li::marker {
+    color: var(--portal-text-secondary);
+}
 
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -663,5 +833,102 @@ footer a svg {
         word-wrap: break-word;
         white-space: normal;
         padding: 8px;
+    }
+
+    /* Code blocks on mobile */
+    .kbdetails pre {
+        padding: 12px 14px;
+        font-size: 0.8125em;
+    }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   12. PRINT STYLES
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@media print {
+    /* Hide portal chrome */
+    header, .header, .portal-header,
+    footer,
+    .searchbox, .searchscreen,
+    .backbtn,
+    .solidbutton,
+    .web-announcement,
+    .tile-widget-bar,
+    span.kbtags,
+    .nhd-button {
+        display: none !important;
+    }
+
+    /* Reset to print-friendly colours */
+    html, body {
+        font-size: 12pt;
+        color: #000;
+        background: #fff;
+    }
+
+    .kbdetails {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Panels: keep coloured left border, white background */
+    .kbdetails .confluence-information-macro-body {
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    /* Tables: clean borders */
+    .kbdetails .confluenceTable {
+        border: 1px solid #ccc !important;
+    }
+
+    .kbdetails .confluenceTable td,
+    .kbdetails .confluenceTable th {
+        border: 1px solid #ccc !important;
+        color: #000 !important;
+    }
+
+    .kbdetails .confluenceTable tr:first-child th,
+    .kbdetails .confluenceTable th.confluenceTh {
+        background-color: #eee !important;
+        color: #000 !important;
+    }
+
+    /* Code blocks */
+    .kbdetails pre {
+        background: #f5f5f5 !important;
+        color: #000 !important;
+        border: 1px solid #ccc !important;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    .kbdetails code {
+        background: #f0f0f0 !important;
+        color: #000 !important;
+    }
+
+    /* Images: remove decorative border, avoid page breaks */
+    .kbdetails img {
+        border: none !important;
+        border-radius: 0 !important;
+        page-break-inside: avoid;
+    }
+
+    /* Avoid page breaks inside panels and tables */
+    .kbdetails .confluence-information-macro,
+    .kbdetails .panel,
+    .kbdetails .confluenceTable {
+        page-break-inside: avoid;
+    }
+
+    /* Links: show URL */
+    .kbdetails a[href]:after {
+        content: " (" attr(href) ")";
+        font-size: 0.85em;
+        color: #666;
     }
 }

@@ -69,14 +69,109 @@ text-underline-offset: 3px;
 transition: color 0.2s ease;
 
 
+/* ═══════════════════════════════════════
+   Precedence: 20 | Selector: li
+   ═══════════════════════════════════════ */
+font-family: 'Montserrat', sans-serif;
+line-height: 1.8;
+margin-bottom: 6px;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 20 | Selector: ul
+   ═══════════════════════════════════════ */
+padding-left: 24px;
+margin: 12px 0;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 20 | Selector: ol
+   ═══════════════════════════════════════ */
+padding-left: 24px;
+margin: 12px 0;
+
+
 /* ═══════════════════════════════════════════════════════════════════════
-   TABLES
+   CODE & PREFORMATTED TEXT
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════
+   Precedence: 20 | Selector: code
+   ═══════════════════════════════════════ */
+font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+font-size: 0.875em;
+background: #f1f3f5;
+color: #d6336c;
+padding: 2px 6px;
+border-radius: 4px;
+word-break: break-word;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 20 | Selector: pre
+   ═══════════════════════════════════════ */
+font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+font-size: 0.875em;
+line-height: 1.6;
+background: #1e1e2e;
+color: #cdd6f4;
+border: 1px solid #313244;
+border-radius: 8px;
+padding: 16px 20px;
+margin: 16px 0;
+overflow-x: auto;
+white-space: pre;
+word-wrap: normal;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 22 | Selector: pre code
+   ═══════════════════════════════════════ */
+background: transparent;
+color: inherit;
+padding: 0;
+border-radius: 0;
+font-size: inherit;
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   BLOCKQUOTES & HORIZONTAL RULES
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════
+   Precedence: 20 | Selector: blockquote
+   ═══════════════════════════════════════ */
+border-left: 4px solid #4088D4;
+background: #f8f9fc;
+margin: 16px 0;
+padding: 12px 20px;
+border-radius: 0 8px 8px 0;
+color: #5f6672;
+font-style: italic;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 20 | Selector: blockquote p
+   ═══════════════════════════════════════ */
+margin: 0;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 20 | Selector: hr
+   ═══════════════════════════════════════ */
+border: none;
+border-top: 1px solid #e2e5ea;
+margin: 32px 0;
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   TABLES — Clean modern style (no border-radius, no zebra stripes)
    ═══════════════════════════════════════════════════════════════════════ */
 
 /* ═══════════════════════════════════════
    Precedence: 20 | Selector: .confluenceTable tr:first-child th
    ═══════════════════════════════════════ */
-background-color: #e9f2fe !important;
+background-color: #f5f6f8 !important;
 color: #1a1d23 !important;
 font-weight: 600;
 font-family: 'Montserrat', sans-serif;
@@ -85,7 +180,7 @@ font-family: 'Montserrat', sans-serif;
 /* ═══════════════════════════════════════
    Precedence: 20 | Selector: .confluenceTable th.confluenceTh
    ═══════════════════════════════════════ */
-background-color: #f0f1f2 !important;
+background-color: #f5f6f8 !important;
 color: #1a1d23 !important;
 font-weight: 600;
 font-family: 'Montserrat', sans-serif;
@@ -96,8 +191,7 @@ font-family: 'Montserrat', sans-serif;
    ═══════════════════════════════════════ */
 border: 1px solid #e2e5ea;
 width: 100%;
-border-radius: 12px;
-overflow: hidden;
+border-collapse: collapse;
 
 
 /* ═══════════════════════════════════════
@@ -112,20 +206,6 @@ border: 1px solid #e2e5ea;
    ═══════════════════════════════════════ */
 padding: 12px 16px;
 border: 1px solid #e2e5ea;
-
-
-/* ═══════════════════════════════════════
-   Precedence: 50 | Selector: confluenceTable, .confluenceTable th, .confluenceTable td
-   ═══════════════════════════════════════ */
-border: 1px solid #e2e5ea;
-border-collapse: collapse;
-padding: 8px;
-
-
-/* ═══════════════════════════════════════
-   Precedence: 50 | Selector: .confluenceTable tr:nth-child(even)
-   ═══════════════════════════════════════ */
-background-color: #f9fafb;
 
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -202,7 +282,7 @@ margin: 15px 0;
 
 
 /* ═══════════════════════════════════════════════════════════════════════
-   CONFLUENCE PANELS — Per-type colours matching Confluence
+   CONFLUENCE PANELS — Per-type colours with left border accent
    ═══════════════════════════════════════════════════════════════════════ */
 
 /* ═══════════════════════════════════════
@@ -211,6 +291,7 @@ margin: 15px 0;
 background: #deebff !important;
 color: inherit !important;
 padding: 15px 25px;
+border-left: 4px solid #2684ff !important;
 
 
 /* ═══════════════════════════════════════
@@ -219,6 +300,7 @@ padding: 15px 25px;
 background: #fffae6 !important;
 color: inherit !important;
 padding: 15px 25px;
+border-left: 4px solid #ffab00 !important;
 
 
 /* ═══════════════════════════════════════
@@ -227,6 +309,7 @@ padding: 15px 25px;
 background: #ffebe6 !important;
 color: inherit !important;
 padding: 15px 25px;
+border-left: 4px solid #de350b !important;
 
 
 /* ═══════════════════════════════════════
@@ -235,6 +318,7 @@ padding: 15px 25px;
 background: #e3fcef !important;
 color: inherit !important;
 padding: 15px 25px;
+border-left: 4px solid #00875a !important;
 
 
 /* ═══════════════════════════════════════

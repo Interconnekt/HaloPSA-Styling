@@ -12,23 +12,24 @@
 ### Typography
 - [ ] Headings (h1/h2/h3) use Montserrat, correct weights
 - [ ] h1 has subtle bottom border (#e2e5ea)
-- [ ] Body text at line-height 1.8 (not 2.5)
+- [ ] Body text at line-height 1.8
 - [ ] Links are #4088D4 with underline offset
 
 ### Tables
-- [ ] Rounded corners (12px border-radius)
-- [ ] Header row: light blue bg (#e9f2fe), black text
-- [ ] confluenceTh cells: light grey bg (#f0f1f2), black text
-- [ ] Zebra stripes on even rows (#f9fafb)
+- [ ] No border-radius (square corners, clean modern look)
+- [ ] No zebra striping (all rows transparent)
+- [ ] Thin 1px borders (#e2e5ea) on all cells
+- [ ] Header row: very light grey bg (#f5f6f8), dark text
+- [ ] confluenceTh cells: same light grey bg (#f5f6f8), dark text
 - [ ] Cell padding comfortable (12px 16px)
+- [ ] border-collapse: collapse (no double borders)
 
-### Panels (check all 6 types)
-- [ ] Info Panel: blue bg (#deebff), blue left border, black text
-- [ ] Note Panel: keeps original purple bg, rounded
-- [ ] Error Panel: pink bg (#ffebe6), red left border, black text
-- [ ] Custom Panel: keeps original cyan bg, rounded
-- [ ] Success Panel: green bg (#e3fcef), green left border, black text
-- [ ] Warning Panel: yellow bg (#fffae6), yellow left border, black text
+### Panels (check all types)
+- [ ] Info Panel: blue bg (#deebff), blue left border (#2684ff), dark text
+- [ ] Note Panel: yellow bg (#fffae6), amber left border (#ffab00), dark text
+- [ ] Warning/Error Panel: pink bg (#ffebe6), red left border (#de350b), dark text
+- [ ] Tip/Success Panel: green bg (#e3fcef), green left border (#00875a), dark text
+- [ ] Generic Panel (.panel): keeps Confluence bg, rounded 12px, no outer border
 
 ### Status Macros (check all 5 colours)
 - [ ] TAG BLUE: blue pill bg (#deebff), dark blue text
@@ -36,6 +37,30 @@
 - [ ] TAG ORANGE: yellow pill bg (#fff0b3), dark orange text
 - [ ] TAG RED: pink pill bg (#ffebe6), dark red text
 - [ ] TAG PURPLE: purple pill bg (#eae6ff), dark purple text
+
+### Code & Preformatted Text
+- [ ] Inline `code`: light grey bg (#f1f3f5), pink text (#d6336c), rounded 4px pill
+- [ ] `pre` blocks: dark bg (#1e1e2e), light text (#cdd6f4), 8px rounded, horizontal scroll
+- [ ] `code` inside `pre`: inherits pre styling (no double background)
+- [ ] Long lines in pre: horizontal scroll, no wrapping
+
+### Blockquotes
+- [ ] Blue left border (4px solid #4088D4)
+- [ ] Light background (#f8f9fc)
+- [ ] Italic text, secondary colour
+- [ ] Rounded right corners (0 8px 8px 0)
+
+### Horizontal Rules
+- [ ] Thin 1px line (#e2e5ea)
+- [ ] Generous margin (32px top/bottom)
+- [ ] No visible border styles besides top
+
+### Lists
+- [ ] Consistent left padding (24px)
+- [ ] Montserrat font, line-height 1.8
+- [ ] UL markers coloured (#4088D4)
+- [ ] OL markers secondary text colour, bold weight
+- [ ] 6px spacing between items
 
 ### Images
 - [ ] Fluid width, rounded corners, light border
@@ -59,17 +84,17 @@
 
 ### Tables
 - [ ] Borders adapt to #555
-- [ ] Header row: light blue bg PERSISTS, text stays BLACK (readable)
-- [ ] confluenceTh: light grey bg persists, text stays BLACK
-- [ ] Zebra stripes darken (#3a3a3a)
+- [ ] Header row: dark bg (#3a3a3a), light text (#ddd)
+- [ ] confluenceTh: dark bg (#3a3a3a), light text (#ddd)
+- [ ] No zebra stripes (transparent rows)
+- [ ] Clean thin borders throughout
 
 ### Panels (dark variants)
-- [ ] Info Panel: dark blue bg (#1a2744), light text, blue border
-- [ ] Note Panel: dark surface bg, light text
-- [ ] Error Panel: dark red bg (#3d2020), light text, red border
-- [ ] Custom Panel: dark surface bg, light text
-- [ ] Success Panel: dark green bg (#1a3d2a), light text, green border
-- [ ] Warning Panel: dark yellow bg (#3d3820), light text, yellow border
+- [ ] Info Panel: dark blue bg (#1a2744), light text, blue left border (#4c9aff)
+- [ ] Note Panel: dark amber bg (#3d3820), light text, amber left border (#ffab00)
+- [ ] Warning/Error Panel: dark red bg (#3d2020), light text, red left border (#ff5630)
+- [ ] Tip/Success Panel: dark green bg (#1a3d2a), light text, green left border (#36b37e)
+- [ ] Generic Panel: dark overlay preserves hue, light text
 
 ### Status Macros (dark variants)
 - [ ] TAG BLUE: dark blue bg (#1a3366), light blue text
@@ -77,6 +102,23 @@
 - [ ] TAG ORANGE: dark yellow bg (#3d3820), gold text
 - [ ] TAG RED: dark red bg (#3d2020), salmon text
 - [ ] TAG PURPLE: dark purple bg (#2a2544), light purple text
+
+### Code & Preformatted Text
+- [ ] Inline `code`: dark bg (#2a2a3a), pink text (#f08ca1)
+- [ ] `pre` blocks: dark bg (#1e1e2e), light text (#cdd6f4), darker border (#45475a)
+- [ ] Readable contrast in both inline and block code
+
+### Blockquotes
+- [ ] Dark background (#3a3a4a)
+- [ ] Blue left border persists (#6ba3e0)
+- [ ] Readable secondary text colour
+
+### Horizontal Rules
+- [ ] Adapts to dark border (#555)
+
+### Lists
+- [ ] UL markers coloured (#6ba3e0)
+- [ ] OL markers secondary text colour (#aaa)
 
 ### Images
 - [ ] Border adapts to dark (#555)
@@ -94,9 +136,15 @@
 
 ### Articles
 - [ ] Headings: Montserrat, correct weights, theme colour
-- [ ] Tables: rounded, proper headers, zebra stripes
-- [ ] Panels: correct per-type colours
+- [ ] Tables: clean modern style, no border-radius, no zebra stripes, thin borders
+- [ ] Table headers: light grey bg (#f5f6f8)
+- [ ] Panels: correct per-type colours with left border accents
 - [ ] Status macros: coloured pills
+- [ ] Inline code: grey bg, pink text, rounded pill
+- [ ] Pre blocks: dark bg, light text, rounded
+- [ ] Blockquotes: blue left border, light bg
+- [ ] Horizontal rules: thin, muted
+- [ ] Lists: consistent spacing, Montserrat font
 - [ ] Images: fluid responsive, rounded
 
 ---
@@ -105,9 +153,11 @@
 
 ### Articles
 - [ ] Headings: readable (HaloPSA built-in #ddd)
-- [ ] Table headers: BLACK text on light bg (still readable)
+- [ ] Table headers: light grey bg persists from Style Profile — may show BLACK text (readable on light bg)
 - [ ] Body text: inherited dark theme colour
-- [ ] Panels/macros: rely on HaloPSA built-in dark rules (basic)
+- [ ] Panels/macros: rely on HaloPSA built-in dark rules (basic, no left border accents)
+- [ ] Code blocks: dark bg persists (good contrast in both modes)
+- [ ] Blockquotes: left border visible, bg may not adapt (Style Profile limitation)
 - [ ] Images: border may not adapt (Style Profile limitation)
 
 ---
@@ -118,15 +168,17 @@
 - [ ] Tables scroll horizontally (not squished)
 - [ ] Panels don't break layout
 - [ ] No content overflows the viewport
-- [ ] Font sizes reduce appropriately
+- [ ] Font sizes reduce to 14px minimum (not below)
 - [ ] kbdetails has no negative margin
+- [ ] Code blocks reduce padding, font slightly smaller
+- [ ] Pre blocks scroll horizontally
 
 ## Responsive — Tablet (768px)
 
 - [ ] Images at ~90% width
 - [ ] Tables readable, may scroll on narrow content
 - [ ] Panels comfortable padding
-- [ ] Font sizes slightly reduced
+- [ ] Font sizes slightly reduced (15px body)
 
 ## Responsive + Dark Mode
 
@@ -134,3 +186,17 @@
 - [ ] Image borders adapt
 - [ ] Panel backgrounds adapt
 - [ ] No colour contrast issues on small screens
+- [ ] Code block contrast maintained on small screens
+
+---
+
+## Print
+
+- [ ] Portal chrome hidden (header, footer, search, buttons, tags)
+- [ ] Article content prints cleanly on white background
+- [ ] Tables have light grey headers, thin borders
+- [ ] Panels keep coloured left border, white background
+- [ ] Code blocks: light bg, dark text (readable on paper)
+- [ ] Images: no decorative border, no page-break inside
+- [ ] Links show URL in parentheses after text
+- [ ] No page breaks inside panels or tables

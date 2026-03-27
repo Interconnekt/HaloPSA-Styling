@@ -4,9 +4,10 @@ Custom CSS for the HaloPSA Self-Service Portal and Knowledge Base articles, with
 
 Covers:
 - Portal chrome (header, search, cards, buttons, footer)
-- Knowledge Base article typography, tables, panels, status macros, and images
-- Dark mode overrides for article content (Confluence panels, tables, status macros)
+- Knowledge Base article typography, tables, panels, status macros, code blocks, blockquotes, lists, and images
+- Dark mode overrides for article content (Confluence panels, tables, status macros, code, blockquotes)
 - Responsive layout fixes for mobile and tablet
+- Print styles for clean article output
 
 ---
 
@@ -52,9 +53,9 @@ The Custom CSS field in HaloPSA contains a single line:
 
 | File | Purpose |
 |------|---------|
-| `self-service-portal.css` | Custom CSS: portal chrome, article light mode overrides, article dark mode overrides, responsive layout |
+| `self-service-portal.css` | Custom CSS: portal chrome, article light/dark mode overrides, code/blockquote/hr/list styling, responsive layout, print styles |
 | `style-profile-rules.css` | Style Profile reference: each block maps to one HaloPSA Style Profile rule |
-| `dark-mode-test-checklist.md` | Test checklist covering both portals, both modes, and responsive breakpoints |
+| `dark-mode-test-checklist.md` | Test checklist covering both portals, both modes, responsive breakpoints, and print |
 | `AGENTS.md` | Instructions for AI agents working on this codebase |
 
 ---
@@ -91,20 +92,25 @@ HaloPSA Styling Layers
 │
 ├── Style Profiles                    → BOTH Self-Service Portal + Agent Portal
 │   ├── Headings (no hardcoded colour — inherits theme)
-│   ├── Tables (borders, rounded corners, header colours, zebra stripes)
-│   ├── Confluence panels (per-type colours: info/note/warning/tip)
+│   ├── Tables (clean modern: thin borders, no border-radius, no zebra stripes)
+│   ├── Confluence panels (per-type colours with left border accents)
 │   ├── Status macros (coloured pill badges)
+│   ├── Code (inline code pills, pre blocks with dark bg)
+│   ├── Blockquotes (left border accent, light bg)
+│   ├── Horizontal rules (thin, muted)
+│   ├── Lists (consistent spacing, Montserrat font)
 │   ├── Images (fluid responsive, rounded corners)
 │   └── Source: style-profile-rules.css → manual entry in HaloPSA UI
 │
 └── Custom CSS                        → Self-Service Portal ONLY
-    ├── Section 1:  Font import (Montserrat via Google Fonts)
-    ├── Section 2:  CSS variables (:root — light mode)
-    ├── Section 3:  CSS variables (.theme-dark — dark mode)
-    ├── Sections 4–8: Portal chrome (header, search, cards, buttons, footer)
-    ├── Section 9:  Article light mode overrides (!important panel/status colours)
-    ├── Section 10: Article dark mode overrides (.theme-dark .kbdetails ...)
-    └── Section 11: Responsive layout (images, tables, mobile breakpoints)
+    ├── Section 1:  Font import (Montserrat via Google Fonts) + CSS variables
+    ├── Section 2:  Global typography
+    ├── Sections 3–7: Portal chrome (header, search, cards, buttons, footer)
+    ├── Section 8:  Desktop full width
+    ├── Section 9:  Article light mode overrides (panels, tables, status, code, blockquote, hr, lists)
+    ├── Section 10: Article dark mode overrides
+    ├── Section 11: Responsive layout (images, tables, code, mobile breakpoints)
+    └── Section 12: Print styles
 ```
 
 ---
@@ -130,17 +136,31 @@ Confluence exports panels and status macros with inline `style="background-color
 Confluence panel structure:
 ```
 div.confluence-information-macro  ← outer wrapper (has the border-radius + overflow: hidden)
-  div.confluence-information-macro-body  ← inner content (has the background-color)
+  div.confluence-information-macro-body  ← inner content (has the background-color + border-left)
 ```
 
 Setting `border-radius` only on the inner element clips that element's own content but does not clip the outer wrapper's background. The outer wrapper needs `border-radius + overflow: hidden` to visually round the panel corners.
 
 The same applies to generic `.panel` / `.panelContent` structures.
 
+### Panel left border accents
+
+Each panel type has a coloured left border accent (4px solid) on the body element:
+- Info: blue (#2684ff)
+- Note: amber (#ffab00)
+- Warning/Error: red (#de350b)
+- Tip/Success: green (#00875a)
+
+These provide a strong visual cue that helps users distinguish panel types at a glance, following the pattern used by Confluence, Notion, and GitHub callouts.
+
 ### Generic panels vs standard macro panels
 
-- **Standard macros** (`.confluence-information-macro-information`, `-note`, `-warning`, `-tip`): have per-type colour rules in both Style Profiles and Custom CSS
+- **Standard macros** (`.confluence-information-macro-information`, `-note`, `-warning`, `-tip`): have per-type colour rules with left border accents in both Style Profiles and Custom CSS
 - **Generic panels** (`.panel .panelContent`): keep whatever background Confluence exported. In dark mode, a `::before` overlay (50% black) darkens these while preserving the panel hue
+
+### Table design philosophy
+
+Tables use a clean modern style: thin 1px borders, `border-collapse: collapse`, no border-radius, no alternating row colours. Header rows get a very subtle grey background (#f5f6f8) to differentiate them without visual noise. This approach follows modern design systems (Notion, Linear, GitHub).
 
 ### Why `@import` only works in Custom CSS
 
@@ -152,7 +172,7 @@ Style Profile rules are wrapped as `.kbdetails selector { properties }`. There i
 
 1. Fork this repository
 2. In `self-service-portal.css`, update the CSS variables in `:root` and `.theme-dark` to match your brand colours
-3. In `style-profile-rules.css`, update the hardcoded colours (`#4088D4`, `#e9f2fe`, `#f0f1f2`) to your brand palette
+3. In `style-profile-rules.css`, update the hardcoded colours (table header bg, panel border accents, link colour, blockquote border) to your brand palette
 4. Enable GitHub Pages and update the `@import` URL
 5. Enter the Style Profile rules manually in HaloPSA
 

@@ -143,15 +143,26 @@ The outer wrapper gets `border: none !important` (kills Confluence's inline bord
 
 The same applies to generic `.panel` / `.panelContent` structures.
 
-### Panel left border accents
+### Panel colour mapping (ADF to CSS)
 
-Each panel type has a coloured left border accent (4px solid) on the **outer wrapper** (not the body):
-- Info: blue (#2684ff)
-- Note: amber (#ffab00)
-- Warning/Error: red (#de350b)
-- Tip/Success: green (#00875a)
+Confluence ADF panel types map to CSS classes with specific colours:
 
-The accent is on the outer wrapper so `overflow: hidden` doesn't clip it at rounded corners. `border: none !important` on both the base `.confluence-information-macro` and each per-type class kills Confluence's inline borders before re-adding just the left accent.
+| ADF Type | CSS Class | Background | Border-left |
+|----------|-----------|------------|-------------|
+| Info | `.confluence-information-macro-information` | #eaf2fd | #2684ff |
+| Note | `.confluence-information-macro-note` | #f7eefd | #6554c0 |
+| Error | `.confluence-information-macro-warning` | #fcedec | #de350b |
+| Success/Tip | `.confluence-information-macro-tip` | #e3fef2 | #00875a |
+| Warning | _(Confluence inline styles)_ | #fdf7cd | inline |
+| Custom | _(Confluence inline styles)_ | #ebf9fe | inline |
+
+**Naming quirk:** ADF "error" panels use the `.confluence-information-macro-warning` class (legacy Confluence naming). The class says "warning" but the panel is red/error.
+
+Fallback rules for `.confluence-information-macro-error` and `.confluence-information-macro-success` duplicate the error and tip colours respectively, in case Confluence uses these class names directly.
+
+ADF "warning" (yellow) and "custom" (teal) panels use Confluence inline styles and need no CSS override.
+
+The accent is on the outer wrapper so `overflow: hidden` doesn't clip it at rounded corners. `border: none !important` on both the base `.confluence-information-macro` and each per-type class kills Confluence's inline borders before re-adding just the left accent. Every per-type body rule also includes `border: none !important`, and a catch-all `.confluence-information-macro-body` rule with `border: none !important` kills secondary borders on all panels.
 
 ### Panel text colour
 
@@ -159,7 +170,7 @@ Panel body rules use `color: #1a1d23 !important` (explicit dark text) rather tha
 
 ### Generic panels vs standard macro panels
 
-- **Standard macros** (`.confluence-information-macro-information`, `-note`, `-warning`, `-tip`): have per-type colour rules with left border accents in both Style Profiles and Custom CSS
+- **Standard macros** (`.confluence-information-macro-information`, `-note`, `-warning`, `-tip`, plus fallbacks `-error`, `-success`): have per-type colour rules with left border accents in both Style Profiles and Custom CSS
 - **Generic panels** (`.panel .panelContent`): keep whatever background Confluence exported. In dark mode, a `::before` overlay (50% black) darkens these while preserving the panel hue
 
 ### Table design philosophy

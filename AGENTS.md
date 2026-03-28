@@ -73,9 +73,28 @@ Setting `border-radius` on the inner div clips that element's own background but
 
 The Style Profile has Precedence 28 rules for `.confluence-information-macro` and `.panel` to apply this at the outer wrapper level (before the Precedence 30 body/content rules).
 
-### 4. Panel types: standard macros vs generic panels
+### 4. Panel types: ADF panels, class mapping, and generic panels
 
-- **Standard Confluence macros** have class names like `.confluence-information-macro-information`, `.confluence-information-macro-note`, `.confluence-information-macro-warning`, `.confluence-information-macro-tip`. These get explicit per-type colour rules on the body and left border accents on the outer wrapper. Each per-type wrapper has `border: none !important; border-left: 4px solid #xxx !important`.
+Confluence ADF defines 6 panel types. When exported to HaloPSA, they map to CSS classes as follows:
+
+| ADF Panel Type | Confluence CSS Class | Background | Border-left |
+|----------------|---------------------|------------|-------------|
+| Info | `.confluence-information-macro-information` | #eaf2fd (blue) | #2684ff |
+| Note | `.confluence-information-macro-note` | #f7eefd (purple) | #6554c0 |
+| Error | `.confluence-information-macro-warning` | #fcedec (red) | #de350b |
+| Success/Tip | `.confluence-information-macro-tip` | #e3fef2 (green) | #00875a |
+| Warning | _(none -- uses Confluence inline styles)_ | #fdf7cd (yellow) | inline |
+| Custom | _(none -- uses Confluence inline styles)_ | #ebf9fe (teal) | inline |
+
+**Legacy naming quirk:** ADF "error" panels render with the `.confluence-information-macro-warning` class, not `-error`. This is a legacy Confluence naming convention -- the class name says "warning" but the panel is visually red/error.
+
+**Fallback rules:** The Style Profile and Custom CSS include rules for `.confluence-information-macro-error` (red) and `.confluence-information-macro-success` (green) as fallbacks, in case Confluence ever uses these class names directly. They duplicate the error and tip colours respectively.
+
+**ADF Warning and Custom panels:** These two panel types rely entirely on Confluence inline styles (yellow #fdf7cd and teal #ebf9fe). No Style Profile or Custom CSS override is needed for them -- they render correctly out of the box. In dark mode, the generic panel `::before` overlay handles darkening.
+
+**Catch-all body border reset:** A rule targeting `.confluence-information-macro-body` with `border: none !important` is applied across all panel types. This kills any secondary borders Confluence adds to the inner content div, regardless of panel type. Every per-type `-body` rule also includes `border: none !important`.
+
+- **Standard Confluence macros** (`.confluence-information-macro-information`, `-note`, `-warning`, `-tip`, plus fallbacks `-error`, `-success`) get explicit per-type colour rules on the body and left border accents on the outer wrapper. Each per-type wrapper has `border: none !important; border-left: 4px solid #xxx !important`. Each per-type body rule has `border: none !important`.
 - **Generic panels** use `.panel` / `.panelContent` and carry whatever background Confluence exported inline. In dark mode, a `::before` overlay (`rgba(10,10,10,0.50)`) darkens these while preserving the hue, since there's no standard class to target for recolouring.
 
 ### 5. Agent Portal dark mode has no article styling from this project

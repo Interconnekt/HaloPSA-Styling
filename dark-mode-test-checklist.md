@@ -24,12 +24,15 @@
 - [ ] border-collapse: collapse (no double borders)
 
 ### Panels (check all types)
-- [ ] Info Panel: blue bg (#deebff), blue left border only (#2684ff), dark text, no other borders
-- [ ] Note Panel: yellow bg (#fffae6), amber left border only (#ffab00), dark text, no other borders
-- [ ] Warning/Error Panel: pink bg (#ffebe6), red left border only (#de350b), dark text, no other borders
-- [ ] Tip/Success Panel: green bg (#e3fcef), green left border only (#00875a), dark text, no other borders
+- [ ] Info Panel (.confluence-information-macro-information): blue bg (#eaf2fd), blue left border only (#2684ff), dark text, no secondary borders
+- [ ] Note Panel (.confluence-information-macro-note): purple bg (#f7eefd), purple left border only (#6554c0), dark text, no secondary borders
+- [ ] Error Panel (.confluence-information-macro-warning -- legacy class name): red bg (#fcedec), red left border only (#de350b), dark text, no secondary borders
+- [ ] Tip/Success Panel (.confluence-information-macro-tip): green bg (#e3fef2), green left border only (#00875a), dark text, no secondary borders
+- [ ] Warning Panel (ADF "warning"): yellow bg (#fdf7cd) via Confluence inline styles, no CSS override needed
+- [ ] Custom Panel (ADF "custom"): teal bg (#ebf9fe) via Confluence inline styles, no CSS override needed
+- [ ] Fallback: .confluence-information-macro-error renders same as error (red), .confluence-information-macro-success same as tip (green)
 - [ ] Generic Panel (.panel): keeps Confluence bg, rounded 12px, no borders
-- [ ] All panels: consistent padding (15px 25px), no stray Confluence borders
+- [ ] All panels: consistent padding (15px 25px), no stray Confluence borders, no secondary borders on .confluence-information-macro-body
 
 ### Status Macros (check all 5 colours)
 - [ ] TAG BLUE: blue pill bg (#deebff), dark blue text
@@ -89,11 +92,13 @@
 - [ ] Clean thin borders throughout
 
 ### Panels (dark variants)
-- [ ] Info Panel: dark blue bg (#1a2744), light text, blue left border (#4c9aff)
-- [ ] Note Panel: dark amber bg (#3d3820), light text, amber left border (#ffab00)
-- [ ] Warning/Error Panel: dark red bg (#3d2020), light text, red left border (#ff5630)
-- [ ] Tip/Success Panel: dark green bg (#1a3d2a), light text, green left border (#36b37e)
+- [ ] Info Panel (.confluence-information-macro-information): dark blue bg (#1a2744), light text, blue left border (#4c9aff), no secondary borders
+- [ ] Note Panel (.confluence-information-macro-note): dark purple bg (#2a2044), light text, purple left border, no secondary borders
+- [ ] Error Panel (.confluence-information-macro-warning -- legacy class name): dark red bg (#3d2020), light text, red left border (#ff5630), no secondary borders
+- [ ] Tip/Success Panel (.confluence-information-macro-tip): dark green bg (#1a3d2a), light text, green left border (#36b37e), no secondary borders
+- [ ] Warning/Custom Panels: dark overlay preserves hue (inline-styled, no class-based override)
 - [ ] Generic Panel: dark overlay preserves hue, light text
+- [ ] All panels: no secondary borders on .confluence-information-macro-body in dark mode
 
 ### Status Macros (dark variants)
 - [ ] TAG BLUE: dark blue bg (#1a3366), light blue text

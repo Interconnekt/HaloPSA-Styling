@@ -442,12 +442,12 @@ footer a svg {
 
 .kbdetails .confluence-information-macro-note {
     border: none !important;
-    border-left: 4px solid #ffab00 !important;
+    border-left: 4px solid #6554c0 !important;
 }
 
 .kbdetails .confluence-information-macro-warning {
     border: none !important;
-    border-left: 4px solid #de350b !important;
+    border-left: 4px solid #ffab00 !important;
 }
 
 .kbdetails .confluence-information-macro-tip {
@@ -468,25 +468,25 @@ footer a svg {
    text in the Agent Portal dark mode where inherit picks up an unset value.
    Self-Service Portal dark mode overrides this to #ddd in section 10. ── */
 .kbdetails .confluence-information-macro-information .confluence-information-macro-body {
-    background: #deebff !important;
+    background: #eaf2fd !important;
     color: #1a1d23 !important;
     padding: 15px 25px !important;
 }
 
 .kbdetails .confluence-information-macro-note .confluence-information-macro-body {
-    background: #fffae6 !important;
+    background: #f7eefd !important;
     color: #1a1d23 !important;
     padding: 15px 25px !important;
 }
 
 .kbdetails .confluence-information-macro-warning .confluence-information-macro-body {
-    background: #ffebe6 !important;
+    background: #fdf7cd !important;
     color: #1a1d23 !important;
     padding: 15px 25px !important;
 }
 
 .kbdetails .confluence-information-macro-tip .confluence-information-macro-body {
-    background: #e3fcef !important;
+    background: #e3fef2 !important;
     color: #1a1d23 !important;
     padding: 15px 25px !important;
 }
@@ -663,11 +663,11 @@ footer a svg {
 }
 
 .theme-dark .kbdetails .confluence-information-macro-note {
-    border-left: 4px solid #ffab00 !important;
+    border-left: 4px solid #8777d9 !important;
 }
 
 .theme-dark .kbdetails .confluence-information-macro-warning {
-    border-left: 4px solid #ff5630 !important;
+    border-left: 4px solid #ffab00 !important;
 }
 
 .theme-dark .kbdetails .confluence-information-macro-tip {
@@ -681,12 +681,12 @@ footer a svg {
 }
 
 .theme-dark .kbdetails .confluence-information-macro-note .confluence-information-macro-body {
-    background: #3d3820 !important;
+    background: #2a2044 !important;
     color: #ddd !important;
 }
 
 .theme-dark .kbdetails .confluence-information-macro-warning .confluence-information-macro-body {
-    background: #3d2020 !important;
+    background: #3d3820 !important;
     color: #ddd !important;
 }
 
@@ -909,8 +909,7 @@ footer a svg {
         color: #000 !important;
     }
 
-    .kbdetails .confluenceTable tr:first-child th,
-    .kbdetails .confluenceTable th.confluenceTh {
+    .kbdetails .confluenceTable th {
         background-color: #eee !important;
         color: #000 !important;
     }

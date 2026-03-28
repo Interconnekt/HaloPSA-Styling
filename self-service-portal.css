@@ -447,10 +447,20 @@ footer a svg {
 
 .kbdetails .confluence-information-macro-warning {
     border: none !important;
-    border-left: 4px solid #ffab00 !important;
+    border-left: 4px solid #de350b !important;
+}
+
+.kbdetails .confluence-information-macro-error {
+    border: none !important;
+    border-left: 4px solid #de350b !important;
 }
 
 .kbdetails .confluence-information-macro-tip {
+    border: none !important;
+    border-left: 4px solid #00875a !important;
+}
+
+.kbdetails .confluence-information-macro-success {
     border: none !important;
     border-left: 4px solid #00875a !important;
 }
@@ -467,28 +477,51 @@ footer a svg {
    color: #1a1d23 (explicit dark text) rather than inherit — ensures readable
    text in the Agent Portal dark mode where inherit picks up an unset value.
    Self-Service Portal dark mode overrides this to #ddd in section 10. ── */
+/* Catch-all: kill Confluence inline borders on ALL panel bodies */
+.kbdetails .confluence-information-macro-body {
+    border: none !important;
+}
+
 .kbdetails .confluence-information-macro-information .confluence-information-macro-body {
     background: #eaf2fd !important;
     color: #1a1d23 !important;
     padding: 15px 25px !important;
+    border: none !important;
 }
 
 .kbdetails .confluence-information-macro-note .confluence-information-macro-body {
     background: #f7eefd !important;
     color: #1a1d23 !important;
     padding: 15px 25px !important;
+    border: none !important;
 }
 
 .kbdetails .confluence-information-macro-warning .confluence-information-macro-body {
-    background: #fdf7cd !important;
+    background: #fcedec !important;
     color: #1a1d23 !important;
     padding: 15px 25px !important;
+    border: none !important;
+}
+
+.kbdetails .confluence-information-macro-error .confluence-information-macro-body {
+    background: #fcedec !important;
+    color: #1a1d23 !important;
+    padding: 15px 25px !important;
+    border: none !important;
 }
 
 .kbdetails .confluence-information-macro-tip .confluence-information-macro-body {
     background: #e3fef2 !important;
     color: #1a1d23 !important;
     padding: 15px 25px !important;
+    border: none !important;
+}
+
+.kbdetails .confluence-information-macro-success .confluence-information-macro-body {
+    background: #e3fef2 !important;
+    color: #1a1d23 !important;
+    padding: 15px 25px !important;
+    border: none !important;
 }
 
 /* ── Tables: clean modern style (no border-radius, no zebra stripes) ── */
@@ -666,15 +699,21 @@ footer a svg {
     border-left: 4px solid #8777d9 !important;
 }
 
-.theme-dark .kbdetails .confluence-information-macro-warning {
-    border-left: 4px solid #ffab00 !important;
+.theme-dark .kbdetails .confluence-information-macro-warning,
+.theme-dark .kbdetails .confluence-information-macro-error {
+    border-left: 4px solid #ff5630 !important;
 }
 
-.theme-dark .kbdetails .confluence-information-macro-tip {
+.theme-dark .kbdetails .confluence-information-macro-tip,
+.theme-dark .kbdetails .confluence-information-macro-success {
     border-left: 4px solid #36b37e !important;
 }
 
 /* ── Confluence Panel bodies: dark mode backgrounds ── */
+.theme-dark .kbdetails .confluence-information-macro-body {
+    border: none !important;
+}
+
 .theme-dark .kbdetails .confluence-information-macro-information .confluence-information-macro-body {
     background: #1a2744 !important;
     color: #ddd !important;
@@ -685,12 +724,14 @@ footer a svg {
     color: #ddd !important;
 }
 
-.theme-dark .kbdetails .confluence-information-macro-warning .confluence-information-macro-body {
-    background: #3d3820 !important;
+.theme-dark .kbdetails .confluence-information-macro-warning .confluence-information-macro-body,
+.theme-dark .kbdetails .confluence-information-macro-error .confluence-information-macro-body {
+    background: #3d2020 !important;
     color: #ddd !important;
 }
 
-.theme-dark .kbdetails .confluence-information-macro-tip .confluence-information-macro-body {
+.theme-dark .kbdetails .confluence-information-macro-tip .confluence-information-macro-body,
+.theme-dark .kbdetails .confluence-information-macro-success .confluence-information-macro-body {
     background: #1a3d2a !important;
     color: #ddd !important;
 }

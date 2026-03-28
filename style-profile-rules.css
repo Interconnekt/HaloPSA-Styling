@@ -283,14 +283,32 @@ border-left: 4px solid #6554c0 !important;
 
 /* ═══════════════════════════════════════
    Precedence: 28 | Selector: .confluence-information-macro-warning
-   ═══════════════════════════════════════ */
+   ═══════════════════════════════════════
+   NOTE: Despite the class name, this renders ADF "error" panels (red).
+   Legacy Confluence mapped error→warning CSS class. */
 border: none !important;
-border-left: 4px solid #ffab00 !important;
+border-left: 4px solid #de350b !important;
 
 
 /* ═══════════════════════════════════════
    Precedence: 28 | Selector: .confluence-information-macro-tip
    ═══════════════════════════════════════ */
+border: none !important;
+border-left: 4px solid #00875a !important;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 28 | Selector: .confluence-information-macro-error
+   ═══════════════════════════════════════
+   Some HaloPSA versions export ADF "error" with this class instead. */
+border: none !important;
+border-left: 4px solid #de350b !important;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 28 | Selector: .confluence-information-macro-success
+   ═══════════════════════════════════════
+   ADF "success" panel — may use this class instead of tip. */
 border: none !important;
 border-left: 4px solid #00875a !important;
 
@@ -315,6 +333,7 @@ margin: 15px 0;
 background: #eaf2fd !important;
 color: #1a1d23 !important;
 padding: 15px 25px !important;
+border: none !important;
 
 
 /* ═══════════════════════════════════════
@@ -323,14 +342,17 @@ padding: 15px 25px !important;
 background: #f7eefd !important;
 color: #1a1d23 !important;
 padding: 15px 25px !important;
+border: none !important;
 
 
 /* ═══════════════════════════════════════
    Precedence: 30 | Selector: .confluence-information-macro-warning .confluence-information-macro-body
-   ═══════════════════════════════════════ */
-background: #fdf7cd !important;
+   ═══════════════════════════════════════
+   Renders ADF "error" panels (red). See outer wrapper comment. */
+background: #fcedec !important;
 color: #1a1d23 !important;
 padding: 15px 25px !important;
+border: none !important;
 
 
 /* ═══════════════════════════════════════
@@ -339,6 +361,34 @@ padding: 15px 25px !important;
 background: #e3fef2 !important;
 color: #1a1d23 !important;
 padding: 15px 25px !important;
+border: none !important;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 30 | Selector: .confluence-information-macro-error .confluence-information-macro-body
+   ═══════════════════════════════════════
+   Fallback if HaloPSA uses -error class instead of -warning for error panels. */
+background: #fcedec !important;
+color: #1a1d23 !important;
+padding: 15px 25px !important;
+border: none !important;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 30 | Selector: .confluence-information-macro-success .confluence-information-macro-body
+   ═══════════════════════════════════════
+   Fallback if HaloPSA uses -success class instead of -tip. */
+background: #e3fef2 !important;
+color: #1a1d23 !important;
+padding: 15px 25px !important;
+border: none !important;
+
+
+/* ═══════════════════════════════════════
+   Precedence: 30 | Selector: .confluence-information-macro-body
+   ═══════════════════════════════════════
+   Catch-all: kills Confluence inline borders on ALL panel bodies. */
+border: none !important;
 
 
 /* ═══════════════════════════════════════
@@ -346,6 +396,7 @@ padding: 15px 25px !important;
    ═══════════════════════════════════════ */
 color: #1a1d23 !important;
 padding: 15px 25px !important;
+border: none !important;
 
 
 /* ═══════════════════════════════════════

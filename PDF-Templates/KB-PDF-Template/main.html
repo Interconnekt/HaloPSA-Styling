@@ -6,19 +6,21 @@
     <style type="text/css">
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
 
-        /* ── Page setup — Word Narrow margins ── */
+        /* ── Page setup ──
+           Top/bottom margins larger to clear header/footer.
+           Left/right match Word Narrow (12.7mm). */
         @page {
             size: A4;
-            margin: 12.7mm;
+            margin: 22mm 12.7mm 20mm 12.7mm;
         }
 
-        /* ── Base ── */
+        /* ── Base — !important overrides Confluence inline font styles ── */
         * {
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
         }
 
         body {
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
             font-size: 12px;
             line-height: 1.7;
             color: #1a1d23;
@@ -28,7 +30,7 @@
 
         /* ── Headings ── */
         h1 {
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
             font-size: 28px;
             font-weight: 800;
             color: #2F355E;
@@ -38,7 +40,7 @@
         }
 
         h2 {
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
             font-size: 18px;
             font-weight: 700;
             color: #2F355E;
@@ -49,7 +51,7 @@
         }
 
         h3 {
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
             font-size: 15px;
             font-weight: 600;
             color: #2F355E;
@@ -57,7 +59,7 @@
         }
 
         h4 {
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
             font-size: 13px;
             font-weight: 600;
             color: #5f6672;
@@ -66,12 +68,12 @@
 
         /* ── Paragraphs & lists ── */
         p {
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
             margin: 8px 0;
         }
 
         li {
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
             margin-bottom: 4px;
         }
 
@@ -84,7 +86,7 @@
         a {
             color: #4088D4;
             text-decoration: none;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
         }
 
         /* ── Divider ── */
@@ -100,7 +102,7 @@
             border-collapse: collapse;
             font-size: 11px;
             margin-top: 12px;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
         }
 
         .meta-table th {
@@ -110,14 +112,14 @@
             text-align: left;
             padding: 8px 12px;
             border: 1px solid #e2e5ea;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
         }
 
         .meta-table td {
             padding: 8px 12px;
             border: 1px solid #e2e5ea;
             vertical-align: top;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
         }
 
         /* ── Stats bar ── */
@@ -125,7 +127,7 @@
             font-size: 10px;
             color: #8b919d;
             margin: 10px 0 0 0;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
         }
 
         .stats-bar strong {
@@ -141,7 +143,7 @@
             font-size: 10px;
             color: #5f6672;
             margin: 6px 0 0 0;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
         }
 
         /* ── Content sections ── */
@@ -153,7 +155,7 @@
         .section-body {
             font-size: 12px;
             line-height: 1.7;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
         }
 
         /* ── Tables (Confluence content) ── */
@@ -162,7 +164,7 @@
             border-collapse: collapse;
             margin: 12px 0;
             font-size: 11px;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
         }
 
         th {
@@ -172,14 +174,14 @@
             text-align: left;
             padding: 8px 12px;
             border: 1px solid #e2e5ea;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
         }
 
         td {
             padding: 8px 12px;
             border: 1px solid #e2e5ea;
             vertical-align: top;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
         }
 
         tr {
@@ -195,7 +197,7 @@
         }
 
         .confluence-information-macro-body {
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
         }
 
         .confluence-information-macro-information {
@@ -252,7 +254,7 @@
 
         .panelContent {
             padding: 10px 16px;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
         }
 
         /* ── Status macros ── */
@@ -264,7 +266,7 @@
             border-radius: 999px;
             text-transform: uppercase;
             letter-spacing: 0.02em;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
         }
 
         .aui-lozenge-complete  { background: #eaf2fd; color: #0747a6; }
@@ -316,12 +318,12 @@
             border-radius: 0 6px 6px 0;
             color: #5f6672;
             font-style: italic;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
         }
 
         blockquote p {
             margin: 0;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
         }
 
         /* ── Images ── */

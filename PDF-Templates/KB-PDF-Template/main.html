@@ -1,0 +1,387 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>$KBTITLE</title>
+    <style type="text/css">
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+        /* ── Page setup — Word Narrow margins ── */
+        @page {
+            size: A4;
+            margin: 12.7mm;
+        }
+
+        /* ── Base ── */
+        * {
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+        }
+
+        body {
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-size: 12px;
+            line-height: 1.7;
+            color: #1a1d23;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ── Headings ── */
+        h1 {
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            color: #2F355E;
+            margin: 0 0 6px 0;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #2F355E;
+            margin: 30px 0 8px 0;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #4088D4;
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: #2F355E;
+            margin: 24px 0 6px 0;
+        }
+
+        h4 {
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            color: #5f6672;
+            margin: 20px 0 4px 0;
+        }
+
+        /* ── Paragraphs & lists ── */
+        p {
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            margin: 8px 0;
+        }
+
+        li {
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+            margin-bottom: 4px;
+        }
+
+        ul, ol {
+            padding-left: 24px;
+            margin: 8px 0;
+        }
+
+        /* ── Links ── */
+        a {
+            color: #4088D4;
+            text-decoration: none;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+        }
+
+        /* ── Divider ── */
+        hr {
+            border: none;
+            border-top: 1px solid #e2e5ea;
+            margin: 20px 0;
+        }
+
+        /* ── Meta table (front page) — matches Confluence table style ── */
+        .meta-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            margin-top: 12px;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+        }
+
+        .meta-table th {
+            background-color: #f5f6f8;
+            color: #1a1d23;
+            font-weight: 600;
+            text-align: left;
+            padding: 8px 12px;
+            border: 1px solid #e2e5ea;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+        }
+
+        .meta-table td {
+            padding: 8px 12px;
+            border: 1px solid #e2e5ea;
+            vertical-align: top;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+        }
+
+        /* ── Stats bar ── */
+        .stats-bar {
+            font-size: 10px;
+            color: #8b919d;
+            margin: 10px 0 0 0;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+        }
+
+        .stats-bar strong {
+            color: #5f6672;
+        }
+
+        .stats-bar span {
+            margin-right: 16px;
+        }
+
+        /* ── Tags ── */
+        .tags {
+            font-size: 10px;
+            color: #5f6672;
+            margin: 6px 0 0 0;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+        }
+
+        /* ── Content sections ── */
+        .section {
+            page-break-inside: avoid;
+            margin-top: 10px;
+        }
+
+        .section-body {
+            font-size: 12px;
+            line-height: 1.7;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+        }
+
+        /* ── Tables (Confluence content) ── */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 11px;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+        }
+
+        th {
+            background-color: #f5f6f8;
+            color: #1a1d23;
+            font-weight: 600;
+            text-align: left;
+            padding: 8px 12px;
+            border: 1px solid #e2e5ea;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+        }
+
+        td {
+            padding: 8px 12px;
+            border: 1px solid #e2e5ea;
+            vertical-align: top;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+        }
+
+        tr {
+            page-break-inside: avoid;
+        }
+
+        /* ── Confluence panels ── */
+        .confluence-information-macro {
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 12px 0;
+            page-break-inside: avoid;
+        }
+
+        .confluence-information-macro-body {
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+        }
+
+        .confluence-information-macro-information {
+            border-left: 4px solid #2684ff;
+        }
+
+        .confluence-information-macro-information .confluence-information-macro-body {
+            background: #eaf2fd;
+            padding: 10px 16px;
+            color: #1a1d23;
+        }
+
+        .confluence-information-macro-note {
+            border-left: 4px solid #6554c0;
+        }
+
+        .confluence-information-macro-note .confluence-information-macro-body {
+            background: #f7eefd;
+            padding: 10px 16px;
+            color: #1a1d23;
+        }
+
+        .confluence-information-macro-warning,
+        .confluence-information-macro-error {
+            border-left: 4px solid #de350b;
+        }
+
+        .confluence-information-macro-warning .confluence-information-macro-body,
+        .confluence-information-macro-error .confluence-information-macro-body {
+            background: #fcedec;
+            padding: 10px 16px;
+            color: #1a1d23;
+        }
+
+        .confluence-information-macro-tip,
+        .confluence-information-macro-success {
+            border-left: 4px solid #00875a;
+        }
+
+        .confluence-information-macro-tip .confluence-information-macro-body,
+        .confluence-information-macro-success .confluence-information-macro-body {
+            background: #e3fef2;
+            padding: 10px 16px;
+            color: #1a1d23;
+        }
+
+        /* Generic panel */
+        .panel {
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 12px 0;
+            page-break-inside: avoid;
+        }
+
+        .panelContent {
+            padding: 10px 16px;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+        }
+
+        /* ── Status macros ── */
+        .status-macro {
+            display: inline-block;
+            padding: 3px 8px;
+            font-weight: 600;
+            font-size: 9px;
+            border-radius: 999px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+        }
+
+        .aui-lozenge-complete  { background: #eaf2fd; color: #0747a6; }
+        .aui-lozenge-success   { background: #e3fef2; color: #006644; }
+        .aui-lozenge-current   { background: #fff0b3; color: #974f0c; }
+        .aui-lozenge-error     { background: #fcedec; color: #bf2600; }
+        .aui-lozenge-progress  { background: #f7eefd; color: #403294; }
+
+        /* ── Code ── */
+        code {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 0.9em;
+            background: #f1f3f5;
+            color: #d6336c;
+            padding: 1px 5px;
+            border-radius: 3px;
+        }
+
+        pre {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 10px;
+            line-height: 1.5;
+            background: #1e1e2e;
+            color: #cdd6f4;
+            border: 1px solid #313244;
+            border-radius: 6px;
+            padding: 12px 16px;
+            margin: 12px 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            page-break-inside: avoid;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+            font-size: inherit;
+            font-family: inherit;
+        }
+
+        /* ── Blockquotes ── */
+        blockquote {
+            border-left: 4px solid #4088D4;
+            background: #f8f9fc;
+            margin: 12px 0;
+            padding: 10px 16px;
+            border-radius: 0 6px 6px 0;
+            color: #5f6672;
+            font-style: italic;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+        }
+
+        blockquote p {
+            margin: 0;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif;
+        }
+
+        /* ── Images ── */
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── Title Block ── -->
+    <div>
+        <h1>$KBTITLE</h1>
+
+        <table class="meta-table">
+            <tr>
+                <th>Created</th>
+                <td>$KBCREATEDBY &bull; $KBDATECREATED</td>
+                <th>Last Edited</th>
+                <td>$KBEDITEDBY &bull; $KBDATEEDITED</td>
+            </tr>
+            <tr>
+                <th>Next Review</th>
+                <td>$KBNEXTREVIEWDATE</td>
+                <th>Article ID</th>
+                <td>$KBID</td>
+            </tr>
+        </table>
+
+        <div class="stats-bar">
+            <span><strong>Views:</strong> $KBVIEWCOUNT</span>
+            <span><strong>Helpful:</strong> $KBUSEFULCOUNT</span>
+            <span><strong>Unhelpful:</strong> $KBNOTUSEFULCOUNT</span>
+        </div>
+
+        <div class="tags"><strong>Tags:</strong> $KBTAGS</div>
+    </div>
+
+    <hr>
+
+    <!-- ── Description ── -->
+    <div class="section">
+        <h2>Description</h2>
+        <div class="section-body">$KBDESCRIPTION</div>
+    </div>
+
+    <!-- ── Resolution ── -->
+    <div class="section">
+        <h2>Resolution</h2>
+        <div class="section-body">$KBRESOLUTION</div>
+    </div>
+
+    <!-- ── Internal Memo ── -->
+    <div class="section">
+        <h2>Internal Memo</h2>
+        <div class="section-body">$KBINTERNALMEMO</div>
+    </div>
+
+</body>
+</html>

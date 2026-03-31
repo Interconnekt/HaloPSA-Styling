@@ -3,8 +3,29 @@
 <head>
     <meta charset="utf-8">
     <title>$KBTITLE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" type="text/css">
     <style type="text/css">
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+        /* Fallback @font-face if <link> fails in wkhtmltopdf */
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 400;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtr6Ew-Y3tcoqK5.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 600;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCu6YDtcoqK5.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 700;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCuMYDtcoqK5.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 800;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCvhYDtcoqK5.woff2') format('woff2');
+        }
 
         /* ── Page setup ──
            Top/bottom margins larger to clear header/footer.
@@ -15,7 +36,7 @@
         }
 
         /* ── Base — !important overrides Confluence inline font styles ── */
-        * {
+        *, *::before, *::after {
             font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
         }
 
@@ -155,6 +176,22 @@
         .section-body {
             font-size: 12px;
             line-height: 1.7;
+            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+        }
+
+        /* Deep override — catches Confluence inline style="font-family:..." on any element */
+        .section-body *,
+        .section-body span,
+        .section-body div,
+        .section-body p,
+        .section-body li,
+        .section-body td,
+        .section-body th,
+        .section-body a,
+        .section-body strong,
+        .section-body em,
+        .section-body b,
+        .section-body i {
             font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
         }
 

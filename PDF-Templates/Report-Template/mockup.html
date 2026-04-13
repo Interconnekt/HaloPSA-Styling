@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Report (Mockup)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; padding: 40px; background: #e0e0e0; font-family: Montserrat, Arial, sans-serif; }
+        .page { width: 210mm; margin: 0 auto 40px auto; background: #fff; box-shadow: 0 2px 16px rgba(0,0,0,0.10); padding: 0; overflow: hidden; position: relative; }
+        .page-body { padding: 24px 48px 40px 48px; font-size: 12px; line-height: 1.6; color: #34495e; }
+        .page-label { background: #F4F4F5; color: #30355b; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 6px 48px; }
+
+        .pdf-header { background-color: #30355b; color: #fff; padding: 14px 48px; }
+        .pdf-header table { width: 100%; border-collapse: collapse; }
+        .pdf-header .title { font-size: 14px; font-weight: 700; letter-spacing: 0.5px; }
+        .pdf-footer { background-color: #18181B; color: rgba(255,255,255,0.85); padding: 10px 48px; font-size: 9px; }
+        .pdf-footer table { width: 100%; border-collapse: collapse; }
+
+        .report-table { width: 100%; border-collapse: collapse; font-size: 11px; border-top: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; }
+        .report-table thead th { background-color: #F4F4F5; color: #30355b; font-weight: 700; text-align: left; padding: 8px 12px; font-size: 11px; white-space: nowrap; }
+        .report-table tbody td { padding: 8px 12px; border-bottom: 1px solid #e0e0e0; vertical-align: top; color: #34495e; font-size: 11px; word-wrap: break-word; }
+        .report-table tbody tr:nth-child(even) { background-color: #F4F4F5; }
+    </style>
+</head>
+<body>
+
+    <div class="page">
+        <div class="page-label">Page 1 — Report</div>
+
+        <div class="pdf-header">
+            <table>
+                <tr>
+                    <td style="width: 50%; vertical-align: middle;">
+                        <img src="https://www.interconnekt.com.au/wp-content/uploads/2024/02/InterconnektLogo-FullWhite.png" alt="Interconnekt" style="height: 36px;">
+                    </td>
+                    <td style="width: 50%; text-align: right; vertical-align: middle; font-size: 10px; line-height: 1.6;">
+                        <div class="title">REPORT</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="page-body">
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>Ticket</th>
+                        <th>Summary</th>
+                        <th>Status</th>
+                        <th>Priority</th>
+                        <th>Agent</th>
+                        <th>Date Raised</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>TKT-4521</td>
+                        <td>Network switch firmware update</td>
+                        <td>Completed</td>
+                        <td>Medium</td>
+                        <td>James M.</td>
+                        <td>02/04/2026</td>
+                    </tr>
+                    <tr>
+                        <td>TKT-4523</td>
+                        <td>New user onboarding - laptop setup</td>
+                        <td>Completed</td>
+                        <td>High</td>
+                        <td>Sarah K.</td>
+                        <td>03/04/2026</td>
+                    </tr>
+                    <tr>
+                        <td>TKT-4530</td>
+                        <td>Email delivery issues investigation</td>
+                        <td>In Progress</td>
+                        <td>High</td>
+                        <td>James M.</td>
+                        <td>05/04/2026</td>
+                    </tr>
+                    <tr>
+                        <td>TKT-4535</td>
+                        <td>VPN configuration for remote worker</td>
+                        <td>Completed</td>
+                        <td>Medium</td>
+                        <td>Sarah K.</td>
+                        <td>07/04/2026</td>
+                    </tr>
+                    <tr>
+                        <td>TKT-4541</td>
+                        <td>Printer driver deployment via Intune</td>
+                        <td>Completed</td>
+                        <td>Low</td>
+                        <td>James M.</td>
+                        <td>08/04/2026</td>
+                    </tr>
+                    <tr>
+                        <td>TKT-4548</td>
+                        <td>SharePoint permissions audit</td>
+                        <td>In Progress</td>
+                        <td>Medium</td>
+                        <td>Sarah K.</td>
+                        <td>10/04/2026</td>
+                    </tr>
+                    <tr>
+                        <td>TKT-4552</td>
+                        <td>Firewall rule review and cleanup</td>
+                        <td>Pending</td>
+                        <td>High</td>
+                        <td>James M.</td>
+                        <td>11/04/2026</td>
+                    </tr>
+                    <tr>
+                        <td>TKT-4560</td>
+                        <td>Azure AD Conditional Access policy review</td>
+                        <td>Completed</td>
+                        <td>High</td>
+                        <td>Sarah K.</td>
+                        <td>12/04/2026</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pdf-footer">
+            <table>
+                <tr>
+                    <td style="width: 33%; text-align: left; padding: 6px 0;">interconnekt.com.au</td>
+                    <td style="width: 33%; text-align: center; padding: 6px 0;">1300 852 842</td>
+                    <td style="width: 33%; text-align: right; padding: 6px 0;">Page 1 of 1</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

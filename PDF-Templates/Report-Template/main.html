@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 400;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtr6Ew-Y3tcoqK5.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 600;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCu6YDtcoqK5.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 700;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCuMYDtcoqK5.woff2') format('woff2');
+        }
+
+        @page {
+            size: A4;
+            margin: 22mm 12.7mm 30mm 12.7mm;
+        }
+
+        *, *::before, *::after {
+            font-family: Montserrat, Arial, sans-serif !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Montserrat, Arial, sans-serif !important;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #34495e;
+            margin: 0;
+            padding: 20px 0 0 0;
+        }
+
+        /* ── Report table ── */
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            margin: 0;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .report-table thead {
+            display: table-header-group;
+        }
+
+        .report-table thead th {
+            background-color: #F4F4F5;
+            color: #30355b;
+            font-weight: 700;
+            text-align: left;
+            padding: 8px 12px;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .report-table tbody td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: top;
+            color: #34495e;
+            font-size: 11px;
+            word-wrap: break-word;
+        }
+
+        .report-table tbody tr {
+            page-break-inside: avoid;
+        }
+
+        .report-table tbody tr:nth-child(even) {
+            background-color: #F4F4F5;
+        }
+
+        /* ── Report chart ── */
+        .report-chart {
+            margin: 30px auto;
+            text-align: center;
+        }
+
+        .report-chart img {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <table class="report-table">
+        $REPORTDATA
+    </table>
+
+</body>
+</html>

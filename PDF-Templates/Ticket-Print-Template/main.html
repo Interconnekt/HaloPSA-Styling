@@ -1,0 +1,362 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Ticket $FAULTID</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        /* Fallback @font-face if <link> fails in wkhtmltopdf */
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 400;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtr6Ew-Y3tcoqK5.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 600;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCu6YDtcoqK5.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 700;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCuMYDtcoqK5.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 800;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCvhYDtcoqK5.woff2') format('woff2');
+        }
+
+        /* ── Page setup ── */
+        @page {
+            size: A4;
+            margin: 22mm 12.7mm 20mm 12.7mm;
+        }
+
+        /* ── Base reset ── */
+        *, *::before, *::after {
+            font-family: Montserrat, Arial, sans-serif !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Montserrat, Arial, sans-serif !important;
+            font-size: 13px;
+            line-height: 1.7;
+            color: #34495e;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ── Title area ── */
+        .ticket-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #30355b;
+            margin: 0 0 4px 0;
+            letter-spacing: -0.02em;
+            line-height: 1.4;
+        }
+
+        .ticket-subtitle {
+            font-size: 12px;
+            font-weight: 700;
+            color: #30355b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0 0 16px 0;
+            line-height: 1.4;
+        }
+
+        /* ── Metadata table (Style A — shaded label column) ── */
+        .meta-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-bottom: 20px;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .meta-table th {
+            background-color: #f0f1f2;
+            color: #30355b;
+            font-weight: 700;
+            text-align: left;
+            padding: 8px 14px;
+            border-bottom: 1px solid #e0e0e0;
+            white-space: nowrap;
+            width: 110px;
+        }
+
+        .meta-table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: top;
+            color: #34495e;
+        }
+
+        /* ── Section headers — periwinkle band style ── */
+        .section-header {
+            font-size: 16px;
+            font-weight: 700;
+            color: #30355b;
+            margin: 24px 0 14px 0;
+            padding: 10px 16px;
+            background-color: #e0eafd;
+            border-radius: 6px;
+        }
+
+        /* ── Divider ── */
+        hr {
+            border: none;
+            border-top: 1px solid #e0e0e0;
+            margin: 24px 0;
+        }
+
+        /* ── Action history ── */
+        .action-item {
+            position: relative;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            background-color: #ffffff;
+            page-break-inside: avoid;
+            overflow: hidden;
+        }
+
+        .action-header {
+            display: table;
+            width: 100%;
+            padding: 10px 14px;
+            background-color: #f0f1f2;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .action-avatar {
+            display: table-cell;
+            vertical-align: top;
+            width: 40px;
+            padding-right: 10px;
+        }
+
+        .action-avatar .profile-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 18px;
+            font-size: 16px !important;
+            line-height: 36px;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            text-align: center;
+            color: white;
+            border: none;
+        }
+
+        .action-avatar .profile-circle img {
+            height: 36px;
+            width: 36px;
+            max-height: 36px;
+            max-width: 36px;
+            border-radius: 18px;
+            top: -2px;
+            position: relative;
+        }
+
+        .action-meta {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .action-who {
+            font-size: 13px;
+            font-weight: 700;
+            color: #30355b;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .action-outcome {
+            font-size: 11px;
+            color: #34495e;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .action-when {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: right;
+            font-size: 10px;
+            color: #34495e;
+            white-space: nowrap;
+            padding-left: 10px;
+        }
+
+        .action-body {
+            padding: 12px 14px 12px 64px;
+            font-size: 13px;
+            line-height: 1.7;
+            color: #34495e;
+        }
+
+        .action-body img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .action-time-summary {
+            font-size: 10px;
+            color: #34495e;
+            margin-top: 2px;
+        }
+
+        /* ── Detail table (items issued — Style B header row) ── */
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin: 12px 0;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .detail-table thead th {
+            background-color: #ebf9fe;
+            color: #30355b;
+            font-weight: 700;
+            text-align: left;
+            padding: 8px 14px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .detail-table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: top;
+            color: #34495e;
+        }
+
+        .detail-table tr {
+            page-break-inside: avoid;
+        }
+
+        /* ── Signature ── */
+        .signature-section {
+            margin-top: 30px;
+            page-break-inside: avoid;
+        }
+
+        .signature-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #30355b;
+            margin-bottom: 8px;
+        }
+
+        .signature-box {
+            height: 100px;
+            width: 320px;
+            border-bottom: 2px solid #30355b;
+            margin-bottom: 8px;
+        }
+
+        .signature-disclaimer {
+            font-size: 9px;
+            color: #34495e;
+            line-height: 1.4;
+            max-width: 500px;
+        }
+
+        /* ── Links ── */
+        a {
+            color: #3598db;
+            text-decoration: none;
+        }
+
+        /* ── Tables in action content ── */
+        .action-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0;
+            font-size: 13px;
+        }
+
+        .action-body th {
+            background-color: #f0f1f2;
+            font-weight: 700;
+            text-align: left;
+            padding: 6px 10px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #30355b;
+        }
+
+        .action-body td {
+            padding: 6px 10px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #34495e;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── Ticket Title ── -->
+    <div class="ticket-title">$SUMMARY</div>
+    <div class="ticket-subtitle">$REQUESTTYPE &bull; #$FAULTID</div>
+
+    <!-- ── Metadata ── -->
+    <table class="meta-table">
+        <tr>
+            <th>Customer</th>
+            <td>$AREA</td>
+            <th>Site</th>
+            <td>$SITE</td>
+        </tr>
+        <tr>
+            <th>User</th>
+            <td>$USERNAME</td>
+            <th>Agent</th>
+            <td>$AGENT</td>
+        </tr>
+        <tr>
+            <th>Date Raised</th>
+            <td>$DATEOCCURREDNOTIME</td>
+            <th>Priority</th>
+            <td>$SERIOUSNESS2</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td>$STATUS</td>
+            <th>Time Spent</th>
+            <td>$TIMETAKEN</td>
+        </tr>
+        <tr>
+            <th>Asset</th>
+            <td colspan="3">$ASSETTAG</td>
+        </tr>
+    </table>
+
+    <!-- ── Action History ── -->
+    <div class="section-header">Activity</div>
+    <div>
+        $ACTIONLIST
+    </div>
+
+    <!-- ── Signature ── -->
+    <hr>
+    <div class="signature-section">
+        <div class="signature-label">Customer Signature</div>
+        <div class="signature-box">
+            $CUSTOMERSIGNATURE
+        </div>
+        <div class="signature-disclaimer">
+            This signature confirms that the customer is satisfied the work has been completed to an acceptable standard.
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,485 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Ticket 0176404 — Mockup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        /* ── Page setup (simulated A4) ── */
+        @page {
+            size: A4;
+            margin: 22mm 12.7mm 20mm 12.7mm;
+        }
+
+        /* ── Simulated page wrapper for browser preview ── */
+        .page-wrapper {
+            max-width: 210mm;
+            margin: 0 auto;
+            background: #ffffff;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+            overflow: hidden;
+        }
+
+        /* ── Header bar ── */
+        .pdf-header {
+            background-color: #30355b;
+            color: #ffffff;
+            padding: 12px 24px;
+            font-family: Montserrat, Arial, sans-serif;
+        }
+
+        .pdf-header table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .pdf-header .logo-cell {
+            width: 50%;
+            vertical-align: middle;
+            padding: 4px 0;
+        }
+
+        .pdf-header .logo-placeholder {
+            height: 40px;
+            width: 220px;
+            display: flex;
+            align-items: center;
+        }
+
+        .pdf-header .logo-placeholder img {
+            max-height: 40px;
+            max-width: 220px;
+        }
+
+        .pdf-header .ref-cell {
+            width: 50%;
+            text-align: right;
+            vertical-align: middle;
+            padding: 4px 0;
+            font-size: 10px;
+            color: rgba(255,255,255,0.7);
+            font-family: Montserrat, Arial, sans-serif;
+        }
+
+        /* ── Footer bar ── */
+        .pdf-footer {
+            background-color: #000000;
+            color: rgba(255,255,255,0.85);
+            padding: 10px 24px;
+            font-family: Montserrat, Arial, sans-serif;
+            font-size: 9px;
+            line-height: 1.4;
+        }
+
+        .pdf-footer table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: Montserrat, Arial, sans-serif;
+            font-size: 9px;
+        }
+
+        .pdf-footer td {
+            padding: 2px 0;
+            font-family: Montserrat, Arial, sans-serif;
+            font-size: 9px;
+        }
+
+        /* ── Body content area ── */
+        .pdf-body {
+            padding: 24px 24px 32px 24px;
+        }
+
+        /* ── Base reset ── */
+        *, *::before, *::after {
+            font-family: Montserrat, Arial, sans-serif !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Montserrat, Arial, sans-serif !important;
+            font-size: 13px;
+            line-height: 1.7;
+            color: #34495e;
+            margin: 0;
+            padding: 20px;
+            background: #edf0f1;
+        }
+
+        /* ── Title area ── */
+        .ticket-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #30355b;
+            margin: 0 0 4px 0;
+            letter-spacing: -0.02em;
+            line-height: 1.4;
+        }
+
+        .ticket-subtitle {
+            font-size: 12px;
+            font-weight: 700;
+            color: #30355b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0 0 16px 0;
+            line-height: 1.4;
+        }
+
+        /* ── Metadata table (Style A) ── */
+        .meta-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-bottom: 20px;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .meta-table th {
+            background-color: #f0f1f2;
+            color: #30355b;
+            font-weight: 700;
+            text-align: left;
+            padding: 8px 14px;
+            border-bottom: 1px solid #e0e0e0;
+            white-space: nowrap;
+            width: 110px;
+        }
+
+        .meta-table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: top;
+            color: #34495e;
+        }
+
+        /* ── Section headers — periwinkle band ── */
+        .section-header {
+            font-size: 16px;
+            font-weight: 700;
+            color: #30355b;
+            margin: 24px 0 14px 0;
+            padding: 10px 16px;
+            background-color: #e0eafd;
+            border-radius: 6px;
+        }
+
+        /* ── Divider ── */
+        hr {
+            border: none;
+            border-top: 1px solid #e0e0e0;
+            margin: 24px 0;
+        }
+
+        /* ── Action history ── */
+        .action-item {
+            position: relative;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            background-color: #ffffff;
+            overflow: hidden;
+        }
+
+        .action-header {
+            display: table;
+            width: 100%;
+            padding: 10px 14px;
+            background-color: #f0f1f2;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .action-avatar {
+            display: table-cell;
+            vertical-align: top;
+            width: 40px;
+            padding-right: 10px;
+        }
+
+        .action-avatar .profile-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 18px;
+            font-size: 16px !important;
+            line-height: 36px;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            text-align: center;
+            color: white;
+            border: none;
+        }
+
+        .action-meta {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .action-who {
+            font-size: 13px;
+            font-weight: 700;
+            color: #30355b;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .action-outcome {
+            font-size: 11px;
+            color: #34495e;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .action-when {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: right;
+            font-size: 10px;
+            color: #34495e;
+            white-space: nowrap;
+            padding-left: 10px;
+        }
+
+        .action-body {
+            padding: 12px 14px 12px 64px;
+            font-size: 13px;
+            line-height: 1.7;
+            color: #34495e;
+        }
+
+        .action-body img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .action-time-summary {
+            font-size: 10px;
+            color: #34495e;
+            margin-top: 2px;
+        }
+
+        /* ── Signature ── */
+        .signature-section {
+            margin-top: 30px;
+        }
+
+        .signature-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #30355b;
+            margin-bottom: 8px;
+        }
+
+        .signature-box {
+            height: 100px;
+            width: 320px;
+            border-bottom: 2px solid #30355b;
+            margin-bottom: 8px;
+        }
+
+        .signature-disclaimer {
+            font-size: 9px;
+            color: #34495e;
+            line-height: 1.4;
+            max-width: 500px;
+        }
+
+        /* ── Links ── */
+        a {
+            color: #3598db;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+    <!-- ══════ HEADER ══════ -->
+    <div class="pdf-header">
+        <table>
+            <tr>
+                <td class="logo-cell">
+                    <div class="logo-placeholder">
+                        <img src="https://assets.unlayer.com/projects/0/1740816329578-Interconnekt-Neg-Halo-300w.png" alt="Interconnekt">
+                    </div>
+                </td>
+                <td class="ref-cell">
+                    Ticket Details Report &bull; #0176404
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- ══════ BODY ══════ -->
+    <div class="pdf-body">
+
+        <!-- ── Ticket Title ── -->
+        <div class="ticket-title">HEIC file issue on workstation</div>
+        <div class="ticket-subtitle">Incident &bull; #0176404</div>
+
+        <!-- ── Metadata ── -->
+        <table class="meta-table">
+            <tr>
+                <th>Customer</th>
+                <td>Kennedy Nolan</td>
+                <th>Site</th>
+                <td>Main</td>
+            </tr>
+            <tr>
+                <th>User</th>
+                <td>Candice Chan</td>
+                <th>Agent</th>
+                <td>Joel Kino</td>
+            </tr>
+            <tr>
+                <th>Date Raised</th>
+                <td>10/04/2026</td>
+                <th>Priority</th>
+                <td>Low</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>Closed</td>
+                <th>Time Spent</th>
+                <td>00:04</td>
+            </tr>
+            <tr>
+                <th>Asset</th>
+                <td colspan="3"></td>
+            </tr>
+        </table>
+
+        <!-- ── Action History ── -->
+        <div class="section-header">Activity</div>
+
+        <!-- Action 1: User email -->
+        <div class="action-item">
+            <div class="action-header">
+                <div class="action-avatar">
+                    <div class="profile-circle" style="background-color: #3574e3;">CC</div>
+                </div>
+                <div class="action-meta">
+                    <div class="action-who">Candice Chan</div>
+                    <div class="action-outcome">First User Email</div>
+                </div>
+                <div class="action-when">10/04/2026 17:20</div>
+            </div>
+            <div class="action-body">
+                <p>Hi Interconnekt,</p>
+                <p>Having some issues with HEIC files again.</p>
+                <p>Should I install the HEVC video extension?</p>
+                <p style="margin-top: 16px; font-size: 11px; color: #34495e;">
+                    <strong>Candice Chan</strong> | Senior Project Architect<br>
+                    <em>she/her</em><br>
+                    My work days are Monday, Thursday &amp; Friday
+                </p>
+            </div>
+        </div>
+
+        <!-- Action 2: Automation -->
+        <div class="action-item">
+            <div class="action-header">
+                <div class="action-avatar">
+                    <div class="profile-circle" style="background-color: #8b919d;">A</div>
+                </div>
+                <div class="action-meta">
+                    <div class="action-who">Automation</div>
+                    <div class="action-outcome">Emailed Confirmation</div>
+                </div>
+                <div class="action-when">10/04/2026 17:20</div>
+            </div>
+            <div class="action-body">
+                <p></p>
+            </div>
+        </div>
+
+        <!-- Action 3: Agent reply -->
+        <div class="action-item">
+            <div class="action-header">
+                <div class="action-avatar">
+                    <div class="profile-circle" style="background-color: #30355b;">JK</div>
+                </div>
+                <div class="action-meta">
+                    <div class="action-who">Joel Kino</div>
+                    <div class="action-outcome">Email User</div>
+                    <div class="action-time-summary">Time Taken: 00:04</div>
+                </div>
+                <div class="action-when">10/04/2026 17:24</div>
+            </div>
+            <div class="action-body">
+                <p>Hi Candice,</p>
+                <p>Yes, you can go ahead and install the HEVC Video Extensions from the Microsoft Store. That should resolve the HEIC preview issue.</p>
+                <p>Let us know if you run into any trouble with it.</p>
+                <p>Regards,<br>Joel Kino<br>Interconnekt</p>
+            </div>
+        </div>
+
+        <!-- Action 4: User reply -->
+        <div class="action-item">
+            <div class="action-header">
+                <div class="action-avatar">
+                    <div class="profile-circle" style="background-color: #3574e3;">CC</div>
+                </div>
+                <div class="action-meta">
+                    <div class="action-who">Candice Chan</div>
+                    <div class="action-outcome">User Email</div>
+                </div>
+                <div class="action-when">10/04/2026 17:31</div>
+            </div>
+            <div class="action-body">
+                <p>Hi Joel,</p>
+                <p>That worked! I can see the HEIC thumbnails now. Thanks for the quick help.</p>
+                <p style="margin-top: 16px; font-size: 11px; color: #34495e;">
+                    <strong>Candice Chan</strong> | Senior Project Architect
+                </p>
+            </div>
+        </div>
+
+        <!-- Action 5: Closure -->
+        <div class="action-item">
+            <div class="action-header">
+                <div class="action-avatar">
+                    <div class="profile-circle" style="background-color: #30355b;">JK</div>
+                </div>
+                <div class="action-meta">
+                    <div class="action-who">Joel Kino</div>
+                    <div class="action-outcome">Closed</div>
+                </div>
+                <div class="action-when">10/04/2026 17:32</div>
+            </div>
+            <div class="action-body">
+                <p>Resolved — HEVC extension installed, HEIC thumbnails now displaying correctly.</p>
+            </div>
+        </div>
+
+        <!-- ── Signature ── -->
+        <hr>
+        <div class="signature-section">
+            <div class="signature-label">Customer Signature</div>
+            <div class="signature-box"></div>
+            <div class="signature-disclaimer">
+                This signature confirms that the customer is satisfied the work has been completed to an acceptable standard.
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ══════ FOOTER ══════ -->
+    <div class="pdf-footer">
+        <table>
+            <tr>
+                <td style="width: 33%; text-align: left;">https://interconnekt.com.au</td>
+                <td style="width: 33%; text-align: center;">1300 852 842</td>
+                <td style="width: 33%; text-align: right;">Page 1 of 2</td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,340 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Purchase Order $POREF</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 400;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtr6Ew-Y3tcoqK5.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 600;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCu6YDtcoqK5.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 700;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCuMYDtcoqK5.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 800;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCvhYDtcoqK5.woff2') format('woff2');
+        }
+
+        @page {
+            size: A4;
+            margin: 22mm 12.7mm 30mm 12.7mm;
+        }
+
+        *, *::before, *::after {
+            font-family: Montserrat, Arial, sans-serif !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Montserrat, Arial, sans-serif !important;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #34495e;
+            margin: 0;
+            padding: 20px 0 0 0;
+        }
+
+        /* ── Links ── */
+        a {
+            color: #3598db;
+            text-decoration: none;
+        }
+
+        /* ── Two-column header layout ── */
+        .po-header-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .po-header-table td {
+            vertical-align: top;
+            padding: 0;
+        }
+
+        /* ── Company details (from) ── */
+        .from-block {
+            background-color: #F4F4F5;
+            border-radius: 8px;
+            padding: 12px 16px;
+            line-height: 1.5;
+            font-size: 11px;
+        }
+
+        .from-block .block-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #30355b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .from-block .company-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #30355b;
+            margin-bottom: 2px;
+        }
+
+        /* ── Supplier details (to) ── */
+        .to-block {
+            background-color: #F4F4F5;
+            border-radius: 8px;
+            padding: 12px 16px;
+            line-height: 1.5;
+            font-size: 11px;
+        }
+
+        .to-block .block-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #30355b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .to-block .supplier-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #30355b;
+            margin-bottom: 2px;
+        }
+
+        /* ── PO meta strip ── */
+        .po-meta {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .po-meta th {
+            background-color: #F4F4F5;
+            color: #30355b;
+            font-weight: 700;
+            text-align: left;
+            padding: 8px 14px;
+            border-bottom: 1px solid #e0e0e0;
+            white-space: nowrap;
+            font-size: 12px;
+            width: 25%;
+            vertical-align: middle;
+        }
+
+        .po-meta td {
+            width: 25%;
+            padding: 8px 14px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: middle;
+            color: #34495e;
+            font-size: 12px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        /* ── Date pill ── */
+        .date-pill {
+            display: inline-block;
+            font-weight: 400;
+            font-size: 11px;
+            padding: 3px 12px;
+            border-radius: 12px;
+            border: 1px solid transparent;
+        }
+
+        /* ── Line items table ── */
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            margin: 0 0 16px 0;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .items-table thead th {
+            background-color: #F4F4F5;
+            color: #30355b;
+            font-weight: 700;
+            text-align: left;
+            padding: 8px 12px;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .items-table tbody td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: top;
+            color: #34495e;
+            font-size: 11px;
+        }
+
+        .items-table thead {
+            display: table-header-group;
+        }
+
+        .items-table tbody tr {
+            page-break-inside: avoid;
+        }
+
+        .items-table tbody tr:nth-child(even) {
+            background-color: #F4F4F5;
+        }
+
+        .items-table thead th:nth-child(2),
+        .items-table tbody td:nth-child(2) {
+            text-align: center !important;
+        }
+
+        /* ── Totals table ── */
+        .totals-table {
+            width: 270px;
+            margin-left: auto;
+            margin-right: 0;
+            border-collapse: collapse;
+            font-size: 12px;
+            line-height: 1.5;
+            page-break-inside: avoid;
+        }
+
+        .totals-table td {
+            padding: 8px 12px;
+        }
+
+        .totals-table .label {
+            text-align: left;
+            color: #30355b;
+            font-weight: 700;
+            background-color: #F4F4F5;
+        }
+
+        .totals-table .value {
+            text-align: right;
+            color: #34495e;
+        }
+
+        .totals-table .subtotal td {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .totals-table .tax td {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .totals-table .total td {
+            padding-top: 8px;
+        }
+
+        .totals-table .total .label {
+            font-size: 14px;
+            font-weight: 800;
+            color: #30355b;
+        }
+
+        .totals-table .total .value {
+            font-size: 14px;
+            font-weight: 800;
+            color: #30355b;
+        }
+
+        /* ── PO Notes ── */
+        .po-notes {
+            margin-top: 24px;
+            padding: 14px 18px;
+            background-color: #F4F4F5;
+            border-radius: 8px;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #34495e;
+        }
+
+        .po-notes-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #30355b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── From / Supplier ── -->
+    <table class="po-header-table">
+        <tr>
+            <td style="width: 48%; padding-right: 4%; vertical-align: top;">
+                <div class="from-block" style="min-height: 120px;">
+                    <div class="block-label">From</div>
+                    <div class="company-name">$ORNAME</div>
+                    <div>$ORADDRESS</div>
+                    <div><a href="$ORWEBSITE">$ORWEBSITE</a></div>
+                    <div>$ORPHONE</div>
+                </div>
+            </td>
+            <td style="width: 48%; vertical-align: top;">
+                <div class="to-block" style="min-height: 120px;">
+                    <div class="block-label">Supplier</div>
+                    <div class="supplier-name">$SUPPLIER_NAME</div>
+                    <div style="margin-top: 8px;">
+                        <span style="font-weight: 700; color: #30355b;">Deliver To:</span> $PODELIVERTO
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- ── PO Meta ── -->
+    <table class="po-meta">
+        <tr>
+            <th>PO Reference</th>
+            <td>$POREF</td>
+            <th>Date</th>
+            <td><span class="date-pill">$PODATE</span></td>
+        </tr>
+    </table>
+
+    <!-- ── Line Items ── -->
+    <table class="items-table">
+        $DETAILSTABLE
+    </table>
+
+    <!-- ── Totals ── -->
+    <table class="totals-table">
+        <tr class="subtotal">
+            <td class="label">Sub-total</td>
+            <td class="value">$POSUBTOTAL</td>
+        </tr>
+        <tr class="tax">
+            <td class="label">Tax</td>
+            <td class="value">$POTAXTOTAL</td>
+        </tr>
+        <tr class="total">
+            <td class="label">TOTAL</td>
+            <td class="value">$POTOTAL</td>
+        </tr>
+    </table>
+
+    <!-- ── PO Notes ── -->
+    <div class="po-notes">
+        <div class="po-notes-label">Notes</div>
+        $PONOTE
+    </div>
+
+</body>
+</html>

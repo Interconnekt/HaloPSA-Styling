@@ -71,7 +71,7 @@
         .invoice-reference { margin-bottom: 16px; font-size: 12px; color: #34495e; }
         .invoice-reference strong { color: #30355b; }
 
-        .section-header { font-size: 14px; font-weight: 700; color: #30355b; margin: 24px 0 12px 0; padding: 8px 14px; background-color: #e0eafd; border-radius: 6px; }
+        .section-header { font-size: 14px; font-weight: 700; color: #30355b; margin: 24px 0 12px 0; padding: 8px 14px; background-color: #f0f1f2; border-radius: 6px; }
 
         .items-table { width: 100%; border-collapse: collapse; font-size: 11px; margin: 0 0 16px 0; border-top: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; }
         .items-table thead th { background-color: #f0f1f2; color: #30355b; font-weight: 700; text-align: left; padding: 8px 12px; font-size: 11px; white-space: nowrap; }
@@ -99,7 +99,7 @@
         .payment-cards { width: 100%; border-collapse: collapse; }
         .payment-cards > tbody > tr > td { width: 50%; vertical-align: top; padding: 0; }
 
-        .payment-card { background-color: #f0f1f2; border-radius: 8px; padding: 16px 20px; font-size: 12px; line-height: 1.7; height: 100%; }
+        .payment-card { background-color: #e8edf6; border-radius: 8px; padding: 16px 20px; font-size: 12px; line-height: 1.7; min-height: 136px; }
         .payment-card-label { font-size: 11px; font-weight: 700; color: #30355b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
         .payment-card table { border-collapse: collapse; }
         .payment-card table td { padding: 2px 0; font-size: 12px; vertical-align: top; border: none; }
@@ -149,19 +149,18 @@
         <!-- ── From / To ── -->
         <table class="invoice-header-table">
             <tr>
-                <td style="width: 48%; padding-right: 4%;">
-                    <div class="from-block">
+                <td style="width: 48%; padding-right: 4%; vertical-align: top;">
+                    <div class="from-block" style="min-height: 140px;">
                         <div class="block-label">From</div>
                         <div class="company-name">Interconnekt</div>
                         <div>ABN: 52 702 542 839</div>
-                        <div>ACN: 005 818 922</div>
                         <div>Level 7, 80 Dorcas St</div>
                         <div>Southbank VIC 3006</div>
-                        <div>1300 852 842</div>
+                        <div><a href="mailto:accounts@interconnekt.com.au">accounts@interconnekt.com.au</a></div>
                     </div>
                 </td>
-                <td style="width: 48%;">
-                    <div class="to-block">
+                <td style="width: 48%; vertical-align: top;">
+                    <div class="to-block" style="min-height: 140px;">
                         <div class="block-label">Billed To</div>
                         <div class="customer-name">Melbourne Home Share</div>
                         <div>Inna Sharma</div>
@@ -328,7 +327,7 @@
     <div class="pdf-footer">
         <table>
             <tr>
-                <td style="width: 33%; text-align: left;">https://interconnekt.com.au</td>
+                <td style="width: 33%; text-align: left;">interconnekt.com.au</td>
                 <td style="width: 33%; text-align: center;">1300 852 842</td>
                 <td style="width: 33%; text-align: right;">Page 1 of 1</td>
             </tr>

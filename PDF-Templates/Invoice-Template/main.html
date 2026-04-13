@@ -160,7 +160,7 @@
             color: #30355b;
             margin: 24px 0 12px 0;
             padding: 8px 14px;
-            background-color: #e0eafd;
+            background-color: #f0f1f2;
             border-radius: 6px;
         }
 
@@ -190,6 +190,10 @@
             vertical-align: top;
             color: #34495e;
             font-size: 11px;
+        }
+
+        .items-table thead {
+            display: table-header-group;
         }
 
         .items-table tbody tr {
@@ -279,12 +283,12 @@
         }
 
         .payment-card {
-            background-color: #f0f1f2;
+            background-color: #e8edf6;
             border-radius: 8px;
             padding: 16px 20px;
             font-size: 12px;
             line-height: 1.7;
-            height: 100%;
+            min-height: 136px;
         }
 
         .payment-card-label {
@@ -336,19 +340,18 @@
     <!-- ── From / To ── -->
     <table class="invoice-header-table">
         <tr>
-            <td style="width: 48%; padding-right: 4%;">
-                <div class="from-block">
+            <td style="width: 48%; padding-right: 4%; vertical-align: top;">
+                <div class="from-block" style="min-height: 140px;">
                     <div class="block-label">From</div>
                     <div class="company-name">$ORNAME</div>
                     <div>ABN: 52 702 542 839</div>
-                    <div>ACN: 005 818 922</div>
                     <div>Level 7, 80 Dorcas St</div>
                     <div>Southbank VIC 3006</div>
-                    <div>$ORPHONE</div>
+                    <div><a href="mailto:accounts@interconnekt.com.au">accounts@interconnekt.com.au</a></div>
                 </div>
             </td>
-            <td style="width: 48%;">
-                <div class="to-block">
+            <td style="width: 48%; vertical-align: top;">
+                <div class="to-block" style="min-height: 140px;">
                     <div class="block-label">Billed To</div>
                     <div class="customer-name">$THIRDPARTYCUSTOMERNAME</div>
                     <div>$ACCOUNTSFIRSTNAME $ACCOUNTSLASTNAME</div>

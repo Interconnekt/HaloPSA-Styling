@@ -37,64 +37,64 @@
 
         /* ── Base — !important overrides Confluence inline font styles ── */
         *, *::before, *::after {
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            font-family: Montserrat, Arial, sans-serif !important;
         }
 
         body {
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
-            font-size: 12px;
+            font-family: Montserrat, Arial, sans-serif !important;
+            font-size: 13px;
             line-height: 1.7;
-            color: #1a1d23;
+            color: #34495e;
             margin: 0;
             padding: 0;
         }
 
         /* ── Headings ── */
         h1 {
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            font-family: Montserrat, Arial, sans-serif !important;
             font-size: 28px;
             font-weight: 800;
-            color: #2F355E;
+            color: #30355b;
             margin: 0 0 6px 0;
             letter-spacing: -0.02em;
             line-height: 1.2;
         }
 
         h2 {
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            font-family: Montserrat, Arial, sans-serif !important;
             font-size: 18px;
             font-weight: 700;
-            color: #2F355E;
+            color: #30355b;
             margin: 30px 0 8px 0;
             padding-bottom: 6px;
-            border-bottom: 2px solid #4088D4;
+            border-bottom: 2px solid #3574e3;
             letter-spacing: -0.01em;
         }
 
         h3 {
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            font-family: Montserrat, Arial, sans-serif !important;
             font-size: 15px;
             font-weight: 600;
-            color: #2F355E;
+            color: #30355b;
             margin: 24px 0 6px 0;
         }
 
         h4 {
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            font-family: Montserrat, Arial, sans-serif !important;
             font-size: 13px;
             font-weight: 600;
-            color: #5f6672;
+            color: #34495e;
             margin: 20px 0 4px 0;
         }
 
         /* ── Paragraphs & lists ── */
         p {
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            font-family: Montserrat, Arial, sans-serif !important;
             margin: 8px 0;
         }
 
         li {
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            font-family: Montserrat, Arial, sans-serif !important;
             margin-bottom: 4px;
         }
 
@@ -105,54 +105,57 @@
 
         /* ── Links ── */
         a {
-            color: #4088D4;
+            color: #3598db;
             text-decoration: none;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            font-family: Montserrat, Arial, sans-serif !important;
         }
 
         /* ── Divider ── */
         hr {
             border: none;
-            border-top: 1px solid #e2e5ea;
+            border-top: 1px solid #e0e0e0;
             margin: 20px 0;
         }
 
-        /* ── Meta table (front page) — matches Confluence table style ── */
+        /* ── Meta table (front page — Style A shaded label) ── */
         .meta-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 11px;
+            font-size: 13px;
             margin-top: 12px;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            font-family: Montserrat, Arial, sans-serif !important;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
         }
 
         .meta-table th {
-            background-color: #f5f6f8;
-            color: #1a1d23;
-            font-weight: 600;
+            background-color: #f0f1f2;
+            color: #30355b;
+            font-weight: 700;
             text-align: left;
-            padding: 8px 12px;
-            border: 1px solid #e2e5ea;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            padding: 8px 14px;
+            border-bottom: 1px solid #e0e0e0;
+            font-family: Montserrat, Arial, sans-serif !important;
         }
 
         .meta-table td {
-            padding: 8px 12px;
-            border: 1px solid #e2e5ea;
+            padding: 8px 14px;
+            border-bottom: 1px solid #e0e0e0;
             vertical-align: top;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            color: #34495e;
+            font-family: Montserrat, Arial, sans-serif !important;
         }
 
         /* ── Stats bar ── */
         .stats-bar {
             font-size: 10px;
-            color: #8b919d;
+            color: #34495e;
             margin: 10px 0 0 0;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            font-family: Montserrat, Arial, sans-serif !important;
         }
 
         .stats-bar strong {
-            color: #5f6672;
+            color: #30355b;
         }
 
         .stats-bar span {
@@ -162,9 +165,9 @@
         /* ── Tags ── */
         .tags {
             font-size: 10px;
-            color: #5f6672;
+            color: #34495e;
             margin: 6px 0 0 0;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            font-family: Montserrat, Arial, sans-serif !important;
         }
 
         /* ── Content sections ── */
@@ -173,10 +176,20 @@
             margin-top: 10px;
         }
 
+        .section-header {
+            font-size: 16px;
+            font-weight: 700;
+            color: #30355b;
+            margin: 24px 0 12px 0;
+            padding: 10px 16px;
+            background-color: #e0eafd;
+            border-radius: 6px;
+        }
+
         .section-body {
-            font-size: 12px;
+            font-size: 13px;
             line-height: 1.7;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            font-family: Montserrat, Arial, sans-serif !important;
         }
 
         /* Deep override — catches Confluence inline style="font-family:..." on any element */
@@ -192,7 +205,7 @@
         .section-body em,
         .section-body b,
         .section-body i {
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            font-family: Montserrat, Arial, sans-serif !important;
         }
 
         /* ── Tables (Confluence content) ── */
@@ -200,25 +213,26 @@
             width: 100%;
             border-collapse: collapse;
             margin: 12px 0;
-            font-size: 11px;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            font-size: 13px;
+            font-family: Montserrat, Arial, sans-serif !important;
         }
 
         th {
-            background-color: #f5f6f8;
-            color: #1a1d23;
-            font-weight: 600;
+            background-color: #f0f1f2;
+            color: #30355b;
+            font-weight: 700;
             text-align: left;
-            padding: 8px 12px;
-            border: 1px solid #e2e5ea;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            padding: 8px 14px;
+            border-bottom: 1px solid #e0e0e0;
+            font-family: Montserrat, Arial, sans-serif !important;
         }
 
         td {
-            padding: 8px 12px;
-            border: 1px solid #e2e5ea;
+            padding: 8px 14px;
+            border-bottom: 1px solid #e0e0e0;
             vertical-align: top;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            color: #34495e;
+            font-family: Montserrat, Arial, sans-serif !important;
         }
 
         tr {
@@ -234,7 +248,7 @@
         }
 
         .confluence-information-macro-body {
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            font-family: Montserrat, Arial, sans-serif !important;
         }
 
         .confluence-information-macro-information {
@@ -242,9 +256,9 @@
         }
 
         .confluence-information-macro-information .confluence-information-macro-body {
-            background: #eaf2fd;
+            background: #deebff;
             padding: 10px 16px;
-            color: #1a1d23;
+            color: #34495e;
         }
 
         .confluence-information-macro-note {
@@ -252,9 +266,9 @@
         }
 
         .confluence-information-macro-note .confluence-information-macro-body {
-            background: #f7eefd;
+            background: #eae6ff;
             padding: 10px 16px;
-            color: #1a1d23;
+            color: #34495e;
         }
 
         .confluence-information-macro-warning,
@@ -264,9 +278,9 @@
 
         .confluence-information-macro-warning .confluence-information-macro-body,
         .confluence-information-macro-error .confluence-information-macro-body {
-            background: #fcedec;
+            background: #ffebe6;
             padding: 10px 16px;
-            color: #1a1d23;
+            color: #34495e;
         }
 
         .confluence-information-macro-tip,
@@ -276,9 +290,9 @@
 
         .confluence-information-macro-tip .confluence-information-macro-body,
         .confluence-information-macro-success .confluence-information-macro-body {
-            background: #e3fef2;
+            background: #e3fcef;
             padding: 10px 16px;
-            color: #1a1d23;
+            color: #34495e;
         }
 
         /* Generic panel */
@@ -291,32 +305,32 @@
 
         .panelContent {
             padding: 10px 16px;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            font-family: Montserrat, Arial, sans-serif !important;
         }
 
         /* ── Status macros ── */
         .status-macro {
             display: inline-block;
-            padding: 3px 8px;
-            font-weight: 600;
-            font-size: 9px;
-            border-radius: 999px;
+            padding: 4px 14px;
+            font-weight: 700;
+            font-size: 11px;
+            border-radius: 20px;
             text-transform: uppercase;
-            letter-spacing: 0.02em;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            letter-spacing: 0.5px;
+            font-family: Montserrat, Arial, sans-serif !important;
         }
 
-        .aui-lozenge-complete  { background: #eaf2fd; color: #0747a6; }
-        .aui-lozenge-success   { background: #e3fef2; color: #006644; }
-        .aui-lozenge-current   { background: #fff0b3; color: #974f0c; }
-        .aui-lozenge-error     { background: #fcedec; color: #bf2600; }
-        .aui-lozenge-progress  { background: #f7eefd; color: #403294; }
+        .aui-lozenge-complete  { background: #deebff; color: #0747a6; }
+        .aui-lozenge-success   { background: #e3fcef; color: #006644; }
+        .aui-lozenge-current   { background: #fff3e0; color: #e65100; }
+        .aui-lozenge-error     { background: #ffebe6; color: #bf2600; }
+        .aui-lozenge-progress  { background: #eae6ff; color: #403294; }
 
         /* ── Code ── */
         code {
             font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
             font-size: 0.9em;
-            background: #f1f3f5;
+            background: #f0f1f2;
             color: #d6336c;
             padding: 1px 5px;
             border-radius: 3px;
@@ -348,19 +362,19 @@
 
         /* ── Blockquotes ── */
         blockquote {
-            border-left: 4px solid #4088D4;
-            background: #f8f9fc;
+            border-left: 4px solid #3574e3;
+            background: #f0f1f2;
             margin: 12px 0;
             padding: 10px 16px;
             border-radius: 0 6px 6px 0;
-            color: #5f6672;
+            color: #34495e;
             font-style: italic;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            font-family: Montserrat, Arial, sans-serif !important;
         }
 
         blockquote p {
             margin: 0;
-            font-family: Montserrat, 'Segoe UI', Verdana, sans-serif !important;
+            font-family: Montserrat, Arial, sans-serif !important;
         }
 
         /* ── Images ── */
@@ -406,19 +420,19 @@
 
     <!-- ── Description ── -->
     <div class="section">
-        <h2>Description</h2>
+        <div class="section-header">Description</div>
         <div class="section-body">$KBDESCRIPTION</div>
     </div>
 
     <!-- ── Resolution ── -->
     <div class="section">
-        <h2>Resolution</h2>
+        <div class="section-header">Resolution</div>
         <div class="section-body">$KBRESOLUTION</div>
     </div>
 
     <!-- ── Internal Memo ── -->
     <div class="section">
-        <h2>Internal Memo</h2>
+        <div class="section-header">Internal Memo</div>
         <div class="section-body">$KBINTERNALMEMO</div>
     </div>
 

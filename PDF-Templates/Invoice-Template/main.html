@@ -132,6 +132,7 @@
             white-space: nowrap;
             font-size: 12px;
             width: 15%;
+            vertical-align: middle;
         }
 
         .invoice-meta td {
@@ -141,9 +142,32 @@
         .invoice-meta td {
             padding: 8px 14px;
             border-bottom: 1px solid #e0e0e0;
-            vertical-align: top;
+            vertical-align: middle;
             color: #34495e;
             font-size: 12px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        /* ── Date pills ── */
+        .date-pill {
+            display: inline-block;
+            font-weight: 400;
+            font-size: 11px;
+            padding: 3px 12px;
+            border-radius: 12px;
+            border: 1px solid transparent;
+        }
+
+        .due-date-pill {
+            display: inline-block;
+            background-color: #fffae6;
+            color: #30355b;
+            font-weight: 700;
+            font-size: 11px;
+            padding: 3px 12px;
+            border-radius: 12px;
+            border: 1px solid #f5a623;
         }
 
         /* ── Reference ── */
@@ -217,6 +241,7 @@
         .totals-table {
             width: 220px;
             margin-left: auto;
+            margin-right: 0;
             border-collapse: collapse;
             font-size: 12px;
             line-height: 1.5;
@@ -224,12 +249,11 @@
         }
 
         .totals-table td {
-            padding: 5px 0;
+            padding: 8px 12px;
         }
 
         .totals-table .label {
             text-align: left;
-            padding-right: 20px;
             color: #30355b;
             font-weight: 700;
         }
@@ -373,13 +397,13 @@
             <th>Invoice Number</th>
             <td>$INVOICENUMBER</td>
             <th>Invoice Date</th>
-            <td>$INVOICEDATE</td>
+            <td><span class="date-pill">$INVOICEDATE</span></td>
         </tr>
         <tr>
             <th>Customer PO</th>
             <td>$CUSTOMERPONUMBER</td>
             <th>Due Date</th>
-            <td>$DUEDATE</td>
+            <td><span class="due-date-pill">$DUEDATE</span></td>
         </tr>
     </table>
 

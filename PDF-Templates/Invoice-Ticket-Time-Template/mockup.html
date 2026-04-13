@@ -33,8 +33,11 @@
         .to-block .customer-name { font-size: 14px; font-weight: 700; color: #30355b; margin-bottom: 2px; }
 
         .invoice-meta { width: 100%; border-collapse: collapse; margin-bottom: 20px; border-top: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; }
-        .invoice-meta th { background-color: #f0f1f2; color: #30355b; font-weight: 700; text-align: left; padding: 8px 14px; border-bottom: 1px solid #e0e0e0; white-space: nowrap; font-size: 12px; width: 15%; }
-        .invoice-meta td { padding: 8px 14px; border-bottom: 1px solid #e0e0e0; vertical-align: top; color: #34495e; font-size: 12px; width: 35%; }
+        .invoice-meta th { background-color: #f0f1f2; color: #30355b; font-weight: 700; text-align: left; padding: 8px 14px; border-bottom: 1px solid #e0e0e0; white-space: nowrap; font-size: 12px; width: 15%; vertical-align: middle; }
+        .invoice-meta td { padding: 8px 14px; border-bottom: 1px solid #e0e0e0; vertical-align: middle; color: #34495e; font-size: 12px; width: 35%; }
+
+        .date-pill { display: inline-block; font-weight: 400; font-size: 11px; padding: 3px 12px; border-radius: 12px; border: 1px solid transparent; }
+        .due-date-pill { display: inline-block; background-color: #fffae6; color: #30355b; font-weight: 700; font-size: 11px; padding: 3px 12px; border-radius: 12px; border: 1px solid #f5a623; }
 
         .invoice-reference { margin-bottom: 16px; font-size: 12px; color: #34495e; }
         .invoice-reference strong { color: #30355b; }
@@ -58,8 +61,8 @@
         .report-table tbody tr:nth-child(odd) { background-color: #f8f9fa; }
 
         .totals-table { width: 220px; margin-left: auto; border-collapse: collapse; font-size: 12px; line-height: 1.5; }
-        .totals-table td { padding: 5px 0; }
-        .totals-table .label { text-align: left; padding-right: 20px; color: #30355b; font-weight: 700; }
+        .totals-table td { padding: 8px 12px; }
+        .totals-table .label { text-align: left; color: #30355b; font-weight: 700; }
         .totals-table .value { text-align: right; color: #34495e; }
         .totals-table .subtotal td { border-bottom: 1px solid #e0e0e0; }
         .totals-table .tax td { border-bottom: 1px solid #e0e0e0; }
@@ -138,13 +141,13 @@
                     <th>Invoice Number</th>
                     <td>INV-00412</td>
                     <th>Invoice Date</th>
-                    <td>10/04/2026</td>
+                    <td><span class="date-pill">10/04/2026</span></td>
                 </tr>
                 <tr>
                     <th>Customer PO</th>
                     <td>PO-2026-0089</td>
                     <th>Due Date</th>
-                    <td>24/04/2026</td>
+                    <td><span class="due-date-pill">24/04/2026</span></td>
                 </tr>
             </table>
 

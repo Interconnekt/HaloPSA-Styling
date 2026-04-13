@@ -107,12 +107,13 @@
         }
 
         .items-table thead th {
-            background-color: #30355b;
-            color: #ffffff;
+            background-color: #e0eafd;
+            color: #30355b;
             font-weight: 700;
             text-align: left;
             padding: 10px 14px;
             font-size: 12px;
+            white-space: nowrap;
         }
 
         .items-table tbody td {
@@ -120,6 +121,15 @@
             border-bottom: 1px solid #e0e0e0;
             vertical-align: top;
             color: #34495e;
+        }
+
+        .items-table tbody td:first-child {
+            background-color: #f0f1f2;
+        }
+
+        .items-table thead th:nth-child(2),
+        .items-table tbody td:nth-child(2) {
+            text-align: center !important;
         }
 
         .items-table tbody tr {

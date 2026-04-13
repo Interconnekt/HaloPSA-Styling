@@ -305,7 +305,7 @@
 <body>
 
     <!-- ── Ticket Title ── -->
-    <div class="ticket-title">Ticket Details Report</div>
+    <div class="ticket-title">$SYMPTOM</div>
     <div class="ticket-subtitle">$REQUESTTYPE &bull; #$FAULTID</div>
 
     <!-- ── Metadata ── -->
@@ -318,7 +318,9 @@
         </tr>
         <tr>
             <th>User</th>
-            <td colspan="3">$USERNAME</td>
+            <td>$USERNAME</td>
+            <th>Agent</th>
+            <td>$ASSIGNEDTO</td>
         </tr>
         <tr>
             <th>Date Raised</th>

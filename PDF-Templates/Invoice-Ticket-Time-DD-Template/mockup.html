@@ -1,0 +1,310 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Invoice - Ticket Time DD (Mockup)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; padding: 40px; background: #e0e0e0; font-family: Montserrat, Arial, sans-serif; }
+        .page { width: 210mm; margin: 0 auto 40px auto; background: #fff; box-shadow: 0 2px 16px rgba(0,0,0,0.10); padding: 0; overflow: hidden; position: relative; }
+        .page-body { padding: 24px 48px 40px 48px; font-size: 12px; line-height: 1.6; color: #34495e; }
+        .page-label { background: #F4F4F5; color: #30355b; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 6px 48px; }
+
+        /* ── Header / Footer chrome ── */
+        .pdf-header { background-color: #30355b; color: #fff; padding: 14px 48px; }
+        .pdf-header table { width: 100%; border-collapse: collapse; }
+        .pdf-header .title { font-size: 14px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .pdf-header .subtitle { color: rgba(255,255,255,0.7); font-size: 10px; }
+        .pdf-footer { background-color: #000; color: rgba(255,255,255,0.85); padding: 10px 48px; font-size: 9px; }
+        .pdf-footer table { width: 100%; border-collapse: collapse; }
+
+        /* ── Content styles ── */
+        a { color: #3598db; text-decoration: none; }
+
+        .invoice-header-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .invoice-header-table td { vertical-align: top; padding: 0; }
+
+        .from-block { background-color: #F4F4F5; border-radius: 8px; padding: 12px 16px; line-height: 1.5; font-size: 11px; }
+        .from-block .block-label { font-size: 10px; font-weight: 700; color: #30355b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .from-block .company-name { font-size: 13px; font-weight: 700; color: #30355b; margin-bottom: 2px; }
+
+        .to-block { background-color: #F4F4F5; border-radius: 8px; padding: 12px 16px; line-height: 1.5; font-size: 11px; }
+        .to-block .block-label { font-size: 10px; font-weight: 700; color: #30355b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .to-block .customer-name { font-size: 13px; font-weight: 700; color: #30355b; margin-bottom: 2px; }
+
+        .invoice-meta { width: 100%; border-collapse: collapse; margin-bottom: 20px; border-top: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; }
+        .invoice-meta th { background-color: #F4F4F5; color: #30355b; font-weight: 700; text-align: left; padding: 8px 14px; border-bottom: 1px solid #e0e0e0; white-space: nowrap; font-size: 12px; width: 25%; vertical-align: middle; }
+        .invoice-meta td { padding: 8px 14px; border-bottom: 1px solid #e0e0e0; vertical-align: middle; color: #34495e; font-size: 12px; width: 25%; }
+
+        .date-pill { display: inline-block; font-weight: 400; font-size: 11px; padding: 3px 12px; border-radius: 12px; border: 1px solid transparent; }
+        .due-date-pill { display: inline-block; background-color: #fffae6; color: #30355b; font-weight: 700; font-size: 11px; padding: 3px 12px; border-radius: 12px; border: 1px solid #f5a623; }
+
+        .invoice-reference { margin-bottom: 16px; font-size: 12px; color: #34495e; }
+        .invoice-reference strong { color: #30355b; }
+
+        .section-header { font-size: 14px; font-weight: 700; color: #30355b; margin: 24px 0 12px 0; padding: 8px 14px; background-color: #e2eafb; border-radius: 6px; }
+        .section-header.first { margin-top: 0; }
+
+        .section-intro { font-size: 12px; color: #34495e; margin-bottom: 16px; line-height: 1.6; }
+
+        .items-table { width: 100%; border-collapse: collapse; font-size: 11px; margin: 0 0 16px 0; border-top: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; }
+        .items-table thead th { background-color: #F4F4F5; color: #30355b; font-weight: 700; text-align: left; padding: 8px 12px; font-size: 11px; white-space: nowrap; }
+        .items-table tbody td { padding: 8px 12px; border-bottom: 1px solid #e0e0e0; vertical-align: top; color: #34495e; font-size: 11px; }
+        .items-table tbody tr:nth-child(even) { background-color: #F4F4F5; }
+        .items-table tbody tr.group-row { background-color: #e0eafd !important; font-weight: 700; color: #30355b; }
+        .items-table tbody tr.group-row td { color: #30355b; font-weight: 700; }
+        .items-table thead th:nth-child(2), .items-table tbody td:nth-child(2) { text-align: center !important; }
+
+        .report-table { width: 100%; border-collapse: collapse; font-size: 11px; border-top: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; }
+        .report-table thead th { background-color: #F4F4F5; color: #30355b; font-weight: 700; text-align: left; padding: 8px 12px; font-size: 11px; white-space: nowrap; }
+        .report-table tbody td { padding: 8px 12px; border-bottom: 1px solid #e0e0e0; vertical-align: top; color: #34495e; font-size: 11px; word-wrap: break-word; }
+        .report-table tbody tr:nth-child(even) { background-color: #F4F4F5; }
+        .report-table thead th:nth-child(2), .report-table tbody td:nth-child(2) { width: 90px; }
+        .report-table thead th:nth-child(3), .report-table tbody td:nth-child(3) { width: 78px; }
+        .report-table thead th:nth-child(4), .report-table tbody td:nth-child(4) { width: 105px; }
+        .report-table thead th:nth-child(5), .report-table tbody td:nth-child(5) { width: 78px; }
+
+        .totals-table { width: 270px; margin-left: auto; border-collapse: collapse; font-size: 12px; line-height: 1.5; }
+        .totals-table td { padding: 8px 12px; }
+        .totals-table .label { text-align: left; color: #30355b; font-weight: 700; background-color: #F4F4F5; }
+        .totals-table .value { text-align: right; color: #34495e; }
+        .totals-table .subtotal td { border-bottom: 1px solid #e0e0e0; }
+        .totals-table .tax td { border-bottom: 1px solid #e0e0e0; }
+        .totals-table .total td { padding-top: 8px; }
+        .totals-table .total .label { font-size: 14px; font-weight: 800; color: #30355b; }
+        .totals-table .total .value { font-size: 14px; font-weight: 800; color: #30355b; }
+
+        hr { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
+
+        .payment-cards { width: 100%; border-collapse: collapse; }
+        .payment-cards > tbody > tr > td { width: 50%; vertical-align: top; padding: 0; }
+        .payment-card { background-color: #e2eafb; border-radius: 8px; padding: 16px 20px; font-size: 12px; line-height: 1.7; min-height: 136px; }
+        .payment-card-label { font-size: 11px; font-weight: 700; color: #30355b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+        .payment-card table { border-collapse: collapse; }
+        .payment-card table td { padding: 2px 0; font-size: 12px; vertical-align: top; border: none; }
+        .payment-card table td:first-child { font-weight: 700; color: #30355b; padding-right: 12px; white-space: nowrap; }
+
+        .pay-button { display: inline-block; background-color: #3574e3; color: #ffffff !important; font-size: 13px; font-weight: 700; padding: 12px 36px; border-radius: 25px; text-decoration: none; text-align: center; letter-spacing: 0.2px; line-height: 1.4; }
+
+        .dd-notice { background-color: #eae6ff; border-radius: 8px; padding: 14px 18px; margin-top: 20px; font-size: 12px; line-height: 1.6; color: #34495e; }
+        .dd-notice strong { color: #30355b; }
+    </style>
+</head>
+<body>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- PAGE 1: INVOICE                         -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="page">
+        <div class="page-label">Page 1 — Main Invoice</div>
+
+        <!-- Header -->
+        <div class="pdf-header">
+            <table>
+                <tr>
+                    <td style="width: 50%; vertical-align: middle;">
+                        <img src="https://www.interconnekt.com.au/wp-content/uploads/2024/02/InterconnektLogo-FullWhite.png" alt="Interconnekt" style="height: 36px;">
+                    </td>
+                    <td style="width: 50%; text-align: right; vertical-align: middle; font-size: 10px; line-height: 1.6;">
+                        <div class="title">TAX INVOICE</div>
+                        <div class="subtitle">#INV-00412 &bull; 10/04/2026</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Body -->
+        <div class="page-body">
+
+            <!-- From / To -->
+            <table class="invoice-header-table">
+                <tr>
+                    <td style="width: 48%; padding-right: 4%; vertical-align: top;">
+                        <div class="from-block" style="min-height: 120px;">
+                            <div class="block-label">From</div>
+                            <div class="company-name">Interconnekt</div>
+                            <div>Level 7, 80 Dorcas St</div>
+                            <div>Southbank VIC 3006</div>
+                            <div><a href="mailto:accounts@interconnekt.com.au">accounts@interconnekt.com.au</a></div>
+                            <div>ABN: 52 702 542 839</div>
+                        </div>
+                    </td>
+                    <td style="width: 48%; vertical-align: top;">
+                        <div class="to-block" style="min-height: 120px;">
+                            <div class="block-label">Billed To</div>
+                            <div class="customer-name">Melbourne Home Share</div>
+                            <div>Inna Sharma</div>
+                            <div>18 Mohawk Street</div>
+                            <div>Windsor</div>
+                            <div>VIC 3181</div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Invoice Meta -->
+            <table class="invoice-meta">
+                <tr>
+                    <th>Invoice Number</th>
+                    <td>INV-00412</td>
+                    <th>Invoice Date</th>
+                    <td><span class="date-pill">10/04/2026</span></td>
+                </tr>
+                <tr>
+                    <th>Customer PO</th>
+                    <td>PO-2026-0089</td>
+                    <th>Due Date</th>
+                    <td><span class="due-date-pill">24/04/2026</span></td>
+                </tr>
+            </table>
+
+            <!-- Reference -->
+            <div class="invoice-reference">
+                <strong>Invoice Reference:</strong> ConnektCare - Managed Support
+            </div>
+
+            <!-- Line Items -->
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Qty</th>
+                        <th>Unit Price</th>
+                        <th>Tax</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="group-row"><td colspan="5">Managed Services</td></tr>
+                    <tr><td>ConnektCare Complete - Per User<br><span style="color:#888;font-size:10px;">For Period: 01/04/2026 - 30/04/2026</span></td><td>9</td><td>$165.00</td><td>$148.50</td><td>$1,485.00</td></tr>
+                    <tr><td>ConnektSecure Essentials - Per User<br><span style="color:#888;font-size:10px;">For Period: 01/04/2026 - 30/04/2026</span></td><td>9</td><td>$15.00</td><td>$13.50</td><td>$135.00</td></tr>
+                    <tr class="group-row"><td colspan="5">Cloud Services</td></tr>
+                    <tr><td>CloudManager Essentials - Per Environment<br><span style="color:#888;font-size:10px;">For Period: 01/04/2026 - 30/04/2026</span></td><td>1</td><td>$300.00</td><td>$30.00</td><td>$300.00</td></tr>
+                </tbody>
+            </table>
+
+            <!-- Totals -->
+            <table class="totals-table">
+                <tr class="subtotal"><td class="label">Sub-total</td><td class="value">$1,920.00</td></tr>
+                <tr class="tax"><td class="label">GST</td><td class="value">$192.00</td></tr>
+                <tr class="total"><td class="label">TOTAL</td><td class="value">$2,112.00</td></tr>
+            </table>
+
+            <!-- Direct Debit Notice -->
+            <div class="dd-notice">
+                In accordance with your Direct Debit authority, your nominated account will be debited <strong>$10,315.25</strong> on or after <strong>27/04/2026</strong> unless you notify us otherwise at least 2 business days prior to this date.
+            </div>
+
+            <!-- Other Payment Methods -->
+            <hr>
+            <div>
+                <div class="section-header">Other Payment Methods</div>
+                <table class="payment-cards">
+                    <tr>
+                        <td style="padding-right: 10px;">
+                            <div class="payment-card">
+                                <div class="payment-card-label">Bank Transfer</div>
+                                <table>
+                                    <tr><td>Account Name</td><td>Interconnekt Pty Ltd</td></tr>
+                                    <tr><td>BSB</td><td>193 879</td></tr>
+                                    <tr><td>Account Number</td><td>439315631</td></tr>
+                                </table>
+                            </div>
+                        </td>
+                        <td style="padding-left: 10px;">
+                            <div class="payment-card" style="text-align: center; padding-top: 24px; padding-bottom: 24px;">
+                                <div class="payment-card-label">Credit Card / Online</div>
+                                <div style="margin-top: 14px;">
+                                    <a href="#" class="pay-button">Pay via Xero</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="pdf-footer">
+            <table>
+                <tr>
+                    <td style="width: 33%; text-align: left;">interconnekt.com.au</td>
+                    <td style="width: 33%; text-align: center;">1300 852 842</td>
+                    <td style="width: 33%; text-align: right;">Page 1 of 2</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- PAGE 2: TIME BREAKDOWN                  -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="page">
+        <div class="page-label">Page 2 — Time Breakdown</div>
+
+        <!-- Header -->
+        <div class="pdf-header">
+            <table>
+                <tr>
+                    <td style="width: 50%; vertical-align: middle;">
+                        <img src="https://www.interconnekt.com.au/wp-content/uploads/2024/02/InterconnektLogo-FullWhite.png" alt="Interconnekt" style="height: 36px;">
+                    </td>
+                    <td style="width: 50%; text-align: right; vertical-align: middle; font-size: 10px; line-height: 1.6;">
+                        <div class="title">TAX INVOICE</div>
+                        <div class="subtitle">#INV-00412 &bull; 10/04/2026</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Body -->
+        <div class="page-body">
+
+            <div class="section-header first">Time Breakdown</div>
+
+            <div class="section-intro">
+                Please see below breakdown of the individual time entries that have been included in this invoice. If more detail is required please let us know.
+            </div>
+
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>Ticket</th>
+                        <th>Summary</th>
+                        <th>Agent</th>
+                        <th>Date</th>
+                        <th>Duration</th>
+                        <th>Charge</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>TKT-4521</td><td>Network switch firmware update</td><td>James M.</td><td>02/04/2026</td><td>1.5h</td><td>$247.50</td></tr>
+                    <tr><td>TKT-4523</td><td>New user onboarding — laptop setup</td><td>Sarah K.</td><td>03/04/2026</td><td>2.0h</td><td>$330.00</td></tr>
+                    <tr><td>TKT-4530</td><td>Email delivery issues investigation</td><td>James M.</td><td>05/04/2026</td><td>0.5h</td><td>$82.50</td></tr>
+                    <tr><td>TKT-4535</td><td>VPN configuration for remote worker</td><td>Sarah K.</td><td>07/04/2026</td><td>1.0h</td><td>$165.00</td></tr>
+                    <tr><td>TKT-4541</td><td>Printer driver deployment via Intune</td><td>James M.</td><td>08/04/2026</td><td>0.75h</td><td>$123.75</td></tr>
+                    <tr><td>TKT-4548</td><td>SharePoint permissions audit</td><td>Sarah K.</td><td>10/04/2026</td><td>1.25h</td><td>$206.25</td></tr>
+                    <tr><td>TKT-4552</td><td>Firewall rule review and cleanup</td><td>James M.</td><td>11/04/2026</td><td>2.0h</td><td>$330.00</td></tr>
+                    <tr><td>TKT-4558</td><td>M365 license reconciliation</td><td>Sarah K.</td><td>14/04/2026</td><td>0.5h</td><td>$82.50</td></tr>
+                    <tr><td>TKT-4563</td><td>Backup restore test — monthly DR drill</td><td>James M.</td><td>15/04/2026</td><td>1.5h</td><td>$247.50</td></tr>
+                    <tr><td>TKT-4570</td><td>Conditional Access policy update</td><td>Sarah K.</td><td>17/04/2026</td><td>1.0h</td><td>$165.00</td></tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="pdf-footer">
+            <table>
+                <tr>
+                    <td style="width: 33%; text-align: left;">interconnekt.com.au</td>
+                    <td style="width: 33%; text-align: center;">1300 852 842</td>
+                    <td style="width: 33%; text-align: right;">Page 2 of 2</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

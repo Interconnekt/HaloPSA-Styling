@@ -26,12 +26,9 @@
             src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCvhYDtcoqK5.woff2') format('woff2');
         }
 
-        /* @page margins are overridden by HaloPSA's wkhtmltopdf settings.
-           Set left/right margins to 0 in HaloPSA and bottom to 25mm.
-           Body padding handles the horizontal inset instead. */
         @page {
             size: A4;
-            margin: 22mm 0 25mm 0;
+            margin: 22mm 12.7mm 25mm 12.7mm;
         }
 
         *, *::before, *::after {
@@ -44,8 +41,8 @@
             font-size: 12px;
             line-height: 1.6;
             color: #34495e;
-            margin: 0;
-            padding: 0 12.7mm;
+            margin: 0 -20px;
+            padding: 0 20px;
         }
 
         /* ── Links ── */
@@ -203,7 +200,7 @@
             page-break-inside: avoid;
         }
 
-        .items-table tbody tr:nth-child(even) {
+        .items-table tbody tr:nth-child(odd) {
             background-color: #f8f9fa;
         }
 

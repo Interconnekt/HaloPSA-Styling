@@ -32,12 +32,13 @@
            Left/right match Word Narrow (12.7mm). */
         @page {
             size: A4;
-            margin: 22mm 12.7mm 20mm 12.7mm;
+            margin: 22mm 12.7mm 30mm 12.7mm;
         }
 
         /* ── Base — !important overrides Confluence inline font styles ── */
         *, *::before, *::after {
             font-family: Montserrat, Arial, sans-serif !important;
+            box-sizing: border-box;
         }
 
         body {
@@ -46,7 +47,7 @@
             line-height: 1.7;
             color: #34495e;
             margin: 0;
-            padding: 0;
+            padding: 20px 0 0 0;
         }
 
         /* ── Headings ── */
@@ -182,7 +183,7 @@
             color: #30355b;
             margin: 24px 0 12px 0;
             padding: 10px 16px;
-            background-color: #e0eafd;
+            background-color: #e2eafb;
             border-radius: 6px;
         }
 
@@ -237,6 +238,10 @@
 
         tr {
             page-break-inside: avoid;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #F4F4F5;
         }
 
         /* ── Confluence panels ── */

@@ -88,9 +88,21 @@
             vertical-align: top;
             color: #34495e;
             font-size: 11px;
-            max-width: 210px;
             word-wrap: break-word;
         }
+
+        /* ── Column widths: squeeze 2-5, maximise Action ── */
+        .report-table thead th:nth-child(2),
+        .report-table tbody td:nth-child(2) { width: 90px; }   /* Agent */
+
+        .report-table thead th:nth-child(3),
+        .report-table tbody td:nth-child(3) { width: 78px; }   /* Date */
+
+        .report-table thead th:nth-child(4),
+        .report-table tbody td:nth-child(4) { width: 105px; }  /* Time Recorded */
+
+        .report-table thead th:nth-child(5),
+        .report-table tbody td:nth-child(5) { width: 78px; }   /* Time Billed */
 
         .report-table tbody tr {
             page-break-inside: avoid;

@@ -1,0 +1,355 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Sales Order — Mockup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        /* ── Simulated page wrapper for browser preview ── */
+        .page-wrapper {
+            max-width: 210mm;
+            margin: 0 auto;
+            background: #ffffff;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+            overflow: hidden;
+        }
+
+        .pdf-header {
+            background-color: #30355b;
+            color: #ffffff;
+            padding: 12px 24px;
+            font-family: Montserrat, Arial, sans-serif;
+        }
+
+        .pdf-header table { width: 100%; border-collapse: collapse; }
+
+        .pdf-header .logo-placeholder {
+            height: 40px;
+            width: 220px;
+            display: flex;
+            align-items: center;
+        }
+
+        .pdf-header .logo-placeholder img {
+            max-height: 40px;
+            max-width: 220px;
+        }
+
+        .pdf-footer {
+            background-color: #000000;
+            color: rgba(255,255,255,0.85);
+            padding: 10px 24px;
+            font-family: Montserrat, Arial, sans-serif;
+            font-size: 9px;
+            line-height: 1.4;
+        }
+
+        .pdf-footer table { width: 100%; border-collapse: collapse; font-family: Montserrat, Arial, sans-serif; font-size: 9px; }
+        .pdf-footer td { padding: 2px 0; font-family: Montserrat, Arial, sans-serif; font-size: 9px; }
+
+        .pdf-body { padding: 24px 24px 32px 24px; }
+
+        /* ── Base reset ── */
+        *, *::before, *::after {
+            font-family: Montserrat, Arial, sans-serif !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Montserrat, Arial, sans-serif !important;
+            font-size: 13px;
+            line-height: 1.7;
+            color: #34495e;
+            margin: 0;
+            padding: 20px;
+            background: #edf0f1;
+        }
+
+        .order-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #30355b;
+            margin: 0 0 4px 0;
+            letter-spacing: -0.02em;
+            line-height: 1.4;
+        }
+
+        .order-subtitle {
+            font-size: 12px;
+            font-weight: 700;
+            color: #30355b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0 0 16px 0;
+            line-height: 1.4;
+        }
+
+        .meta-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-bottom: 24px;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .meta-table th {
+            background-color: #f0f1f2;
+            color: #30355b;
+            font-weight: 700;
+            text-align: left;
+            padding: 8px 14px;
+            border-bottom: 1px solid #e0e0e0;
+            white-space: nowrap;
+            width: 110px;
+        }
+
+        .meta-table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: top;
+            color: #34495e;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            margin: 0 0 20px 0;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .items-table thead th {
+            background-color: #30355b;
+            color: #ffffff;
+            font-weight: 700;
+            text-align: left;
+            padding: 10px 14px;
+            font-size: 12px;
+        }
+
+        .items-table thead th.right { text-align: right; }
+
+        .items-table tbody td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: top;
+            color: #34495e;
+        }
+
+        .items-table tbody td.right { text-align: right; }
+
+        .totals-table {
+            width: 240px;
+            margin-left: auto;
+            border-collapse: collapse;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .totals-table td { padding: 6px 0; }
+
+        .totals-table .label {
+            text-align: left;
+            padding-right: 20px;
+            color: #30355b;
+            font-weight: 700;
+        }
+
+        .totals-table .value { text-align: right; color: #34495e; }
+
+        .totals-table .subtotal td { border-bottom: 1px solid #e0e0e0; }
+        .totals-table .tax td { border-bottom: 1px solid #e0e0e0; }
+        .totals-table .total td { padding-top: 8px; }
+        .totals-table .total .label { font-size: 14px; font-weight: 800; color: #30355b; }
+        .totals-table .total .value { font-size: 14px; font-weight: 800; color: #30355b; }
+
+        .order-notes {
+            margin-top: 24px;
+            font-size: 13px;
+            line-height: 1.7;
+            color: #34495e;
+        }
+
+        .thank-you {
+            margin-top: 30px;
+            padding: 16px 20px;
+            background-color: #f0f1f2;
+            border-radius: 6px;
+            font-size: 11px;
+            line-height: 1.6;
+            color: #34495e;
+            text-align: center;
+        }
+
+        a { color: #3598db; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+    <!-- ══════ HEADER ══════ -->
+    <div class="pdf-header">
+        <table>
+            <tr>
+                <td style="width: 50%; vertical-align: middle; padding: 4px 0;">
+                    <div class="logo-placeholder">
+                        <img src="https://assets.unlayer.com/projects/0/1740816329578-Interconnekt-Neg-Halo-300w.png" alt="Interconnekt">
+                    </div>
+                </td>
+                <td style="width: 50%; text-align: right; vertical-align: middle; padding: 4px 0; font-size: 10px; color: rgba(255,255,255,0.7); font-family: Montserrat, Arial, sans-serif;">
+                    Sales Order
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- ══════ BODY ══════ -->
+    <div class="pdf-body">
+
+        <div class="order-title">Sales Order</div>
+        <div class="order-subtitle">Order &bull; 10/2/2026</div>
+
+        <table class="meta-table">
+            <tr>
+                <th>Customer</th>
+                <td>Melbourne Home Share</td>
+                <th>Contact</th>
+                <td>Inna Sharma</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>10/2/2026</td>
+                <th>PO Number</th>
+                <td>18 Mohawk Street Windsor</td>
+            </tr>
+            <tr>
+                <th>Delivery</th>
+                <td colspan="3">18 Mohawk Street, Windsor VIC 3181</td>
+            </tr>
+        </table>
+
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th class="right">Quantity</th>
+                    <th class="right">Unit Price</th>
+                    <th class="right">Tax</th>
+                    <th class="right">Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Ubiquiti UniFi Dream Machine Special Edition - network management device</td>
+                    <td class="right">1</td>
+                    <td class="right">$1,000.00</td>
+                    <td class="right">$100.00</td>
+                    <td class="right">$1,100.00</td>
+                </tr>
+                <tr>
+                    <td>WD Purple WD8SPURZ - hard drive - 8 TB - SATA 6Gb/s</td>
+                    <td class="right">1</td>
+                    <td class="right">$457.00</td>
+                    <td class="right">$45.70</td>
+                    <td class="right">$502.70</td>
+                </tr>
+                <tr>
+                    <td>Ubiquiti UniFi Switch Flex 2.5G PoE, 8-port 2.5 GbE PoE++, 1G GbE RJ45/SFP+ Combination Uplink Port, Powered With PoE+++ or AC</td>
+                    <td class="right">1</td>
+                    <td class="right">$413.00</td>
+                    <td class="right">$41.30</td>
+                    <td class="right">$454.30</td>
+                </tr>
+                <tr>
+                    <td>Ubiquiti AC Power Adapter 210W, Delivers At 54V DC for A PoE Switch, Compatible USP Box, USP Power, USP Router, USP Switch</td>
+                    <td class="right">1</td>
+                    <td class="right">$173.00</td>
+                    <td class="right">$17.30</td>
+                    <td class="right">$190.30</td>
+                </tr>
+                <tr>
+                    <td>Setup and Installation (27% discount)</td>
+                    <td class="right">12</td>
+                    <td class="right">$200.00</td>
+                    <td class="right">$20.00</td>
+                    <td class="right">$2,640.00</td>
+                </tr>
+                <tr>
+                    <td>Ubiquiti UnFi U7 Lite - radio access point - Wi-Fi 7</td>
+                    <td class="right">2</td>
+                    <td class="right">$181.00</td>
+                    <td class="right">$18.10</td>
+                    <td class="right">$398.20</td>
+                </tr>
+                <tr>
+                    <td>Ubiquiti UniFi Switch USW-FLEX - switch - 5 ports - Managed</td>
+                    <td class="right">1</td>
+                    <td class="right">$200.00</td>
+                    <td class="right">$20.00</td>
+                    <td class="right">$220.00</td>
+                </tr>
+                <tr>
+                    <td>PowerShield Ninja Slimline 600VA UPS, LiFePO4, 2x IEC Outputs, Lithium-iron Phosphate, DIN Rail Mount, Silent Operation, 5 Yr Warranty</td>
+                    <td class="right">1</td>
+                    <td class="right">$846.00</td>
+                    <td class="right">$84.60</td>
+                    <td class="right">$930.60</td>
+                </tr>
+                <tr>
+                    <td>Ubiquiti UniFi - door access controller</td>
+                    <td class="right">1</td>
+                    <td class="right">$475.00</td>
+                    <td class="right">$47.50</td>
+                    <td class="right">$522.50</td>
+                </tr>
+                <tr>
+                    <td>Ubiquiti UniFi - video intercom monitoring tablet</td>
+                    <td class="right">1</td>
+                    <td class="right">$349.00</td>
+                    <td class="right">$34.90</td>
+                    <td class="right">$383.90</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="totals-table">
+            <tr class="subtotal">
+                <td class="label">Sub-total</td>
+                <td class="value">$7,219.12</td>
+            </tr>
+            <tr class="tax">
+                <td class="label">Sales tax</td>
+                <td class="value">$721.91</td>
+            </tr>
+            <tr class="total">
+                <td class="label">TOTAL</td>
+                <td class="value">$7,941.03</td>
+            </tr>
+        </table>
+
+        <div class="thank-you">
+            Thank you for your order. The above items have been sold by us to your company on the basis of a legally binding order. An invoice detailing your order will follow shortly from our Finance team to yours for the above amount. Should you have any questions regarding this order, please feel free to contact us at any time.
+            <br><br>
+            Thank you for your business. It is very much appreciated.
+        </div>
+
+    </div>
+
+    <!-- ══════ FOOTER ══════ -->
+    <div class="pdf-footer">
+        <table>
+            <tr>
+                <td style="width: 33%; text-align: left;">https://interconnekt.com.au</td>
+                <td style="width: 33%; text-align: center;">1300 852 842</td>
+                <td style="width: 33%; text-align: right;">Page 1 of 1</td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>

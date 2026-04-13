@@ -1,0 +1,272 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Sales Order</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        /* Fallback @font-face if <link> fails in wkhtmltopdf */
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 400;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtr6Ew-Y3tcoqK5.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 600;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCu6YDtcoqK5.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 700;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCuMYDtcoqK5.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 800;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCvhYDtcoqK5.woff2') format('woff2');
+        }
+
+        /* ── Page setup ── */
+        @page {
+            size: A4;
+            margin: 22mm 12.7mm 20mm 12.7mm;
+        }
+
+        /* ── Base reset ── */
+        *, *::before, *::after {
+            font-family: Montserrat, Arial, sans-serif !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Montserrat, Arial, sans-serif !important;
+            font-size: 13px;
+            line-height: 1.7;
+            color: #34495e;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ── Title area ── */
+        .order-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #30355b;
+            margin: 0 0 4px 0;
+            letter-spacing: -0.02em;
+            line-height: 1.4;
+        }
+
+        .order-subtitle {
+            font-size: 12px;
+            font-weight: 700;
+            color: #30355b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0 0 16px 0;
+            line-height: 1.4;
+        }
+
+        /* ── Metadata table (Style A — shaded label column) ── */
+        .meta-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-bottom: 24px;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .meta-table th {
+            background-color: #f0f1f2;
+            color: #30355b;
+            font-weight: 700;
+            text-align: left;
+            padding: 8px 14px;
+            border-bottom: 1px solid #e0e0e0;
+            white-space: nowrap;
+            width: 110px;
+        }
+
+        .meta-table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: top;
+            color: #34495e;
+        }
+
+        /* ── Line items table (Style B — coloured header row) ── */
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            margin: 0 0 20px 0;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .items-table thead th {
+            background-color: #30355b;
+            color: #ffffff;
+            font-weight: 700;
+            text-align: left;
+            padding: 10px 14px;
+            font-size: 12px;
+        }
+
+        .items-table tbody td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: top;
+            color: #34495e;
+        }
+
+        .items-table tbody tr {
+            page-break-inside: avoid;
+        }
+
+        /* ── Totals table ── */
+        .totals-table {
+            width: 240px;
+            margin-left: auto;
+            border-collapse: collapse;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .totals-table td {
+            padding: 6px 0;
+        }
+
+        .totals-table .label {
+            text-align: left;
+            padding-right: 20px;
+            color: #30355b;
+            font-weight: 700;
+        }
+
+        .totals-table .value {
+            text-align: right;
+            color: #34495e;
+        }
+
+        .totals-table .subtotal td {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .totals-table .tax td {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .totals-table .total td {
+            padding-top: 8px;
+        }
+
+        .totals-table .total .label {
+            font-size: 14px;
+            font-weight: 800;
+            color: #30355b;
+        }
+
+        .totals-table .total .value {
+            font-size: 14px;
+            font-weight: 800;
+            color: #30355b;
+        }
+
+        /* ── Order notes ── */
+        .order-notes {
+            margin-top: 24px;
+            font-size: 13px;
+            line-height: 1.7;
+            color: #34495e;
+        }
+
+        /* ── Thank you / legal text ── */
+        .thank-you {
+            margin-top: 30px;
+            padding: 16px 20px;
+            background-color: #f0f1f2;
+            border-radius: 6px;
+            font-size: 11px;
+            line-height: 1.6;
+            color: #34495e;
+            text-align: center;
+        }
+
+        /* ── Divider ── */
+        hr {
+            border: none;
+            border-top: 1px solid #e0e0e0;
+            margin: 24px 0;
+        }
+
+        /* ── Links ── */
+        a {
+            color: #3598db;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── Order Title ── -->
+    <div class="order-title">Sales Order</div>
+    <div class="order-subtitle">Order &bull; $ORDERDATE</div>
+
+    <!-- ── Metadata ── -->
+    <table class="meta-table">
+        <tr>
+            <th>Customer</th>
+            <td>$AREA</td>
+            <th>Contact</th>
+            <td>$USERNAME</td>
+        </tr>
+        <tr>
+            <th>Date</th>
+            <td>$ORDERDATE</td>
+            <th>PO Number</th>
+            <td>$ORDERPO</td>
+        </tr>
+        <tr>
+            <th>Delivery</th>
+            <td colspan="3">$SITE</td>
+        </tr>
+    </table>
+
+    <!-- ── Line Items ── -->
+    <table class="items-table">
+        $DETAILSTABLE
+    </table>
+
+    <!-- ── Totals ── -->
+    <table class="totals-table">
+        <tr class="subtotal">
+            <td class="label">Sub-total</td>
+            <td class="value">$ORDERSUBTOTAL</td>
+        </tr>
+        <tr class="tax">
+            <td class="label">Sales tax</td>
+            <td class="value">$ORDERTAXTOTAL</td>
+        </tr>
+        <tr class="total">
+            <td class="label">TOTAL</td>
+            <td class="value">$ORDERTOTAL</td>
+        </tr>
+    </table>
+
+    <!-- ── Order Notes ── -->
+    <div class="order-notes">
+        $ORDERNOTE
+    </div>
+
+    <!-- ── Thank You ── -->
+    <div class="thank-you">
+        Thank you for your order. The above items have been sold by us to your company on the basis of a legally binding order. An invoice detailing your order will follow shortly from our Finance team to yours for the above amount. Should you have any questions regarding this order, please feel free to contact us at any time.
+        <br><br>
+        Thank you for your business. It is very much appreciated.
+    </div>
+
+</body>
+</html>

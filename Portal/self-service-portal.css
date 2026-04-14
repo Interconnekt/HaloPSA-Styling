@@ -596,6 +596,26 @@ html body .portal .solidbutton {
     font-family: 'Montserrat', 'Poppins', sans-serif !important;
 }
 
+/* Discussion thread boxes on ticket pages — bump radius to match the
+   softer card language used elsewhere (tiles, widgets). HaloPSA ships
+   these at 5px which reads as a sharper, older aesthetic. */
+html body .portal .action-history-item {
+    border-radius: 14px !important;
+}
+
+/* Workflow stepper line (rc-steps library) — `3.2547741a.chunk.css`
+   hardcodes `width: 1000px` and `background: #e9e9e9` on the
+   `.rc-steps-item-title::after` pseudo that draws the connector line
+   between steps. On a 2-step flow (Service Desk → Resolved) the 1000px
+   line overshoots the gap and the near-white colour disappears on the
+   dark body. We clamp width to the item's remaining space and retint
+   using the theme border token so it reads in both modes. */
+html body .portal .rc-steps-item-title::after {
+    width: calc(100% - 40px) !important;
+    background: var(--portal-border) !important;
+    height: 2px !important;
+}
+
 
 
 /* ─────────────────────────────────────────────────

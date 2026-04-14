@@ -446,8 +446,8 @@ searchboxinput,
 .portal .tree-menu .tree-node[style*="rgb(47, 53, 94)"],
 .portal .tree-menu .tree-node[style*="background-color: rgb(47"] {
     background-color: transparent !important;
-    color: var(--portal-heading) !important;
-    border-left: 3px solid var(--portal-accent);
+    color: var(--portal-action) !important;
+    border-left: 3px solid var(--portal-action);
     padding-left: 7px !important;
     font-weight: 600;
     border-radius: 0 !important;

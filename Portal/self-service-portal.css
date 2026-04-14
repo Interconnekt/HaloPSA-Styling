@@ -758,12 +758,15 @@ html body .portal .details-form textarea {
     padding: 12px 14px !important;
 }
 
-/* Focus state in action blue — clear, accessible focus indicator. */
+/* Focus state — keep the border stable (just the normal border colour)
+   and use a subtle 2px ring for the focus indicator. The earlier design
+   swapped the border itself to solid action blue which read as an
+   over-bold "blue line around the text" when typing. */
 html body .portal .details-form input[type="text"]:focus,
 html body .portal .details-form input:not([type]):focus,
 html body .portal .details-form textarea:focus {
-    border-color: var(--portal-action) !important;
-    box-shadow: 0 0 0 3px rgba(80, 132, 238, 0.18) !important;
+    border-color: var(--portal-border) !important;
+    box-shadow: 0 0 0 2px rgba(80, 132, 238, 0.25) !important;
     outline: none !important;
 }
 
@@ -779,8 +782,8 @@ html body .portal .details-form .Select__control {
     background-color: var(--portal-bg) !important;
 }
 html body .portal .details-form .Select__control--is-focused {
-    border-color: var(--portal-action) !important;
-    box-shadow: 0 0 0 3px rgba(80, 132, 238, 0.18) !important;
+    border-color: var(--portal-border) !important;
+    box-shadow: 0 0 0 2px rgba(80, 132, 238, 0.25) !important;
 }
 
 /* Breathing room between field rows. */

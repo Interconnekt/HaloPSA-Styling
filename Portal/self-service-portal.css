@@ -792,6 +792,37 @@ html body .portal .details-form .mb-3 {
     margin-bottom: 20px !important;
 }
 
+/* Froala rich-text editor (Details field) — HaloPSA renders it with a
+   white content area and no border, which clashes badly with the dark
+   form chrome around it. We unify to match other inputs: 10px radius,
+   border-token outline, surface toolbar, bg content area, text-token
+   body. Note: scoped tightly to `.fr-box` so we don't accidentally
+   restyle Froala when it shows up on other pages (e.g. the ticket
+   reply editor — which should inherit the same treatment anyway). */
+html body .portal .fr-box {
+    border: 1px solid var(--portal-border) !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+}
+html body .portal .fr-box .fr-toolbar {
+    background: var(--portal-surface) !important;
+    border-bottom: 1px solid var(--portal-border) !important;
+    border-radius: 0 !important;
+}
+html body .portal .fr-box .fr-wrapper {
+    background: var(--portal-bg) !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+}
+html body .portal .fr-box .fr-element,
+html body .portal .fr-box .fr-view {
+    color: var(--portal-text) !important;
+    background: transparent !important;
+}
+html body .portal .fr-placeholder {
+    color: var(--portal-text-muted) !important;
+}
+
 /* "* denotes a mandatory field" hint — HaloPSA ships this in alarm red
    (`rgb(235, 0, 0)`) which reads as an error. It's instructional copy,
    not an error, so we soften to a pinky-red that still reads as a

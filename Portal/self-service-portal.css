@@ -670,6 +670,31 @@ html body .portal .solidbutton.fabtn:not(.notext) {
     white-space: nowrap;
 }
 
+/* Icon-only fabtns (`.notext`, e.g. Share next to Generate PDF) — match
+   the 30px pill height of their text-bearing siblings and render as a
+   round icon button so the pair aligns cleanly regardless of viewport. */
+html body .portal .solidbutton.fabtn.notext {
+    width: 30px !important;
+    height: 30px !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px !important;
+}
+
+/* `.buttons-container` ships as `display: block` which relies on inline
+   whitespace between children for spacing — fragile when HaloPSA emits
+   the markup without whitespace. Flex + gap makes the row layout
+   predictable and keeps the Generate PDF pill and its icon sibling
+   vertically aligned. */
+html body .portal .buttons-container {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
 /* Back button — HaloPSA applies an inline style that paints this the
    heading-purple, which disappears into the dark body. Force the action
    colour with !important so the button is actually visible.

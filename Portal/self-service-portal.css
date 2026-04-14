@@ -207,7 +207,7 @@ header h1, header h2, header h3,
     font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-size: 1.75rem !important;
     font-weight: 600 !important;
-    color: var(--portal-heading) !important;
+    color: var(--portal-action) !important;
     letter-spacing: -0.01em;
 }
 
@@ -672,6 +672,18 @@ html body .portal *::-webkit-scrollbar-track {
 html body .portal * {
     scrollbar-width: thin !important;
     scrollbar-color: var(--portal-border) transparent !important;
+}
+
+/* Top nav buttons — hover/focus lights up in the action blue so users
+   get clear interaction feedback. HaloPSA sets inline `rgb(47, 53, 94)`
+   on `.nhd-nav-btn`, so attribute selector + !important beats inline.
+   Note: HaloPSA doesn't emit a `selected`/`active` class for the current
+   section, so we only style interactive states — true "current page"
+   indication would require JS to add a class based on URL. */
+html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"]:hover,
+html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"]:focus-visible {
+    background-color: var(--portal-action) !important;
+    box-shadow: 0 4px 12px var(--portal-action-shadow) !important;
 }
 
 

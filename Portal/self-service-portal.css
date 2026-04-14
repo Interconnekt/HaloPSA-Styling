@@ -808,17 +808,43 @@ html body .portal .attachment-container.edit {
     border-radius: 14px !important;
 }
 
-/* Previous / Next pagination buttons (react-table) — default is a flat
-   low-contrast pill that barely reads. Restyle to match the form's
-   surface chrome with an action-blue hover for clear interaction. */
+/* Pagination bar (react-table) — the defaults are a 28px-tall strip
+   with fixed `.-btn` heights that caused text to clip and misalign.
+   We grow the bar to 62px, centre all children, and use inline-flex on
+   the buttons with line-height:1 so vertical centring is exact.
+   Specificity: chain `.-pagination .-btn` (3 classes) so later rules on
+   `.-btn` can target pagination without fighting us for specificity. */
+html body .portal .-pagination {
+    padding: 14px 12px !important;
+    align-items: center !important;
+    gap: 12px;
+    border-top: 1px solid var(--portal-border) !important;
+    box-shadow: none !important;
+}
+html body .portal .-pagination > * {
+    height: auto !important;
+}
+html body .portal .-pagination .-previous,
+html body .portal .-pagination .-next {
+    display: flex !important;
+    align-items: center;
+    padding: 0 !important;
+}
+html body .portal .-pagination .-btn,
 html body .portal button.-btn {
     background-color: var(--portal-surface) !important;
     color: var(--portal-text) !important;
     border: 1px solid var(--portal-border) !important;
     border-radius: 10px !important;
-    padding: 8px 18px !important;
+    height: 36px !important;
+    padding: 0 20px !important;
+    line-height: 1 !important;
     font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-weight: 600 !important;
+    font-size: 13px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     transition: background-color 150ms ease, border-color 150ms ease;
 }
 html body .portal button.-btn:hover:not([disabled]) {
@@ -829,6 +855,19 @@ html body .portal button.-btn:hover:not([disabled]) {
 html body .portal button.-btn[disabled] {
     opacity: 0.5;
     cursor: not-allowed;
+}
+/* Page-number jump input — pill it to match form chrome. */
+html body .portal .-pagination input {
+    height: 32px !important;
+    border-radius: 8px !important;
+    border: 1px solid var(--portal-border) !important;
+    background: var(--portal-bg) !important;
+    text-align: center !important;
+    padding: 0 8px !important;
+    width: 50px !important;
+}
+html body .portal .-pagination .-pageJump {
+    margin: 0 6px !important;
 }
 
 /* Asset selector — fix the overlap where the switches row touched the

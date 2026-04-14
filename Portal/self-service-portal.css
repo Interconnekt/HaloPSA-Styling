@@ -128,13 +128,8 @@ html, body {
     color: var(--portal-text);
 }
 
-.tree-node {
-    font-family: 'Montserrat', sans-serif !important;
-}
-
 /* Headings */
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Montserrat', sans-serif !important;
     color: var(--portal-heading);
 }
 
@@ -197,14 +192,12 @@ header h1, header h2, header h3,
 .portal .search-title {
     font-size: 2.5rem;
     font-weight: 500;
-    font-family: 'Montserrat', 'Poppins', sans-serif;
     margin: 40px 0 -40px;
     color: var(--portal-heading);
 }
 
 .portal .page-title h1,
 .portal .details-form .details-group-header.title {
-    font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-size: 1.75rem !important;
     font-weight: 600 !important;
     color: var(--portal-action) !important;
@@ -214,7 +207,6 @@ header h1, header h2, header h3,
 /* Page subtitle (eyebrow label — e.g. "Top Articles" on the KB index) */
 .portal .page-title .page-subtitle,
 .portal .page-subtitle {
-    font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-size: 0.75rem !important;
     font-weight: 600 !important;
     text-transform: uppercase;
@@ -260,7 +252,6 @@ header h1, header h2, header h3,
 
 .portal .searchscreen .searchbox input[type=text],
 .portal .theme-dark .searchscreen .searchbox input[type=text] {
-    font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-size: 16px !important;
     border-radius: 50px !important;
     padding: 14px 22px;
@@ -289,7 +280,6 @@ header h1, header h2, header h3,
    padding and shadow. Border is hairline rgba so it adapts to theme surface. */
 .portal .card.dashbtn,
 .portal .dashbtn {
-    font-family: 'Montserrat', 'Poppins', sans-serif !important;
     border-radius: 14px !important;
     padding: 28px 20px 24px !important;
     border: 1px solid var(--portal-border) !important;
@@ -337,7 +327,6 @@ searchboxinput,
 /* Article title */
 .portal .articleInfoSmall.kb .heading,
 .portal .article .heading {
-    font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-size: 17px !important;
     font-weight: 600 !important;
     letter-spacing: -0.005em;
@@ -346,14 +335,12 @@ searchboxinput,
 /* View-count number (tabular so digits align) */
 .portal .articleInfoSmall.kb > div:last-child,
 .portal .articleInfoSmall.kb > :not(.heading):not(.articleText) {
-    font-family: 'Montserrat', 'Poppins', sans-serif;
     font-variant-numeric: tabular-nums;
     color: rgba(221, 221, 221, 0.6);
 }
 
 /* Tag pills — real pills, subtle surface, hover tint */
 .portal .kbtags {
-    font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-size: 12px !important;
     font-weight: 500 !important;
     border-radius: 50px !important;
@@ -377,7 +364,6 @@ searchboxinput,
 }
 .portal .kblist input[type=text],
 .portal .tree-menu input[type=text] {
-    font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-size: 14px !important;
     padding: 10px 16px !important;
     border: none !important;
@@ -390,11 +376,7 @@ searchboxinput,
     box-shadow: 0 0 0 2px rgba(107, 163, 224, 0.3) inset;
 }
 
-/* Sidebar tree items — Montserrat + hover tint */
-.portal .tree-menu,
-.portal .kblist {
-    font-family: 'Montserrat', 'Poppins', sans-serif !important;
-}
+/* Sidebar tree items — hover tint */
 .portal .tree-menu .sidebar,
 .portal .kblist .sidebar {
     border-radius: 8px;
@@ -431,7 +413,6 @@ searchboxinput,
    left bar — too heavy for small cards. Slim the bar, tighten radius,
    add a subtle hover lift. No hairline border so the bar sits flush. */
 .portal .listwidget .listwidget-title {
-    font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-size: 1.25rem !important;
     font-weight: 500 !important;
     letter-spacing: -0.005em;
@@ -501,7 +482,6 @@ html body .portal .sla-perc-bar > div[style*="rgb(34, 139, 34)"] {
 
 /* Countdown text inside the bar — Montserrat, legible on coloured fills */
 html body .portal .bar-text {
-    font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-weight: 500 !important;
     font-size: 12px !important;
     letter-spacing: 0.2px;
@@ -509,7 +489,6 @@ html body .portal .bar-text {
 /* Centred countdown text sits inside the bar — keep it legible but not
    bold enough to shout. */
 html body .portal .bar-text {
-    font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-weight: 500 !important;
     font-size: 12px !important;
     letter-spacing: 0.2px;
@@ -619,7 +598,6 @@ html body .portal .solidbutton.fabtn.notext {
     color: var(--portal-text) !important;
     border: 1px solid var(--portal-border) !important;
     border-radius: 10px !important;
-    font-family: 'Montserrat', 'Poppins', sans-serif !important;
 }
 html body .portal .solidbutton.fabtn:hover,
 html body .portal .solidbutton.fabtn.notext:hover {
@@ -662,7 +640,6 @@ html body .portal button.backbtn:hover {
 /* Article tags */
 span.kbtags {
     border-radius: var(--portal-radius);
-    font-family: 'Montserrat', sans-serif;
 }
 
 /* Primary pill action buttons — "View All" on the home widgets plus
@@ -675,7 +652,6 @@ html body .portal .nhd-button.curve,
 html body .portal button.nhd-button.curve {
     background-color: var(--portal-action) !important;
     box-shadow: 0 4px 12px var(--portal-action-shadow) !important;
-    font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     letter-spacing: 0.02em;
@@ -684,34 +660,6 @@ html body .portal button.nhd-button.curve {
 html body .portal .nhd-button.curve:hover,
 html body .portal button.nhd-button.curve:hover {
     background-color: var(--portal-action-hover) !important;
-}
-
-/* ── Ticket pages: force Montserrat everywhere ──
-   The portal has no dedicated ticket-page wrapper class, so we scope
-   via the structural containers HaloPSA actually uses on ticket views
-   (action history, details form, sidebar, profile header). `html body`
-   prefix keeps us ahead of later-loaded HaloPSA rules. */
-html body .portal .action-history-item,
-html body .portal .action-history-item *,
-html body .portal .history-details,
-html body .portal .history-details *,
-html body .portal .action-details,
-html body .portal .action-details *,
-html body .portal .details-form,
-html body .portal .details-form *,
-html body .portal .details-sidebar,
-html body .portal .details-sidebar *,
-html body .portal .profile-title,
-html body .portal .profile-title *,
-html body .portal .profile-details,
-html body .portal .profile-details *,
-html body .portal .profile-full-name,
-html body .portal .profile-extra,
-html body .portal .config-intro,
-html body .portal .config-intro *,
-html body .portal .nhd-button,
-html body .portal .solidbutton {
-    font-family: 'Montserrat', 'Poppins', sans-serif !important;
 }
 
 /* Ticket-header subtitle (e.g. 'Test ticket' beneath 'IC:0176791').
@@ -770,7 +718,6 @@ html body .portal .status-avatar.bitsmall {
    buttons with surface tokens and a soft hover. */
 html body .portal .page-counts,
 html body .portal .page-counts h98 {
-    font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     color: var(--portal-text-muted, #bbb) !important;
@@ -1066,7 +1013,6 @@ html body .portal button.-btn {
     height: 36px !important;
     padding: 0 20px !important;
     line-height: 1 !important;
-    font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-weight: 600 !important;
     font-size: 13px !important;
     display: inline-flex !important;
@@ -1118,7 +1064,6 @@ html body .portal .switches > button {
     border: 0 !important;
     border-radius: 999px !important;
     padding: 6px 16px !important;
-    font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-weight: 500 !important;
     font-size: 13px !important;
     background: transparent !important;
@@ -1217,7 +1162,6 @@ footer {
 }
 
 footer a {
-    font-family: 'Montserrat', sans-serif;
     display: inline-block;
     color: var(--portal-surface);
     text-decoration: none;
@@ -1380,7 +1324,6 @@ footer a svg {
     background-color: var(--portal-table-header-bg) !important;
     color: inherit !important;
     font-weight: 600 !important;
-    font-family: 'Montserrat', sans-serif !important;
 }
 
 /* Subtle row hover — alpha so it works on any body bg */
@@ -1479,7 +1422,6 @@ footer a svg {
 
 .kbdetails li {
     margin-bottom: 6px;
-    font-family: 'Montserrat', sans-serif;
     line-height: 1.8;
 }
 

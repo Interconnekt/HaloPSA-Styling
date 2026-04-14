@@ -454,10 +454,37 @@ searchboxinput,
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
 }
 
-/* Slim the coloured indicator bar and match the card's rounded corner */
+/* Slim the coloured indicator bar and match the card's rounded corner.
+   4px reads as an intentional status accent; 14px radius on the leading
+   edge mirrors the card's corner so the bar terminates cleanly. */
 .portal .listwidget .action-history-item .tile-widget-bar {
-    width: 3px !important;
+    width: 4px !important;
     border-radius: 14px 0 0 14px !important;
+}
+
+/* SLA countdown bar (bottom-right of home-page ticket cards).
+   HaloPSA ships `.sla-perc-bar` as a grey track with a vivid red fill
+   (`rgb(255, 46, 0)`) at only 2px radius — it reads as a harsh brick on
+   the dark card. Pill-round the track + soften the overdue red to a
+   dusty coral so it still signals urgency without screaming. The fill
+   is an unnamed child div, so we target it via `> div`. */
+html body .portal .sla-perc-bar {
+    border-radius: 999px !important;
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    overflow: hidden;
+    height: 18px !important;
+}
+html body .portal .sla-perc-bar > div {
+    border-radius: 999px !important;
+    background-color: #d9574e !important;
+}
+/* Centred countdown text sits inside the bar — keep it legible but not
+   bold enough to shout. */
+html body .portal .bar-text {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 12px !important;
+    letter-spacing: 0.2px;
 }
 
 /* Kanban cards */

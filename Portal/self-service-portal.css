@@ -146,6 +146,36 @@ p, span, li, a {
     font-weight: 400;
 }
 
+/* Comprehensive font-family sweep — ensures Montserrat wins everywhere
+   in the portal chrome, not just through the per-component overrides
+   scattered in sections 3–8. Two layers:
+
+   1. Form controls — inputs, textareas, selects, buttons and optgroups
+      do NOT inherit `font-family` by default (HTML spec: browser UA
+      styles set a system font on these elements). Forcing `inherit`
+      makes them pick up Montserrat from <body> so the New Ticket form,
+      filter dropdowns, searchboxes etc all match the rest of the portal.
+
+   2. Scoped universal override for `.portal` subtree — catches anything
+      HaloPSA's bundled libraries (react-select Lato, react-kanban /
+      react-table Poppins, Segoe UI Light on some profile headers)
+      paint via same-specificity class rules that beat plain body
+      inheritance. `!important` is required because some of those
+      declarations ship inline.
+
+   Exclusions:
+     - `i`, `svg`, `.fa` — FontAwesome icon glyphs would render as
+       unicode placeholders if forced to Montserrat. HaloPSA loads FA
+       separately and paints icons via `font-family: FontAwesome`.
+     - `code`, `pre`, `pre *` — monospace stacks (SFMono, Consolas,
+       Menlo) defined in section 9 for inline/block code. */
+input, textarea, select, button, optgroup {
+    font-family: inherit;
+}
+html body .portal *:not(i):not(svg):not(.fa):not(code):not(pre):not(pre *) {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
+}
+
 /* Header bar text override */
 header,
 .header,
@@ -190,14 +220,21 @@ header h1, header h2, header h3,
    ───────────────────────────────────────────────── */
 
 .portal .search-title {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-size: 2.5rem;
     font-weight: 500;
     margin: 40px 0 -40px;
     color: var(--portal-heading);
 }
 
+/* Page titles. HaloPSA ships the ticket/list H1 as `.profile-full-name.oneline`
+   in Segoe UI Light, which bypasses the older `.page-title h1` selector we had.
+   Include both so Montserrat + action-blue lands on every page-title variant. */
 .portal .page-title h1,
+.portal h1.profile-full-name,
+.portal h1.profile-full-name.oneline,
 .portal .details-form .details-group-header.title {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-size: 1.75rem !important;
     font-weight: 600 !important;
     color: var(--portal-action) !important;
@@ -480,15 +517,13 @@ html body .portal .sla-perc-bar > div[style*="rgb(34, 139, 34)"] {
     background-color: #4fa37a !important;
 }
 
-/* Countdown text inside the bar — Montserrat, legible on coloured fills */
+/* Centred countdown text inside the SLA bar — Montserrat so it matches
+   the rest of the portal surfaces, weight 500 and 12px to stay legible
+   on the coloured fills without shouting. Two rules collapsed into one:
+   previous revision had a duplicate block, and both had lost the
+   `font-family` declaration during the 811c15f strip. */
 html body .portal .bar-text {
-    font-weight: 500 !important;
-    font-size: 12px !important;
-    letter-spacing: 0.2px;
-}
-/* Centred countdown text sits inside the bar — keep it legible but not
-   bold enough to shout. */
-html body .portal .bar-text {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-weight: 500 !important;
     font-size: 12px !important;
     letter-spacing: 0.2px;
@@ -652,10 +687,27 @@ html body .portal .nhd-button.curve,
 html body .portal button.nhd-button.curve {
     background-color: var(--portal-action) !important;
     box-shadow: 0 4px 12px var(--portal-action-shadow) !important;
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     letter-spacing: 0.02em;
     padding: 8px 18px !important;
+}
+/* Icons inside action buttons — HaloPSA's Font Awesome stylesheet paints
+   `.fa` at `color: #555` globally, which sits grey on our blue button
+   bg (the `Book an appointment` calendar and `Time Entry` clock were the
+   visible offenders; `Add Note` uses an inline SVG that correctly
+   inherits the button's text colour). Forcing `color: inherit` on the
+   icons lets them adopt whatever `color` the button sets — stays white
+   here, auto-adapts if the button's colour ever changes. */
+html body .portal .nhd-button.curve i,
+html body .portal .nhd-button.curve .fa,
+html body .portal .nhd-button.curve svg,
+html body .portal button.nhd-button.curve i,
+html body .portal button.nhd-button.curve .fa,
+html body .portal button.nhd-button.curve svg {
+    color: inherit !important;
+    fill: currentColor !important;
 }
 html body .portal .nhd-button.curve:hover,
 html body .portal button.nhd-button.curve:hover {
@@ -667,6 +719,7 @@ html body .portal button.nhd-button.curve:hover {
    small against the 28px H1 above it. Bump so the ticket's actual
    name reads as a proper subtitle rather than a footnote. */
 html body .portal .profile-extra {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-size: 18px !important;
     font-weight: 500 !important;
     color: var(--portal-text) !important;
@@ -718,6 +771,7 @@ html body .portal .status-avatar.bitsmall {
    buttons with surface tokens and a soft hover. */
 html body .portal .page-counts,
 html body .portal .page-counts h98 {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     color: var(--portal-text-muted, #bbb) !important;
@@ -777,6 +831,24 @@ html body .portal .searchholder input[name="searchbox"] {
     padding-right: 16px !important;
 }
 
+/* Typography for list-top controls — the "Open Tickets" / "All Tickets"
+   react-select dropdowns and the search input all ship in Poppins. Target
+   the stable react-select BEM classes (`.Select__single-value` etc) — NOT
+   the Emotion hash classes (`css-1dimb5e-singleValue`), which change on
+   library upgrades — plus the search input's wrapper so placeholder and
+   typed text pick up Montserrat too. */
+html body .portal .searchholder input,
+html body .portal .searchholder input[name="searchbox"],
+html body .portal .Select__control,
+html body .portal .Select__single-value,
+html body .portal .Select__placeholder,
+html body .portal .Select__input,
+html body .portal .Select__input input,
+html body .portal .Select__menu,
+html body .portal .Select__option {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
+}
+
 /* Slim scrollbars — HaloPSA inherits default OS scrollbars which look
    chunky in a modern portal UI. Using the border token as the thumb
    colour keeps them subtle in both light and dark mode. */
@@ -796,16 +868,43 @@ html body .portal * {
     scrollbar-color: var(--portal-border) transparent !important;
 }
 
-/* Top nav buttons — hover/focus lights up in the action blue so users
-   get clear interaction feedback. HaloPSA sets inline `rgb(47, 53, 94)`
-   on `.nhd-nav-btn`, so attribute selector + !important beats inline.
-   Note: HaloPSA doesn't emit a `selected`/`active` class for the current
-   section, so we only style interactive states — true "current page"
-   indication would require JS to add a class based on URL. */
+/* Site header typography — HaloPSA ships `.nhd-nav-btn` (and its children)
+   in Poppins 16px/400. Scope Montserrat to the whole nav wrapper so it
+   cascades to every nav item including tooltips and the user-menu popover.
+   Kept at 13px/500 with light letter-spacing so it reads as a compact
+   header rather than competing with page-title weight. */
+html body .portal .nhd-nav,
+html body .portal .nhd-nav button.nhd-nav-btn,
+html body .portal .nhd-nav .buttoncontainer {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.02em;
+}
+
+/* Top nav buttons — hover/focus needs to read as a highlight, not a
+   drop-shadow. HaloPSA ships the base bg inline as `rgb(47, 53, 94)`,
+   so the previous `#30355b` hover was nearly the same value (~1pt
+   difference) and the navy-tinted box-shadow just looked like a puddle.
+   Instead, layer a white-alpha overlay via `background-image` linear-
+   gradient: keeps the inline-set `background-color` intact, lightens
+   the whole tab by a hue-agnostic amount, and self-corrects if HaloPSA
+   changes the navbar colour later. Transition covers the perceived
+   latency between pointer-in and paint. No shadow — rest of the portal
+   uses background-only hovers, so this keeps interaction language
+   consistent. Note: HaloPSA doesn't emit a `selected`/`active` class
+   for the current section; styling the true "current page" would need
+   JS to add a class based on URL. */
+html body .portal button.nhd-nav-btn,
+html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"] {
+    transition: background-image 120ms ease, background-color 120ms ease !important;
+}
+html body .portal button.nhd-nav-btn:hover,
+html body .portal button.nhd-nav-btn:focus-visible,
 html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"]:hover,
 html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"]:focus-visible {
-    background-color: #30355b !important;
-    box-shadow: 0 4px 12px rgba(48, 53, 91, 0.40) !important;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.10)) !important;
+    box-shadow: none !important;
 }
 
 /* ─────────────────────────────────────────────────

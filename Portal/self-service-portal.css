@@ -868,26 +868,40 @@ html body .portal .switches > button:not([style*="rgb(47, 53, 94)"]):hover {
     background: var(--portal-surface) !important;
 }
 
-/* Asset table filter row — the form-facelift rule made every text input
-   40px, which meant the react-table filter inputs filled the 40px filter
-   row exactly, butting against the header separator above and the tbody
-   below. We shrink filter inputs to 32px and pad the filter row so they
-   sit centred with breathing room. Specificity includes `.details-form`
-   so we outrank the generic form input rule without `!important` fights. */
+/* Asset table filter row — react-table ships `.rt-thead.-filters` at a
+   fixed 40px height, so padding alone just compresses content rather
+   than growing the row. We force `height: auto` + box-sizing to let the
+   row grow to `padding + content`. Inputs are sized at 30px inside a
+   10px-padded row (= 50px total) so nothing clips into the header above
+   or the tbody below. `overflow: visible` on `.rt-th` is critical —
+   react-table sets it to `hidden` by default which would clip any
+   focus ring or shadow on the inputs. */
 html body .portal .rt-thead.-filters {
-    padding: 8px 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 10px 0 !important;
     background: transparent !important;
+    border-bottom: 1px solid var(--portal-border) !important;
+}
+html body .portal .rt-thead.-filters .rt-tr {
+    height: auto !important;
 }
 html body .portal .rt-thead.-filters .rt-th {
+    overflow: visible !important;
     padding: 0 4px !important;
+    height: auto !important;
 }
 html body .portal .details-form .rt-thead.-filters input[type="text"] {
-    height: 32px !important;
+    height: 30px !important;
     font-size: 13px !important;
     padding: 0 10px !important;
+    width: 100%;
+    box-sizing: border-box;
 }
+/* Header row: drop the default bottom border — the filter row below
+   carries the separator instead, avoiding a double-line effect. */
 html body .portal .rt-thead.-header {
-    border-bottom: 1px solid var(--portal-border) !important;
+    border-bottom: 0 !important;
     box-shadow: none !important;
 }
 

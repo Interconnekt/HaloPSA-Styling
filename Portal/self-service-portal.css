@@ -868,6 +868,29 @@ html body .portal .switches > button:not([style*="rgb(47, 53, 94)"]):hover {
     background: var(--portal-surface) !important;
 }
 
+/* Asset table filter row — the form-facelift rule made every text input
+   40px, which meant the react-table filter inputs filled the 40px filter
+   row exactly, butting against the header separator above and the tbody
+   below. We shrink filter inputs to 32px and pad the filter row so they
+   sit centred with breathing room. Specificity includes `.details-form`
+   so we outrank the generic form input rule without `!important` fights. */
+html body .portal .rt-thead.-filters {
+    padding: 8px 0 !important;
+    background: transparent !important;
+}
+html body .portal .rt-thead.-filters .rt-th {
+    padding: 0 4px !important;
+}
+html body .portal .details-form .rt-thead.-filters input[type="text"] {
+    height: 32px !important;
+    font-size: 13px !important;
+    padding: 0 10px !important;
+}
+html body .portal .rt-thead.-header {
+    border-bottom: 1px solid var(--portal-border) !important;
+    box-shadow: none !important;
+}
+
 
 
 /* ─────────────────────────────────────────────────

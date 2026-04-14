@@ -368,7 +368,7 @@ searchboxinput,
     transition: background-color 160ms ease;
 }
 .portal .article:hover {
-    background-color: rgba(255, 255, 255, 0.04);
+    background-color: var(--portal-surface-hover);
 }
 
 /* Article title */
@@ -383,7 +383,7 @@ searchboxinput,
 .portal .articleInfoSmall.kb > div:last-child,
 .portal .articleInfoSmall.kb > :not(.heading):not(.articleText) {
     font-variant-numeric: tabular-nums;
-    color: rgba(221, 221, 221, 0.6);
+    color: var(--portal-text-muted);
 }
 
 /* Tag pills — real pills, subtle surface, hover tint */
@@ -392,18 +392,18 @@ searchboxinput,
     font-weight: 500 !important;
     border-radius: 50px !important;
     border: none !important;
-    background: rgba(255, 255, 255, 0.06) !important;
+    background: var(--portal-surface-hover) !important;
     padding: 4px 12px !important;
     transition: background-color 150ms ease;
 }
 .portal .kbtags:hover {
-    background: rgba(255, 255, 255, 0.10) !important;
+    background: var(--portal-surface-active) !important;
 }
 
 /* Sidebar search (tree-menu / kblist) — borderless pill matching home search */
 .portal .kblist .searchbox,
 .portal .tree-menu .searchbox {
-    background: rgba(255, 255, 255, 0.04) !important;
+    background: var(--portal-surface-hover) !important;
     border: none !important;
     border-radius: 50px !important;
     box-shadow: none !important;
@@ -434,7 +434,7 @@ searchboxinput,
 }
 .portal .tree-menu .sidebar:hover,
 .portal .kblist .sidebar:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--portal-surface-hover);
 }
 
 /* KB sidebar — selected article highlight.
@@ -1395,6 +1395,15 @@ footer a svg {
    with the .kbdetails ancestor gives us enough specificity to win.
    ═══════════════════════════════════════════════════════════════════════ */
 
+/* Article title (the H1 inside a rendered KB article). The global
+   `h1 { 1.625rem }` = 26px was a touch larger than the page-title H1
+   above it (22px). 1.5rem = 24px gives the article's own heading
+   visible emphasis over the page title without re-introducing the
+   poster-sized hierarchy we tightened away from. */
+.kbdetails h1 {
+    font-size: 1.5rem;
+}
+
 /* ── Panel outer wrappers: border-radius + overflow clipping + left border accent ──
    border-left goes on the OUTER wrapper so it isn't clipped by overflow: hidden.
    border: none first kills any Confluence inline border, then border-left re-adds just the accent.
@@ -1454,46 +1463,38 @@ footer a svg {
     border: none !important;
 }
 
+/* Shared padding + text colour for all panel bodies. Per-type rules
+   below only set background. `color: var(--portal-text)` auto-flips
+   via the `:root` / `.theme-dark` token overrides — no dark-mode
+   duplicates needed. Panel backgrounds stay as light tints because
+   the dark-mode overrides in section 10 set per-type dark surfaces. */
+.kbdetails [class*="confluence-information-macro-"] > .confluence-information-macro-body {
+    color: var(--portal-text) !important;
+    padding: 15px 25px !important;
+}
+
 .kbdetails .confluence-information-macro-information .confluence-information-macro-body {
     background: #eaf2fd !important;
-    color: #1a1d23 !important;
-    padding: 15px 25px !important;
-    border: none !important;
 }
 
 .kbdetails .confluence-information-macro-note .confluence-information-macro-body {
     background: #f7eefd !important;
-    color: #1a1d23 !important;
-    padding: 15px 25px !important;
-    border: none !important;
 }
 
 .kbdetails .confluence-information-macro-warning .confluence-information-macro-body {
     background: #fcedec !important;
-    color: #1a1d23 !important;
-    padding: 15px 25px !important;
-    border: none !important;
 }
 
 .kbdetails .confluence-information-macro-error .confluence-information-macro-body {
     background: #fcedec !important;
-    color: #1a1d23 !important;
-    padding: 15px 25px !important;
-    border: none !important;
 }
 
 .kbdetails .confluence-information-macro-tip .confluence-information-macro-body {
     background: #e3fef2 !important;
-    color: #1a1d23 !important;
-    padding: 15px 25px !important;
-    border: none !important;
 }
 
 .kbdetails .confluence-information-macro-success .confluence-information-macro-body {
     background: #e3fef2 !important;
-    color: #1a1d23 !important;
-    padding: 15px 25px !important;
-    border: none !important;
 }
 
 /* ── Tables: clean modern style (no border-radius, no zebra stripes) ──
@@ -1678,26 +1679,24 @@ footer a svg {
     border: none !important;
 }
 
+/* Dark-mode backgrounds only — text colour is handled by the shared
+   `color: var(--portal-text) !important` rule in section 9. */
 .theme-dark .kbdetails .confluence-information-macro-information .confluence-information-macro-body {
     background: #1a2744 !important;
-    color: #ddd !important;
 }
 
 .theme-dark .kbdetails .confluence-information-macro-note .confluence-information-macro-body {
     background: #2a2044 !important;
-    color: #ddd !important;
 }
 
 .theme-dark .kbdetails .confluence-information-macro-warning .confluence-information-macro-body,
 .theme-dark .kbdetails .confluence-information-macro-error .confluence-information-macro-body {
     background: #3d2020 !important;
-    color: #ddd !important;
 }
 
 .theme-dark .kbdetails .confluence-information-macro-tip .confluence-information-macro-body,
 .theme-dark .kbdetails .confluence-information-macro-success .confluence-information-macro-body {
     background: #1a3d2a !important;
-    color: #ddd !important;
 }
 
 /* ── Generic Panels (.panel/.panelContent) — dark overlay preserving hue ── */
@@ -1734,11 +1733,6 @@ footer a svg {
     padding: 15px 25px;
 }
 
-/* ── Images: dark border ── */
-.theme-dark .kbdetails img {
-    border-color: var(--portal-border);
-}
-
 /* ── Status Macros: dark mode pill colours ── */
 .theme-dark .kbdetails .status-macro.aui-lozenge-complete  { background-color: #1a3366 !important; color: #8bb3e0 !important; }
 .theme-dark .kbdetails .status-macro.aui-lozenge-success   { background-color: #1a3d2a !important; color: #57d9a3 !important; }
@@ -1746,26 +1740,11 @@ footer a svg {
 .theme-dark .kbdetails .status-macro.aui-lozenge-error     { background-color: #3d2020 !important; color: #ff8f73 !important; }
 .theme-dark .kbdetails .status-macro.aui-lozenge-progress  { background-color: #2a2544 !important; color: #b8acf6 !important; }
 
-/* ── Blockquotes: dark mode ── */
-.theme-dark .kbdetails blockquote {
-    background: var(--portal-quote-bg);
-    border-left-color: var(--portal-quote-border);
-    color: var(--portal-text-secondary);
-}
-
-/* ── Horizontal rules: dark mode ── */
-.theme-dark .kbdetails hr {
-    border-top-color: var(--portal-border);
-}
-
-/* ── Lists: dark mode marker colours ── */
-.theme-dark .kbdetails ul li::marker {
-    color: var(--portal-accent);
-}
-
-.theme-dark .kbdetails ol li::marker {
-    color: var(--portal-text-secondary);
-}
+/* NOTE: No dark-mode overrides for blockquote, hr, ::marker, or img
+   border. The light-mode rules above already reference tokens
+   (`--portal-quote-*`, `--portal-border`, `--portal-accent`,
+   `--portal-text-secondary`) that flip automatically under `.theme-dark`
+   via the `:root` / `.theme-dark` variable blocks in section 1. */
 
 
 /* ═══════════════════════════════════════════════════════════════════════

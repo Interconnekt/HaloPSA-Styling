@@ -676,6 +676,10 @@ html body .portal button.nhd-button.curve {
     background-color: var(--portal-action) !important;
     box-shadow: 0 4px 12px var(--portal-action-shadow) !important;
     font-family: 'Montserrat', 'Poppins', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.02em;
+    padding: 8px 18px !important;
 }
 html body .portal .nhd-button.curve:hover,
 html body .portal button.nhd-button.curve:hover {
@@ -702,9 +706,24 @@ html body .portal .profile-title *,
 html body .portal .profile-details,
 html body .portal .profile-details *,
 html body .portal .profile-full-name,
+html body .portal .profile-extra,
+html body .portal .config-intro,
+html body .portal .config-intro *,
 html body .portal .nhd-button,
 html body .portal .solidbutton {
     font-family: 'Montserrat', 'Poppins', sans-serif !important;
+}
+
+/* Ticket-header subtitle (e.g. 'Test ticket' beneath 'IC:0176791').
+   HaloPSA ships `.profile-extra` at 14px/400 which sits awkwardly
+   small against the 28px H1 above it. Bump so the ticket's actual
+   name reads as a proper subtitle rather than a footnote. */
+html body .portal .profile-extra {
+    font-size: 18px !important;
+    font-weight: 500 !important;
+    color: var(--portal-text) !important;
+    margin-top: 2px;
+    letter-spacing: 0.01em;
 }
 
 /* Discussion thread boxes on ticket pages — bump radius to match the

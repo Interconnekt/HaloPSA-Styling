@@ -655,6 +655,23 @@ html body .portal .solidbutton.fabtn.notext:hover {
     background-color: var(--portal-surface-hover) !important;
 }
 
+/* Shared height for all action-row buttons — fabtns (icon + label),
+   fabtn.notext (icon-only), fabtn.noprint (ticket-view collapse/
+   download icons) and `.nhd-button.curve` pills all need to match so
+   the row visually aligns as one family. 36px is the middle of the
+   old ladder (30 for icons, 40 for HaloPSA's pills) — gives icon
+   buttons enough tap target without making the pills feel chunky.
+
+   The `.nhd-button.curve` match is below in its own block — HaloPSA
+   ships `height: 40px` on `.nhd-button` which we beat there. */
+html body .portal .solidbutton.fabtn,
+html body .portal .solidbutton.fabtn.notext,
+html body .portal .solidbutton.fabtn.noprint {
+    height: 36px !important;
+    display: inline-flex !important;
+    align-items: center;
+}
+
 /* Text-bearing fabtns on the KB chrome (Generate PDF, Print, Download,
    Share Link when rendered with a label). HaloPSA ships them at 32×32
    with 0 padding — fine for the `.notext` icon-only siblings, but it
@@ -664,29 +681,26 @@ html body .portal .solidbutton.fabtn.notext:hover {
    and forcing the pagination-circle dimensions on them. Scoped out via
    `:not(.fabtn)` there; this block gives text-bearing fabtns a proper
    icon+label pill sized to their content. */
-html body .portal .solidbutton.fabtn:not(.notext) {
+html body .portal .solidbutton.fabtn:not(.notext):not(.noprint) {
     width: auto !important;
-    height: 30px !important;
-    padding: 0 12px !important;
-    display: inline-flex !important;
-    align-items: center;
+    padding: 0 14px !important;
     gap: 6px;
     font-size: 12px !important;
     font-weight: 500 !important;
     white-space: nowrap;
 }
 
-/* Icon-only fabtns (`.notext`, e.g. Share next to Generate PDF) — match
-   the 30px pill height of their text-bearing siblings and render as a
-   round icon button so the pair aligns cleanly regardless of viewport. */
-html body .portal .solidbutton.fabtn.notext {
-    width: 30px !important;
-    height: 30px !important;
+/* Icon-only fabtns (`.notext`, e.g. Share next to Generate PDF;
+   `.noprint`, e.g. the ticket-view collapse/download icons). Square
+   the box at 36×36 and keep 10px corner radius so they read as
+   rounded-square icon buttons in the same family as the `.fabtn`
+   text pills. */
+html body .portal .solidbutton.fabtn.notext,
+html body .portal .solidbutton.fabtn.noprint {
+    width: 36px !important;
     padding: 0 !important;
-    display: inline-flex !important;
-    align-items: center;
     justify-content: center;
-    border-radius: 999px !important;
+    border-radius: 10px !important;
 }
 
 /* `.buttons-container` ships as `display: block` which relies on inline
@@ -710,11 +724,14 @@ html body .portal .backbtn,
 html body .portal button.backbtn {
     background-color: var(--portal-action) !important;
     /* HaloPSA paints `.backbtn` with inline styles (width 50, margin 5px 20px,
-       border-radius 8px) so every dimension override needs !important. */
+       border-radius 8px) so every dimension override needs !important.
+       Vertical margin keeps the button clear of the 60px navbar above
+       (previously `margin-top: 0` put the button at top:55 which clipped
+       the navbar); left margin keeps it off the viewport edge. */
     width: 32px !important;
     height: 32px !important;
     border: none !important;
-    margin: 0 10px 0 0 !important;
+    margin: 14px 10px 0 20px !important;
     border-radius: 999px !important;
     display: inline-flex !important;
     align-items: center;
@@ -755,7 +772,15 @@ html body .portal button.nhd-button.curve {
     font-size: 12px !important;
     font-weight: 500 !important;
     letter-spacing: 0.02em;
-    padding: 7px 16px !important;
+    /* HaloPSA's `.nhd-button { height: 40px }` was making these pills
+       sit taller than the 36px icon fabtns on the ticket-view action
+       row, causing the row to look misaligned. Force 36px to match
+       the shared fabtn height. `padding: 0 16px` instead of `7px 16px`
+       because the explicit height handles vertical centring via flex. */
+    height: 36px !important;
+    padding: 0 16px !important;
+    display: inline-flex !important;
+    align-items: center;
 }
 /* Icons inside action buttons — HaloPSA's Font Awesome stylesheet paints
    `.fa` at `color: #555` globally, which sits grey on our blue button
@@ -817,7 +842,14 @@ html body .portal .rc-steps-item-title::after {
    HaloPSA renders status chips via `.status-avatar.fortable` which ship
    at a 4px radius — too square against the rounded Select controls
    (`Select__control`, 50px) sitting next to them. We push to a full
-   pill shape so the status reads as a chip, not a button. */
+   pill shape so the status reads as a chip, not a button.
+
+   Ticket-view sidebar variant (`.status-avatar.small`) also ships with
+   `margin-left: -3px` and `display: block` + full parent width, which
+   pushes the pill's left edge 3px past the parent's `overflow: hidden`
+   clip — hiding the rounded left corner. We reset margin and switch to
+   inline-block so the pill shrinks to its label and the rounded ends
+   are visible on both sides. */
 html body .portal .status-avatar.fortable,
 html body .portal .status-avatar.small,
 html body .portal .status-avatar.bitsmall {
@@ -825,6 +857,9 @@ html body .portal .status-avatar.bitsmall {
     padding: 2px 10px !important;
     font-weight: 600 !important;
     letter-spacing: 0.02em;
+    margin-left: 0 !important;
+    display: inline-block !important;
+    width: auto !important;
 }
 
 /* Tickets list header controls — "1-15 of 23" counter plus the prev /

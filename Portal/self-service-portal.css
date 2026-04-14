@@ -465,12 +465,10 @@ searchboxinput,
 }
 
 /* SLA countdown bar (bottom-right of home-page ticket cards).
-   HaloPSA paints the fill colour inline per ticket (green / amber /
-   red depending on SLA state), so we DO NOT override background-color
-   on the inner fill — that would flatten the state signal into a
-   single colour. We only pill-round both track and fill, and slightly
-   lift the track so it reads on the dark card. `overflow: hidden` on
-   the track clips the fill to the rounded corners. */
+   HaloPSA paints the fill colour inline per ticket state — we need
+   per-state overrides (not a blanket colour) to preserve the state
+   signal while retinting HaloPSA's harsh primary hues into the portal
+   palette. Attribute selectors match the inline bg string directly. */
 html body .portal .sla-perc-bar {
     border-radius: 999px !important;
     overflow: hidden;
@@ -478,6 +476,35 @@ html body .portal .sla-perc-bar {
 }
 html body .portal .sla-perc-bar > div {
     border-radius: 999px !important;
+}
+
+/* Overdue (HaloPSA ships rgb(255, 46, 0) — pure vermilion). Swap to a
+   muted coral-red that still reads as alarm but doesn't scream. */
+html body .portal .sla-perc-bar > div[style*="rgb(255, 46, 0)"] {
+    background-color: #d05a52 !important;
+}
+
+/* Warning (HaloPSA ships rgb(255, 191, 0) — pure amber). Swap to a
+   warmer honey-amber that complements the dark card. */
+html body .portal .sla-perc-bar > div[style*="rgb(255, 191, 0)"] {
+    background-color: #e0a84a !important;
+    color: #1e1e1e !important;
+}
+
+/* Fresh / within SLA (HaloPSA uses rgb(0, 190, 0) or similar).
+   Swap to a muted teal-green for a calmer "on track" cue. */
+html body .portal .sla-perc-bar > div[style*="rgb(0, 190, 0)"],
+html body .portal .sla-perc-bar > div[style*="rgb(40, 167, 69)"],
+html body .portal .sla-perc-bar > div[style*="rgb(34, 139, 34)"] {
+    background-color: #4fa37a !important;
+}
+
+/* Countdown text inside the bar — Montserrat, legible on coloured fills */
+html body .portal .bar-text {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 12px !important;
+    letter-spacing: 0.2px;
 }
 /* Centred countdown text sits inside the bar — keep it legible but not
    bold enough to shout. */

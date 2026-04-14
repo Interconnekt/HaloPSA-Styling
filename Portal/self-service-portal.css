@@ -870,6 +870,18 @@ html body .portal .rc-steps-item-process .rc-steps-item-title {
     color: var(--portal-action) !important;
 }
 
+/* Home page hero background. HaloPSA's chunk.css ships
+   `.portal-background { background-position: top !important }` plus
+   a tenant inline `height: 155%`, which stretches the frame to a
+   ~5.9:1 aspect and — combined with `background-size: cover` —
+   crops a 1.5:1 hero image down to a thin top strip. The subject of
+   the image (sitting near the vertical middle of the source) gets
+   cut off entirely. Anchor the position to the centre so the subject
+   is visible instead of the sky. */
+html body .portal .portal-background {
+    background-position: center center !important;
+}
+
 /* Ticket list view (tickets?viewid=…) — status pills, table density,
    search bar, and scrollbar polish.
 

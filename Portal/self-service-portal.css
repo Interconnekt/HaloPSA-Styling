@@ -679,7 +679,8 @@ html body .portal .rc-steps-item-title::after {
    (`Select__control`, 50px) sitting next to them. We push to a full
    pill shape so the status reads as a chip, not a button. */
 html body .portal .status-avatar.fortable,
-html body .portal .status-avatar.small {
+html body .portal .status-avatar.small,
+html body .portal .status-avatar.bitsmall {
     border-radius: 999px !important;
     padding: 2px 10px !important;
     font-weight: 600 !important;

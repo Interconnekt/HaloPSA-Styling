@@ -1,0 +1,513 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Tax Invoice $INVOICENUMBER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 400;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtr6Ew-Y3tcoqK5.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 600;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCu6YDtcoqK5.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 700;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCuMYDtcoqK5.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            font-weight: 800;
+            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCvhYDtcoqK5.woff2') format('woff2');
+        }
+
+        @page {
+            size: A4;
+            margin: 22mm 12.7mm 30mm 12.7mm;
+        }
+
+        *, *::before, *::after {
+            font-family: Montserrat, Arial, sans-serif !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Montserrat, Arial, sans-serif !important;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #34495e;
+            margin: 0;
+            padding: 20px 0 0 0;
+        }
+
+        /* ── Links ── */
+        a {
+            color: #3598db;
+            text-decoration: none;
+        }
+
+        /* ── Two-column header layout ── */
+        .invoice-header-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .invoice-header-table td {
+            vertical-align: top;
+            padding: 0;
+        }
+
+        /* ── Company details (from) ── */
+        .from-block {
+            background-color: #F4F4F5;
+            border-radius: 8px;
+            padding: 12px 16px;
+            line-height: 1.5;
+            font-size: 11px;
+        }
+
+        .from-block .block-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #30355b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .from-block .company-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #30355b;
+            margin-bottom: 2px;
+        }
+
+        /* ── Billing details (to) ── */
+        .to-block {
+            background-color: #F4F4F5;
+            border-radius: 8px;
+            padding: 12px 16px;
+            line-height: 1.5;
+            font-size: 11px;
+        }
+
+        .to-block .block-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #30355b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .to-block .customer-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #30355b;
+            margin-bottom: 2px;
+        }
+
+        /* ── Invoice meta strip ── */
+        .invoice-meta {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .invoice-meta th {
+            background-color: #F4F4F5;
+            color: #30355b;
+            font-weight: 700;
+            text-align: left;
+            padding: 8px 14px;
+            border-bottom: 1px solid #e0e0e0;
+            white-space: nowrap;
+            font-size: 12px;
+            width: 25%;
+            vertical-align: middle;
+        }
+
+        .invoice-meta td {
+            width: 25%;
+            padding: 8px 14px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: middle;
+            color: #34495e;
+            font-size: 12px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        /* ── Date pills ── */
+        .date-pill {
+            display: inline-block;
+            font-weight: 400;
+            font-size: 11px;
+            padding: 3px 12px;
+            border-radius: 12px;
+            border: 1px solid transparent;
+        }
+
+        .due-date-pill {
+            display: inline-block;
+            background-color: #fffae6;
+            color: #30355b;
+            font-weight: 700;
+            font-size: 11px;
+            padding: 3px 12px;
+            border-radius: 12px;
+            border: 1px solid #f5a623;
+        }
+
+        /* ── Reference ── */
+        .invoice-reference {
+            margin-bottom: 4px;
+            font-size: 12px;
+            color: #34495e;
+        }
+
+        .invoice-reference strong {
+            color: #30355b;
+        }
+
+        /* ── Delivery Address ── */
+        .invoice-delivery {
+            margin-bottom: 16px;
+            font-size: 12px;
+            color: #34495e;
+        }
+
+        .invoice-delivery strong {
+            color: #30355b;
+        }
+
+        /* ── Section headers ── */
+        .section-header {
+            font-size: 14px;
+            font-weight: 700;
+            color: #30355b;
+            margin: 24px 0 12px 0;
+            padding: 8px 14px;
+            background-color: #e2eafb;
+            border-radius: 6px;
+        }
+
+        /* ── Line items table (finance styling) ── */
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            margin: 0 0 16px 0;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .items-table thead th {
+            background-color: #F4F4F5;
+            color: #30355b;
+            font-weight: 700;
+            text-align: left;
+            padding: 8px 12px;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .items-table tbody td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: top;
+            color: #34495e;
+            font-size: 11px;
+        }
+
+        .items-table thead {
+            display: table-header-group;
+        }
+
+        .items-table tbody tr {
+            page-break-inside: avoid;
+        }
+
+        .items-table tbody tr:nth-child(even) {
+            background-color: #F4F4F5;
+        }
+
+        .items-table thead th:nth-child(2),
+        .items-table tbody td:nth-child(2) {
+            text-align: center !important;
+        }
+
+        /* ── Totals table ── */
+        .totals-table {
+            width: 270px;
+            margin-left: auto;
+            margin-right: 0;
+            border-collapse: collapse;
+            font-size: 12px;
+            line-height: 1.5;
+            page-break-inside: avoid;
+        }
+
+        .totals-table td {
+            padding: 8px 12px;
+        }
+
+        .totals-table .label {
+            text-align: left;
+            color: #30355b;
+            font-weight: 700;
+            background-color: #F4F4F5;
+        }
+
+        .totals-table .value {
+            text-align: right;
+            color: #34495e;
+        }
+
+        .totals-table .subtotal td {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .totals-table .tax td {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .totals-table .total td {
+            padding-top: 8px;
+        }
+
+        .totals-table .total .label {
+            font-size: 14px;
+            font-weight: 800;
+            color: #30355b;
+        }
+
+        .totals-table .total .value {
+            font-size: 14px;
+            font-weight: 800;
+            color: #30355b;
+        }
+
+        /* ── Direct Debit notice ── */
+        .dd-notice {
+            background-color: #eae6ff;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-top: 20px;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #34495e;
+        }
+
+        .dd-notice strong {
+            color: #30355b;
+        }
+
+        /* ── Divider ── */
+        hr {
+            border: none;
+            border-top: 1px solid #e0e0e0;
+            margin: 24px 0;
+        }
+
+        /* ── Payment methods ── */
+        .payment-section {
+            page-break-inside: avoid;
+        }
+
+        .payment-cards {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .payment-cards > tbody > tr > td {
+            width: 50%;
+            vertical-align: top;
+            padding: 0;
+        }
+
+        .payment-card {
+            background-color: #e2eafb;
+            border-radius: 8px;
+            padding: 16px 20px;
+            font-size: 12px;
+            line-height: 1.7;
+            min-height: 136px;
+        }
+
+        .payment-card-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #30355b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .payment-card table {
+            border-collapse: collapse;
+        }
+
+        .payment-card table td {
+            padding: 2px 0;
+            font-size: 12px;
+            vertical-align: top;
+            border: none;
+        }
+
+        .payment-card table td:first-child {
+            font-weight: 700;
+            color: #30355b;
+            padding-right: 12px;
+            white-space: nowrap;
+        }
+
+        /* ── Pay button ── */
+        .pay-button {
+            display: inline-block;
+            background-color: #3574e3;
+            color: #ffffff !important;
+            font-family: Montserrat, Arial, sans-serif !important;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 12px 36px;
+            border-radius: 25px;
+            text-decoration: none;
+            text-align: center;
+            letter-spacing: 0.2px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── From / To ── -->
+    <table class="invoice-header-table">
+        <tr>
+            <td style="width: 48%; padding-right: 4%; vertical-align: top;">
+                <div class="from-block" style="min-height: 120px;">
+                    <div class="block-label">From</div>
+                    <div class="company-name">$ORNAME</div>
+                    <div>Level 7, 80 Dorcas St</div>
+                    <div>Southbank VIC 3006</div>
+                    <div><a href="mailto:accounts@interconnekt.com.au">accounts@interconnekt.com.au</a></div>
+                    <div>ABN: 52 702 542 839</div>
+                </div>
+            </td>
+            <td style="width: 48%; vertical-align: top;">
+                <div class="to-block" style="min-height: 120px;">
+                    <div class="block-label">Billed To</div>
+                    <div class="customer-name">$THIRDPARTYCUSTOMERNAME</div>
+                    <div>$ACCOUNTSFIRSTNAME $ACCOUNTSLASTNAME</div>
+                    <div>$INVOICEADDRESS1 $INVOICEADDRESS2</div>
+                    <div>$INVOICEADDRESS3</div>
+                    <div>$INVOICEADDRESS4 $INVOICEPOSTCODE</div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- ── Invoice Meta ── -->
+    <table class="invoice-meta">
+        <tr>
+            <th>Invoice Number</th>
+            <td>$INVOICENUMBER</td>
+            <th>Invoice Date</th>
+            <td><span class="date-pill">$INVOICEDATE</span></td>
+        </tr>
+        <tr>
+            <th>Customer PO</th>
+            <td>$CUSTOMERPONUMBER</td>
+            <th>Due Date</th>
+            <td><span class="due-date-pill">$DUEDATE</span></td>
+        </tr>
+    </table>
+
+    <!-- ── Reference ── -->
+    <div class="invoice-reference">
+        <strong>Invoice Reference:</strong> $REFERENCE
+    </div>
+
+    <!-- ── Delivery Address ── -->
+    <div class="invoice-delivery">
+        <strong>Delivery Address:</strong><br>
+        $DELIVERYADDRESS1<br>
+        $DELIVERYADDRESS2<br>
+        $DELIVERYADDRESS3<br>
+        $DELIVERYADDRESS4<br>
+        $DELIVERYPOSTCODE
+    </div>
+
+    <!-- ── Line Items ── -->
+    <table class="items-table">
+        $DETAILSTABLE
+    </table>
+
+    <!-- ── Totals ── -->
+    <table class="totals-table">
+        <tr class="subtotal">
+            <td class="label">Sub-total</td>
+            <td class="value">$INVOICESUBTOTAL</td>
+        </tr>
+        <tr class="tax">
+            <td class="label">GST</td>
+            <td class="value">$INVOICETAXTOTAL</td>
+        </tr>
+        <tr class="total">
+            <td class="label">TOTAL</td>
+            <td class="value">$INVOICETOTAL</td>
+        </tr>
+    </table>
+
+    <!-- ── Direct Debit Notice ── -->
+    <div class="dd-notice">
+        In accordance with your Direct Debit authority, your nominated account will be debited <strong>$INVOICEDUETOTAL</strong> on or after <strong>$DUEDATE</strong> unless you notify us otherwise at least 2 business days prior to this date.
+    </div>
+
+    <!-- ── Other Payment Methods ── -->
+    <hr>
+    <div class="payment-section">
+        <div class="section-header">Other Payment Methods</div>
+        <table class="payment-cards">
+            <tr>
+                <td style="padding-right: 10px;">
+                    <div class="payment-card">
+                        <div class="payment-card-label">Bank Transfer</div>
+                        <table>
+                            <tr>
+                                <td>Account Name</td>
+                                <td>Interconnekt Pty Ltd</td>
+                            </tr>
+                            <tr>
+                                <td>BSB</td>
+                                <td>193 879</td>
+                            </tr>
+                            <tr>
+                                <td>Account Number</td>
+                                <td>439315631</td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+                <td style="padding-left: 10px;">
+                    <div class="payment-card" style="text-align: center; padding-top: 24px; padding-bottom: 24px;">
+                        <div class="payment-card-label">Credit Card / Online</div>
+                        <div style="margin-top: 14px;">
+                            <a href="$XEROINVOICEURL" class="pay-button" target="_blank">Pay via Xero</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>

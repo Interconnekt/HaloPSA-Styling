@@ -42,10 +42,21 @@ HaloPSA has two separate CSS injection points for Knowledge Base articles. This 
 The Custom CSS field in HaloPSA contains a single line:
 
 ```css
-@import url('https://<your-github-username>.github.io/<your-repo>/self-service-portal.css');
+@import url('https://interconnekt.github.io/HaloPSA-Styling/Portal/self-service-portal.css');
 ```
 
 `self-service-portal.css` is served via GitHub Pages. Edit the file, commit, push — changes are live within ~10 minutes.
+
+### Layer 3 — Iframe JS shim (email bodies)
+
+**Applies to:** Self-Service Portal email-body iframes (`iframe.halo-html-renderer`)
+**Location:** HaloPSA admin — global `<script>` injection point
+**How it works:** HaloPSA renders email bodies inside a same-origin iframe with its own `<style>` setting Segoe UI. Host CSS doesn't cross the iframe boundary, so the only way to theme that content is via JS. `iframe-theme.js` reaches into `iframe.contentDocument.head` and injects a `<style>` setting Montserrat + `#3598db` link colour. See `Portal/portal-chrome.md` for details.
+
+Add once in HaloPSA admin:
+```html
+<script src="https://interconnekt.github.io/HaloPSA-Styling/Portal/iframe-theme.js"></script>
+```
 
 ---
 
@@ -53,9 +64,12 @@ The Custom CSS field in HaloPSA contains a single line:
 
 | File | Purpose |
 |------|---------|
-| `self-service-portal.css` | Custom CSS: portal chrome, article light/dark mode overrides, code/blockquote/hr/list styling, responsive layout, print styles |
-| `style-profile-rules.css` | Style Profile reference: each block maps to one HaloPSA Style Profile rule |
-| `dark-mode-test-checklist.md` | Test checklist covering both portals, both modes, responsive breakpoints, and print |
+| `Portal/self-service-portal.css` | Custom CSS: portal chrome, article light/dark mode overrides, code/blockquote/hr/list styling, responsive layout, print styles |
+| `Portal/iframe-theme.js` | JS shim that themes email-body iframes (`iframe.halo-html-renderer`) — injects Montserrat + `#3598db` link colour into same-origin iframe documents. Loaded in HaloPSA admin via `<script src="...">` |
+| `Portal/portal-chrome.md` | Portal chrome reference: design tokens, key rules per page, iframe shim notes, gotchas |
+| `Portal/light-mode-checklist.md` | Light-mode test checklist for portal chrome (home, tickets list, ticket view, kanban, iframe) |
+| `Portal/dark-mode-test-checklist.md` | Test checklist covering KB articles across both portals, both modes, responsive breakpoints, and print |
+| `Knowledge Base/style-profile-rules.css` | Style Profile reference: each block maps to one HaloPSA Style Profile rule |
 | `AGENTS.md` | Instructions for AI agents working on this codebase |
 
 ---

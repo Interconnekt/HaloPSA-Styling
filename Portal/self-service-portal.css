@@ -715,6 +715,17 @@ html body .portal .buttons-container {
     gap: 6px;
 }
 
+/* Ticket-view action row (`.history-options-portal.buttons-container`)
+   sits directly above the action-history card stack. The cards carry
+   `margin-left: 20px` while the button row has no padding, so the
+   leftmost icon button landed ~17px to the left of the card edge
+   (fabtn's own `margin: 1px 3px` accounts for the remaining 3px).
+   Match the card's 20px indent so the row visually anchors to the
+   same left rail as the cards below it. */
+html body .portal .history-options-portal.buttons-container {
+    padding-left: 17px !important;
+}
+
 /* Back button — HaloPSA applies an inline style that paints this the
    heading-purple, which disappears into the dark body. Force the action
    colour with !important so the button is actually visible.

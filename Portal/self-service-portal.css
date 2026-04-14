@@ -979,14 +979,36 @@ html body .portal .nhd-nav .buttoncontainer {
    JS to add a class based on URL. */
 html body .portal button.nhd-nav-btn,
 html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"] {
-    transition: background-image 120ms ease, background-color 120ms ease !important;
+    transition: background-image 150ms ease, background-color 150ms ease, box-shadow 150ms ease !important;
 }
-html body .portal button.nhd-nav-btn:hover,
-html body .portal button.nhd-nav-btn:focus-visible,
-html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"]:hover,
-html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"]:focus-visible {
-    background-image: linear-gradient(rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.10)) !important;
+
+/* Hover — DARKEN the nav chip via a black overlay so the button reads
+   as being "pressed into" the header, giving clear affordance without
+   introducing a new colour. Overrides HaloPSA's built-in hover rule
+   (which lands on `.nhd-nav-btn.menubtn:hover` with darker navy). */
+html body .portal button.nhd-nav-btn:not(.active):hover,
+html body .portal button.nhd-nav-btn:not(.active):focus-visible,
+html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"]:not(.active):hover,
+html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"]:not(.active):focus-visible,
+html body .portal .nhd-nav-rightAlign button:not(.active):not(.highlight):hover {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.28)) !important;
+    background-color: rgb(47, 53, 94) !important;
     box-shadow: none !important;
+}
+
+/* Selected (`.active`) — LIGHT, branded. Action-blue fill with a soft
+   inset highlight reads as the current page lifted above the rest of
+   the nav. Stays bright even on hover/focus. */
+html body .portal button.nhd-nav-btn.active,
+html body .portal button.nhd-nav-btn.active:hover,
+html body .portal button.nhd-nav-btn.active:focus-visible,
+html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"].active,
+html body .portal .nhd-nav-btn.menubtn.active,
+html body .portal .nhd-nav-btn.homebtn {
+    background-color: var(--portal-action) !important;
+    background-image: none !important;
+    color: #fff !important;
+    box-shadow: inset 0 -2px 0 rgba(255, 255, 255, 0.25) !important;
 }
 
 /* ─────────────────────────────────────────────────

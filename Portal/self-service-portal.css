@@ -985,13 +985,23 @@ html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"] {
 /* Hover — DARKEN the nav chip via a black overlay so the button reads
    as being "pressed into" the header, giving clear affordance without
    introducing a new colour. Overrides HaloPSA's built-in hover rule
-   (which lands on `.nhd-nav-btn.menubtn:hover` with darker navy). */
+   (which lands on `.nhd-nav-btn.menubtn:hover` with darker navy).
+
+   `background-size: 100%` + `background-repeat: no-repeat` are *required*
+   here: HaloPSA ships `.nhd-nav-btn { background-size: 18px }` for the
+   hamburger-menu button's icon image. Without the reset, our hover
+   linear-gradient renders as an 18px stripe centred on the button
+   (the "thin compared to the text" symptom) instead of filling the
+   full 60px chip. */
 html body .portal button.nhd-nav-btn:not(.active):hover,
 html body .portal button.nhd-nav-btn:not(.active):focus-visible,
 html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"]:not(.active):hover,
 html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"]:not(.active):focus-visible,
 html body .portal .nhd-nav-rightAlign button:not(.active):not(.highlight):hover {
     background-image: linear-gradient(rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.28)) !important;
+    background-size: 100% 100% !important;
+    background-repeat: no-repeat !important;
+    background-position: 0 0 !important;
     background-color: rgb(47, 53, 94) !important;
     box-shadow: none !important;
 }

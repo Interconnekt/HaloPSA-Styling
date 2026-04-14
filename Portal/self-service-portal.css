@@ -43,6 +43,13 @@
     --portal-accent: #4088D4;
     --portal-accent-hover: #3572b0;
 
+    /* Primary action colour — used on back button, pill action buttons
+       (Add Note, Time Entry, View All, etc.). Separate from --portal-accent
+       so it can stay saturated regardless of theme tinting elsewhere. */
+    --portal-action: #5084ee;
+    --portal-action-hover: #3a6fd9;
+    --portal-action-shadow: rgba(80, 132, 238, 0.30);
+
     /* Borders & shadows */
     --portal-border: #e2e5ea;
     --portal-border-light: #eef0f3;
@@ -490,22 +497,32 @@ searchboxinput,
    6. BUTTONS & TAGS
    ───────────────────────────────────────────────── */
 
-/* Rounded buttons (Generate PDF, Share Link) */
-.solidbutton.fabtn,
-.solidbutton.fabtn.notext {
-    border-radius: var(--portal-radius) !important;
+/* Icon / text utility buttons (Generate PDF, Share Link, Download,
+   Print, and the top-right circular chrome on the ticket page).
+   HaloPSA hardcodes a dark-grey bg which looks reasonable in dark mode
+   but becomes a jarring dark pill in light mode. Swap to surface tokens
+   so the button tone follows the theme automatically. */
+html body .portal .solidbutton.fabtn,
+html body .portal .solidbutton.fabtn.notext {
+    background-color: var(--portal-surface) !important;
+    color: var(--portal-text) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: 10px !important;
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
 }
-
-.solidbutton.fabtn {
-    font-family: 'Montserrat', 'Poppins', sans-serif;
+html body .portal .solidbutton.fabtn:hover,
+html body .portal .solidbutton.fabtn.notext:hover {
+    background-color: var(--portal-surface-hover) !important;
 }
 
 /* Back button — HaloPSA applies an inline style that paints this the
-   heading-purple, which disappears into the dark body. Force the accent
-   colour with !important so the button is actually visible. */
-.portal .backbtn,
-.backbtn {
-    background-color: var(--portal-accent) !important;
+   heading-purple, which disappears into the dark body. Force the action
+   colour with !important so the button is actually visible.
+   `html body .portal` prefix raises specificity above any later-loaded
+   HaloPSA rule carrying equal weight on `.portal .backbtn`. */
+html body .portal .backbtn,
+html body .portal button.backbtn {
+    background-color: var(--portal-action) !important;
     width: 50px;
     height: 50px;
     border: none;
@@ -517,13 +534,13 @@ searchboxinput,
     color: #fff !important;
     font-size: 18px;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(107, 163, 224, 0.25) !important;
+    box-shadow: 0 4px 12px var(--portal-action-shadow) !important;
     transition: all 0.3s ease;
 }
 
-.portal .backbtn:hover,
-.backbtn:hover {
-    background-color: var(--portal-accent-hover) !important;
+html body .portal .backbtn:hover,
+html body .portal button.backbtn:hover {
+    background-color: var(--portal-action-hover) !important;
 }
 
 .backbtn:hover {
@@ -537,17 +554,46 @@ span.kbtags {
     font-family: 'Montserrat', sans-serif;
 }
 
-/* View All buttons — the original rule had `.nhd-button curve` (space),
-   which is a descendant combinator and never matched. Fix to the compound
-   selector, bump specificity with `.portal`, and add !important so we
-   beat HaloPSA's inline dark-blue fill. Matches the back-button accent. */
-.portal .nhd-button.curve,
-.portal button.nhd-button.curve {
-    background-color: var(--portal-accent) !important;
-    box-shadow: 0 4px 12px rgba(107, 163, 224, 0.25) !important;
+/* Primary pill action buttons — "View All" on the home widgets plus
+   the row of ticket actions (Add Note, Time Entry, Project Time, Add
+   Comment, Schedule New User, Book an Appointment). HaloPSA ships an
+   inline style that paints these the heading-purple; we override with
+   the action blue. `html body` prefix raises specificity above same-
+   weight rules that might load after ours. */
+html body .portal .nhd-button.curve,
+html body .portal button.nhd-button.curve {
+    background-color: var(--portal-action) !important;
+    box-shadow: 0 4px 12px var(--portal-action-shadow) !important;
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
 }
-.portal .nhd-button.curve:hover {
-    background-color: var(--portal-accent-hover) !important;
+html body .portal .nhd-button.curve:hover,
+html body .portal button.nhd-button.curve:hover {
+    background-color: var(--portal-action-hover) !important;
+}
+
+/* ── Ticket pages: force Montserrat everywhere ──
+   The portal has no dedicated ticket-page wrapper class, so we scope
+   via the structural containers HaloPSA actually uses on ticket views
+   (action history, details form, sidebar, profile header). `html body`
+   prefix keeps us ahead of later-loaded HaloPSA rules. */
+html body .portal .action-history-item,
+html body .portal .action-history-item *,
+html body .portal .history-details,
+html body .portal .history-details *,
+html body .portal .action-details,
+html body .portal .action-details *,
+html body .portal .details-form,
+html body .portal .details-form *,
+html body .portal .details-sidebar,
+html body .portal .details-sidebar *,
+html body .portal .profile-title,
+html body .portal .profile-title *,
+html body .portal .profile-details,
+html body .portal .profile-details *,
+html body .portal .profile-full-name,
+html body .portal .nhd-button,
+html body .portal .solidbutton {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
 }
 
 

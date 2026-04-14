@@ -806,6 +806,7 @@ html body .portal .fr-box {
 }
 html body .portal .fr-box .fr-toolbar {
     background: var(--portal-surface) !important;
+    border: 0 !important;
     border-bottom: 1px solid var(--portal-border) !important;
     border-radius: 0 !important;
 }
@@ -813,6 +814,18 @@ html body .portal .fr-box .fr-wrapper {
     background: var(--portal-bg) !important;
     border: 0 !important;
     border-radius: 0 !important;
+}
+/* Froala's second toolbar (bottom strip with "Powered by Froala" link +
+   counter) ships with a white background and grey border. Retint so it
+   doesn't read as a jarring white stripe at the bottom of the dark card. */
+html body .portal .fr-box .fr-second-toolbar {
+    background: var(--portal-surface) !important;
+    border: 0 !important;
+    border-top: 1px solid var(--portal-border) !important;
+    color: var(--portal-text-muted) !important;
+}
+html body .portal .fr-box .fr-counter {
+    color: var(--portal-text-muted) !important;
 }
 html body .portal .fr-box .fr-element,
 html body .portal .fr-box .fr-view {

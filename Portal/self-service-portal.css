@@ -976,6 +976,17 @@ html body .portal .rt-th {
     font-family: 'Montserrat', 'Poppins', sans-serif !important;
 }
 
+/* Vertically centre cell contents. react-table ships `.rt-td` as
+   `display: block` with 7px top padding, which pins text, status
+   pills and asset chips to the top of the 56px row — mixed-height
+   content (text + pills) reads as misaligned. Switching `.rt-td` to
+   flex with `align-items: center` centres the children on the row's
+   vertical midline regardless of their intrinsic height. */
+html body .portal .rt-td {
+    display: flex !important;
+    align-items: center;
+}
+
 /* Search bar — the visible pill is actually the `.searchbox` wrapper,
    not the input itself. HaloPSA sets it to a 5px radius with a hardcoded
    dark-grey bg that looks like a square shell in light mode. We round

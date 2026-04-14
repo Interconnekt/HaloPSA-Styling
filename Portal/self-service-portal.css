@@ -616,6 +616,55 @@ html body .portal .rc-steps-item-title::after {
     height: 2px !important;
 }
 
+/* Ticket list view (tickets?viewid=…) — status pills, table density,
+   search bar, and scrollbar polish.
+
+   HaloPSA renders status chips via `.status-avatar.fortable` which ship
+   at a 4px radius — too square against the rounded Select controls
+   (`Select__control`, 50px) sitting next to them. We push to a full
+   pill shape so the status reads as a chip, not a button. */
+html body .portal .status-avatar.fortable,
+html body .portal .status-avatar.small {
+    border-radius: 999px !important;
+    padding: 2px 10px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em;
+}
+
+/* Table text — HaloPSA's `.rt-td` is 16px which is quite heavy for a
+   data table. 13px keeps things readable while fitting more rows. */
+html body .portal .rt-td,
+html body .portal .rt-th {
+    font-size: 13px !important;
+}
+
+/* Search bar — matches the pill radius of the view/filter Selects
+   ("Open Tickets", "All Tickets") for visual consistency in the toolbar. */
+html body .portal .searchholder input[name="searchbox"] {
+    border-radius: 50px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+}
+
+/* Slim scrollbars — HaloPSA inherits default OS scrollbars which look
+   chunky in a modern portal UI. Using the border token as the thumb
+   colour keeps them subtle in both light and dark mode. */
+html body .portal *::-webkit-scrollbar {
+    width: 6px !important;
+    height: 6px !important;
+}
+html body .portal *::-webkit-scrollbar-thumb {
+    background: var(--portal-border) !important;
+    border-radius: 999px !important;
+}
+html body .portal *::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+html body .portal * {
+    scrollbar-width: thin !important;
+    scrollbar-color: var(--portal-border) transparent !important;
+}
+
 
 
 /* ─────────────────────────────────────────────────

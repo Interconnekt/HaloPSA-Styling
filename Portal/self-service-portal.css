@@ -841,6 +841,17 @@ html body .portal .buttons-container .solidbutton:not(.fabtn)[disabled] {
     cursor: not-allowed;
 }
 
+/* The "more views" dropdown (Tile View / Kanban View / Gantt) sits inside
+   a Semantic UI `div.ui.button.dropdown` wrapper that paints its own grey
+   background. The round icon button inside already has our surface styling,
+   so neutralise the wrapper so the grey square doesn't peek out behind it. */
+html body .portal .buttons-container .ui.button.dropdown {
+    background-color: transparent !important;
+    padding: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
 /* Table text — HaloPSA's `.rt-td` is 16px which is quite heavy for a
    data table. 13px keeps things readable while fitting more rows. Also
    force Montserrat to keep the ticket list consistent with the ticket

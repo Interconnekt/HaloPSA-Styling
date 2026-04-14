@@ -931,6 +931,48 @@ html body .portal .rc-steps-item-process .rc-steps-item-title {
     color: var(--portal-action) !important;
 }
 
+/* Semantic UI popup (share sheet on ticket view). HaloPSA leans on
+   Semantic's `.ui.popup` which ships hardcoded white bg, dark body
+   text and a 4.57px radius — a jarring white card against the dark
+   portal surface. Retint to surface tokens, round to match our card
+   radius, and theme the inner `.nhd-button.curve` which Semantic's
+   `.ui.button` default paints `#0f61a1` (ignoring our existing
+   `--portal-action` rule because Semantic's selector specificity
+   wins inside `.ui.popup`). */
+html body .portal .ui.popup,
+html body .portal .ui.popup.transition.visible {
+    background: var(--portal-surface) !important;
+    color: var(--portal-text) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35) !important;
+}
+html body .portal .ui.popup .header,
+html body .portal .ui.popup h1,
+html body .portal .ui.popup h2,
+html body .portal .ui.popup h3,
+html body .portal .ui.popup h4 {
+    color: var(--portal-heading) !important;
+}
+/* Semantic paints `.ui.popup::before` as a white arrow; retint so it
+   matches the surface and keeps the 1px border continuous. */
+html body .portal .ui.popup::before {
+    background: var(--portal-surface) !important;
+    box-shadow: 1px 1px 0 0 var(--portal-border) !important;
+}
+html body .portal .ui.popup .nhd-button.curve,
+html body .portal .ui.popup button.nhd-button.curve,
+html body .portal .ui.popup .ui.button {
+    background-color: var(--portal-action) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px var(--portal-action-shadow) !important;
+}
+html body .portal .ui.popup .nhd-button.curve:hover,
+html body .portal .ui.popup button.nhd-button.curve:hover,
+html body .portal .ui.popup .ui.button:hover {
+    background-color: var(--portal-action-hover) !important;
+}
+
 /* Home page hero background. HaloPSA's chunk.css ships
    `.portal-background { background-position: top !important }` plus
    a tenant inline `height: 155%`, which stretches the frame to a

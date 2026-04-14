@@ -638,8 +638,17 @@ html body .portal .rt-th {
     font-size: 13px !important;
 }
 
-/* Search bar — matches the pill radius of the view/filter Selects
-   ("Open Tickets", "All Tickets") for visual consistency in the toolbar. */
+/* Search bar — the visible pill is actually the `.searchbox` wrapper,
+   not the input itself. HaloPSA sets it to a 5px radius with a hardcoded
+   dark-grey bg that looks like a square shell in light mode. We round
+   the wrapper to match the view/filter Selects ("Open Tickets",
+   "All Tickets") and retint to surface tokens so it follows the theme. */
+html body .portal .searchbox {
+    border-radius: 50px !important;
+    background-color: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+    overflow: hidden;
+}
 html body .portal .searchholder input[name="searchbox"] {
     border-radius: 50px !important;
     padding-left: 16px !important;

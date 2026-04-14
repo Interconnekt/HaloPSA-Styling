@@ -224,6 +224,67 @@ header h1, header h2, header h3,
     p, span, li, a { font-size: 14px; }
 }
 
+/* ─────────────────────────────────────────────────
+   Responsive polish — tablet + mobile layout fixes
+   ─────────────────────────────────────────────────
+   HaloPSA ships a mostly-fluid desktop layout that leaks a few
+   issues at narrower breakpoints. Fix them here rather than
+   inline so the desktop rules stay clean. */
+
+/* Home dashboard cards (`.dashbtn`): at Bootstrap's `col-md-4`
+   (>=768px) the cards render at ~180px wide, 3-per-row. With
+   HaloPSA's 28/20/24 padding and `.card-body { flex: 1 }` the
+   row's tallest card (whose text wraps to 4 lines) forces every
+   sibling to match, producing ~390px cards with huge dead space
+   below short content. Tighten padding, shrink the icon, and
+   reduce the title → text gap so the stretched height is less
+   wasteful — we can't stop Bootstrap equalising rows without
+   breaking the look, so we just make the equalised height smaller. */
+@media (max-width: 1199px) {
+    html body .portal .dashbtn {
+        padding: 20px 14px 16px !important;
+    }
+    html body .portal .dashbtn .card-img {
+        width: 56px !important;
+        height: 56px !important;
+        margin-bottom: 10px !important;
+    }
+    html body .portal .dashbtn .card-title {
+        margin-bottom: 6px !important;
+        font-size: 1rem !important;
+        line-height: 1.3 !important;
+    }
+    html body .portal .dashbtn .card-text {
+        font-size: 0.8125rem !important;
+        line-height: 1.4 !important;
+    }
+}
+
+/* Ticket-view workflow stepper — 6 steps × ~100px overflow the
+   ~450px wrap on mobile, clipping `Review` and `Complete`.
+   Make the wrap scrollable so the full chain is reachable
+   (dragging or swiping on touch devices). `min-width: max-content`
+   on the inner `.rc-steps` keeps items at their natural width
+   instead of crushing them to fit. */
+@media (max-width: 768px) {
+    html body .portal .workflow-steps-wrap {
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+    html body .portal .workflow-steps-wrap .rc-steps {
+        min-width: max-content;
+    }
+    /* Ticket-view action row (Add Note / Time Entry + icon fabtns)
+       can feel cramped at mobile. Let it wrap cleanly so pills
+       don't spill off-screen. `.buttons-container` already flex-
+       wraps; tighten the gap so the wrapped row looks intentional. */
+    html body .portal .history-options-portal.buttons-container {
+        padding-left: 12px !important;
+        gap: 8px;
+    }
+}
+
 
 /* ─────────────────────────────────────────────────
    3. HEADER & NAVIGATION

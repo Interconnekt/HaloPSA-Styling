@@ -43,12 +43,16 @@
     --portal-accent: #4088D4;
     --portal-accent-hover: #3572b0;
 
-    /* Primary action colour — used on back button, pill action buttons
-       (Add Note, Time Entry, View All, etc.). Separate from --portal-accent
-       so it can stay saturated regardless of theme tinting elsewhere. */
-    --portal-action: #5084ee;
-    --portal-action-hover: #3a6fd9;
-    --portal-action-shadow: rgba(80, 132, 238, 0.30);
+    /* Primary action colour — used on H1 page titles, back button, and
+       pill action buttons (Add Note, Time Entry, View All, etc.). Unified
+       to one blue so the portal doesn't read as three competing shades
+       (the previous value `#5084ee` leaned more purple/indigo against
+       the KB-link `--portal-accent #4088D4` and the email-iframe link
+       `#3598db`). Kept separate from `--portal-accent` so it can stay
+       saturated regardless of theme tinting elsewhere. */
+    --portal-action: #418be1;
+    --portal-action-hover: #3776bf;
+    --portal-action-shadow: rgba(65, 139, 225, 0.30);
 
     /* Borders & shadows */
     --portal-border: #e2e5ea;

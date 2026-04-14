@@ -695,6 +695,18 @@ html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"]:focus-visible {
    lift labels to a clear uppercase eyebrow so the hierarchy reads.
    ───────────────────────────────────────────────── */
 
+/* Constrain the `.page-title` block to the same 1040px as the form card
+   below so the header doesn't sprawl edge-to-edge while the form sits
+   neatly centred. The `:has(.mandatory-hint)` predicate scopes this to
+   form pages (new ticket / ticket edit) — pages without a form
+   (dashboard, KB index) keep their wide title. */
+html body .portal .page-title:has(.mandatory-hint) {
+    max-width: 1040px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding: 0 36px;
+}
+
 html body .portal .details-form.readeditform {
     max-width: 1040px !important;
     margin: 24px auto 40px !important;

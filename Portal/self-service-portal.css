@@ -687,6 +687,47 @@ html body .portal .status-avatar.bitsmall {
     letter-spacing: 0.02em;
 }
 
+/* Tickets list header controls — "1-15 of 23" counter plus the prev /
+   next / more-menu buttons at the top-right of the list. HaloPSA
+   ships the counter in Poppins 16px and the buttons at a 4px radius
+   in `rgb(80, 80, 80)` — they feel disconnected from the pilled
+   chrome elsewhere on the page. Unify: Montserrat counter, circular
+   buttons with surface tokens and a soft hover. */
+html body .portal .page-counts,
+html body .portal .page-counts h98 {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    color: var(--portal-text-muted, #bbb) !important;
+    letter-spacing: 0.2px;
+}
+
+html body .portal .buttons-container .solidbutton,
+html body .portal .buttons-container .solidbutton.menubtn {
+    background-color: var(--portal-surface) !important;
+    color: var(--portal-text) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: 999px !important;
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    margin: 0 3px !important;
+    transition: background-color 150ms ease, border-color 150ms ease;
+}
+html body .portal .buttons-container .solidbutton:hover,
+html body .portal .buttons-container .solidbutton.menubtn:hover {
+    background-color: var(--portal-surface-hover) !important;
+    border-color: var(--portal-action) !important;
+}
+html body .portal .buttons-container .solidbutton:disabled,
+html body .portal .buttons-container .solidbutton[disabled] {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
 /* Table text — HaloPSA's `.rt-td` is 16px which is quite heavy for a
    data table. 13px keeps things readable while fitting more rows. Also
    force Montserrat to keep the ticket list consistent with the ticket

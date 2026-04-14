@@ -50,6 +50,12 @@
     --portal-shadow-hover: 0 20px 30px rgba(36, 50, 66, .14);
     --portal-shadow-sm: 0 1px 3px rgba(0, 0, 0, .06);
 
+    /* Table tokens — alpha-tinted so they lift from whatever surface
+       sits underneath, and adapt automatically in .theme-dark. */
+    --portal-table-header-bg: rgba(15, 23, 42, 0.04);
+    --portal-table-border: rgba(15, 23, 42, 0.08);
+    --portal-table-row-hover: rgba(15, 23, 42, 0.03);
+
     /* Radii */
     --portal-radius: 25px;
     --portal-radius-sm: 15px;
@@ -84,6 +90,12 @@
     --portal-shadow: 0 4px 8px rgba(0, 0, 0, .3);
     --portal-shadow-hover: 0 20px 30px rgba(0, 0, 0, .4);
     --portal-shadow-sm: 0 1px 3px rgba(0, 0, 0, .2);
+
+    /* Table tokens — flipped to white alpha so headers lift from the
+       dark body instead of becoming bright light islands. */
+    --portal-table-header-bg: rgba(255, 255, 255, 0.04);
+    --portal-table-border: rgba(255, 255, 255, 0.08);
+    --portal-table-row-hover: rgba(255, 255, 255, 0.03);
 
     /* Code (dark) */
     --portal-code-bg: #2a2a3a;
@@ -185,10 +197,39 @@ header h1, header h2, header h3,
 
 .portal .page-title h1,
 .portal .details-form .details-group-header.title {
-    font-family: 'Montserrat', 'Poppins', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 200;
-    color: var(--portal-heading);
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
+    font-size: 1.75rem !important;
+    font-weight: 600 !important;
+    color: var(--portal-heading) !important;
+    letter-spacing: -0.01em;
+}
+
+/* Page subtitle (eyebrow label — e.g. "Top Articles" on the KB index) */
+.portal .page-title .page-subtitle,
+.portal .page-subtitle {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--portal-text-muted) !important;
+    opacity: 0.75;
+    margin-bottom: 20px;
+}
+
+/* Collapsible section headers inside KB articles / ticket details
+   (e.g. "Description" expander on a KB article). HaloPSA ships these as
+   <h2> inside .details-group-header.title — renders Poppins 21px/200 by
+   default. Reframe them as Montserrat uppercase eyebrows so they match
+   the rest of the portal's section-label language. */
+.portal .details-group-header h2,
+.portal .details-group-header.title h2 {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    opacity: 0.85;
 }
 
 
@@ -196,39 +237,35 @@ header h1, header h2, header h3,
    4. SEARCH
    ───────────────────────────────────────────────── */
 
-.portal .searchbox,
-.searchbox {
+/* Search box wrapper — borderless pill, soft shadow.
+   Selector matches HaloPSA's `.portal .theme-dark .searchscreen:not(.searchscreen-full) .searchbox`
+   specificity so we can win the cascade in dark mode. */
+.portal .searchscreen .searchbox,
+.portal .theme-dark .searchscreen .searchbox,
+.portal .theme-dark .searchscreen:not(.searchscreen-full) .searchbox {
+    border: none !important;
     border-radius: 50px !important;
-}
-
-.searchscreen .searchbox {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
     height: 60px;
+    overflow: hidden;
+    background: var(--portal-surface);
 }
 
-.searchscreen .searchbox input[type=text] {
+.portal .searchscreen .searchbox input[type=text],
+.portal .theme-dark .searchscreen .searchbox input[type=text] {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-size: 16px !important;
     border-radius: 50px !important;
-    padding: 8px 16px;
-    border: 1px solid var(--portal-border);
-    background: var(--portal-surface);
+    padding: 14px 22px;
+    border: none !important;
+    background: transparent !important;
     color: var(--portal-text);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: box-shadow 0.2s ease;
 }
 
-.searchscreen .searchbox input[type=text]:hover {
-    border-color: var(--portal-text-muted);
-    border-radius: 50px !important;
-}
-
-.searchscreen .searchbox input[type=text]:focus {
-    border-color: var(--portal-accent);
+.portal .searchscreen .searchbox input[type=text]:focus {
     outline: none;
-    border-radius: 50px !important;
-    box-shadow: 0 0 0 3px rgba(64, 136, 212, 0.2);
-}
-
-.searchscreen .searchbox input[type=text]:active {
-    border-radius: 50px !important;
+    box-shadow: 0 0 0 3px rgba(64, 136, 212, 0.25) inset;
 }
 
 #searchscreen-searchbar::placeholder {
@@ -240,22 +277,180 @@ header h1, header h2, header h3,
    5. CARDS, PANELS & TILES
    ───────────────────────────────────────────────── */
 
-.portal .dashbtn,
+/* Dashboard tiles — modern elevated card with hover lift.
+   HaloPSA ships these as .card.dashbtn.noborder; we override font, radius,
+   padding and shadow. Border is hairline rgba so it adapts to theme surface. */
+.portal .card.dashbtn,
+.portal .dashbtn {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
+    border-radius: 14px !important;
+    padding: 28px 20px 24px !important;
+    border: 1px solid var(--portal-border) !important;
+    box-shadow: var(--portal-shadow) !important;
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease !important;
+}
+
+.theme-dark .card.dashbtn,
+.theme-dark .dashbtn {
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.portal .card.dashbtn:hover,
+.portal .dashbtn:hover {
+    background-color: var(--portal-surface-hover);
+    box-shadow: var(--portal-shadow-hover) !important;
+    transform: translateY(-2px);
+    border-color: var(--portal-accent) !important;
+}
+
 .details-group.card-panel,
 searchboxinput,
 .details-form .details-group.card-panel {
     border-radius: var(--portal-radius) !important;
 }
 
-.portal .dashbtn:hover {
-    background-color: var(--portal-surface-hover);
-    box-shadow: var(--portal-shadow-hover);
-}
-
 .details-group.card-panel {
     box-shadow: var(--portal-shadow);
     border-radius: var(--portal-radius);
     background: var(--portal-surface);
+}
+
+/* ── Knowledge Base index page ── */
+
+/* Article list row — tap-feel hover tint */
+.portal .article {
+    border-radius: 10px;
+    padding: 14px 14px 18px !important;
+    transition: background-color 160ms ease;
+}
+.portal .article:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+}
+
+/* Article title */
+.portal .articleInfoSmall.kb .heading,
+.portal .article .heading {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
+    font-size: 17px !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.005em;
+}
+
+/* View-count number (tabular so digits align) */
+.portal .articleInfoSmall.kb > div:last-child,
+.portal .articleInfoSmall.kb > :not(.heading):not(.articleText) {
+    font-family: 'Montserrat', 'Poppins', sans-serif;
+    font-variant-numeric: tabular-nums;
+    color: rgba(221, 221, 221, 0.6);
+}
+
+/* Tag pills — real pills, subtle surface, hover tint */
+.portal .kbtags {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    border-radius: 50px !important;
+    border: none !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    padding: 4px 12px !important;
+    transition: background-color 150ms ease;
+}
+.portal .kbtags:hover {
+    background: rgba(255, 255, 255, 0.10) !important;
+}
+
+/* Sidebar search (tree-menu / kblist) — borderless pill matching home search */
+.portal .kblist .searchbox,
+.portal .tree-menu .searchbox {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: none !important;
+    border-radius: 50px !important;
+    box-shadow: none !important;
+    overflow: hidden;
+}
+.portal .kblist input[type=text],
+.portal .tree-menu input[type=text] {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
+    font-size: 14px !important;
+    padding: 10px 16px !important;
+    border: none !important;
+    background: transparent !important;
+    color: inherit;
+}
+.portal .kblist input[type=text]:focus,
+.portal .tree-menu input[type=text]:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(107, 163, 224, 0.3) inset;
+}
+
+/* Sidebar tree items — Montserrat + hover tint */
+.portal .tree-menu,
+.portal .kblist {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
+}
+.portal .tree-menu .sidebar,
+.portal .kblist .sidebar {
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin: 2px 0;
+    transition: background-color 150ms ease;
+    cursor: pointer;
+}
+.portal .tree-menu .sidebar:hover,
+.portal .kblist .sidebar:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* KB sidebar — selected article highlight.
+   HaloPSA applies the active state as an *inline* style setting bg to
+   the heading-purple (rgb(47, 53, 94)). That's both hard to read and
+   visually heavy. Attribute selectors match the inline style, and the
+   !importants win inline-specificity. Result is a tonal accent tint
+   with a left accent bar — a lighter, softer modern nav pattern. */
+.portal .tree-menu .tree-node[style*="rgb(47, 53, 94)"],
+.portal .tree-menu .tree-node[style*="background-color: rgb(47"] {
+    background-color: rgba(107, 163, 224, 0.14) !important;
+    color: var(--portal-heading) !important;
+    border-left: 3px solid var(--portal-accent);
+    padding-left: 7px !important;
+    font-weight: 600;
+    border-radius: 0 8px 8px 0 !important;
+}
+
+/* ── Home dashboard widgets (My Tickets / My Approvals / My Assets) ──
+   These are the dashboard-row tiles at the bottom of the portal home
+   page (`.listwidget` containers with `.action-history-item.tile-item`
+   rows). The defaults are 25px-radius tiles with a chunky 10px coloured
+   left bar — too heavy for small cards. Slim the bar, tighten radius,
+   add a subtle hover lift. No hairline border so the bar sits flush. */
+.portal .listwidget .listwidget-title {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
+    font-size: 1.25rem !important;
+    font-weight: 500 !important;
+    letter-spacing: -0.005em;
+    margin-bottom: 12px;
+}
+.portal .listwidget .listwidget-icon {
+    opacity: 0.9;
+    margin-right: 6px;
+}
+
+.portal .listwidget .action-history-item.tile-item {
+    border-radius: 14px !important;
+    padding: 18px !important;
+    margin: 10px 0 !important;
+    border: 0 !important;
+    transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.portal .listwidget .action-history-item.tile-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
+/* Slim the coloured indicator bar and match the card's rounded corner */
+.portal .listwidget .action-history-item .tile-widget-bar {
+    width: 3px !important;
+    border-radius: 14px 0 0 14px !important;
 }
 
 /* Kanban cards */
@@ -305,9 +500,12 @@ searchboxinput,
     font-family: 'Montserrat', 'Poppins', sans-serif;
 }
 
-/* Back button */
+/* Back button — HaloPSA applies an inline style that paints this the
+   heading-purple, which disappears into the dark body. Force the accent
+   colour with !important so the button is actually visible. */
+.portal .backbtn,
 .backbtn {
-    background-color: var(--portal-accent);
+    background-color: var(--portal-accent) !important;
     width: 50px;
     height: 50px;
     border: none;
@@ -316,11 +514,16 @@ searchboxinput,
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
+    color: #fff !important;
     font-size: 18px;
     cursor: pointer;
-    box-shadow: var(--portal-shadow);
+    box-shadow: 0 4px 12px rgba(107, 163, 224, 0.25) !important;
     transition: all 0.3s ease;
+}
+
+.portal .backbtn:hover,
+.backbtn:hover {
+    background-color: var(--portal-accent-hover) !important;
 }
 
 .backbtn:hover {
@@ -334,9 +537,17 @@ span.kbtags {
     font-family: 'Montserrat', sans-serif;
 }
 
-/* View All buttons */
-.nhd-button curve {
-    background-color: var(--portal-accent);
+/* View All buttons — the original rule had `.nhd-button curve` (space),
+   which is a descendant combinator and never matched. Fix to the compound
+   selector, bump specificity with `.portal`, and add !important so we
+   beat HaloPSA's inline dark-blue fill. Matches the back-button accent. */
+.portal .nhd-button.curve,
+.portal button.nhd-button.curve {
+    background-color: var(--portal-accent) !important;
+    box-shadow: 0 4px 12px rgba(107, 163, 224, 0.25) !important;
+}
+.portal .nhd-button.curve:hover {
+    background-color: var(--portal-accent-hover) !important;
 }
 
 
@@ -524,9 +735,14 @@ footer a svg {
     border: none !important;
 }
 
-/* ── Tables: clean modern style (no border-radius, no zebra stripes) ── */
+/* ── Tables: clean modern style (no border-radius, no zebra stripes) ──
+   Uses alpha-tinted tokens so the same rules work for header row AND
+   header column in both light and dark mode. Colour is inherited so
+   text stays readable on whatever body surface sits underneath — this
+   avoids the bright-island problem we hit previously when hard-coding
+   light greys (#f5f6f8) in dark mode. */
 .kbdetails .confluenceTable {
-    border: 1px solid var(--portal-border) !important;
+    border: 1px solid var(--portal-table-border) !important;
     border-radius: 0 !important;
     overflow: visible !important;
     border-collapse: collapse !important;
@@ -534,16 +750,21 @@ footer a svg {
 
 .kbdetails .confluenceTable td,
 .kbdetails .confluenceTable th {
-    border: 1px solid var(--portal-border) !important;
+    border: 1px solid var(--portal-table-border) !important;
     padding: 12px 16px;
 }
 
-/* All th elements: header row AND first-column numbered cells get same styling */
+/* All th elements: header row AND first-column cells */
 .kbdetails .confluenceTable th {
-    background-color: #f5f6f8 !important;
-    color: #1a1d23 !important;
+    background-color: var(--portal-table-header-bg) !important;
+    color: inherit !important;
     font-weight: 600 !important;
     font-family: 'Montserrat', sans-serif !important;
+}
+
+/* Subtle row hover — alpha so it works on any body bg */
+.kbdetails .confluenceTable tbody tr:hover td {
+    background-color: var(--portal-table-row-hover);
 }
 
 /* Remove zebra stripes */
@@ -670,25 +891,9 @@ footer a svg {
     color: var(--portal-accent);
 }
 
-/* ── Tables: dark mode ── */
-.theme-dark .kbdetails .confluenceTable {
-    border-color: var(--portal-border) !important;
-}
-
-.theme-dark .kbdetails .confluenceTable td,
-.theme-dark .kbdetails .confluenceTable th {
-    border-color: var(--portal-border) !important;
-}
-
-.theme-dark .kbdetails .confluenceTable th {
-    background-color: #3a3a3a !important;
-    color: #ddd !important;
-}
-
-/* Ensure no zebra stripes in dark mode either */
-.theme-dark .kbdetails .confluenceTable tr:nth-child(even) {
-    background-color: transparent !important;
-}
+/* Tables: dark-mode colour handling is done via the --portal-table-*
+   tokens at the top of this file (alpha-tinted, auto-adapts). No
+   dark-mode-specific overrides needed here. */
 
 /* ── Confluence Panel outer wrappers: dark mode border-left accents ── */
 .theme-dark .kbdetails .confluence-information-macro-information {

@@ -996,20 +996,13 @@ html body .portal .nhd-nav-rightAlign button:not(.active):not(.highlight):hover 
     box-shadow: none !important;
 }
 
-/* Selected (`.active`) — LIGHT, branded. Action-blue fill with a soft
-   inset highlight reads as the current page lifted above the rest of
-   the nav. Stays bright even on hover/focus. */
-html body .portal button.nhd-nav-btn.active,
-html body .portal button.nhd-nav-btn.active:hover,
-html body .portal button.nhd-nav-btn.active:focus-visible,
-html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"].active,
-html body .portal .nhd-nav-btn.menubtn.active,
-html body .portal .nhd-nav-btn.homebtn {
-    background-color: var(--portal-action) !important;
-    background-image: none !important;
-    color: #fff !important;
-    box-shadow: inset 0 -2px 0 rgba(255, 255, 255, 0.25) !important;
-}
+/* NOTE: No "selected nav" rule. HaloPSA never emits `.active` (or any
+   other marker) on the current-page `.nhd-nav-btn` — every nav button
+   renders with `class="nhd-nav-btn undefined"`. A JS shim that adds
+   `.active` via classList doesn't stick either: HaloPSA's React render
+   pins `className` to derived state, so the next reconciliation strips
+   it back off. See `portal-chrome.md → Navbar selected state` for the
+   full write-up. Hover darkening above is the extent of what we can do. */
 
 /* ─────────────────────────────────────────────────
    NEW TICKET / TICKET EDIT FORM

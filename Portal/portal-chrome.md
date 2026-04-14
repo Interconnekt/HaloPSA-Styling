@@ -114,6 +114,16 @@ Body text colour — HaloPSA re-paints the iframe content when theme switches. O
 
 ---
 
+## Navbar selected state — why we don't have one
+
+HaloPSA renders every top-nav button with `class="nhd-nav-btn undefined"` — including the current page's one. The literal string `"undefined"` is a React bug (looks like `${isActive ? 'active' : undefined}` with no fallback). There is no `.active` class, no `aria-current`, no per-button inline-style differentiation. Every button is identical to HaloPSA.
+
+**Why a JS shim doesn't fix it.** The obvious workaround is a small script (like `iframe-theme.js`) that reads `location.pathname`, finds the matching button by text, and adds `.active`. It doesn't stick: HaloPSA pins `className` to derived React state, so the next reconciliation (any state change, route update, menu toggle) strips the class back off before the paint settles. We verified live — `classList.add('active')` + `getComputedStyle` returns HaloPSA's inline navy, not our branded blue, because React has already wiped the class by the time the style system samples it. A `MutationObserver` that re-adds the class after every render would work in principle but fights HaloPSA on every keystroke, and any scroll/resize/menu toggle would flash.
+
+**What we ship instead.** Hover darkening only — a 28% black overlay on the resting navy via `background-image: linear-gradient(...)`. It gives clear hover affordance without a new colour. The selected-state half of the original restyle was removed; see the comment block above `button.nhd-nav-btn` hover rules in `self-service-portal.css`.
+
+---
+
 ## Pending / Not Yet Audited
 
 - **Assets page** — not yet styled beyond whatever the tickets-list rules cascade to

@@ -445,12 +445,18 @@ searchboxinput,
    with a left accent bar — a lighter, softer modern nav pattern. */
 .portal .tree-menu .tree-node[style*="rgb(47, 53, 94)"],
 .portal .tree-menu .tree-node[style*="background-color: rgb(47"] {
-    background-color: rgba(107, 163, 224, 0.14) !important;
+    background-color: transparent !important;
     color: var(--portal-heading) !important;
     border-left: 3px solid var(--portal-accent);
     padding-left: 7px !important;
     font-weight: 600;
-    border-radius: 0 8px 8px 0 !important;
+    border-radius: 0 !important;
+}
+
+/* KB sidebar — shrink tree-node labels from HaloPSA's default 16px to
+   14px. Scoped to `.tree-menu` so article body text (16px) is untouched. */
+.portal .tree-menu .tree-node {
+    font-size: 14px !important;
 }
 
 /* ── Home dashboard widgets (My Tickets / My Approvals / My Assets) ──

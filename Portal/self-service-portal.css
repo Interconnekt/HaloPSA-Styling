@@ -682,8 +682,8 @@ html body .portal * {
    indication would require JS to add a class based on URL. */
 html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"]:hover,
 html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"]:focus-visible {
-    background-color: var(--portal-action) !important;
-    box-shadow: 0 4px 12px var(--portal-action-shadow) !important;
+    background-color: #30355b !important;
+    box-shadow: 0 4px 12px rgba(48, 53, 91, 0.40) !important;
 }
 
 

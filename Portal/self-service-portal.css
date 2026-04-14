@@ -515,15 +515,71 @@ html body .portal .bar-text {
     letter-spacing: 0.2px;
 }
 
-/* Kanban cards */
-.react-kanban-column .card {
-    padding: 30px !important;
-    background: var(--portal-surface);
+/* ── Kanban view (tickets list → Kanban View) ──
+   HaloPSA's kanban uses `.board-card-content` for the actual card
+   surface (not `.card`) — the old `.react-kanban-column .card` rules
+   targeted a class that doesn't exist. Structure per card:
+     .board-card > .board-card-content
+                     ├ .board-card-bar    (status stripe, absolute-left)
+                     ├ .board-card-summary (ticket title)
+                     └ .board-card-details (meta lines)
+   Flat rectangular content panels with asymmetric padding feel
+   disconnected from the pilled chrome elsewhere. Round the card,
+   symmetrical padding, Montserrat throughout, a proper gap between
+   cards, and a uppercase-eyebrow column header. */
+
+/* Column header — 'Assigned', 'In Progress' etc. */
+html body .portal .board-column-title {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--portal-text-muted, #bbb) !important;
+    padding: 4px 8px 12px !important;
 }
 
-.react-kanban-column .card h4 {
-    font-size: 1.3rem !important;
-    color: var(--portal-heading);
+/* Card surface */
+html body .portal .board-card-content {
+    background-color: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: 12px !important;
+    padding: 14px 16px 14px 20px !important;
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
+    overflow: hidden;
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+html body .portal .board-card-content:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+    border-color: var(--portal-action);
+}
+
+/* Gap between stacked cards in a column */
+html body .portal .react-kanban-column > div > div {
+    margin-bottom: 10px;
+}
+
+/* Status stripe — mirror the home-page Option A (6px, rounded leading
+   edge). HaloPSA positions this absolute inside the rounded content,
+   so overflow:hidden on the content clips it to the same radius. */
+html body .portal .board-card-bar {
+    width: 6px !important;
+    border-radius: 12px 0 0 12px !important;
+}
+
+/* Card typography */
+html body .portal .board-card-summary {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: var(--portal-text) !important;
+    margin-bottom: 4px;
+}
+html body .portal .board-card-details {
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
+    font-size: 12px !important;
+    color: var(--portal-text-muted, #bbb) !important;
 }
 
 /* Filter boxes */

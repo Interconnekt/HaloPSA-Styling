@@ -169,7 +169,7 @@
 
         /* ── Reference ── */
         .invoice-reference {
-            margin-bottom: 4px;
+            margin-bottom: 0;
             font-size: 12px;
             color: #34495e;
         }
@@ -438,12 +438,7 @@
 
     <!-- ── Delivery Address ── -->
     <div class="invoice-delivery">
-        <strong>Delivery Address:</strong><br>
-        $DELIVERYADDRESS1<br>
-        $DELIVERYADDRESS2<br>
-        $DELIVERYADDRESS3<br>
-        $DELIVERYADDRESS4<br>
-        $DELIVERYPOSTCODE
+        <strong>Delivery Address:</strong> $DELIVERYADDRESS1$IF$DELIVERYADDRESS2$, $DELIVERYADDRESS2$ENDIF$$IF$DELIVERYADDRESS3$, $DELIVERYADDRESS3$ENDIF$$IF$DELIVERYADDRESS4$, $DELIVERYADDRESS4$ENDIF$$IF$DELIVERYPOSTCODE$, $DELIVERYPOSTCODE$ENDIF$
     </div>
 
     <!-- ── Line Items ── -->

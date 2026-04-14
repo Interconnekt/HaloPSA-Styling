@@ -632,10 +632,13 @@ html body .portal .status-avatar.small {
 }
 
 /* Table text — HaloPSA's `.rt-td` is 16px which is quite heavy for a
-   data table. 13px keeps things readable while fitting more rows. */
+   data table. 13px keeps things readable while fitting more rows. Also
+   force Montserrat to keep the ticket list consistent with the ticket
+   page (which already uses Montserrat across every text surface). */
 html body .portal .rt-td,
 html body .portal .rt-th {
     font-size: 13px !important;
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
 }
 
 /* Search bar — the visible pill is actually the `.searchbox` wrapper,
@@ -707,7 +710,12 @@ html body .portal .page-title:has(.mandatory-hint) {
     padding: 0 36px;
 }
 
-html body .portal .details-form.readeditform {
+/* Only apply the form-card treatment on *actual* submission forms.
+   `.details-form.readeditform` is reused by HaloPSA as a plain filter-
+   bar wrapper on list pages (tickets list, etc.), which shouldn't be
+   framed as a card. We gate the facelift on `.portal:has(.mandatory-hint)`
+   so it only lights up when a real form is on the page. */
+html body .portal:has(.mandatory-hint) .details-form.readeditform {
     max-width: 1040px !important;
     margin: 24px auto 40px !important;
     padding: 32px 36px !important;
@@ -719,7 +727,7 @@ html body .portal .details-form.readeditform {
 
 /* Neutralise the card-panel wrappers HaloPSA applies to each group —
    we want one outer card, not nested cards inside it. */
-html body .portal .details-form .details-group.card-panel {
+html body .portal:has(.mandatory-hint) .details-form .details-group.card-panel {
     background: transparent !important;
     border: 0 !important;
     padding: 0 !important;

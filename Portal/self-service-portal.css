@@ -643,6 +643,27 @@ html body .portal .solidbutton.fabtn.notext:hover {
     background-color: var(--portal-surface-hover) !important;
 }
 
+/* Text-bearing fabtns on the KB chrome (Generate PDF, Print, Download,
+   Share Link when rendered with a label). HaloPSA ships them at 32×32
+   with 0 padding — fine for the `.notext` icon-only siblings, but it
+   crushes the label down to a 32px square and clips the text.
+   The `.buttons-container .solidbutton` rule below was the culprit: it
+   was grabbing *every* solid button in the container (including these)
+   and forcing the pagination-circle dimensions on them. Scoped out via
+   `:not(.fabtn)` there; this block gives text-bearing fabtns a proper
+   icon+label pill sized to their content. */
+html body .portal .solidbutton.fabtn:not(.notext) {
+    width: auto !important;
+    height: 32px !important;
+    padding: 0 14px !important;
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    white-space: nowrap;
+}
+
 /* Back button — HaloPSA applies an inline style that paints this the
    heading-purple, which disappears into the dark body. Force the action
    colour with !important so the button is actually visible.
@@ -782,8 +803,14 @@ html body .portal .page-counts h98 {
     letter-spacing: 0.2px;
 }
 
-html body .portal .buttons-container .solidbutton,
-html body .portal .buttons-container .solidbutton.menubtn {
+/* Tickets-list pagination buttons — prev / next / more-menu. Scoped to
+   `:not(.fabtn)` so we don't grab the KB-header utility buttons
+   (Generate PDF / Print / Download / Share Link) which also live
+   inside `.buttons-container` but render with text labels. `.fabtn`
+   styling (rounded rectangle or 32x32 icon square) is handled in
+   section 6 above. */
+html body .portal .buttons-container .solidbutton:not(.fabtn),
+html body .portal .buttons-container .solidbutton.menubtn:not(.fabtn) {
     background-color: var(--portal-surface) !important;
     color: var(--portal-text) !important;
     border: 1px solid var(--portal-border) !important;
@@ -797,13 +824,13 @@ html body .portal .buttons-container .solidbutton.menubtn {
     margin: 0 3px !important;
     transition: background-color 150ms ease, border-color 150ms ease;
 }
-html body .portal .buttons-container .solidbutton:hover,
-html body .portal .buttons-container .solidbutton.menubtn:hover {
+html body .portal .buttons-container .solidbutton:not(.fabtn):hover,
+html body .portal .buttons-container .solidbutton.menubtn:not(.fabtn):hover {
     background-color: var(--portal-surface-hover) !important;
     border-color: var(--portal-action) !important;
 }
-html body .portal .buttons-container .solidbutton:disabled,
-html body .portal .buttons-container .solidbutton[disabled] {
+html body .portal .buttons-container .solidbutton:not(.fabtn):disabled,
+html body .portal .buttons-container .solidbutton:not(.fabtn)[disabled] {
     opacity: 0.4;
     cursor: not-allowed;
 }

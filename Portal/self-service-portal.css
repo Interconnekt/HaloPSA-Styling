@@ -823,17 +823,40 @@ html body .portal .action-history-item {
     border-radius: 14px !important;
 }
 
-/* Workflow stepper line (rc-steps library) — `3.2547741a.chunk.css`
-   hardcodes `width: 1000px` and `background: #e9e9e9` on the
-   `.rc-steps-item-title::after` pseudo that draws the connector line
-   between steps. On a 2-step flow (Service Desk → Resolved) the 1000px
-   line overshoots the gap and the near-white colour disappears on the
-   dark body. We clamp width to the item's remaining space and retint
-   using the theme border token so it reads in both modes. */
-html body .portal .rc-steps-item-title::after {
-    width: calc(100% - 40px) !important;
+/* Workflow stepper (rc-steps library, `rc-steps-label-vertical` variant).
+   Two fixes here:
+
+   1. Connector line. rc-steps ships `background: #e9e9e9` on
+      `.rc-steps-item-tail::after` — near-white, too loud on both the
+      dark surface and the light one. Retint via `--portal-border` so
+      it reads as a subtle hairline in both themes. (An older rule
+      targeted `.rc-steps-item-title::after` which doesn't exist in
+      this variant — the real connector is on the tail pseudo.)
+
+   2. Title-under-icon centring. rc-steps paints
+      `.rc-steps-item-icon { margin: 0 10px 0 36px }` inside a 100px
+      content block, so the title (centred in the content box at x=50)
+      sits 5px right of the icon centre (36 + 18/2 = 45). Normalise
+      icon margins to `(100 - 18)/2 = 41px` each side so title and
+      icon share a centre.
+
+   Active step colour comes from `--portal-action` instead of the
+   rc-steps default `#108ee9` so the step pill matches our button
+   blue. */
+html body .portal .rc-steps-item-tail::after {
     background: var(--portal-border) !important;
-    height: 2px !important;
+    height: 1px !important;
+}
+html body .portal .rc-steps-label-vertical .rc-steps-item-icon {
+    margin: 0 41px !important;
+}
+html body .portal .rc-steps-item-process .rc-steps-item-icon,
+html body .portal .rc-steps-item-finish .rc-steps-item-icon {
+    background: var(--portal-action) !important;
+    border-color: var(--portal-action) !important;
+}
+html body .portal .rc-steps-item-process .rc-steps-item-title {
+    color: var(--portal-action) !important;
 }
 
 /* Ticket list view (tickets?viewid=…) — status pills, table density,

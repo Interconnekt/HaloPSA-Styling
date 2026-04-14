@@ -137,12 +137,17 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--portal-heading);
 }
 
-h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 20px; }
-h2 { font-size: 2rem; font-weight: 600; margin-bottom: 18px; }
-h3 { font-size: 1.75rem; font-weight: 500; margin-bottom: 16px; }
-h4 { font-size: 1.5rem; font-weight: 500; margin-bottom: 14px; }
-h5 { font-size: 1.25rem; font-weight: 400; margin-bottom: 12px; }
-h6 { font-size: 1rem; font-weight: 400; margin-bottom: 10px; }
+/* Heading scale — tightened from the previous 2.5/2/1.75/1.5/1.25/1rem
+   ladder which made KB articles feel like posters and the portal
+   chrome feel bloated. Modern app-style hierarchy: page title ~22px,
+   section ~18px, sub-section ~16px. Body root stays 16px for article
+   readability; headings step up from there. */
+h1 { font-size: 1.625rem; font-weight: 700; margin-bottom: 16px; }
+h2 { font-size: 1.375rem; font-weight: 600; margin-bottom: 14px; }
+h3 { font-size: 1.125rem; font-weight: 600; margin-bottom: 12px; }
+h4 { font-size: 1rem;     font-weight: 600; margin-bottom: 10px; }
+h5 { font-size: 0.9375rem;font-weight: 600; margin-bottom: 8px; }
+h6 { font-size: 0.875rem; font-weight: 600; margin-bottom: 8px; }
 
 /* Body text */
 p, span, li, a {
@@ -194,27 +199,28 @@ header h1, header h2, header h3,
     color: #fff !important;
 }
 
-/* Tablet */
+/* Tablet — nudge body down by 1px and shrink headings proportionally
+   to the desktop scale. */
 @media (max-width: 768px) {
     html, body { font-size: 15px; }
-    h1 { font-size: 2rem; }
-    h2 { font-size: 1.75rem; }
-    h3 { font-size: 1.5rem; }
-    h4 { font-size: 1.3rem; }
-    h5 { font-size: 1.1rem; }
-    h6 { font-size: 1rem; }
+    h1 { font-size: 1.5rem; }
+    h2 { font-size: 1.25rem; }
+    h3 { font-size: 1.0625rem; }
+    h4 { font-size: 1rem; }
+    h5 { font-size: 0.9375rem; }
+    h6 { font-size: 0.875rem; }
     p, span, li, a { font-size: 15px; }
 }
 
 /* Mobile */
 @media (max-width: 480px) {
     html, body { font-size: 14px; }
-    h1 { font-size: 1.75rem; }
-    h2 { font-size: 1.5rem; }
-    h3 { font-size: 1.3rem; }
-    h4 { font-size: 1.2rem; }
-    h5 { font-size: 1rem; }
-    h6 { font-size: 0.9rem; }
+    h1 { font-size: 1.375rem; }
+    h2 { font-size: 1.1875rem; }
+    h3 { font-size: 1.0625rem; }
+    h4 { font-size: 1rem; }
+    h5 { font-size: 0.9375rem; }
+    h6 { font-size: 0.875rem; }
     p, span, li, a { font-size: 14px; }
 }
 
@@ -225,7 +231,7 @@ header h1, header h2, header h3,
 
 .portal .search-title {
     font-family: 'Montserrat', 'Poppins', sans-serif !important;
-    font-size: 2.5rem;
+    font-size: 1.75rem;
     font-weight: 500;
     margin: 40px 0 -40px;
     color: var(--portal-heading);
@@ -239,7 +245,7 @@ header h1, header h2, header h3,
 .portal h1.profile-full-name.oneline,
 .portal .details-form .details-group-header.title {
     font-family: 'Montserrat', 'Poppins', sans-serif !important;
-    font-size: 1.75rem !important;
+    font-size: 1.375rem !important;
     font-weight: 600 !important;
     color: var(--portal-action) !important;
     letter-spacing: -0.01em;
@@ -248,7 +254,7 @@ header h1, header h2, header h3,
 /* Page subtitle (eyebrow label — e.g. "Top Articles" on the KB index) */
 .portal .page-title .page-subtitle,
 .portal .page-subtitle {
-    font-size: 0.75rem !important;
+    font-size: 0.6875rem !important;
     font-weight: 600 !important;
     text-transform: uppercase;
     letter-spacing: 0.14em;
@@ -265,7 +271,7 @@ header h1, header h2, header h3,
 .portal .details-group-header h2,
 .portal .details-group-header.title h2 {
     font-family: 'Montserrat', 'Poppins', sans-serif !important;
-    font-size: 1rem !important;
+    font-size: 0.8125rem !important;
     font-weight: 600 !important;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -368,7 +374,7 @@ searchboxinput,
 /* Article title */
 .portal .articleInfoSmall.kb .heading,
 .portal .article .heading {
-    font-size: 17px !important;
+    font-size: 14px !important;
     font-weight: 600 !important;
     letter-spacing: -0.005em;
 }
@@ -382,7 +388,7 @@ searchboxinput,
 
 /* Tag pills — real pills, subtle surface, hover tint */
 .portal .kbtags {
-    font-size: 12px !important;
+    font-size: 11px !important;
     font-weight: 500 !important;
     border-radius: 50px !important;
     border: none !important;
@@ -405,8 +411,8 @@ searchboxinput,
 }
 .portal .kblist input[type=text],
 .portal .tree-menu input[type=text] {
-    font-size: 14px !important;
-    padding: 10px 16px !important;
+    font-size: 13px !important;
+    padding: 8px 14px !important;
     border: none !important;
     background: transparent !important;
     color: inherit;
@@ -454,7 +460,7 @@ searchboxinput,
    left bar — too heavy for small cards. Slim the bar, tighten radius,
    add a subtle hover lift. No hairline border so the bar sits flush. */
 .portal .listwidget .listwidget-title {
-    font-size: 1.25rem !important;
+    font-size: 1rem !important;
     font-weight: 500 !important;
     letter-spacing: -0.005em;
     margin-bottom: 12px;
@@ -529,7 +535,7 @@ html body .portal .sla-perc-bar > div[style*="rgb(34, 139, 34)"] {
 html body .portal .bar-text {
     font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-weight: 500 !important;
-    font-size: 12px !important;
+    font-size: 11px !important;
     letter-spacing: 0.2px;
 }
 
@@ -549,7 +555,7 @@ html body .portal .bar-text {
 /* Column header — 'Assigned', 'In Progress' etc. */
 html body .portal .board-column-title {
     font-family: 'Montserrat', 'Poppins', sans-serif !important;
-    font-size: 12px !important;
+    font-size: 11px !important;
     font-weight: 700 !important;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -589,14 +595,14 @@ html body .portal .board-card-bar {
 /* Card typography */
 html body .portal .board-card-summary {
     font-family: 'Montserrat', 'Poppins', sans-serif !important;
-    font-size: 14px !important;
+    font-size: 13px !important;
     font-weight: 600 !important;
     color: var(--portal-text) !important;
     margin-bottom: 4px;
 }
 html body .portal .board-card-details {
     font-family: 'Montserrat', 'Poppins', sans-serif !important;
-    font-size: 12px !important;
+    font-size: 11px !important;
     color: var(--portal-text-muted, #bbb) !important;
 }
 
@@ -654,12 +660,12 @@ html body .portal .solidbutton.fabtn.notext:hover {
    icon+label pill sized to their content. */
 html body .portal .solidbutton.fabtn:not(.notext) {
     width: auto !important;
-    height: 32px !important;
-    padding: 0 14px !important;
+    height: 30px !important;
+    padding: 0 12px !important;
     display: inline-flex !important;
     align-items: center;
     gap: 6px;
-    font-size: 13px !important;
+    font-size: 12px !important;
     font-weight: 500 !important;
     white-space: nowrap;
 }
@@ -672,8 +678,8 @@ html body .portal .solidbutton.fabtn:not(.notext) {
 html body .portal .backbtn,
 html body .portal button.backbtn {
     background-color: var(--portal-action) !important;
-    width: 50px;
-    height: 50px;
+    width: 42px;
+    height: 42px;
     border: none;
     margin: 5px 15px;
     border-radius: 2rem;
@@ -681,7 +687,7 @@ html body .portal button.backbtn {
     align-items: center;
     justify-content: center;
     color: #fff !important;
-    font-size: 18px;
+    font-size: 15px;
     cursor: pointer;
     box-shadow: 0 4px 12px var(--portal-action-shadow) !important;
     transition: all 0.3s ease;
@@ -713,10 +719,10 @@ html body .portal button.nhd-button.curve {
     background-color: var(--portal-action) !important;
     box-shadow: 0 4px 12px var(--portal-action-shadow) !important;
     font-family: 'Montserrat', 'Poppins', sans-serif !important;
-    font-size: 13px !important;
+    font-size: 12px !important;
     font-weight: 500 !important;
     letter-spacing: 0.02em;
-    padding: 8px 18px !important;
+    padding: 7px 16px !important;
 }
 /* Icons inside action buttons — HaloPSA's Font Awesome stylesheet paints
    `.fa` at `color: #555` globally, which sits grey on our blue button
@@ -745,7 +751,7 @@ html body .portal button.nhd-button.curve:hover {
    name reads as a proper subtitle rather than a footnote. */
 html body .portal .profile-extra {
     font-family: 'Montserrat', 'Poppins', sans-serif !important;
-    font-size: 18px !important;
+    font-size: 14px !important;
     font-weight: 500 !important;
     color: var(--portal-text) !important;
     margin-top: 2px;
@@ -797,7 +803,7 @@ html body .portal .status-avatar.bitsmall {
 html body .portal .page-counts,
 html body .portal .page-counts h98 {
     font-family: 'Montserrat', 'Poppins', sans-serif !important;
-    font-size: 13px !important;
+    font-size: 12px !important;
     font-weight: 500 !important;
     color: var(--portal-text-muted, #bbb) !important;
     letter-spacing: 0.2px;
@@ -841,7 +847,7 @@ html body .portal .buttons-container .solidbutton:not(.fabtn)[disabled] {
    page (which already uses Montserrat across every text surface). */
 html body .portal .rt-td,
 html body .portal .rt-th {
-    font-size: 13px !important;
+    font-size: 12px !important;
     font-family: 'Montserrat', 'Poppins', sans-serif !important;
 }
 
@@ -878,6 +884,7 @@ html body .portal .Select__input input,
 html body .portal .Select__menu,
 html body .portal .Select__option {
     font-family: 'Montserrat', 'Poppins', sans-serif !important;
+    font-size: 13px !important;
 }
 
 /* Slim scrollbars — HaloPSA inherits default OS scrollbars which look
@@ -987,7 +994,7 @@ html body .portal:has(.mandatory-hint) .details-form .details-group.card-panel {
 /* Labels as uppercase eyebrow — more scannable than the default 12px
    400-weight light-grey which got lost against dark surfaces. */
 html body .portal .details-form label {
-    font-size: 12px !important;
+    font-size: 11px !important;
     font-weight: 600 !important;
     letter-spacing: 0.06em !important;
     text-transform: uppercase !important;
@@ -1000,13 +1007,13 @@ html body .portal .details-form label {
 html body .portal .details-form input[type="text"]:not(.Select__input),
 html body .portal .details-form input:not([type]):not(.Select__input),
 html body .portal .details-form textarea {
-    height: 40px !important;
+    height: 36px !important;
     border-radius: 10px !important;
     border: 1px solid var(--portal-border) !important;
     background-color: var(--portal-bg) !important;
     color: var(--portal-text) !important;
-    padding: 0 14px !important;
-    font-size: 14px !important;
+    padding: 0 12px !important;
+    font-size: 13px !important;
     transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 html body .portal .details-form textarea {

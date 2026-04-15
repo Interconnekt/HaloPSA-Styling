@@ -1239,13 +1239,19 @@ html body .portal .Select__option {
 
 /* Home page horizontal width — align dashbtn cards row and the hero
    search to the same content zone as the Recent Activity / Top 5
-   Articles columns below. Those use Bootstrap's `.col-xl-6.px-xl-5`
-   which adds 3rem of inner padding at xl viewports — so the dashbtn
-   row + searchholder span ~96px wider per side than the cards below.
-   Mirror the same xl-only padding so all three sections of the home
-   page share one content-edge alignment. */
+   Articles columns below. Those cols use Bootstrap's `.col-xl-6.px-xl-5`
+   which adds 3rem (48px) of inner padding at xl, AND their child tiles
+   are direct children of the col (no extra col-padding). The dashbtn
+   row's children are `.col-md-3` cards which carry their own 15px
+   Bootstrap col-padding — so we apply 33px (= 48 - 15) row-padding to
+   land cards exactly on the Recent col's content edge. The hero search
+   has no inner col-padding, so it gets the full 48px. xl-only media
+   query matches Bootstrap's `.px-xl-5` breakpoint. */
 @media (min-width: 1200px) {
-    html body .portal .container .dashbuttons.row,
+    html body .portal .container .dashbuttons.row {
+        padding-left: 33px !important;
+        padding-right: 33px !important;
+    }
     html body .portal .container .searchholder {
         padding-left: 3rem !important;
         padding-right: 3rem !important;

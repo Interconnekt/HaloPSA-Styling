@@ -2342,3 +2342,15 @@ footer a svg {
         color: #666;
     }
 }
+
+/* Hide the "PSA Software by HaloPSA" attribution in the footer.
+   Target by href so we don't accidentally remove Interconnekt's own
+   footer content. Hiding the parent .row drops the bordered pill
+   wrapper too, rather than leaving an empty box with a visible
+   outline. */
+html body .portal footer.page-footer a[href*="usehalo.com"] {
+    display: none !important;
+}
+html body .portal footer.page-footer .center-align > .row:has(a[href*="usehalo.com"]) {
+    display: none !important;
+}

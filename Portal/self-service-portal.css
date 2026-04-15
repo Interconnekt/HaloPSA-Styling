@@ -1261,15 +1261,22 @@ html body .portal .Select__option {
         padding-left: 33px !important;
         padding-right: 33px !important;
     }
-    /* `.searchholder` ships at an intrinsic 1351px (HaloPSA default)
-       narrower than its 1386px parent — so naive padding under-fills.
-       Force width:100% to fill the parent first, then apply the same
-       33px symmetric padding the dashbtn row uses. The input lands
-       exactly on the Recent col content edge (236-1557 at 1793 vw). */
+    /* The visible dark pill is `.searchbox` (parent of `.searchholder`),
+       not the input or holder themselves — both inner layers are
+       transparent. So the alignment must be applied to `.searchbox`'s
+       OUTER box, not to inner padding. We inset `.searchbox` by 33px on
+       each side so the visible pill lands on the same vertical lines as
+       the dashbtn tile content (e.g. 236-1557 at 1800vw). */
+    html body .portal .searchscreen form.container > .searchbox {
+        margin-left: 33px !important;
+        margin-right: 33px !important;
+    }
+    /* Holder no longer needs internal padding — keep width:100% so it
+       fills the now-narrower `.searchbox` parent. */
     html body .portal .container .searchholder {
         width: 100% !important;
-        padding-left: 33px !important;
-        padding-right: 33px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
     }
 }
 

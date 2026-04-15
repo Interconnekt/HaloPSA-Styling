@@ -430,8 +430,8 @@ searchboxinput,
 .portal .article {
     background: var(--portal-surface);
     border-radius: 14px !important;
-    padding: 18px !important;
-    margin: 10px 0 !important;
+    padding: 15px !important;
+    margin: 8px 0 !important;
     border: 0 !important;
     transition: transform 180ms ease, box-shadow 180ms ease, background-color 160ms ease;
 }

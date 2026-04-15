@@ -2354,3 +2354,19 @@ html body .portal footer.page-footer a[href*="usehalo.com"] {
 html body .portal footer.page-footer .center-align > .row:has(a[href*="usehalo.com"]) {
     display: none !important;
 }
+
+/* Strip the "https://" prefix from the website link in the footer.
+   Can't edit the DOM text from CSS, so we zero-out the original
+   text's font-size and inject the clean version via ::before.
+   Targeting by href^="https://interconnekt" scopes this to just the
+   website link (the tel: and mailto: siblings keep their text). */
+html body .portal footer.page-footer .box1 a[href^="https://interconnekt"] > div {
+    font-size: 0 !important;  /* hide original "https://..." text */
+}
+html body .portal footer.page-footer .box1 a[href^="https://interconnekt"] > div::before {
+    content: "interconnekt.com.au";
+    font-size: 12px;
+    font-weight: 400;
+    font-family: 'Montserrat', 'Poppins', sans-serif;
+    color: #fff;
+}

@@ -1283,6 +1283,16 @@ html body .portal .Select__option {
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
+    /* Search magnifier icon — HaloPSA pins it absolute right:0 with
+       margin-right:12px, so it hugs the pill edge. The placeholder
+       text sits ~33px in from the left edge (input padding-left 16px
+       + the inset we apply elsewhere). Match the icon's right inset
+       to that ~33px so the two visible elements feel symmetric.
+       Wrapped in the same xl breakpoint where the box-inset applies —
+       below 1200px the pill itself isn't inset so 12px reads fine. */
+    html body .portal .searchbox svg.searchbutton {
+        right: 21px !important;   /* + native 12px margin-right = 33px total inset */
+    }
 }
 
 /* Navbar search ("Search" placeholder, top-right of the header).

@@ -860,6 +860,11 @@ html body .portal button.nhd-button.curve {
     font-size: 12px !important;
     font-weight: 500 !important;
     letter-spacing: 0.02em;
+    /* Explicit pill — HaloPSA paints these at 40px radius natively which
+       is incidentally pill-shaped at 36px height. State the intent
+       directly so any future height tweak doesn't break the pill, and
+       so our peer "View More" rule can match exactly. */
+    border-radius: 999px !important;
     /* HaloPSA's `.nhd-button { height: 40px }` was making these pills
        sit taller than the 36px icon fabtns on the ticket-view action
        row, causing the row to look misaligned. Force 36px to match
@@ -916,7 +921,7 @@ html body .portal .results-table + div > a {
     letter-spacing: 0.02em;
     height: 36px !important;
     padding: 0 16px !important;
-    border-radius: var(--portal-radius) !important;
+    border-radius: 999px !important;
     text-decoration: none !important;
     transition: background-color 150ms ease;
 }

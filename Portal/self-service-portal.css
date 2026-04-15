@@ -915,8 +915,8 @@ html body .portal .results-table + div > a {
     font-weight: 500 !important;
     letter-spacing: 0.02em;
     height: 36px !important;
-    padding: 0 18px !important;
-    border-radius: 999px !important;
+    padding: 0 16px !important;
+    border-radius: var(--portal-radius) !important;
     text-decoration: none !important;
     transition: background-color 150ms ease;
 }

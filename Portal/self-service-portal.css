@@ -1268,6 +1268,11 @@ html body .portal .Select__option {
        each side so the visible pill lands on the same vertical lines as
        the dashbtn tile content (e.g. 236-1557 at 1800vw). */
     html body .portal .searchscreen form.container > .searchbox {
+        /* HaloPSA pins .searchbox to an explicit width that fills its
+           form parent — so margin-right alone can't shrink the visible
+           pill. Override to width:auto so the symmetric margins
+           actually compute the box smaller (parent_content - 66px). */
+        width: auto !important;
         margin-left: 33px !important;
         margin-right: 33px !important;
     }

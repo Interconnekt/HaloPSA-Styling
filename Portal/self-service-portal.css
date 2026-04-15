@@ -431,9 +431,52 @@ searchboxinput,
     background: var(--portal-surface);
     border-radius: 14px !important;
     padding: 15px !important;
-    margin: 8px 0 !important;
+    /* `.article` sits inside `<table.results-table>` which establishes
+       a new block-formatting context — so the first child's top margin
+       does NOT collapse with the parent (unlike `.action-history-item`
+       in Recent Activity, whose top margin does collapse). Use bottom-
+       only margin to mirror the visual rhythm of the Recent column
+       (first item flush to the title, 8px between items). */
+    margin: 0 0 8px !important;
     border: 0 !important;
     transition: transform 180ms ease, box-shadow 180ms ease, background-color 160ms ease;
+}
+
+/* HaloPSA renders the article-type badge twice per row: once inside
+   `.articleRight` (next to the views count) and once as a direct child
+   of `.articleInfoSmall.kb` (a standalone chip with `i.fas.book`).
+   They render side-by-side on the right of every card — duplication.
+   Hide the standalone one; keep the one grouped with the views count
+   so the right-edge of each card reads as a clean stat block. */
+.portal .articleInfoSmall.kb > .status-avatar {
+    display: none !important;
+}
+
+/* The remaining ARTICLE chip (inside `.articleRight`) ships at HaloPSA's
+   default heading-purple rgb(47,53,94) with 4px corners — too square
+   against the rest of the pill chrome on the page. Re-skin to a pill
+   in the surface-hover token so it reads as a soft category chip
+   rather than a competing solid bg. */
+.portal .article .articleRight .status-avatar {
+    background-color: var(--portal-surface-hover) !important;
+    color: var(--portal-text-muted) !important;
+    border-radius: 999px !important;
+    padding: 2px 10px !important;
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    display: inline-flex !important;
+    align-items: center;
+    gap: 4px;
+    height: auto !important;
+    line-height: 1.4 !important;
+}
+.portal .article .articleRight .status-avatar svg,
+.portal .article .articleRight .status-avatar i {
+    width: 10px;
+    height: 10px;
+    color: inherit !important;
 }
 /* Unified card-hover recipe shared across `.article`, `.listwidget
    .action-history-item.tile-item`, and `.board-card-content`. Three

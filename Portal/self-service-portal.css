@@ -468,9 +468,18 @@ searchboxinput,
     text-transform: uppercase;
     display: inline-flex !important;
     align-items: center;
+    justify-content: center;
     gap: 4px;
+    width: auto !important;
     height: auto !important;
+    min-height: 0 !important;
     line-height: 1.4 !important;
+    /* HaloPSA inherits `word-break: break-all` + `white-space: normal`
+       on .status-avatar, which mid-word-breaks "ARTICLE" to "ARTIC|LE"
+       inside the fixed 80px `.articleRight` parent. Force nowrap and
+       reset word-break so the label stays one line. */
+    white-space: nowrap !important;
+    word-break: keep-all !important;
 }
 .portal .article .articleRight .status-avatar svg,
 .portal .article .articleRight .status-avatar i {

@@ -371,7 +371,16 @@ header h1, header h2, header h3,
 
 .portal .searchscreen .searchbox input[type=text]:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(64, 136, 212, 0.25) inset;
+    box-shadow: none;
+}
+/* Belt-and-braces: kill any focus halo on the hero search,
+   regardless of which input element actually receives focus. */
+html body .portal .searchholder:focus-within,
+html body .portal .searchholder input:focus,
+html body .portal .searchholder input:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
 }
 
 #searchscreen-searchbar::placeholder {

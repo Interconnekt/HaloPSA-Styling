@@ -1237,6 +1237,49 @@ html body .portal .Select__option {
     font-size: 13px !important;
 }
 
+/* Home page horizontal width — align dashbtn cards row and the hero
+   search to the same content zone as the Recent Activity / Top 5
+   Articles columns below. Those use Bootstrap's `.col-xl-6.px-xl-5`
+   which adds 3rem of inner padding at xl viewports — so the dashbtn
+   row + searchholder span ~96px wider per side than the cards below.
+   Mirror the same xl-only padding so all three sections of the home
+   page share one content-edge alignment. */
+@media (min-width: 1200px) {
+    html body .portal .container .dashbuttons.row,
+    html body .portal .container .searchholder {
+        padding-left: 3rem !important;
+        padding-right: 3rem !important;
+    }
+}
+
+/* Navbar search ("Search" placeholder, top-right of the header).
+   Typography (13px/500/Montserrat/0.26px) already matches the nav
+   buttons, but HaloPSA paints the `.Select__control` as a pill with
+   visible chrome — which reads as a competing input chip next to
+   the flat nav-text peers. Flatten the chrome so the search reads
+   as a peer text element. The pill/border returns on focus to give
+   clear "I'm now active" affordance without shouting at rest. */
+html body .portal .buttoncontainer.nav-search .Select__control {
+    background-color: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    border-radius: 999px !important;
+    min-height: 36px !important;
+    height: 36px !important;
+}
+html body .portal .buttoncontainer.nav-search .Select__control--is-focused {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12) !important;
+}
+html body .portal .buttoncontainer.nav-search .Select__placeholder,
+html body .portal .buttoncontainer.nav-search .Select__single-value,
+html body .portal .buttoncontainer.nav-search .Select__input-container {
+    color: rgba(255, 255, 255, 0.85) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.26px;
+}
+
 /* Slim scrollbars — HaloPSA inherits default OS scrollbars which look
    chunky in a modern portal UI. Using the border token as the thumb
    colour keeps them subtle in both light and dark mode. */

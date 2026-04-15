@@ -1252,9 +1252,15 @@ html body .portal .Select__option {
         padding-left: 33px !important;
         padding-right: 33px !important;
     }
+    /* `.searchholder` ships at an intrinsic 1351px (HaloPSA default)
+       narrower than its 1386px parent — so naive padding under-fills.
+       Force width:100% to fill the parent first, then apply the same
+       33px symmetric padding the dashbtn row uses. The input lands
+       exactly on the Recent col content edge (236-1557 at 1793 vw). */
     html body .portal .container .searchholder {
-        padding-left: 3rem !important;
-        padding-right: 3rem !important;
+        width: 100% !important;
+        padding-left: 33px !important;
+        padding-right: 33px !important;
     }
 }
 

@@ -422,14 +422,29 @@ searchboxinput,
 
 /* ── Knowledge Base index page ── */
 
-/* Article list row — tap-feel hover tint */
+/* Article list row — surface card matching the home-page Recent Activity
+   tiles (`.action-history-item.tile-item`). Same surface token, radius,
+   padding and lift-on-hover, so the home page's "Top 5 Articles" widget
+   reads as a peer of the Recent Activity column next to it. The KB index
+   page (where these also render) gets the same card treatment for free. */
 .portal .article {
-    border-radius: 10px;
-    padding: 14px 14px 18px !important;
-    transition: background-color 160ms ease;
+    background: var(--portal-surface);
+    border-radius: 14px !important;
+    padding: 18px !important;
+    margin: 10px 0 !important;
+    border: 0 !important;
+    transition: transform 180ms ease, box-shadow 180ms ease, background-color 160ms ease;
 }
+/* Unified card-hover recipe shared across `.article`, `.listwidget
+   .action-history-item.tile-item`, and `.board-card-content`. Three
+   parts: translateY lift, surface-hover tint, shadow-hover token.
+   The `.dashbtn` home tiles deliberately keep their distinct stronger
+   hover (border-colour accent + harder shadow) to read as primary
+   navigation, not peer content cards. */
 .portal .article:hover {
     background-color: var(--portal-surface-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--portal-shadow-hover);
 }
 
 /* Article title */
@@ -545,8 +560,9 @@ searchboxinput,
     transition: transform 180ms ease, box-shadow 180ms ease;
 }
 .portal .listwidget .action-history-item.tile-item:hover {
+    background-color: var(--portal-surface-hover);
     transform: translateY(-2px);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+    box-shadow: var(--portal-shadow-hover);
 }
 
 /* Coloured status stripe on the leading edge of each home-page ticket
@@ -641,9 +657,9 @@ html body .portal .board-card-content {
     transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
 html body .portal .board-card-content:hover {
+    background-color: var(--portal-surface-hover);
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
-    border-color: var(--portal-action);
+    box-shadow: var(--portal-shadow-hover);
 }
 
 /* Gap between stacked cards in a column */
@@ -875,6 +891,41 @@ html body .portal button.nhd-button.curve:hover {
     background-color: var(--portal-action-hover) !important;
 }
 
+/* "View More" link under the Top 5 Articles widget on the home page.
+   HaloPSA renders it as a bare unclassed <a> sitting in the div that
+   immediately follows `.results-table`, which gives us a tight, unique
+   anchor. We re-skin it as a primary action button so it visually
+   matches the "View All" buttons under the ticket widgets — same
+   `--portal-action` fill, same shadow token, same 36px height and
+   12px Montserrat label. Centred under the card list via `display:
+   block` + `width: max-content` + `margin: auto`. */
+html body .portal .results-table + div {
+    text-align: center;
+    margin-top: 12px;
+}
+html body .portal .results-table + div > a {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--portal-action) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px var(--portal-action-shadow) !important;
+    font-family: 'Montserrat', 'Poppins', sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.02em;
+    height: 36px !important;
+    padding: 0 18px !important;
+    border-radius: 999px !important;
+    text-decoration: none !important;
+    transition: background-color 150ms ease;
+}
+html body .portal .results-table + div > a:hover {
+    background-color: var(--portal-action-hover) !important;
+    color: #fff !important;
+    text-decoration: none !important;
+}
+
 /* Ticket-header subtitle (e.g. 'Test ticket' beneath 'IC:0176791').
    HaloPSA ships `.profile-extra` at 14px/400 which sits awkwardly
    small against the 28px H1 above it. Bump so the ticket's actual
@@ -1007,7 +1058,10 @@ html body .portal .status-avatar.bitsmall {
     font-weight: 600 !important;
     letter-spacing: 0.02em;
     margin-left: 0 !important;
-    display: inline-block !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
     width: auto !important;
 }
 

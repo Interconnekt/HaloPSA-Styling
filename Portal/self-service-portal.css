@@ -1284,14 +1284,21 @@ html body .portal .Select__option {
         padding-right: 0 !important;
     }
     /* Search magnifier icon — HaloPSA pins it absolute right:0 with
-       margin-right:12px, so it hugs the pill edge. The placeholder
-       text sits ~33px in from the left edge (input padding-left 16px
-       + the inset we apply elsewhere). Match the icon's right inset
-       to that ~33px so the two visible elements feel symmetric.
-       Wrapped in the same xl breakpoint where the box-inset applies —
-       below 1200px the pill itself isn't inset so 12px reads fine. */
+       margin-right:12px, so it hugs the pill edge. We push it inward
+       so its right edge sits 33px from the visible pill right. */
     html body .portal .searchbox svg.searchbutton {
         right: 21px !important;   /* + native 12px margin-right = 33px total inset */
+    }
+    /* Match the input text's left inset to the icon's right inset.
+       HaloPSA's input padding is 16px each side; bump to 33px on the
+       left so placeholder + cursor visually start at the same offset
+       from the pill edge as the icon. Right side gets 57px (33 inset
+       + 16 icon width + 8 breathing) so typed text never slides under
+       the icon. ID selector wins over HaloPSA's base attribute-
+       selector rule without needing `!important` specificity war. */
+    html body .portal #searchscreen-searchbar {
+        padding-left: 33px !important;
+        padding-right: 57px !important;
     }
 }
 

@@ -1,0 +1,1467 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   HaloPSA Self-Service Portal — v2 (Interconnekt edition)
+   ═══════════════════════════════════════════════════════════════════════
+
+   Drop-in replacement for self-service-portal.css. Loaded via @import in
+   Configuration → Self Service Portal → Custom CSS.
+
+   Design DNA pulled from the Interconnekt website rebuild:
+   • Montserrat 300 display weight + Instrument Serif italic emphasis
+   • JetBrains Mono eyebrows with leading em-dash (S/01 — …)
+   • Dark-first palette (#0A0F1C / #121929 / #1F2740), light cream mode
+   • #4A74F0 primary → #D946EF accent gradient line
+   • Tighter radii (10–16px), hairline borders, editorial rhythm
+   • Ops-card texture — mono rows, pulsing status dot, delta chips
+
+   Sections
+   1.  Tokens (light + dark + editmode)
+   2.  Typography + global base
+   3.  Editorial eyebrow + italic-serif system
+   4.  Header & navigation
+   5.  Home hero + search
+   6.  Dashboard tiles (the 4 action cards)
+   7.  Home columns — Top Articles, Recent Activity
+   8.  Cards, panels, tile-widgets
+   9.  Buttons, pills, status chips
+   10. Ticket list — table, filters, pagination
+   11. Kanban board
+   12. New Ticket / forms — field chrome, froala, stepper
+   13. KB article reading view
+   14. Announcements + footer
+   15. Responsive + print
+   ═══════════════════════════════════════════════════════════════════════ */
+
+
+/* ─────────────────────────────────────────────────────────
+   1 · Tokens
+   ───────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+    /* Typography */
+    --ik-font-display: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --ik-font-serif:   'Instrument Serif', Georgia, 'Times New Roman', serif;
+    --ik-font-mono:    'JetBrains Mono', ui-monospace, Consolas, Menlo, monospace;
+
+    /* ── LIGHT mode palette ── */
+    --portal-bg:              #FAFAF7;
+    --portal-bg-subtle:       #F2F1EB;
+    --portal-surface:         #FFFFFF;
+    --portal-surface-hover:   #F7F6F1;
+    --portal-surface-active:  #EEEDE5;
+
+    --portal-text:            #0E1424;
+    --portal-text-secondary:  #515970;
+    --portal-text-muted:      #7D85A0;
+    --portal-heading:         #0E1424;
+
+    /* Brand */
+    --portal-accent:          #2B5CE6;
+    --portal-accent-hover:    #1E49C9;
+    --portal-accent-subtle:   rgba(43, 92, 230, 0.08);
+    --portal-accent-soft:     #EBF0FD;
+    --portal-accent-2:        #C026D3;   /* gradient end */
+
+    /* Action (buttons, H1, stepper active) */
+    --portal-action:          #2B5CE6;
+    --portal-action-hover:    #1E49C9;
+    --portal-action-shadow:   rgba(43, 92, 230, 0.22);
+
+    /* Borders & shadows */
+    --portal-border:          #E5E3DB;
+    --portal-border-soft:     #EEEDE5;
+    --portal-border-light:    #EEEDE5;
+    --portal-shadow-sm:       0 1px 2px rgba(14, 20, 36, 0.04);
+    --portal-shadow:          0 4px 12px -2px rgba(14, 20, 36, 0.06), 0 2px 4px -2px rgba(14, 20, 36, 0.04);
+    --portal-shadow-hover:    0 16px 40px -12px rgba(14, 20, 36, 0.14), 0 4px 12px -2px rgba(14, 20, 36, 0.06);
+
+    /* Table */
+    --portal-table-header-bg: rgba(14, 20, 36, 0.035);
+    --portal-table-border:    rgba(14, 20, 36, 0.08);
+    --portal-table-row-hover: rgba(14, 20, 36, 0.025);
+
+    /* Radii — ALL edited down from HaloPSA's 25px pill language.
+       `--portal-radius` = the "big" one (cards, hero search); mid
+       matches our ticket/KB card language; sm is inputs/chips. */
+    --portal-radius:          16px;
+    --portal-radius-md:       12px;
+    --portal-radius-sm:       10px;
+    --portal-radius-xs:       8px;
+
+    /* Code */
+    --portal-code-bg:         #F2F1EB;
+    --portal-code-text:       #B91C1C;
+    --portal-pre-bg:          #0E1424;
+    --portal-pre-text:        #EAEBEF;
+    --portal-pre-border:      #1F2740;
+
+    /* Blockquote */
+    --portal-quote-border:    var(--portal-accent);
+    --portal-quote-bg:        #F7F6F1;
+
+    /* Semantic */
+    --portal-ok:              #15803D;
+    --portal-warn:            #C2410C;
+    --portal-err:             #B91C1C;
+
+    /* Gradient system */
+    --ik-gradient-brand: linear-gradient(135deg, #2B5CE6 0%, #8B3AD9 55%, #C026D3 100%);
+    --ik-gradient-line:  linear-gradient(90deg, transparent, #2B5CE6 30%, #C026D3 70%, transparent);
+
+    /* Motion */
+    --ik-ease:           cubic-bezier(0.22, 1, 0.36, 1);
+    --ik-dur:            180ms;
+
+    /* Density — overridden inline by the Tweaks panel */
+    --ik-density-pad:    1;   /* 1 = default, 0.75 = compact, 1.25 = roomy */
+
+    color-scheme: light;
+}
+
+/* ── DARK mode token flip ── */
+.theme-dark {
+    --portal-bg:              #0A0F1C;
+    --portal-bg-subtle:       #0D1423;
+    --portal-surface:         #121929;
+    --portal-surface-hover:   #161E31;
+    --portal-surface-active:  #1A2238;
+
+    --portal-text:            #EAEBEF;
+    --portal-text-secondary:  #97A0B8;
+    --portal-text-muted:      #6A7493;
+    --portal-heading:         #EAEBEF;
+
+    --portal-accent:          #4A74F0;
+    --portal-accent-hover:    #6B8DF3;
+    --portal-accent-subtle:   rgba(74, 116, 240, 0.14);
+    --portal-accent-soft:     rgba(74, 116, 240, 0.10);
+    --portal-accent-2:        #D946EF;
+
+    --portal-action:          #4A74F0;
+    --portal-action-hover:    #6B8DF3;
+    --portal-action-shadow:   rgba(74, 116, 240, 0.30);
+
+    --portal-border:          #1F2740;
+    --portal-border-soft:     #171F34;
+    --portal-border-light:    #171F34;
+    --portal-shadow-sm:       0 1px 2px rgba(0, 0, 0, 0.35);
+    --portal-shadow:          0 6px 20px -4px rgba(0, 0, 0, 0.45), 0 2px 6px -2px rgba(0, 0, 0, 0.25);
+    --portal-shadow-hover:    0 24px 60px -20px rgba(0, 0, 0, 0.55), 0 8px 20px -6px rgba(0, 0, 0, 0.3);
+
+    --portal-table-header-bg: rgba(255, 255, 255, 0.04);
+    --portal-table-border:    rgba(255, 255, 255, 0.08);
+    --portal-table-row-hover: rgba(255, 255, 255, 0.03);
+
+    --portal-code-bg:         #1A2238;
+    --portal-code-text:       #F08CA1;
+    --portal-pre-bg:          #0D1423;
+    --portal-pre-text:        #EAEBEF;
+    --portal-pre-border:      #1F2740;
+
+    --portal-quote-bg:        #161E31;
+
+    --portal-ok:              #34D399;
+    --portal-warn:            #FB923C;
+    --portal-err:             #F87171;
+
+    --ik-gradient-brand: linear-gradient(135deg, #4A74F0 0%, #A856EF 55%, #D946EF 100%);
+    --ik-gradient-line:  linear-gradient(90deg, transparent, #4A74F0 30%, #D946EF 70%, transparent);
+
+    color-scheme: dark;
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   2 · Global typography + base
+   ───────────────────────────────────────────────────────── */
+
+html, body {
+    font-family: var(--ik-font-display) !important;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--portal-text);
+    background: var(--portal-bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+::selection { background: var(--portal-accent); color: #fff; }
+
+/* Soft radial glow behind the page — same trick as the website hero.
+   Pinned to the portal wrapper so it doesn't leak into fixed UI. */
+html body .portal {
+    position: relative;
+}
+html body .portal::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(ellipse 1200px 600px at 50% -200px,
+                var(--portal-accent-subtle), transparent 70%);
+    opacity: 0.9;
+}
+html body .portal > * { position: relative; z-index: 1; }
+
+/* Heading ladder — Montserrat 300 for display-scale, 500 for
+   section labels. Italic comes from <em> / Instrument Serif. */
+html body .portal h1,
+html body .portal h2,
+html body .portal h3,
+html body .portal h4,
+html body .portal h5,
+html body .portal h6 {
+    color: var(--portal-heading);
+    font-family: var(--ik-font-display) !important;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+}
+
+html body .portal h1 { font-size: 1.625rem; font-weight: 400; margin-bottom: 14px; }
+html body .portal h2 { font-size: 1.375rem; font-weight: 500; margin-bottom: 12px; }
+html body .portal h3 { font-size: 1.125rem; font-weight: 500; margin-bottom: 10px; }
+html body .portal h4 { font-size: 1rem;     font-weight: 500; margin-bottom: 10px; }
+html body .portal h5 { font-size: 0.9375rem;font-weight: 500; margin-bottom: 8px;  }
+html body .portal h6 { font-size: 0.875rem; font-weight: 500; margin-bottom: 8px;  }
+
+html body .portal h1 em,
+html body .portal h2 em,
+html body .portal h3 em,
+html body .portal .page-title h1 em {
+    font-family: var(--ik-font-serif) !important;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.005em;
+    color: var(--portal-text);
+}
+
+html body .portal p,
+html body .portal span,
+html body .portal li {
+    font-size: 15px;
+    font-weight: 400;
+}
+
+/* Font sweep — every HaloPSA subtree picks up Montserrat, except
+   icons and code blocks (left monospace via their explicit stacks). */
+input, textarea, select, button, optgroup { font-family: inherit; }
+html body .portal *:not(i):not(svg):not(.fa):not(code):not(pre):not(pre *):not(.ik-mono):not(.ik-serif) {
+    font-family: var(--ik-font-display), 'Poppins', sans-serif !important;
+}
+
+/* Utility classes the Custom JS can stamp onto HaloPSA elements if
+   desired — but the defaults below don't require JS. */
+.ik-mono  { font-family: var(--ik-font-mono)  !important; letter-spacing: 0.06em; }
+.ik-serif { font-family: var(--ik-font-serif) !important; font-style: italic; font-weight: 400; }
+
+
+/* ─────────────────────────────────────────────────────────
+   3 · Editorial eyebrow + italic-serif system
+   ─────────────────────────────────────────────────────────
+   HaloPSA already renders `.page-subtitle` above every page title.
+   We repurpose it as the mono "S/NN —" eyebrow. */
+
+html body .portal .page-subtitle,
+html body .portal .page-title .page-subtitle {
+    font-family: var(--ik-font-mono) !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.14em !important;
+    text-transform: uppercase !important;
+    color: var(--portal-text-muted) !important;
+    opacity: 1 !important;
+    margin-bottom: 18px !important;
+    display: inline-flex !important;
+    align-items: center;
+    gap: 12px;
+}
+html body .portal .page-subtitle::before {
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.5;
+}
+
+/* H1 page title — use Montserrat 400 display + coloured headings.
+   Keep HaloPSA's `.profile-full-name` variant covered too. */
+html body .portal .page-title h1,
+html body .portal h1.profile-full-name,
+html body .portal h1.profile-full-name.oneline,
+html body .portal .details-form .details-group-header.title {
+    font-family: var(--ik-font-display) !important;
+    font-size: 1.75rem !important;
+    font-weight: 300 !important;
+    letter-spacing: -0.02em !important;
+    color: var(--portal-heading) !important;
+    line-height: 1.1 !important;
+    margin-top: 4px;
+}
+
+/* Italic-serif underlay for emphasised word(s) in page titles.
+   HaloPSA won't render <em>, but the KB/article content uses it,
+   and any headings the Custom JS enriches will inherit this. */
+html body .portal .page-title h1 em {
+    font-family: var(--ik-font-serif) !important;
+    font-style: italic;
+    font-weight: 400;
+    position: relative;
+    padding: 0 2px;
+}
+html body .portal .page-title h1 em::after {
+    content: '';
+    position: absolute;
+    left: -2%;
+    right: -2%;
+    bottom: 6%;
+    height: 2px;
+    background: var(--ik-gradient-line);
+    opacity: 0.85;
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   4 · Header & navigation
+   ─────────────────────────────────────────────────────────
+   HaloPSA paints the top bar inline as rgb(47,53,94) — the
+   Interconnekt navy #2F355E. We keep that, but layer a
+   gradient hairline under it so the chrome reads "branded",
+   not "default MSP nav". */
+
+html body .portal header,
+html body .portal .header,
+html body .portal .portal-header {
+    background-color: #0E1424 !important;
+    color: #fff;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.3);
+}
+html body .portal header::after,
+html body .portal .portal-header::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 1px;
+    background: var(--ik-gradient-line);
+    opacity: 0.5;
+}
+
+/* Nav buttons — Montserrat 13px 500, relaxed tracking. */
+html body .portal .nhd-nav,
+html body .portal .nhd-nav button.nhd-nav-btn,
+html body .portal .nhd-nav .buttoncontainer {
+    font-family: var(--ik-font-display) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.02em;
+}
+
+html body .portal button.nhd-nav-btn,
+html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"] {
+    background-color: transparent !important;
+    color: rgba(255,255,255,0.82) !important;
+    transition: background-image var(--ik-dur) var(--ik-ease),
+                color var(--ik-dur) var(--ik-ease) !important;
+}
+
+html body .portal button.nhd-nav-btn:not(.active):hover,
+html body .portal button.nhd-nav-btn:not(.active):focus-visible,
+html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"]:not(.active):hover,
+html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"]:not(.active):focus-visible,
+html body .portal .nhd-nav-rightAlign button:not(.active):not(.highlight):hover {
+    background-image: linear-gradient(rgba(255,255,255,0.08), rgba(255,255,255,0.08)) !important;
+    background-size: 100% 100% !important;
+    background-repeat: no-repeat !important;
+    background-position: 0 0 !important;
+    background-color: transparent !important;
+    color: #fff !important;
+    box-shadow: none !important;
+}
+
+/* Navbar search — flatten, restore pill on focus, Montserrat. */
+html body .portal .buttoncontainer.nav-search .Select__control {
+    background-color: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    border-radius: 999px !important;
+    min-height: 36px !important;
+    height: 36px !important;
+}
+html body .portal .buttoncontainer.nav-search .Select__control--is-focused {
+    background-color: rgba(255,255,255,0.06) !important;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.14) !important;
+}
+html body .portal .buttoncontainer.nav-search .Select__placeholder,
+html body .portal .buttoncontainer.nav-search .Select__single-value,
+html body .portal .buttoncontainer.nav-search .Select__input-container {
+    color: rgba(255,255,255,0.72) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.04em !important;
+}
+
+/* Status strip under the nav (add via Custom HTML if available).
+   Hidden by default; portals that embed it land the styling. */
+html body .portal .ik-status-strip {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 10px 24px;
+    background: var(--portal-surface);
+    border-bottom: 1px solid var(--portal-border-soft);
+    font-family: var(--ik-font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--portal-text-muted);
+}
+html body .portal .ik-status-strip .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--portal-ok);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--portal-ok) 20%, transparent);
+    animation: ik-pulse 2.4s ease-in-out infinite;
+}
+@keyframes ik-pulse {
+    0%,100% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--portal-ok) 20%, transparent); }
+    50%     { box-shadow: 0 0 0 6px color-mix(in srgb, var(--portal-ok) 8%, transparent); }
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   5 · Home hero + search
+   ─────────────────────────────────────────────────────────
+   HaloPSA's `.searchscreen` renders the hero: a stretched bg
+   image plus a centred pill input. We flatten the bg, tighten
+   the radius, and overlay a subtle gradient-line accent. */
+
+html body .portal .portal-background {
+    background-position: center center !important;
+    background-color: var(--portal-bg) !important;
+    position: relative;
+}
+
+/* Hero title ("How can we help?") */
+html body .portal .search-title,
+html body .portal .searchscreen .search-title {
+    font-family: var(--ik-font-display) !important;
+    font-size: clamp(2rem, 3.5vw, 3rem) !important;
+    font-weight: 300 !important;
+    letter-spacing: -0.02em !important;
+    color: var(--portal-heading) !important;
+    margin: 0 0 28px !important;
+    line-height: 1.05;
+}
+
+/* Search box — not a pill anymore; editorial rounded rect. */
+html body .portal .searchscreen .searchbox,
+html body .portal .theme-dark .searchscreen .searchbox,
+html body .portal .theme-dark .searchscreen:not(.searchscreen-full) .searchbox {
+    background: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: 14px !important;
+    box-shadow: var(--portal-shadow) !important;
+    height: 60px;
+    overflow: hidden;
+    transition: border-color var(--ik-dur) var(--ik-ease),
+                box-shadow var(--ik-dur) var(--ik-ease);
+}
+html body .portal .searchscreen .searchbox:focus-within {
+    border-color: var(--portal-accent) !important;
+    box-shadow: 0 0 0 4px var(--portal-accent-subtle), var(--portal-shadow-hover) !important;
+}
+html body .portal .searchscreen .searchbox input[type=text] {
+    font-family: var(--ik-font-display) !important;
+    font-size: 16px !important;
+    border-radius: 14px !important;
+    padding: 14px 22px;
+    border: none !important;
+    background: transparent !important;
+    color: var(--portal-text);
+}
+html body .portal .searchscreen .searchbox input[type=text]::placeholder {
+    color: var(--portal-text-muted);
+    font-weight: 400;
+}
+html body .portal .searchscreen .searchbox svg.searchbutton {
+    color: var(--portal-accent);
+}
+html body .portal .searchholder:focus-within,
+html body .portal .searchholder input:focus,
+html body .portal .searchholder input:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   6 · Dashboard tiles (Log Ticket / My Tickets / Assets / KB)
+   ───────────────────────────────────────────────────────── */
+
+html body .portal .card.dashbtn,
+html body .portal .dashbtn {
+    background: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius) !important;
+    padding: 28px 24px 24px !important;
+    box-shadow: var(--portal-shadow-sm) !important;
+    transition: transform 220ms var(--ik-ease),
+                border-color 220ms var(--ik-ease),
+                box-shadow 220ms var(--ik-ease) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Gradient hairline across the top — same signature as ops card */
+html body .portal .card.dashbtn::before,
+html body .portal .dashbtn::before {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 1px;
+    background: var(--ik-gradient-line);
+    opacity: 0;
+    transition: opacity 220ms var(--ik-ease);
+}
+
+html body .portal .card.dashbtn:hover,
+html body .portal .dashbtn:hover {
+    transform: translateY(-2px);
+    border-color: var(--portal-accent) !important;
+    box-shadow: var(--portal-shadow-hover) !important;
+}
+html body .portal .card.dashbtn:hover::before,
+html body .portal .dashbtn:hover::before { opacity: 0.85; }
+
+html body .portal .dashbtn .card-img {
+    width: 40px !important;
+    height: 40px !important;
+    margin-bottom: 20px !important;
+    padding: 8px;
+    border-radius: var(--portal-radius-sm);
+    background: var(--portal-accent-soft);
+    color: var(--portal-accent) !important;
+}
+html body .portal .dashbtn .card-img svg,
+html body .portal .dashbtn .card-img img {
+    color: var(--portal-accent) !important;
+    filter: none;
+}
+
+html body .portal .dashbtn .card-title {
+    font-family: var(--ik-font-display) !important;
+    font-size: 1.0625rem !important;
+    font-weight: 500 !important;
+    letter-spacing: -0.01em !important;
+    color: var(--portal-heading) !important;
+    margin-bottom: 8px !important;
+    line-height: 1.25;
+}
+html body .portal .dashbtn .card-text {
+    font-size: 0.875rem !important;
+    line-height: 1.5 !important;
+    color: var(--portal-text-secondary) !important;
+    font-weight: 400;
+}
+
+/* The "see more →" cap row that HaloPSA paints at the bottom.
+   Render as mono eyebrow so it matches the editorial voice. */
+html body .portal .dashbtn .card-link,
+html body .portal .dashbtn .card-footer {
+    margin-top: 14px !important;
+    font-family: var(--ik-font-mono) !important;
+    font-size: 10.5px !important;
+    letter-spacing: 0.14em !important;
+    text-transform: uppercase;
+    color: var(--portal-accent) !important;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   7 · Home columns — Top Articles, Recent Activity
+   ─────────────────────────────────────────────────────────
+   Each is a stack of `.tile-widget` rows. Reframe as thin
+   hairline list cards with mono meta + Montserrat titles. */
+
+html body .portal .tile-widget-bar,
+html body .portal .tile-widget {
+    background: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-md) !important;
+    box-shadow: none !important;
+    transition: border-color var(--ik-dur) var(--ik-ease),
+                transform var(--ik-dur) var(--ik-ease);
+}
+html body .portal .tile-widget:hover {
+    border-color: var(--portal-accent) !important;
+    transform: translateX(2px);
+}
+
+/* Section headings on the home page ("Recent Tickets", "Top Articles") */
+html body .portal .col-xl-6 > h3,
+html body .portal .col-xl-6 > h2 {
+    font-family: var(--ik-font-display) !important;
+    font-weight: 300 !important;
+    font-size: 1.5rem !important;
+    letter-spacing: -0.02em !important;
+    margin-bottom: 20px !important;
+    color: var(--portal-heading) !important;
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   8 · Cards, panels, generic containers
+   ───────────────────────────────────────────────────────── */
+
+html body .portal .card,
+html body .portal .details-group.card-panel,
+html body .portal .action-history-item {
+    background: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-md) !important;
+    box-shadow: none !important;
+}
+
+html body .portal .action-history-item {
+    border-radius: var(--portal-radius-md) !important;
+    transition: border-color var(--ik-dur) var(--ik-ease);
+}
+html body .portal .action-history-item:hover {
+    border-color: var(--portal-border) !important;
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   9 · Buttons, pills, status chips
+   ───────────────────────────────────────────────────────── */
+
+/* Primary action — solid accent, tight radius, no drop shadow puddle */
+html body .portal .nhd-button.curve,
+html body .portal button.nhd-button.curve,
+html body .portal .ui.popup .ui.button,
+html body .portal .solidbutton:not(.menubtn):not(.fabtn),
+html body .portal button.-btn:hover:not([disabled]) {
+    background-color: var(--portal-action) !important;
+    color: #fff !important;
+    border-radius: var(--portal-radius-sm) !important;
+    border: 1px solid transparent !important;
+    box-shadow: none !important;
+    font-family: var(--ik-font-display) !important;
+    font-weight: 500 !important;
+    letter-spacing: -0.005em !important;
+    transition: background-color var(--ik-dur) var(--ik-ease),
+                transform var(--ik-dur) var(--ik-ease),
+                box-shadow var(--ik-dur) var(--ik-ease) !important;
+    padding: 10px 18px !important;
+    position: relative;
+    isolation: isolate;
+}
+html body .portal .nhd-button.curve:hover,
+html body .portal button.nhd-button.curve:hover,
+html body .portal .ui.popup .ui.button:hover {
+    background-color: var(--portal-action-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px -8px var(--portal-action-shadow) !important;
+}
+
+/* Primary: underlay the brand gradient so hover feels alive */
+html body .portal .nhd-button.curve::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--ik-gradient-brand);
+    opacity: 0;
+    transition: opacity var(--ik-dur) var(--ik-ease);
+    z-index: -1;
+}
+html body .portal .nhd-button.curve:hover::before { opacity: 1; }
+
+/* Status pills — force full-pill, mono-ish tight caps. */
+html body .portal .status-avatar.fortable,
+html body .portal .status-avatar.small,
+html body .portal .status-avatar.bitsmall {
+    border-radius: 999px !important;
+    padding: 3px 12px !important;
+    font-family: var(--ik-font-display) !important;
+    font-weight: 600 !important;
+    font-size: 10.5px !important;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-left: 0 !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    width: auto !important;
+    line-height: 1.5;
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   10 · Ticket list — table, filters, pagination
+   ───────────────────────────────────────────────────────── */
+
+html body .portal .rt-td,
+html body .portal .rt-th {
+    font-family: var(--ik-font-display) !important;
+    font-size: 13px !important;
+    color: var(--portal-text);
+}
+html body .portal .rt-th {
+    font-family: var(--ik-font-mono) !important;
+    font-size: 10.5px !important;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--portal-text-muted) !important;
+    font-weight: 500 !important;
+}
+
+html body .portal .rt-td {
+    display: flex !important;
+    align-items: center;
+    padding: 12px 14px !important;
+}
+html body .portal .rt-tr {
+    border-bottom: 1px solid var(--portal-border-soft) !important;
+}
+html body .portal .rt-tbody .rt-tr-group:hover {
+    background: var(--portal-table-row-hover);
+}
+
+/* Counter + prev/next */
+html body .portal .page-counts,
+html body .portal .page-counts h98 {
+    font-family: var(--ik-font-mono) !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.1em !important;
+    color: var(--portal-text-muted) !important;
+    text-transform: uppercase;
+}
+html body .portal .buttons-container .solidbutton:not(.fabtn),
+html body .portal .buttons-container .solidbutton.menubtn:not(.fabtn) {
+    background-color: var(--portal-surface) !important;
+    color: var(--portal-text) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-sm) !important;
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    margin: 0 3px !important;
+    box-shadow: none !important;
+    transition: all var(--ik-dur) var(--ik-ease);
+}
+html body .portal .buttons-container .solidbutton:not(.fabtn):hover {
+    background-color: var(--portal-surface-hover) !important;
+    border-color: var(--portal-accent) !important;
+    color: var(--portal-accent) !important;
+}
+html body .portal .buttons-container .ui.button.dropdown {
+    background-color: transparent !important;
+    padding: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Search wrapper on list pages */
+html body .portal .searchbox {
+    border-radius: var(--portal-radius-sm) !important;
+    background-color: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+    overflow: hidden;
+    transition: border-color var(--ik-dur) var(--ik-ease);
+}
+html body .portal .searchbox:focus-within {
+    border-color: var(--portal-accent) !important;
+    box-shadow: 0 0 0 3px var(--portal-accent-subtle) !important;
+}
+
+html body .portal .searchholder input,
+html body .portal .searchholder input[name="searchbox"],
+html body .portal .Select__control,
+html body .portal .Select__single-value,
+html body .portal .Select__placeholder,
+html body .portal .Select__input,
+html body .portal .Select__input input,
+html body .portal .Select__menu,
+html body .portal .Select__option {
+    font-family: var(--ik-font-display) !important;
+    font-size: 13px !important;
+}
+
+html body .portal .Select__control {
+    border-radius: var(--portal-radius-sm) !important;
+    border-color: var(--portal-border) !important;
+    background: var(--portal-surface) !important;
+    min-height: 40px !important;
+    box-shadow: none !important;
+}
+html body .portal .Select__control--is-focused {
+    border-color: var(--portal-accent) !important;
+    box-shadow: 0 0 0 3px var(--portal-accent-subtle) !important;
+}
+html body .portal .Select__menu {
+    border-radius: var(--portal-radius-sm) !important;
+    border: 1px solid var(--portal-border) !important;
+    box-shadow: var(--portal-shadow-hover) !important;
+    overflow: hidden;
+}
+
+/* Pagination */
+html body .portal .-pagination {
+    padding: 14px 12px !important;
+    align-items: center !important;
+    gap: 12px;
+    border-top: 1px solid var(--portal-border) !important;
+    box-shadow: none !important;
+}
+html body .portal .-pagination .-btn,
+html body .portal button.-btn {
+    background-color: var(--portal-surface) !important;
+    color: var(--portal-text) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-sm) !important;
+    height: 36px !important;
+    padding: 0 20px !important;
+    font-family: var(--ik-font-display) !important;
+    font-weight: 500 !important;
+    font-size: 13px !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all var(--ik-dur) var(--ik-ease);
+}
+html body .portal button.-btn:hover:not([disabled]) {
+    background-color: var(--portal-action) !important;
+    color: #fff !important;
+    border-color: var(--portal-action) !important;
+}
+html body .portal button.-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+html body .portal .-pagination input {
+    height: 32px !important;
+    border-radius: var(--portal-radius-xs) !important;
+    border: 1px solid var(--portal-border) !important;
+    background: var(--portal-surface) !important;
+    text-align: center;
+    padding: 0 8px;
+    width: 50px;
+    font-family: var(--ik-font-mono) !important;
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   11 · Kanban board (react-kanban)
+   ───────────────────────────────────────────────────────── */
+
+html body .portal .react-kanban-board,
+html body .portal .smooth-dnd-container {
+    background: transparent !important;
+}
+
+html body .portal .react-kanban-column {
+    background: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-md) !important;
+    padding: 18px 14px !important;
+    box-shadow: none !important;
+    min-width: 280px;
+}
+
+html body .portal .react-kanban-column > div:first-child,
+html body .portal .react-kanban-column-header {
+    font-family: var(--ik-font-mono) !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.14em !important;
+    text-transform: uppercase;
+    color: var(--portal-text-muted) !important;
+    margin-bottom: 14px !important;
+    padding: 0 4px !important;
+    border: none !important;
+    background: transparent !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+html body .portal .react-kanban-column > div:first-child::after,
+html body .portal .react-kanban-column-header::after {
+    content: '';
+    flex: 1;
+    margin-left: 12px;
+    height: 1px;
+    background: var(--portal-border-soft);
+}
+
+html body .portal .react-kanban-card {
+    background: var(--portal-bg) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-sm) !important;
+    padding: 14px !important;
+    margin-bottom: 10px !important;
+    box-shadow: var(--portal-shadow-sm) !important;
+    transition: transform var(--ik-dur) var(--ik-ease),
+                border-color var(--ik-dur) var(--ik-ease),
+                box-shadow var(--ik-dur) var(--ik-ease);
+    font-family: var(--ik-font-display) !important;
+}
+html body .portal .react-kanban-card:hover {
+    transform: translateY(-1px);
+    border-color: var(--portal-accent) !important;
+    box-shadow: var(--portal-shadow) !important;
+}
+html body .portal .react-kanban-card__title {
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    color: var(--portal-heading) !important;
+    border: none !important;
+    padding: 0 0 6px !important;
+    letter-spacing: -0.005em;
+}
+html body .portal .react-kanban-card__description {
+    font-size: 12.5px !important;
+    color: var(--portal-text-secondary) !important;
+    line-height: 1.5;
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   12 · New Ticket / ticket edit form
+   ───────────────────────────────────────────────────────── */
+
+html body .portal .page-title:has(.mandatory-hint) {
+    max-width: 1040px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding: 0 36px;
+}
+
+html body .portal:has(.mandatory-hint) .details-form.readeditform {
+    max-width: 1040px !important;
+    margin: 24px auto 40px !important;
+    padding: 36px 40px !important;
+    background: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius) !important;
+    box-shadow: var(--portal-shadow) !important;
+    position: relative;
+    overflow: hidden;
+}
+html body .portal:has(.mandatory-hint) .details-form.readeditform::before {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 1px;
+    background: var(--ik-gradient-line);
+    opacity: 0.6;
+}
+
+html body .portal:has(.mandatory-hint) .details-form .details-group.card-panel {
+    background: transparent !important;
+    border: 0 !important;
+    padding: 0 !important;
+    margin: 0 0 8px !important;
+    box-shadow: none !important;
+}
+
+html body .portal .details-form label {
+    font-family: var(--ik-font-mono) !important;
+    font-size: 10.5px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    color: var(--portal-text-muted) !important;
+    margin-bottom: 8px !important;
+    display: inline-block;
+}
+
+html body .portal .details-form input[type="text"]:not(.Select__input),
+html body .portal .details-form input:not([type]):not(.Select__input),
+html body .portal .details-form textarea {
+    height: 40px !important;
+    border-radius: var(--portal-radius-sm) !important;
+    border: 1px solid var(--portal-border) !important;
+    background-color: var(--portal-bg) !important;
+    color: var(--portal-text) !important;
+    padding: 0 14px !important;
+    font-family: var(--ik-font-display) !important;
+    font-size: 14px !important;
+    transition: border-color var(--ik-dur) var(--ik-ease),
+                box-shadow var(--ik-dur) var(--ik-ease),
+                background var(--ik-dur) var(--ik-ease);
+}
+html body .portal .details-form textarea {
+    height: auto !important;
+    min-height: 120px !important;
+    padding: 14px 16px !important;
+    line-height: 1.55;
+}
+
+html body .portal .details-form input[type="text"]:focus,
+html body .portal .details-form input:not([type]):focus,
+html body .portal .details-form textarea:focus {
+    border-color: var(--portal-accent) !important;
+    background: var(--portal-surface) !important;
+    box-shadow: 0 0 0 3px var(--portal-accent-subtle) !important;
+    outline: none !important;
+}
+
+html body .portal .details-form .Select__control {
+    min-height: 40px !important;
+    border-radius: var(--portal-radius-sm) !important;
+    border: 1px solid var(--portal-border) !important;
+    background-color: var(--portal-bg) !important;
+}
+html body .portal .details-form .Select__control--is-focused {
+    border-color: var(--portal-accent) !important;
+    background: var(--portal-surface) !important;
+    box-shadow: 0 0 0 3px var(--portal-accent-subtle) !important;
+}
+
+html body .portal .details-form .mb-2,
+html body .portal .details-form .mb-3 { margin-bottom: 20px !important; }
+
+/* Froala editor */
+html body .portal .fr-box {
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-sm) !important;
+    overflow: hidden !important;
+}
+html body .portal .fr-box .fr-toolbar {
+    background: var(--portal-surface-hover) !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--portal-border) !important;
+    border-radius: 0 !important;
+}
+html body .portal .fr-box .fr-wrapper {
+    background: var(--portal-bg) !important;
+    border: 0 !important;
+}
+html body .portal .fr-box .fr-second-toolbar {
+    background: var(--portal-surface-hover) !important;
+    border: 0 !important;
+    border-top: 1px solid var(--portal-border) !important;
+    color: var(--portal-text-muted) !important;
+}
+html body .portal .fr-box .fr-element,
+html body .portal .fr-box .fr-view {
+    color: var(--portal-text) !important;
+    background: transparent !important;
+    font-family: var(--ik-font-display) !important;
+    line-height: 1.6;
+}
+html body .portal .fr-placeholder { color: var(--portal-text-muted) !important; }
+
+html body .portal .mandatory-hint {
+    font-family: var(--ik-font-mono) !important;
+    font-size: 11px !important;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--portal-text-muted) !important;
+    font-style: normal !important;
+    opacity: 0.9;
+}
+html body .portal .mandatory-hint::before {
+    content: '* ';
+    color: var(--portal-accent);
+}
+
+html body .portal .attachment-container.edit {
+    border: 1.5px dashed var(--portal-border) !important;
+    border-radius: var(--portal-radius-sm) !important;
+    background: var(--portal-surface-hover) !important;
+    transition: border-color var(--ik-dur) var(--ik-ease),
+                background var(--ik-dur) var(--ik-ease);
+}
+html body .portal .attachment-container.edit:hover {
+    border-color: var(--portal-accent) !important;
+    background: var(--portal-accent-soft) !important;
+}
+
+/* Stepper */
+html body .portal .rc-steps-item-tail::after {
+    background: var(--portal-border) !important;
+    height: 1px !important;
+}
+html body .portal .rc-steps-label-vertical .rc-steps-item-icon {
+    margin: 0 41px !important;
+}
+html body .portal .rc-steps-item-process .rc-steps-item-icon,
+html body .portal .rc-steps-item-finish .rc-steps-item-icon {
+    background: var(--portal-action) !important;
+    border-color: var(--portal-action) !important;
+}
+html body .portal .rc-steps-item-process .rc-steps-item-title {
+    color: var(--portal-action) !important;
+}
+html body .portal .rc-steps-item-title {
+    font-family: var(--ik-font-mono) !important;
+    font-size: 11px !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+}
+
+/* Switches segmented control */
+html body .portal .switches {
+    display: inline-flex !important;
+    background: var(--portal-bg) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-sm) !important;
+    padding: 4px !important;
+    gap: 2px;
+    overflow: hidden;
+}
+html body .portal .switches > button {
+    border: 0 !important;
+    border-radius: calc(var(--portal-radius-sm) - 4px) !important;
+    padding: 6px 14px !important;
+    font-family: var(--ik-font-display) !important;
+    font-weight: 500 !important;
+    font-size: 13px !important;
+    background: transparent !important;
+    color: var(--portal-text-muted) !important;
+    transition: background-color var(--ik-dur) var(--ik-ease),
+                color var(--ik-dur) var(--ik-ease);
+}
+html body .portal .switches > button[style*="rgb(47, 53, 94)"] {
+    background: var(--portal-action) !important;
+    color: #fff !important;
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   13 · KB article reading view
+   ───────────────────────────────────────────────────────── */
+
+html body .portal .kbdetails {
+    font-family: var(--ik-font-display) !important;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 20px 0 60px;
+    line-height: 1.7;
+    color: var(--portal-text);
+    font-size: 16px;
+}
+
+html body .portal .kbdetails h1 {
+    font-family: var(--ik-font-display) !important;
+    font-size: 2.25rem !important;
+    font-weight: 300 !important;
+    letter-spacing: -0.02em !important;
+    line-height: 1.1;
+    margin: 10px 0 18px !important;
+    color: var(--portal-heading) !important;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--portal-border-soft);
+}
+html body .portal .kbdetails h1 em {
+    font-family: var(--ik-font-serif) !important;
+    font-style: italic;
+    font-weight: 400;
+}
+
+html body .portal .kbdetails h2 {
+    font-size: 1.375rem !important;
+    font-weight: 500 !important;
+    margin-top: 40px !important;
+    margin-bottom: 12px !important;
+    letter-spacing: -0.015em;
+}
+html body .portal .kbdetails h3 {
+    font-size: 1.125rem !important;
+    font-weight: 500 !important;
+    margin-top: 28px !important;
+    margin-bottom: 10px !important;
+}
+
+html body .portal .kbdetails p {
+    font-size: 16px !important;
+    line-height: 1.7 !important;
+    margin-bottom: 16px;
+    color: var(--portal-text);
+}
+
+/* Article meta strip — if present above the H1 */
+html body .portal .kbdetails .kbmeta,
+html body .portal span.kbtags {
+    font-family: var(--ik-font-mono) !important;
+    font-size: 11px !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase;
+    color: var(--portal-text-muted) !important;
+}
+
+/* Confluence panels — keep the left-accent, flatten radii & refresh tones */
+html body .portal .kbdetails .confluence-information-macro,
+html body .portal .kbdetails .panel {
+    border-radius: var(--portal-radius-sm) !important;
+    overflow: hidden !important;
+    border: 1px solid var(--portal-border-soft) !important;
+    border-left-width: 0 !important;
+    padding: 0 !important;
+    margin: 20px 0;
+}
+html body .portal .kbdetails .confluence-information-macro-information {
+    border-left: 3px solid #2B5CE6 !important;
+}
+html body .portal .kbdetails .confluence-information-macro-note {
+    border-left: 3px solid #8B3AD9 !important;
+}
+html body .portal .kbdetails .confluence-information-macro-warning,
+html body .portal .kbdetails .confluence-information-macro-error {
+    border-left: 3px solid var(--portal-err) !important;
+}
+html body .portal .kbdetails .confluence-information-macro-tip,
+html body .portal .kbdetails .confluence-information-macro-success {
+    border-left: 3px solid var(--portal-ok) !important;
+}
+html body .portal .kbdetails [class*="confluence-information-macro-"] > .confluence-information-macro-body {
+    color: var(--portal-text) !important;
+    padding: 16px 22px !important;
+    font-size: 15px !important;
+    line-height: 1.65 !important;
+}
+html body .portal .kbdetails .confluence-information-macro-information .confluence-information-macro-body { background: var(--portal-accent-soft) !important; }
+html body .portal .kbdetails .confluence-information-macro-note .confluence-information-macro-body        { background: #F7EEFD !important; }
+html body .portal .kbdetails .confluence-information-macro-warning .confluence-information-macro-body,
+html body .portal .kbdetails .confluence-information-macro-error .confluence-information-macro-body        { background: #FCEDEC !important; }
+html body .portal .kbdetails .confluence-information-macro-tip .confluence-information-macro-body,
+html body .portal .kbdetails .confluence-information-macro-success .confluence-information-macro-body     { background: #E3FEF2 !important; }
+
+/* Dark overrides for panel bodies */
+.theme-dark.portal .kbdetails .confluence-information-macro-information .confluence-information-macro-body,
+html body .portal.theme-dark .kbdetails .confluence-information-macro-information .confluence-information-macro-body,
+html body .theme-dark .portal .kbdetails .confluence-information-macro-information .confluence-information-macro-body { background: rgba(74,116,240,0.12) !important; }
+html body .theme-dark .portal .kbdetails .confluence-information-macro-note .confluence-information-macro-body        { background: rgba(168,86,239,0.12) !important; }
+html body .theme-dark .portal .kbdetails .confluence-information-macro-warning .confluence-information-macro-body,
+html body .theme-dark .portal .kbdetails .confluence-information-macro-error .confluence-information-macro-body        { background: rgba(248,113,113,0.10) !important; }
+html body .theme-dark .portal .kbdetails .confluence-information-macro-tip .confluence-information-macro-body,
+html body .theme-dark .portal .kbdetails .confluence-information-macro-success .confluence-information-macro-body     { background: rgba(52,211,153,0.10) !important; }
+
+/* Code */
+html body .portal .kbdetails code {
+    font-family: var(--ik-font-mono) !important;
+    font-size: 0.875em;
+    background: var(--portal-code-bg);
+    color: var(--portal-code-text);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+html body .portal .kbdetails pre {
+    font-family: var(--ik-font-mono) !important;
+    background: var(--portal-pre-bg);
+    color: var(--portal-pre-text);
+    border: 1px solid var(--portal-pre-border);
+    border-radius: var(--portal-radius-sm);
+    padding: 18px 20px;
+    margin: 18px 0;
+    overflow-x: auto;
+    line-height: 1.6;
+    font-size: 13.5px;
+}
+html body .portal .kbdetails pre code {
+    background: transparent; color: inherit; padding: 0; border-radius: 0;
+}
+
+/* Blockquote — full Interconnekt serif voice */
+html body .portal .kbdetails blockquote {
+    border-left: 3px solid var(--portal-accent);
+    background: transparent;
+    margin: 22px 0;
+    padding: 4px 0 4px 22px;
+    font-family: var(--ik-font-serif) !important;
+    font-style: italic;
+    font-size: 20px;
+    line-height: 1.45;
+    color: var(--portal-text);
+    border-radius: 0;
+}
+
+html body .portal .kbdetails hr {
+    border: 0;
+    border-top: 1px solid var(--portal-border-soft);
+    margin: 40px 0;
+}
+
+/* Lists */
+html body .portal .kbdetails ul,
+html body .portal .kbdetails ol { padding-left: 22px; margin: 12px 0; }
+html body .portal .kbdetails li { margin-bottom: 8px; line-height: 1.7; }
+html body .portal .kbdetails ul li::marker { color: var(--portal-accent); }
+
+/* Images */
+html body .portal .kbdetails img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 24px auto;
+    border-radius: var(--portal-radius-sm);
+    border: 1px solid var(--portal-border);
+}
+
+/* Tables */
+html body .portal .kbdetails .confluenceTable {
+    border: 1px solid var(--portal-table-border) !important;
+    border-collapse: collapse !important;
+    border-radius: 0 !important;
+}
+html body .portal .kbdetails .confluenceTable th,
+html body .portal .kbdetails .confluenceTable td {
+    border: 1px solid var(--portal-table-border) !important;
+    padding: 12px 16px;
+    font-size: 14px;
+}
+html body .portal .kbdetails .confluenceTable th {
+    background: var(--portal-table-header-bg) !important;
+    font-family: var(--ik-font-mono) !important;
+    font-size: 11px !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase;
+    color: var(--portal-text-muted) !important;
+    font-weight: 500 !important;
+}
+html body .portal .kbdetails .confluenceTable tbody tr:hover td {
+    background: var(--portal-table-row-hover);
+}
+html body .portal .kbdetails .confluenceTable tr:nth-child(even) { background: transparent !important; }
+
+/* Status lozenges — keep colour semantics, tighten */
+html body .portal .kbdetails .status-macro.aui-lozenge {
+    display: inline-block !important;
+    padding: 4px 10px !important;
+    font-family: var(--ik-font-display) !important;
+    font-weight: 600 !important;
+    font-size: 10.5px !important;
+    line-height: 1.5 !important;
+    border-radius: 999px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.06em !important;
+}
+html body .portal .kbdetails .status-macro.aui-lozenge-complete { background: #DBEAFE !important; color: #1E3A8A !important; }
+html body .portal .kbdetails .status-macro.aui-lozenge-success  { background: #D1FAE5 !important; color: #064E3B !important; }
+html body .portal .kbdetails .status-macro.aui-lozenge-current  { background: #FEF3C7 !important; color: #78350F !important; }
+html body .portal .kbdetails .status-macro.aui-lozenge-error    { background: #FEE2E2 !important; color: #7F1D1D !important; }
+html body .portal .kbdetails .status-macro.aui-lozenge-progress { background: #EDE9FE !important; color: #4C1D95 !important; }
+
+html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-complete { background: rgba(74,116,240,0.15) !important; color: #9AB5F7 !important; }
+html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-success  { background: rgba(52,211,153,0.15) !important; color: #86EFAC !important; }
+html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-current  { background: rgba(251,146,60,0.15) !important; color: #FDBA74 !important; }
+html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-error    { background: rgba(248,113,113,0.15) !important; color: #FCA5A5 !important; }
+html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-progress { background: rgba(217,70,239,0.15) !important; color: #E9A0EF !important; }
+
+
+/* ─────────────────────────────────────────────────────────
+   14 · Announcements + footer
+   ───────────────────────────────────────────────────────── */
+
+html body .portal .web-announcement {
+    background: transparent;
+    padding: 0;
+    border-radius: var(--portal-radius-sm);
+    overflow: hidden;
+    border: 1px solid var(--portal-border);
+}
+html body .portal #text-scroll-container {
+    border-radius: 0;
+    background: var(--portal-surface-hover);
+    border: 0;
+    padding: 12px 16px;
+    font-family: var(--ik-font-display) !important;
+    font-weight: 500;
+    font-size: 13.5px;
+    color: var(--portal-text);
+}
+html body .portal .web-announcement-img-enhanced {
+    border-radius: 0;
+    background: var(--portal-accent);
+    border: 0;
+    padding: 12px;
+    color: #fff;
+}
+
+html body .portal footer {
+    background: var(--portal-bg) !important;
+    border-top: 1px solid var(--portal-border-soft);
+    padding: 20px 24px;
+    text-align: center;
+}
+html body .portal footer a {
+    color: var(--portal-text-muted) !important;
+    font-family: var(--ik-font-mono) !important;
+    font-size: 11px !important;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+html body .portal footer.page-footer a[href*="usehalo.com"] { display: none !important; }
+
+
+/* ─────────────────────────────────────────────────────────
+   15 · Scrollbars
+   ───────────────────────────────────────────────────────── */
+
+html body .portal *::-webkit-scrollbar { width: 8px; height: 8px; }
+html body .portal *::-webkit-scrollbar-thumb {
+    background: var(--portal-border);
+    border-radius: 999px;
+}
+html body .portal *::-webkit-scrollbar-track { background: transparent; }
+html body .portal * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--portal-border) transparent;
+}
+
+/* ─────────────────────────────────────────────────────────
+   16 · Print
+   ───────────────────────────────────────────────────────── */
+
+@media print {
+    html body .portal header,
+    html body .portal .portal-header,
+    html body .portal footer,
+    html body .portal .searchbox,
+    html body .portal .backbtn,
+    html body .portal .solidbutton,
+    html body .portal .nhd-button { display: none !important; }
+
+    html, body { font-size: 11pt; color: #000; background: #fff; }
+
+    html body .portal .kbdetails { max-width: 100% !important; padding: 0 !important; }
+    html body .portal .kbdetails h1 { border: 0 !important; }
+
+    html body .portal .kbdetails a[href]:after {
+        content: " (" attr(href) ")";
+        font-size: 0.85em;
+        color: #666;
+    }
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   17 · Semantic UI popup (share sheet) — carryover polish
+   ───────────────────────────────────────────────────────── */
+
+html body .portal .ui.popup,
+html body .portal .ui.popup.transition.visible {
+    background: var(--portal-surface) !important;
+    color: var(--portal-text) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-sm) !important;
+    box-shadow: var(--portal-shadow-hover) !important;
+}
+html body .portal .ui.popup::before {
+    background: var(--portal-surface) !important;
+    box-shadow: 1px 1px 0 0 var(--portal-border) !important;
+}

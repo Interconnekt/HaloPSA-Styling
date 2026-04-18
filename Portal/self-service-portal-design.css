@@ -421,66 +421,6 @@ html body .portal .nhd-nav {
     box-shadow: 0 1px 0 rgba(0,0,0,0.3) !important;
 }
 
-/* Header inner content width — match the Interconnekt website's
-   `mx-auto max-w-[1240px] px-6 md:px-10` pattern (see
-   src/components/site-nav.tsx). The navy bar (.nhd-nav) stays
-   edge-to-edge; the `.nhd-nav-wrapper` inside gets a 1240px cap
-   + horizontal padding so logo/nav/search sit within the same
-   content rail as the main page content below.
-
-   Width tokens are literal `1240px`/`24px`/`40px` rather than
-   portal vars because:
-     - The 1240 value is a website design constant, not a portal
-       spacing rhythm — sharing it via a portal token would imply
-       it's a portal-owned thing
-     - It needs to match the website exactly; one place to change. */
-html body .portal .nhd-nav-wrapper {
-    max-width: 1240px;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    padding-left: 24px;
-    padding-right: 24px;
-    box-sizing: border-box;
-}
-@media (min-width: 768px) {
-    html body .portal .nhd-nav-wrapper {
-        padding-left: 40px;
-        padding-right: 40px;
-    }
-}
-
-/* ── Main content width — match the website + header ──
-   Every page's main container (home tiles row, ticket list, new
-   ticket form, KB index, dashboard widgets) caps at 1240px centred
-   with matching horizontal padding, so the content rail aligns
-   exactly with the header's `.nhd-nav-wrapper` above.
-
-   HaloPSA uses Bootstrap's `.container` and `.container-large` on
-   different pages:
-     .container       — home, forms, KB index (narrow)
-     .container-large — ticket list, kanban (historically wider)
-   We cap both at 1240px so every page reads as one content width.
-
-   EXCLUDED: `.kbdetails` (KB article reading view). It has its own
-   1100px reading measure which is deliberately narrower for long-
-   form readability — the user flagged the KB as the exception to
-   the 1240px rule. */
-html body .portal .container,
-html body .portal .container-large {
-    max-width: 1240px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    padding-left: 24px;
-    padding-right: 24px;
-    box-sizing: border-box;
-}
-@media (min-width: 768px) {
-    html body .portal .container,
-    html body .portal .container-large {
-        padding-left: 40px;
-        padding-right: 40px;
-    }
-}
 
 /* Nav buttons — Montserrat 13px 500, relaxed tracking. */
 html body .portal .nhd-nav,
@@ -2316,21 +2256,22 @@ html body .portal .kbdetails .kbmeta {
     color: var(--portal-text-muted) !important;
 }
 
-/* KB tags (`span.kbtags`) — match the website's COMPLIANCE /
-   FEATURED-style pill: Jet Brains Mono at 11.5px with generous
-   padding, moderate tracking (not over-spaced), surface-active
-   bg so it lifts cleanly off both card and page surfaces. */
+/* KB tags (`span.kbtags`) — JetBrains Mono uppercase pill, slightly
+   more compact than the COMPLIANCE-style reference. Font family is
+   spelled out explicitly (not just via the var) so the legacy
+   self-service-portal.css and older deploys that don't resolve the
+   --ik-font-mono token still get JetBrains Mono. */
 html body .portal span.kbtags,
 html body .portal .kbtags {
     display: inline-block !important;
     background: var(--portal-surface-active) !important;
     color: var(--portal-text) !important;
-    font-family: var(--ik-font-mono) !important;
-    font-size: 11.5px !important;
+    font-family: var(--ik-font-mono), 'JetBrains Mono', ui-monospace, Consolas, Menlo, monospace !important;
+    font-size: 10px !important;
     font-weight: 500 !important;
-    letter-spacing: 0.08em !important;
+    letter-spacing: 0.1em !important;
     text-transform: uppercase !important;
-    padding: 5px 14px !important;
+    padding: 4px 12px !important;
     border: 1px solid transparent !important;
     border-radius: 999px !important;
     margin: 3px 6px 3px 0 !important;

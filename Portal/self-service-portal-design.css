@@ -1418,26 +1418,43 @@ html body .portal .status-avatar.fortile {
 }
 
 /* ─── Priority indicator — radiating dot in tonal pill ─────
-   HaloPSA renders each row's Priority cell as
-     <div class="oneline">
-       Medium                                       (text label)
-       <div class="priority-block" style="background-color: …"></div>  (8×8 swatch)
-     </div>
+   HaloPSA emits two patterns for the priority indicator:
 
-   We render this as a tonal pill (background = light tint of the priority
-   hue) with the swatch repurposed as a saturated 8px circle dot SITTING
-   IN FRONT OF the label, plus a CSS keyframe pulse that radiates a fading
-   ring out from the dot — same idiom as Pingdom / Better Stack / GitHub
-   uptime status indicators. `flex-direction: row-reverse` lets us keep
-   HaloPSA's DOM order (text first, swatch second) while painting dot-then-
-   text on screen.
+     1. Inside the ticket-list table cell:
+          <div class="oneline">
+            <div class="priority-block" style="background-color: …"></div>
+            Medium
+          </div>
+     2. In the priority filter sidebar (and possibly other surfaces):
+          same `.oneline` + `.priority-block` pattern, but NOT inside an
+          `.rt-td` table cell. Earlier rules were scoped to `.rt-td .oneline`
+          and so this surface fell through to default styling — every
+          priority showed up as a dark-grey pill regardless of name.
 
-   Per-level theming uses three custom properties stamped on `.oneline`
-   via `:has()` so each priority gets its own bg / ink / dot colour
-   without triplicating the layout rules:
-     --p-bg   tonal background (~92% lightness of hue)
-     --p-ink  text colour (~28% lightness — readable contrast on tint)
-     --p-dot  saturated dot colour (the "live" hue) */
+   We render the pattern as a tonal pill (background = light tint of the
+   priority hue) with the swatch repurposed as a saturated 8px circle dot
+   sitting IN FRONT OF the label, plus a CSS keyframe pulse that radiates a
+   fading ring — same idiom as Pingdom / Better Stack / GitHub uptime
+   status indicators.
+
+   Theming uses three custom properties (`--p-bg`, `--p-ink`, `--p-dot`)
+   stamped on the `.oneline` wrapper. Two stamping mechanisms:
+
+     - JS class stamper in `iframe-theme.js` adds `.p-low / .p-medium /
+       .p-high / .p-critical` based on the wrapper's text content. This is
+       the primary mechanism — it works regardless of what inline `rgb()`
+       value HaloPSA happens to emit per tenant (the user's instance was
+       emitting Low/Critical with hex values that didn't match the legacy
+       rgb selectors below, so those rows fell through to grey).
+     - Inline-rgb attribute selectors (`[style*="rgb(...)"]`) below act as
+       a fallback for chips that haven't been JS-stamped yet, or for rgb
+       values the JS map doesn't recognise.
+
+   DOM order is `[block, text]` — confirmed empirically (with the previous
+   `flex-direction: row-reverse` rule the dot rendered on the RIGHT, which
+   only happens if reversing a block-first DOM). We use the default `row`
+   direction so the visual order matches DOM order (better for screen
+   readers than `row-reverse` or `order:-1` games). */
 
 @keyframes ik-priority-pulse {
     0%   { box-shadow: 0 0 0 0 var(--p-dot, currentColor); opacity: 1; }
@@ -1445,9 +1462,9 @@ html body .portal .status-avatar.fortile {
     100% { box-shadow: 0 0 0 0 transparent; opacity: 1; }
 }
 
-html body .portal .rt-td .oneline:has(> .priority-block) {
+html body .portal .oneline:has(> .priority-block) {
     display: inline-flex !important;
-    flex-direction: row-reverse;        /* dot first, text second */
+    flex-direction: row;
     align-items: center;
     justify-content: flex-start;
     gap: 8px;
@@ -1464,12 +1481,8 @@ html body .portal .rt-td .oneline:has(> .priority-block) {
     line-height: 1.4;
 }
 
-/* The HaloPSA swatch reused as the radiating dot. Width/height bumped
-   to a perfect 8px circle, `border-radius: 999px` overrides the older
-   3px-rounded-square treatment. The pulse animation is owned by the
-   dot (not the pill) so the ring radiates out from the dot's centre
-   rather than from the pill's edge. */
-html body .portal .rt-td .oneline > .priority-block {
+/* The HaloPSA swatch reused as the radiating dot — perfect 8px circle. */
+html body .portal .oneline > .priority-block {
     display: inline-block !important;
     width: 8px !important;
     height: 8px !important;
@@ -1477,44 +1490,46 @@ html body .portal .rt-td .oneline > .priority-block {
     flex: 0 0 8px;
     padding: 0 !important;
     margin: 0 !important;
-    background-image: linear-gradient(var(--p-dot), var(--p-dot)) !important;
-    background-color: var(--p-dot) !important;
-    color: var(--p-dot);   /* drives `currentColor` fallback in the keyframe */
+    background-image: linear-gradient(var(--p-dot, var(--portal-text-muted)), var(--p-dot, var(--portal-text-muted))) !important;
+    background-color: var(--p-dot, var(--portal-text-muted)) !important;
+    color: var(--p-dot, var(--portal-text-muted));
     animation: ik-priority-pulse 2.4s var(--ik-ease) infinite;
 }
 
-/* Per-priority token triplets — stamped via :has() on the .oneline so
-   the pill, ink, and dot all theme together. Tints derived from the
-   ops-config palette family (light bg ~92% lightness, ink ~28%,
-   dot is the saturated brand hue). Dark-mode overrides at the bottom
-   flip bg to a translucent wash + lift the ink. */
+/* Per-priority token triplets — primary path is the JS-stamped `.p-*`
+   class, fallback is the inline-rgb attribute selector. Both stamp the
+   same `--p-bg / --p-ink / --p-dot` triplet onto `.oneline`. */
 
 /* Low — brand blue */
-html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(0, 98, 177)"]),
-html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(0, 123, 255)"]) {
+html body .portal .oneline.p-low,
+html body .portal .oneline:has(> .priority-block[style*="rgb(0, 98, 177)"]),
+html body .portal .oneline:has(> .priority-block[style*="rgb(0, 123, 255)"]) {
     --p-bg: var(--portal-accent-soft);
     --p-ink: var(--portal-accent);
     --p-dot: var(--portal-accent);
 }
 /* Medium — amber */
-html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(164, 221, 0)"]),
-html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(252, 220, 0)"]) {
+html body .portal .oneline.p-medium,
+html body .portal .oneline:has(> .priority-block[style*="rgb(164, 221, 0)"]),
+html body .portal .oneline:has(> .priority-block[style*="rgb(252, 220, 0)"]) {
     --p-bg: #FFE9C2;
     --p-ink: #7A4400;
     --p-dot: var(--portal-warn);
 }
 /* High — orange */
-html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(251, 158, 0)"]),
-html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 152, 0)"]),
-html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 193, 7)"]) {
+html body .portal .oneline.p-high,
+html body .portal .oneline:has(> .priority-block[style*="rgb(251, 158, 0)"]),
+html body .portal .oneline:has(> .priority-block[style*="rgb(255, 152, 0)"]),
+html body .portal .oneline:has(> .priority-block[style*="rgb(255, 193, 7)"]) {
     --p-bg: #FFE0CC;
     --p-ink: #7A2E0A;
     --p-dot: #F97316;
 }
 /* Critical — coral red */
-html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(220, 53, 69)"]),
-html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 0, 0)"]),
-html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 46, 0)"]) {
+html body .portal .oneline.p-critical,
+html body .portal .oneline:has(> .priority-block[style*="rgb(220, 53, 69)"]),
+html body .portal .oneline:has(> .priority-block[style*="rgb(255, 0, 0)"]),
+html body .portal .oneline:has(> .priority-block[style*="rgb(255, 46, 0)"]) {
     --p-bg: #FBDAD4;
     --p-ink: #7A1E10;
     --p-dot: var(--portal-err);
@@ -1522,28 +1537,32 @@ html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 46, 0)"
 
 /* Dark-mode tints — translucent washes + light ink, matching the
    status-pill dark treatment elsewhere in this file. */
-.theme-dark .portal .rt-td .oneline:has(> .priority-block[style*="rgb(0, 98, 177)"]),
-.theme-dark .portal .rt-td .oneline:has(> .priority-block[style*="rgb(0, 123, 255)"]) {
+.theme-dark .portal .oneline.p-low,
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(0, 98, 177)"]),
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(0, 123, 255)"]) {
     --p-bg: rgba(74, 116, 240, 0.18);
     --p-ink: #93C5FD;
     --p-dot: var(--portal-accent);
 }
-.theme-dark .portal .rt-td .oneline:has(> .priority-block[style*="rgb(164, 221, 0)"]),
-.theme-dark .portal .rt-td .oneline:has(> .priority-block[style*="rgb(252, 220, 0)"]) {
+.theme-dark .portal .oneline.p-medium,
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(164, 221, 0)"]),
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(252, 220, 0)"]) {
     --p-bg: rgba(251, 146, 60, 0.18);
     --p-ink: #FDBA74;
     --p-dot: var(--portal-warn);
 }
-.theme-dark .portal .rt-td .oneline:has(> .priority-block[style*="rgb(251, 158, 0)"]),
-.theme-dark .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 152, 0)"]),
-.theme-dark .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 193, 7)"]) {
+.theme-dark .portal .oneline.p-high,
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(251, 158, 0)"]),
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 152, 0)"]),
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 193, 7)"]) {
     --p-bg: rgba(249, 115, 22, 0.20);
     --p-ink: #FDBA74;
     --p-dot: #F97316;
 }
-.theme-dark .portal .rt-td .oneline:has(> .priority-block[style*="rgb(220, 53, 69)"]),
-.theme-dark .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 0, 0)"]),
-.theme-dark .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 46, 0)"]) {
+.theme-dark .portal .oneline.p-critical,
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(220, 53, 69)"]),
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 0, 0)"]),
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 46, 0)"]) {
     --p-bg: rgba(248, 113, 113, 0.20);
     --p-ink: #FCA5A5;
     --p-dot: var(--portal-err);
@@ -1552,7 +1571,7 @@ html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 46, 0)"
 /* Respect users with reduced-motion preferences — drop the pulse, keep
    the static dot + pill. */
 @media (prefers-reduced-motion: reduce) {
-    html body .portal .rt-td .oneline > .priority-block {
+    html body .portal .oneline > .priority-block {
         animation: none !important;
     }
 }

@@ -309,3 +309,106 @@
         start();
     }
 })();
+
+
+/**
+ * Priority-pill class stamper.
+ *
+ * HaloPSA renders priority indicators as
+ *   <div class="oneline">
+ *     <div class="priority-block" style="background-color: rgb(...)"></div>
+ *     Medium
+ *   </div>
+ * The portal CSS themes this as a tonal pill via `--p-bg / --p-ink /
+ * --p-dot` triplets keyed on a `.p-low / .p-medium / .p-high / .p-critical`
+ * class on the `.oneline`. We stamp those classes here based on the
+ * wrapper's text content (excluding the swatch element).
+ *
+ * Why text-content stamping (not inline-rgb selectors): HaloPSA's per-
+ * tenant priority colours vary — e.g. one instance emits Low as
+ * `rgb(0, 98, 177)` while another uses a custom blue. The CSS keeps a
+ * legacy rgb-based fallback for chips this stamper hasn't touched yet,
+ * but text-content matching is the durable path.
+ *
+ * MutationObserver catches re-renders from react-table sort/filter/page
+ * change and from filter sidebar clicks. `data-priority-stamped` marks
+ * already-classed wrappers so the observer doesn't redundantly re-write
+ * the DOM (which would re-fire the observer in a loop).
+ */
+(function () {
+    'use strict';
+
+    var PRIORITY_MAP = {
+        'low': 'p-low',
+        'medium': 'p-medium',
+        'normal': 'p-medium',
+        'high': 'p-high',
+        'critical': 'p-critical',
+        'urgent': 'p-critical'
+    };
+
+    var MARKER = 'data-priority-stamped';
+    var MANAGED = ['p-low', 'p-medium', 'p-high', 'p-critical'];
+
+    function stampWrapper(wrapper, key) {
+        var cls = PRIORITY_MAP[key];
+        if (cls && wrapper.classList.contains(cls) && wrapper.getAttribute(MARKER) === key) return;
+        for (var i = 0; i < MANAGED.length; i++) {
+            if (MANAGED[i] !== cls && wrapper.classList.contains(MANAGED[i])) {
+                wrapper.classList.remove(MANAGED[i]);
+            }
+        }
+        if (cls) wrapper.classList.add(cls);
+        wrapper.setAttribute(MARKER, key || '');
+    }
+
+    function readSiblingText(parent, exclude) {
+        // Concatenate text from every child node except the swatch element.
+        // textContent picks up nested spans (e.g. icon + label wrappers)
+        // without us having to enumerate them.
+        var text = '';
+        for (var n = parent.firstChild; n; n = n.nextSibling) {
+            if (n === exclude) continue;
+            text += n.textContent || '';
+        }
+        return text.trim().toLowerCase();
+    }
+
+    function stampBySwatch(swatch) {
+        var parent = swatch.parentElement;
+        if (!parent) return;
+        var key = readSiblingText(parent, swatch);
+        if (!key) return;
+        stampWrapper(parent, key);
+    }
+
+    function sweep(root) {
+        (root || document).querySelectorAll('.priority-block').forEach(stampBySwatch);
+    }
+
+    function start() {
+        sweep();
+        if (!document.body) return;
+        var obs = new MutationObserver(function (muts) {
+            for (var i = 0; i < muts.length; i++) {
+                var added = muts[i].addedNodes;
+                for (var j = 0; j < added.length; j++) {
+                    var node = added[j];
+                    if (node.nodeType !== 1) continue;
+                    if (node.matches && node.matches('.priority-block')) {
+                        stampBySwatch(node);
+                    } else if (node.querySelectorAll) {
+                        sweep(node);
+                    }
+                }
+            }
+        });
+        obs.observe(document.body, { childList: true, subtree: true });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', start);
+    } else {
+        start();
+    }
+})();

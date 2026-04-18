@@ -2499,6 +2499,42 @@ html body .portal .searchscreen.searchscreen-full {
     padding: 0 24px;
 }
 
+/* Clear (X) button — HaloPSA ships `.searchclear` at right: 35px
+   with padding: 15px 5px, which leaves a visible 30-odd-px gap
+   between the X and the magnifier icon on the right edge (reads as
+   a floating X rather than a partner to the search affordance).
+   Also positions the bg-image + SVG children on top of each other
+   in some layouts. Re-slot so the X sits immediately to the left of
+   the magnifier with a consistent ghost-icon treatment. */
+html body .portal .searchscreen .searchbox .searchclear {
+    position: absolute !important;
+    right: 36px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    height: 24px !important;
+    width: 24px !important;
+    padding: 0 !important;
+    background-image: none !important;
+    background-color: transparent !important;
+    border-radius: var(--portal-radius-xs) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: var(--portal-text-muted) !important;
+    cursor: pointer;
+    z-index: 2;
+    transition: background-color var(--ik-dur) var(--ik-ease),
+                color var(--ik-dur) var(--ik-ease) !important;
+}
+html body .portal .searchscreen .searchbox .searchclear:hover {
+    background-color: var(--portal-surface-hover) !important;
+    color: var(--portal-accent) !important;
+}
+html body .portal .searchscreen .searchbox .searchclear svg {
+    width: 12px !important;
+    height: 12px !important;
+}
+
 /* Entity-selection pills (All / Articles / Services / Tickets) —
    pin to accent pill family so the active state reads as brand. */
 html body .portal .entity-selection {
@@ -3359,8 +3395,18 @@ html body .portal .articleInfoSmall.kb > .status-avatar {
    Activity tiles carry theirs because HaloPSA emits a real status
    colour inline; articles don't have a status, so a fake accent
    stripe just created visual noise. */
-html body .portal .article,
-html body .portal .article.searchlist {
+/* NOTE: `:not(.search-result-item)` is critical. HaloPSA stamps a
+   dual-class `.search-result-item.article` wrapper on every search
+   result, which used to double-match both this KB card rule AND the
+   `.search-result-item` card rule above — yielding a nested box
+   chrome (two borders, two paddings) and a stacked hover lift on
+   the inner `.article.searchlist` that read as "a second card grew
+   inside the first." The `:not()` scopes this rule back to its
+   intended home (KB index / Top 5 Articles widget) so search
+   results land on the dedicated `.search-result-item` card chrome
+   earlier in the file. */
+html body .portal .article:not(.search-result-item),
+html body .portal .article.searchlist:not(.search-result-item) {
     display: block !important;
     background: var(--portal-surface) !important;
     border: 1px solid var(--portal-border) !important;
@@ -3371,8 +3417,8 @@ html body .portal .article.searchlist {
                 transform var(--ik-dur) var(--ik-ease),
                 box-shadow var(--ik-dur) var(--ik-ease);
 }
-html body .portal .article:hover,
-html body .portal .article.searchlist:hover {
+html body .portal .article:hover:not(.search-result-item),
+html body .portal .article.searchlist:hover:not(.search-result-item) {
     border-color: var(--portal-accent) !important;
     transform: translateY(-2px);
     box-shadow: var(--portal-shadow) !important;

@@ -810,81 +810,74 @@ html body .portal .nhd-button.curve:hover::before { opacity: 1; }
    across every secondary nav/action button so the portal reads
    as one family instead of three competing button styles. */
 
-/* "View more" — home page, under Top 5 Articles (bare <a> that
-   HaloPSA emits as first child after `.results-table`). */
+/* ─── Ghost action family — View All / View More / Back ──
+   One shared chrome across every secondary nav/action button.
+   Both View All (above/below listwidgets) and View More (under
+   Top 5 Articles) share identical geometry + typography; on hover
+   both tint to accent blue instead of inverting to fg/bg, keeping
+   the lift subtle and brand-consistent. Back button reuses the
+   same palette in a circular 32×32 icon button form. */
 html body .portal .results-table + div {
     text-align: center;
     margin-top: 14px;
 }
 html body .portal .results-table + div > a,
 html body .portal a.view-all,
-html body .portal .view-more {
+html body .portal .view-more,
+html body .portal .listwidget .nhd-button.curve,
+html body .portal .listwidget button.nhd-button.curve {
     display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
+    align-items: center !important;
+    justify-content: center !important;
     gap: 6px;
     font-family: var(--ik-font-display) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     letter-spacing: -0.005em !important;
     color: var(--portal-text-secondary) !important;
-    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
     border: 1px solid var(--portal-border) !important;
     border-radius: 999px !important;
     padding: 8px 18px !important;
+    height: auto !important;
     box-shadow: none !important;
     text-decoration: none !important;
+    transform: none !important;
     transition: background-color var(--ik-dur) var(--ik-ease),
                 border-color var(--ik-dur) var(--ik-ease),
                 color var(--ik-dur) var(--ik-ease) !important;
 }
-html body .portal .results-table + div > a:hover,
-html body .portal a.view-all:hover,
-html body .portal .view-more:hover {
-    background: var(--portal-text) !important;
-    border-color: var(--portal-text) !important;
-    color: var(--portal-bg) !important;
-    text-decoration: none !important;
-}
-
-/* "View all" button that HaloPSA emits above/below listwidgets as
-   `.nhd-button.curve` with text "View All" — we can't text-match
-   in CSS, so we rely on the primary rule above already styling
-   all `.nhd-button.curve`. Remap it to the ghost family so secondary
-   list-widget actions don't compete with the main CTA on each page.
-   Scope tightly to the listwidget so we don't hit the primary "Log
-   a Ticket" / "Add Note" action pills elsewhere. */
-html body .portal .listwidget .nhd-button.curve,
-html body .portal .listwidget button.nhd-button.curve {
-    background-color: transparent !important;
-    border: 1px solid var(--portal-border) !important;
-    color: var(--portal-text-secondary) !important;
-    box-shadow: none !important;
-    padding: 8px 18px !important;
-    border-radius: 999px !important;
-    font-size: 13px !important;
-    font-weight: 500 !important;
-}
+/* Kill the primary-button gradient underlay when a .nhd-button.curve
+   is inside a listwidget (it's a secondary action here, not CTA). */
 html body .portal .listwidget .nhd-button.curve::before {
     display: none !important;
+    opacity: 0 !important;
 }
+
+/* Hover: tint to accent blue — soft accent fill, accent border,
+   accent ink. No inversion to fg/bg. */
+html body .portal .results-table + div > a:hover,
+html body .portal a.view-all:hover,
+html body .portal .view-more:hover,
 html body .portal .listwidget .nhd-button.curve:hover,
 html body .portal .listwidget button.nhd-button.curve:hover {
-    background: var(--portal-text) !important;
-    border-color: var(--portal-text) !important;
-    color: var(--portal-bg) !important;
-    transform: none;
+    background-color: var(--portal-accent-soft) !important;
+    background-image: none !important;
+    border-color: var(--portal-accent) !important;
+    color: var(--portal-accent) !important;
+    text-decoration: none !important;
+    transform: none !important;
     box-shadow: none !important;
 }
 
-/* Back button — ticket / KB article view, top-left of the page.
+/* Back button — circular 32×32 form of the same ghost family.
    HaloPSA ships `.backbtn` with heading-purple inline bg that
-   disappears against dark surfaces. Swap to the ghost family so
-   Back reads as a peer of View All / View More. Keep circular
-   32x32 geometry — the icon is a single chevron. */
+   disappears against dark surfaces. */
 html body .portal .backbtn,
 html body .portal button.backbtn {
     background-color: transparent !important;
+    background-image: none !important;
     border: 1px solid var(--portal-border) !important;
     color: var(--portal-text-secondary) !important;
     box-shadow: none !important;
@@ -905,9 +898,9 @@ html body .portal button.backbtn {
 }
 html body .portal .backbtn:hover,
 html body .portal button.backbtn:hover {
-    background: var(--portal-text) !important;
-    border-color: var(--portal-text) !important;
-    color: var(--portal-bg) !important;
+    background-color: var(--portal-accent-soft) !important;
+    border-color: var(--portal-accent) !important;
+    color: var(--portal-accent) !important;
     transform: none !important;
 }
 

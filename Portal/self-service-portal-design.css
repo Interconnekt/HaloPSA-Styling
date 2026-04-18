@@ -142,17 +142,24 @@
     color-scheme: light;
 }
 
-/* ── DARK mode token flip ── */
+/* ── DARK mode token flip ──
+   Neutral charcoal ramp, not the website's navy #0A0F1C. User brief
+   called for "dark grey in dark mode" — the navy reads as too
+   saturated against HaloPSA's native chrome (react-select dropdowns,
+   Semantic UI popups, froala toolbar) which expect a neutral bg.
+   Cool-tinted greys (hue ~220, very low saturation) keep a subtle
+   relationship with the website's navy palette without shouting blue.
+   Steps ≈ Zinc-950 → Zinc-800 so surfaces lift cleanly from bg. */
 .theme-dark {
-    --portal-bg:              #0A0F1C;
-    --portal-bg-subtle:       #0D1423;
-    --portal-surface:         #121929;
-    --portal-surface-hover:   #161E31;
-    --portal-surface-active:  #1A2238;
+    --portal-bg:              #161719;   /* neutral very-dark grey */
+    --portal-bg-subtle:       #1B1D20;
+    --portal-surface:         #1F2125;   /* one step up from bg */
+    --portal-surface-hover:   #262930;
+    --portal-surface-active:  #2E3138;
 
     --portal-text:            #EAEBEF;
-    --portal-text-secondary:  #97A0B8;
-    --portal-text-muted:      #6A7493;
+    --portal-text-secondary:  #A4AAB7;
+    --portal-text-muted:      #7A8090;
     --portal-heading:         #EAEBEF;
 
     --portal-accent:          #4A74F0;
@@ -169,17 +176,19 @@
     --portal-highlight-subtle: rgba(74, 222, 128, 0.16);
 
     /* Dark tints — cooler deep blue + warmer plum-tinted deep */
-    --portal-tint-cool:       #112346;
-    --portal-tint-warm:       #241829;
-    --portal-band-bg:         #131B30;
+    --portal-tint-cool:       #182133;
+    --portal-tint-warm:       #241A25;
+    --portal-band-bg:         #1B1D22;
 
     --portal-action:          #4A74F0;
     --portal-action-hover:    #6B8DF3;
     --portal-action-shadow:   rgba(74, 116, 240, 0.30);
 
-    --portal-border:          #1F2740;
-    --portal-border-soft:     #171F34;
-    --portal-border-light:    #171F34;
+    /* Borders tuned against the new grey ramp — slightly lifted so
+       hairlines remain visible on both bg and surface. */
+    --portal-border:          #343741;
+    --portal-border-soft:     #26282F;
+    --portal-border-light:    #26282F;
     --portal-shadow-sm:       0 1px 2px rgba(0, 0, 0, 0.35);
     --portal-shadow:          0 6px 20px -4px rgba(0, 0, 0, 0.45), 0 2px 6px -2px rgba(0, 0, 0, 0.25);
     --portal-shadow-hover:    0 24px 60px -20px rgba(0, 0, 0, 0.55), 0 8px 20px -6px rgba(0, 0, 0, 0.3);
@@ -188,13 +197,13 @@
     --portal-table-border:    rgba(255, 255, 255, 0.08);
     --portal-table-row-hover: rgba(255, 255, 255, 0.03);
 
-    --portal-code-bg:         #1A2238;
+    --portal-code-bg:         #262930;
     --portal-code-text:       #F08CA1;
-    --portal-pre-bg:          #0D1423;
+    --portal-pre-bg:          #0F1012;
     --portal-pre-text:        #EAEBEF;
-    --portal-pre-border:      #1F2740;
+    --portal-pre-border:      #343741;
 
-    --portal-quote-bg:        #161E31;
+    --portal-quote-bg:        #1F2125;
 
     --portal-ok:              #34D399;
     --portal-warn:            #FB923C;
@@ -382,11 +391,20 @@ html body .portal .page-title h1 em::after {
 html body .portal header,
 html body .portal .header,
 html body .portal .portal-header {
+    /* Light mode: navy brand bar. Dark mode: sit one step below
+       --portal-bg so the nav chrome reads darker than the page. */
     background-color: #0A0F1C !important;
     color: #fff;
     border-bottom: 1px solid rgba(255,255,255,0.06);
     position: relative;
     box-shadow: 0 1px 0 rgba(0,0,0,0.3);
+}
+html body.theme-dark .portal header,
+html body .theme-dark .portal header,
+html body .portal .theme-dark header,
+html body.theme-dark .portal .portal-header,
+html body .theme-dark .portal .portal-header {
+    background-color: #0F1012 !important;   /* one step below --portal-bg */
 }
 html body .portal header::after,
 html body .portal .portal-header::after {
@@ -671,7 +689,8 @@ html body .portal .dashbtn .card-footer {
    Each is a stack of `.tile-widget` rows. Reframe as thin
    hairline list cards with mono meta + Montserrat titles. */
 
-html body .portal .tile-widget-bar,
+/* `.tile-widget` is the list-item card on home-page Top Articles /
+   Recent Tickets. Card surface is the hairline-bordered shell. */
 html body .portal .tile-widget {
     background: var(--portal-surface) !important;
     border: 1px solid var(--portal-border) !important;
@@ -683,6 +702,20 @@ html body .portal .tile-widget {
 html body .portal .tile-widget:hover {
     border-color: var(--portal-accent) !important;
     transform: translateX(2px);
+}
+
+/* `.tile-widget-bar` is the coloured status stripe on the leading
+   edge of each home-page ticket tile (`.action-history-item.tile-item`).
+   HaloPSA paints the stripe colour inline per ticket status — we only
+   set geometry here (6px wide, rounded to match the card's leading
+   edge). Do NOT set `background` here: it would override the inline
+   status colour and make every stripe the same surface colour. */
+html body .portal .action-history-item .tile-widget-bar,
+html body .portal .tile-item .tile-widget-bar {
+    width: 4px !important;
+    border-radius: var(--portal-radius-md) 0 0 var(--portal-radius-md) !important;
+    border: 0 !important;
+    box-shadow: none !important;
 }
 
 /* Section headings on the home page ("Recent Tickets", "Top Articles") */
@@ -1488,13 +1521,41 @@ html body .portal .kbdetails p {
 }
 
 /* Article meta strip — if present above the H1 */
-html body .portal .kbdetails .kbmeta,
-html body .portal span.kbtags {
+html body .portal .kbdetails .kbmeta {
     font-family: var(--ik-font-mono) !important;
     font-size: 11px !important;
     letter-spacing: 0.1em !important;
     text-transform: uppercase;
     color: var(--portal-text-muted) !important;
+}
+
+/* KB tags (`span.kbtags`) render below each article on the KB index
+   and on article pages. HaloPSA's default chrome paints them as a
+   flat dark-grey 2px-radius rectangle — we re-skin as hairline pills
+   sitting on our surface token. They live side-by-side with no
+   natural spacing, so we add margin-right too. */
+html body .portal span.kbtags,
+html body .portal .kbtags {
+    display: inline-block !important;
+    background: var(--portal-surface) !important;
+    color: var(--portal-text-secondary) !important;
+    font-family: var(--ik-font-display) !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.02em !important;
+    text-transform: none;
+    padding: 3px 10px !important;
+    border: 1px solid var(--portal-border-soft) !important;
+    border-radius: 999px !important;
+    margin: 2px 4px 2px 0 !important;
+    line-height: 1.6 !important;
+    transition: border-color var(--ik-dur) var(--ik-ease),
+                color var(--ik-dur) var(--ik-ease);
+}
+html body .portal span.kbtags:hover,
+html body .portal .kbtags:hover {
+    border-color: var(--portal-accent) !important;
+    color: var(--portal-accent) !important;
 }
 
 /* Confluence panels — keep the left-accent, flatten radii & refresh tones */
@@ -1605,26 +1666,42 @@ html body .portal .kbdetails img {
     border: 1px solid var(--portal-border);
 }
 
-/* Tables */
+/* Tables — clean modern style, thin hairline borders.
+   Border-collapse + zero border-spacing so the cell lines meet
+   seamlessly (HaloPSA's default `border-spacing: 2px` was causing
+   the body's interior lines to sit INSIDE the header bg block —
+   the symptom user described as "table lines more indented than
+   the header names"). */
 html body .portal .kbdetails .confluenceTable {
     border: 1px solid var(--portal-table-border) !important;
     border-collapse: collapse !important;
+    border-spacing: 0 !important;
     border-radius: 0 !important;
 }
 html body .portal .kbdetails .confluenceTable th,
 html body .portal .kbdetails .confluenceTable td {
     border: 1px solid var(--portal-table-border) !important;
-    padding: 12px 16px;
-    font-size: 14px;
+    padding: 10px 14px !important;
+    font-family: var(--ik-font-display) !important;
+    font-size: 14px !important;
+    vertical-align: top;
+    color: var(--portal-text);
 }
+/* Header row AND first-column headers share the same treatment:
+   the body font at the SAME size as td cells (not a shrunken mono
+   eyebrow) with a subtle bg tint and bold weight. This keeps the
+   header row visually flush with the body rows — no more "smaller
+   mono label floating in a bigger cell" feel. */
 html body .portal .kbdetails .confluenceTable th {
     background: var(--portal-table-header-bg) !important;
-    font-family: var(--ik-font-mono) !important;
-    font-size: 11px !important;
-    letter-spacing: 0.1em !important;
-    text-transform: uppercase;
-    color: var(--portal-text-muted) !important;
-    font-weight: 500 !important;
+    font-family: var(--ik-font-display) !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: var(--portal-heading) !important;
+    letter-spacing: -0.005em !important;
+    text-transform: none !important;
+    text-align: left;
+    vertical-align: middle;
 }
 html body .portal .kbdetails .confluenceTable tbody tr:hover td {
     background: var(--portal-table-row-hover);
@@ -1726,6 +1803,144 @@ html body .portal footer.page-footer .box1 a[href^="https://interconnekt"] > div
    badge). Hide the duplicate so only our pill remains. */
 html body .portal .articleInfoSmall.kb > .status-avatar {
     display: none !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   KB INDEX — article list cards
+   ─────────────────────────────────────────────────────────
+   The KB index (`/portal/kb?faqlist=1`) renders each article as
+   a `.article` row wrapping a flex `.articleInfoSmall.kb`. Out of
+   the box these ship as padding: 0, border: 0, bg: transparent —
+   effectively unstyled, just a stack of text blobs. Reframe each
+   row as a hairline card matching the home-page tile-widgets so
+   the KB index reads as a proper list of cards, not a bullet list. */
+html body .portal .article,
+html body .portal .article.searchlist {
+    display: block !important;
+    background: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-md) !important;
+    padding: 14px 18px !important;
+    margin: 0 0 10px !important;
+    transition: border-color var(--ik-dur) var(--ik-ease),
+                transform var(--ik-dur) var(--ik-ease),
+                box-shadow var(--ik-dur) var(--ik-ease);
+}
+html body .portal .article:hover,
+html body .portal .article.searchlist:hover {
+    border-color: var(--portal-accent) !important;
+    transform: translateX(2px);
+    box-shadow: var(--portal-shadow-sm) !important;
+}
+
+/* Row layout — inner `.articleInfoSmall.kb` ships as a loose flex row.
+   Give it explicit gap so title + meta + chips don't collide. */
+html body .portal .articleInfoSmall.kb {
+    display: flex !important;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+/* Article title — the `.heading` inside the row. HaloPSA's default
+   leaves this at 16px/400; push to 14.5/600 so it anchors the card
+   visually and matches the Top 5 Articles home widget. */
+html body .portal .article .heading,
+html body .portal .articleInfoSmall.kb .heading {
+    font-family: var(--ik-font-display) !important;
+    font-size: 14.5px !important;
+    font-weight: 600 !important;
+    color: var(--portal-text) !important;
+    letter-spacing: -0.005em;
+    flex: 1 1 60%;
+    min-width: 0;
+}
+
+/* Right-side chip block (`.articleRight`) — views count + ARTICLE pill.
+   Align to the end so the title can breathe on the left. */
+html body .portal .articleRight {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    color: var(--portal-text-muted);
+    font-variant-numeric: tabular-nums;
+    font-size: 12px;
+}
+
+/* `ARTICLE` chip on the right edge — re-skin as a soft capsule
+   instead of HaloPSA's default heading-purple block. */
+html body .portal .article .articleRight .status-avatar {
+    background: var(--portal-surface-hover) !important;
+    color: var(--portal-text-muted) !important;
+    border: 1px solid var(--portal-border-soft) !important;
+    border-radius: 999px !important;
+    padding: 2px 10px !important;
+    font-family: var(--ik-font-mono) !important;
+    font-size: 9.5px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    line-height: 1.5 !important;
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+}
+
+/* Tree menu (left sidebar on KB pages) — slim down node size and
+   align with our display font. HaloPSA ships these at Poppins 16px. */
+html body .portal .tree-menu .tree-node,
+html body .portal .kblist .tree-node,
+html body .portal .tree-menu .sidebar,
+html body .portal .kblist .sidebar {
+    font-family: var(--ik-font-display) !important;
+    font-size: 13.5px !important;
+    border-radius: var(--portal-radius-xs) !important;
+    padding: 6px 10px;
+    margin: 2px 0;
+    transition: background-color var(--ik-dur) var(--ik-ease),
+                color var(--ik-dur) var(--ik-ease);
+}
+html body .portal .tree-menu .sidebar:hover,
+html body .portal .kblist .sidebar:hover {
+    background: var(--portal-surface-hover);
+}
+
+/* Selected tree-node — HaloPSA marks the active item via inline
+   `background-color: rgb(47, 53, 94)` (heading purple). Re-skin as
+   a tonal accent with a left rule so the KB nav matches the rest
+   of the editorial-flavoured portal. */
+html body .portal .tree-menu .tree-node[style*="rgb(47, 53, 94)"],
+html body .portal .tree-menu .tree-node[style*="background-color: rgb(47"] {
+    background-color: var(--portal-accent-subtle) !important;
+    color: var(--portal-accent) !important;
+    border-left: 3px solid var(--portal-accent);
+    padding-left: 7px !important;
+    font-weight: 600;
+    border-radius: 0 !important;
+}
+
+/* KB sidebar search ("Filter articles..." input). HaloPSA ships
+   a chunky 2px-border input; re-skin to match pill chrome. */
+html body .portal .kblist .searchbox,
+html body .portal .tree-menu .searchbox {
+    background: var(--portal-surface-hover) !important;
+    border: 1px solid var(--portal-border-soft) !important;
+    border-radius: var(--portal-radius-sm) !important;
+    box-shadow: none !important;
+    overflow: hidden;
+    transition: border-color var(--ik-dur) var(--ik-ease);
+}
+html body .portal .kblist .searchbox:focus-within,
+html body .portal .tree-menu .searchbox:focus-within {
+    border-color: var(--portal-accent) !important;
+}
+html body .portal .kblist input[type="text"],
+html body .portal .tree-menu input[type="text"] {
+    font-size: 13px !important;
+    padding: 8px 12px !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: var(--portal-text);
 }
 
 

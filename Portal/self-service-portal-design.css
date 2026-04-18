@@ -2345,6 +2345,280 @@ html body .portal .react-kanban-card__description {
 
 
 /* ─────────────────────────────────────────────────────────
+   11b · Gantt view (react-calendar-timeline)
+   ─────────────────────────────────────────────────────────
+   HaloPSA's Gantt view uses react-calendar-timeline under the
+   hood (class prefix `rct-*`). The library ships with its own
+   flat-white chrome: white sidebar, black gridlines, solid-blue
+   item bars, bright red today-line. Re-token everything onto
+   the portal palette so Gantt reads as a first-class view
+   alongside Tile and Kanban (not a third-party widget dropped
+   onto the page). */
+
+html body .portal .react-calendar-timeline {
+    background: transparent !important;
+    color: var(--portal-text) !important;
+    font-family: var(--ik-font-display) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-md) !important;
+    overflow: hidden;
+    margin-top: 16px;
+}
+
+/* Header row — two stacked tiers (year/month + day/week). Eyebrow
+   typography to match the list-view header above it. */
+html body .portal .react-calendar-timeline .rct-header,
+html body .portal .react-calendar-timeline .rct-header-root {
+    background: var(--portal-surface) !important;
+    border-bottom: 1px solid var(--portal-border) !important;
+    color: var(--portal-text-muted) !important;
+}
+html body .portal .react-calendar-timeline .rct-header .rct-label,
+html body .portal .react-calendar-timeline .rct-header .rct-label-group {
+    background: transparent !important;
+    border-color: var(--portal-border-soft) !important;
+    color: var(--portal-text-muted) !important;
+    font-family: var(--ik-font-mono) !important;
+    font-size: 10.5px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+}
+
+/* Left sidebar — ticket titles list. Surface bg + hairline rows. */
+html body .portal .react-calendar-timeline .rct-sidebar,
+html body .portal .react-calendar-timeline .rct-sidebar-right {
+    background: var(--portal-surface) !important;
+    border-right: 1px solid var(--portal-border) !important;
+    color: var(--portal-text) !important;
+    font-family: var(--ik-font-display) !important;
+    font-size: 13px !important;
+}
+html body .portal .react-calendar-timeline .rct-sidebar .rct-sidebar-header {
+    background: var(--portal-surface) !important;
+    color: var(--portal-text-muted) !important;
+    border-bottom: 1px solid var(--portal-border) !important;
+}
+html body .portal .react-calendar-timeline .rct-sidebar .rct-sidebar-row {
+    background: transparent !important;
+    color: var(--portal-text) !important;
+    border-bottom: 1px solid var(--portal-border-soft) !important;
+    padding: 0 14px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+html body .portal .react-calendar-timeline .rct-sidebar .rct-sidebar-row.rct-sidebar-row-odd {
+    background: transparent !important;
+}
+html body .portal .react-calendar-timeline .rct-sidebar .rct-sidebar-row.rct-sidebar-row-even {
+    background: var(--portal-table-row-hover, transparent) !important;
+}
+
+/* Horizontal grid rows — alternate very subtle banding to help
+   long rows track across the timeline. */
+html body .portal .react-calendar-timeline .rct-horizontal-lines .rct-hl-odd,
+html body .portal .react-calendar-timeline .rct-horizontal-lines .rct-hl-even {
+    border-bottom: 1px solid var(--portal-border-soft) !important;
+}
+html body .portal .react-calendar-timeline .rct-horizontal-lines .rct-hl-even {
+    background: transparent !important;
+}
+html body .portal .react-calendar-timeline .rct-horizontal-lines .rct-hl-odd {
+    background: var(--portal-table-row-hover, transparent) !important;
+}
+
+/* Vertical gridlines (day/week separators). Soft hairline, weekends
+   get a slightly stronger tint so the eye can snap to Saturday. */
+html body .portal .react-calendar-timeline .rct-vertical-lines .rct-vl {
+    border-left: 1px solid var(--portal-border-soft) !important;
+    background: transparent !important;
+}
+html body .portal .react-calendar-timeline .rct-vertical-lines .rct-vl.rct-day-0,
+html body .portal .react-calendar-timeline .rct-vertical-lines .rct-vl.rct-day-6 {
+    background: var(--portal-surface-hover) !important;
+}
+
+/* Today marker — vertical accent line (not the library's default red). */
+html body .portal .react-calendar-timeline .rct-today {
+    background: var(--portal-accent-subtle) !important;
+}
+html body .portal .react-calendar-timeline .rct-cursor-line {
+    background: var(--portal-accent) !important;
+    opacity: 0.35;
+}
+
+/* Item bars — ticket duration pills. Use the brand-action gradient
+   with a soft shadow so they lift off the row banding. Drag-handles
+   inherit the item colour rather than the library's dark grey. */
+html body .portal .react-calendar-timeline .rct-items .rct-item {
+    background: var(--portal-accent) !important;
+    background-color: var(--portal-accent) !important;
+    border: 1px solid var(--portal-accent-hover, var(--portal-accent)) !important;
+    color: #fff !important;
+    border-radius: var(--portal-radius-xs) !important;
+    font-family: var(--ik-font-display) !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    transition: transform var(--ik-dur) var(--ik-ease),
+                box-shadow var(--ik-dur) var(--ik-ease),
+                filter var(--ik-dur) var(--ik-ease) !important;
+}
+html body .portal .react-calendar-timeline .rct-items .rct-item:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 2px 8px -2px var(--portal-accent) !important;
+    z-index: 2;
+}
+html body .portal .react-calendar-timeline .rct-items .rct-item.selected {
+    background: var(--portal-accent-hover, var(--portal-accent)) !important;
+    box-shadow: 0 0 0 2px var(--portal-accent-subtle) !important;
+}
+html body .portal .react-calendar-timeline .rct-items .rct-item .rct-item-overflow {
+    padding: 0 8px !important;
+}
+html body .portal .react-calendar-timeline .rct-items .rct-item .rct-drag-left,
+html body .portal .react-calendar-timeline .rct-items .rct-item .rct-drag-right {
+    background: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   11c · Search results page (.searchscreen)
+   ─────────────────────────────────────────────────────────
+   /search lists KB articles / services / tickets as
+   `.search-result-item.article` rows grouped under
+   `.grouped-results` / `.results-table`. Out of the box the
+   outer table renders a flat grey background with no card chrome,
+   and the leading `.status-avatar` chip (ARTICLE/SERVICE/TICKET)
+   ships at 80×44px with its text wrapping onto two lines
+   (ARTICL / E). Polish: frame each result as a portal card, hide
+   the leading entity chip (redundant with the active pill tab
+   above) and reskin the entity-selection pill tabs. */
+
+html body .portal .searchscreen.searchscreen-full {
+    max-width: 1160px;
+    margin: 24px auto 40px;
+    padding: 0 24px;
+}
+
+/* Entity-selection pills (All / Articles / Services / Tickets) —
+   pin to accent pill family so the active state reads as brand. */
+html body .portal .entity-selection {
+    display: flex;
+    gap: 8px;
+    margin: 20px 0 24px !important;
+    flex-wrap: wrap;
+}
+html body .portal .entity-selection .pill {
+    background: transparent !important;
+    color: var(--portal-text-secondary) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: 999px !important;
+    padding: 8px 18px !important;
+    font-family: var(--ik-font-display) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    letter-spacing: -0.005em;
+    cursor: pointer;
+    transition: background-color var(--ik-dur) var(--ik-ease),
+                color var(--ik-dur) var(--ik-ease),
+                border-color var(--ik-dur) var(--ik-ease) !important;
+}
+html body .portal .entity-selection .pill:hover {
+    background: var(--portal-accent-soft) !important;
+    color: var(--portal-accent) !important;
+    border-color: var(--portal-accent) !important;
+}
+html body .portal .entity-selection .pill.active {
+    background: var(--portal-accent) !important;
+    color: #fff !important;
+    border-color: var(--portal-accent) !important;
+    font-weight: 600 !important;
+}
+
+/* Outer results container — drop the default panel chrome and let
+   each result card sit flat on the page. */
+html body .portal .searchscreen .grouped-results,
+html body .portal .searchscreen .results-table {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Result cards — one unified card chrome for article/service/ticket
+   variants. Hover lifts the border + adds a subtle shadow so the
+   row reads as "clickable" without shouting. */
+html body .portal .search-result-item {
+    background: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-md) !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    transition: border-color var(--ik-dur) var(--ik-ease),
+                box-shadow var(--ik-dur) var(--ik-ease),
+                transform var(--ik-dur) var(--ik-ease);
+}
+html body .portal .search-result-item:hover {
+    border-color: var(--portal-accent) !important;
+    box-shadow: var(--portal-shadow-sm) !important;
+    transform: translateY(-1px);
+}
+html body .portal .search-result-item .article.searchlist {
+    background: transparent !important;
+    border: 0 !important;
+    padding: 18px 22px !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 18px;
+}
+
+/* Leading entity chip (Article / Service / Ticket) — hidden.
+   The active pill tab above already tells the user what they're
+   looking at, and HaloPSA ships the chip at 80×44px with its
+   label wrapping onto two lines ("ARTICL / E") which reads as
+   broken typography. Collapse the chip and its trailing empty
+   TD so the title + summary get the full row width. */
+html body .portal .search-result-item .article.searchlist > .status-avatar,
+html body .portal .search-result-item .article.searchlist > td:empty:last-child {
+    display: none !important;
+}
+
+/* Title + summary column */
+html body .portal .search-result-item .articleInfo {
+    display: block !important;
+    flex: 1 1 auto;
+    padding: 0 !important;
+    border: 0 !important;
+}
+html body .portal .search-result-item .articleInfo .heading,
+html body .portal .search-result-item .articleInfo .summary {
+    font-family: var(--ik-font-display) !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: var(--portal-heading) !important;
+    letter-spacing: -0.005em;
+    margin-bottom: 8px !important;
+    padding: 0 !important;
+}
+html body .portal .search-result-item .articleInfo .desc-large {
+    font-family: var(--ik-font-display) !important;
+    font-size: 13px !important;
+    line-height: 1.55 !important;
+    color: var(--portal-text-secondary) !important;
+    margin-top: 6px;
+}
+
+/* Tag chips inside search results — same kbtags family, inherit
+   existing pill styling. Just tighten the spacing around them. */
+html body .portal .search-result-item .articleInfo .kbtags {
+    margin-right: 6px !important;
+    margin-bottom: 8px !important;
+}
+
+
+/* ─────────────────────────────────────────────────────────
    12 · New Ticket / ticket edit form
    ───────────────────────────────────────────────────────── */
 

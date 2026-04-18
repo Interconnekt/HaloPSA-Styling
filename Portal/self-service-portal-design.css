@@ -945,6 +945,95 @@ html body .portal button.backbtn svg {
     fill: currentColor !important;
 }
 
+/* ─── Chrome icon buttons — Share / Print / Download / theme + device toggles ─
+   HaloPSA emits these as `.solidbutton.fabtn.notext` (icon-only) and
+   `.solidbutton.fabtn.noprint` (collapse/download), and ships them with a
+   dark-grey filled pill that reads as competing chrome against the back
+   button's ghost-circle treatment. We bring them into the same ghost
+   family — transparent fill, hairline border, accent-soft hover — but in
+   square 32×32 form (10px radius) so they read as siblings rather than
+   clones of the round back button. Mirrors the website's theme-picker
+   button shape (`<button class="rounded-md border …">`). The 32px height
+   matches `.backbtn` exactly so the row reads as one aligned strip of
+   chrome regardless of how HaloPSA wraps the buttons. */
+html body .portal .solidbutton.fabtn,
+html body .portal .solidbutton.fabtn.notext,
+html body .portal .solidbutton.fabtn.noprint {
+    background-color: transparent !important;
+    background-image: none !important;
+    border: 1px solid var(--portal-border) !important;
+    color: var(--portal-text-secondary) !important;
+    box-shadow: none !important;
+    height: 32px !important;
+    border-radius: var(--portal-radius-sm) !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    /* Vertical margin matches `.backbtn` so the buttons land on the same
+       baseline whether they sit in `.buttons-container`, the article header
+       row, or the ticket-view `.history-options-portal`. Horizontal gap
+       handled by the `.buttons-container` flex `gap` rule below. */
+    margin: 14px 0 0 0 !important;
+    padding: 0 !important;
+    font-family: var(--ik-font-display) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    cursor: pointer;
+    transition: background-color var(--ik-dur) var(--ik-ease),
+                border-color var(--ik-dur) var(--ik-ease),
+                color var(--ik-dur) var(--ik-ease) !important;
+    transform: none !important;
+}
+
+/* Icon-only siblings: lock to a 32×32 square so Share + theme + device
+   toggles read as a clean grid of icon chips. */
+html body .portal .solidbutton.fabtn.notext,
+html body .portal .solidbutton.fabtn.noprint {
+    width: 32px !important;
+}
+
+/* Text-bearing fabtns (Generate PDF, Print, Download with label) get an
+   auto width with comfortable padding + 6px icon-label gap, but keep the
+   shared 32px height + 10px radius so the row stays visually unified. */
+html body .portal .solidbutton.fabtn:not(.notext):not(.noprint) {
+    width: auto !important;
+    padding: 0 12px !important;
+    gap: 6px;
+    font-size: 12px !important;
+    white-space: nowrap;
+}
+
+/* Hover — same accent-soft tint as the back button so the whole chrome
+   family lights up consistently on interaction. */
+html body .portal .solidbutton.fabtn:hover,
+html body .portal .solidbutton.fabtn.notext:hover,
+html body .portal .solidbutton.fabtn.noprint:hover {
+    background-color: var(--portal-accent-soft) !important;
+    border-color: var(--portal-accent) !important;
+    color: var(--portal-accent) !important;
+}
+
+/* Icons inside fabtns must inherit `color` — HaloPSA's FA stylesheet
+   paints `.fa` at `color: #555` globally, which sits muddy on the ghost
+   bg and refuses to flip to accent on hover. */
+html body .portal .solidbutton.fabtn i,
+html body .portal .solidbutton.fabtn .fa,
+html body .portal .solidbutton.fabtn svg {
+    color: inherit !important;
+    fill: currentColor !important;
+}
+
+/* `.buttons-container` ships as `display: block` which relies on inline
+   whitespace for spacing — fragile when HaloPSA emits the markup without
+   whitespace. Flex + gap makes the row predictable and keeps the chrome
+   buttons evenly spaced regardless of HaloPSA's emitted whitespace. */
+html body .portal .buttons-container {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
 /* ─── Status pill shape ───────────────────────────────────
    Force full-pill geometry on every `.status-avatar` variant
    HaloPSA emits. Clean pill — no leading dot — labels carry
@@ -1328,89 +1417,144 @@ html body .portal .status-avatar.fortile {
     text-transform: uppercase !important;
 }
 
-/* ─── Priority indicator — coloured swatch + label ─────────
+/* ─── Priority indicator — radiating dot in tonal pill ─────
    HaloPSA renders each row's Priority cell as
      <div class="oneline">
        Medium                                       (text label)
        <div class="priority-block" style="background-color: …"></div>  (8×8 swatch)
      </div>
-   Layout: small rounded coloured square BEFORE the text (flex row-reverse
-   so the swatch sits on the left regardless of DOM order), body-size
-   text in the normal cell colour. This reads as a status-indicator
-   dot + label rather than a full tonal pill, matching the user's
-   reference.
 
-   HaloPSA palette → brand colour mapping (via attribute selectors
-   on the swatch's inline `background-color: rgb(...)`):
-     rgb(0, 98, 177)     deep blue   → Low       (--portal-accent)
-     rgb(164, 221, 0)    lime        → Medium    (--portal-warn amber)
-     rgb(252, 220, 0)    yellow      → Medium    (same)
-     rgb(251, 158, 0)    orange      → High      (#F97316)
-     rgb(220, 53, 69)    red         → Critical  (--portal-err)
-     rgb(255, 0, 0)      red         → Critical  (same)
-     rgb(255, 46, 0)     red-orange  → Critical  (same) */
+   We render this as a tonal pill (background = light tint of the priority
+   hue) with the swatch repurposed as a saturated 8px circle dot SITTING
+   IN FRONT OF the label, plus a CSS keyframe pulse that radiates a fading
+   ring out from the dot — same idiom as Pingdom / Better Stack / GitHub
+   uptime status indicators. `flex-direction: row-reverse` lets us keep
+   HaloPSA's DOM order (text first, swatch second) while painting dot-then-
+   text on screen.
+
+   Per-level theming uses three custom properties stamped on `.oneline`
+   via `:has()` so each priority gets its own bg / ink / dot colour
+   without triplicating the layout rules:
+     --p-bg   tonal background (~92% lightness of hue)
+     --p-ink  text colour (~28% lightness — readable contrast on tint)
+     --p-dot  saturated dot colour (the "live" hue) */
+
+@keyframes ik-priority-pulse {
+    0%   { box-shadow: 0 0 0 0 var(--p-dot, currentColor); opacity: 1; }
+    70%  { box-shadow: 0 0 0 6px transparent; opacity: 1; }
+    100% { box-shadow: 0 0 0 0 transparent; opacity: 1; }
+}
 
 html body .portal .rt-td .oneline:has(> .priority-block) {
     display: inline-flex !important;
-    flex-direction: row-reverse;        /* swatch first, text second */
+    flex-direction: row-reverse;        /* dot first, text second */
     align-items: center;
-    justify-content: flex-end;
-    gap: 10px;
-    padding: 0 !important;
-    background: transparent !important;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 4px 12px 4px 10px !important;
+    background: var(--p-bg, var(--portal-surface-active)) !important;
     border: 0 !important;
-    border-radius: 0 !important;
+    border-radius: 999px !important;
     font-family: var(--ik-font-display) !important;
-    font-size: 13px !important;
-    font-weight: 500 !important;
-    letter-spacing: 0;
-    text-transform: none;
-    color: var(--portal-text) !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--p-ink, var(--portal-text)) !important;
     line-height: 1.4;
 }
-/* The coloured swatch — render as a 10×10 rounded square, aligned
-   with the text baseline. `!important` on `display` overrides an
-   earlier `display: none` that might still be cached, and the
-   per-level background colour overrides HaloPSA's inline bg. */
+
+/* The HaloPSA swatch reused as the radiating dot. Width/height bumped
+   to a perfect 8px circle, `border-radius: 999px` overrides the older
+   3px-rounded-square treatment. The pulse animation is owned by the
+   dot (not the pill) so the ring radiates out from the dot's centre
+   rather than from the pill's edge. */
 html body .portal .rt-td .oneline > .priority-block {
     display: inline-block !important;
-    width: 10px !important;
-    height: 10px !important;
-    border-radius: 3px !important;
-    flex: 0 0 10px;
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 999px !important;
+    flex: 0 0 8px;
     padding: 0 !important;
     margin: 0 !important;
+    background-image: linear-gradient(var(--p-dot), var(--p-dot)) !important;
+    background-color: var(--p-dot) !important;
+    color: var(--p-dot);   /* drives `currentColor` fallback in the keyframe */
+    animation: ik-priority-pulse 2.4s var(--ik-ease) infinite;
 }
 
-/* Colour remap — paint the swatch with brand tokens keyed on
-   HaloPSA's inline rgb(). `background-image` wins over the inline
-   `background-color` (same trick we use for status pills). */
+/* Per-priority token triplets — stamped via :has() on the .oneline so
+   the pill, ink, and dot all theme together. Tints derived from the
+   ops-config palette family (light bg ~92% lightness, ink ~28%,
+   dot is the saturated brand hue). Dark-mode overrides at the bottom
+   flip bg to a translucent wash + lift the ink. */
 
-/* Low — HaloPSA deep blue → brand primary blue */
-html body .portal .rt-td .oneline > .priority-block[style*="rgb(0, 98, 177)"],
-html body .portal .rt-td .oneline > .priority-block[style*="rgb(0, 123, 255)"] {
-    background-image: linear-gradient(var(--portal-accent), var(--portal-accent)) !important;
-    background-color: var(--portal-accent) !important;
+/* Low — brand blue */
+html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(0, 98, 177)"]),
+html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(0, 123, 255)"]) {
+    --p-bg: var(--portal-accent-soft);
+    --p-ink: var(--portal-accent);
+    --p-dot: var(--portal-accent);
 }
-/* Medium — HaloPSA lime / yellow → brand amber (--portal-warn) */
-html body .portal .rt-td .oneline > .priority-block[style*="rgb(164, 221, 0)"],
-html body .portal .rt-td .oneline > .priority-block[style*="rgb(252, 220, 0)"] {
-    background-image: linear-gradient(var(--portal-warn), var(--portal-warn)) !important;
-    background-color: var(--portal-warn) !important;
+/* Medium — amber */
+html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(164, 221, 0)"]),
+html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(252, 220, 0)"]) {
+    --p-bg: #FFE9C2;
+    --p-ink: #7A4400;
+    --p-dot: var(--portal-warn);
 }
-/* High — HaloPSA orange → brand orange #F97316 */
-html body .portal .rt-td .oneline > .priority-block[style*="rgb(251, 158, 0)"],
-html body .portal .rt-td .oneline > .priority-block[style*="rgb(255, 152, 0)"],
-html body .portal .rt-td .oneline > .priority-block[style*="rgb(255, 193, 7)"] {
-    background-image: linear-gradient(#F97316, #F97316) !important;
-    background-color: #F97316 !important;
+/* High — orange */
+html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(251, 158, 0)"]),
+html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 152, 0)"]),
+html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 193, 7)"]) {
+    --p-bg: #FFE0CC;
+    --p-ink: #7A2E0A;
+    --p-dot: #F97316;
 }
-/* Critical — HaloPSA red → brand err (coral) */
-html body .portal .rt-td .oneline > .priority-block[style*="rgb(220, 53, 69)"],
-html body .portal .rt-td .oneline > .priority-block[style*="rgb(255, 0, 0)"],
-html body .portal .rt-td .oneline > .priority-block[style*="rgb(255, 46, 0)"] {
-    background-image: linear-gradient(var(--portal-err), var(--portal-err)) !important;
-    background-color: var(--portal-err) !important;
+/* Critical — coral red */
+html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(220, 53, 69)"]),
+html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 0, 0)"]),
+html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 46, 0)"]) {
+    --p-bg: #FBDAD4;
+    --p-ink: #7A1E10;
+    --p-dot: var(--portal-err);
+}
+
+/* Dark-mode tints — translucent washes + light ink, matching the
+   status-pill dark treatment elsewhere in this file. */
+.theme-dark .portal .rt-td .oneline:has(> .priority-block[style*="rgb(0, 98, 177)"]),
+.theme-dark .portal .rt-td .oneline:has(> .priority-block[style*="rgb(0, 123, 255)"]) {
+    --p-bg: rgba(74, 116, 240, 0.18);
+    --p-ink: #93C5FD;
+    --p-dot: var(--portal-accent);
+}
+.theme-dark .portal .rt-td .oneline:has(> .priority-block[style*="rgb(164, 221, 0)"]),
+.theme-dark .portal .rt-td .oneline:has(> .priority-block[style*="rgb(252, 220, 0)"]) {
+    --p-bg: rgba(251, 146, 60, 0.18);
+    --p-ink: #FDBA74;
+    --p-dot: var(--portal-warn);
+}
+.theme-dark .portal .rt-td .oneline:has(> .priority-block[style*="rgb(251, 158, 0)"]),
+.theme-dark .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 152, 0)"]),
+.theme-dark .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 193, 7)"]) {
+    --p-bg: rgba(249, 115, 22, 0.20);
+    --p-ink: #FDBA74;
+    --p-dot: #F97316;
+}
+.theme-dark .portal .rt-td .oneline:has(> .priority-block[style*="rgb(220, 53, 69)"]),
+.theme-dark .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 0, 0)"]),
+.theme-dark .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 46, 0)"]) {
+    --p-bg: rgba(248, 113, 113, 0.20);
+    --p-ink: #FCA5A5;
+    --p-dot: var(--portal-err);
+}
+
+/* Respect users with reduced-motion preferences — drop the pulse, keep
+   the static dot + pill. */
+@media (prefers-reduced-motion: reduce) {
+    html body .portal .rt-td .oneline > .priority-block {
+        animation: none !important;
+    }
 }
 
 /* Legacy `.priority-avatar` (if HaloPSA surfaces this class on any
@@ -1629,8 +1773,19 @@ html body .portal .buttons-container .ui.button.dropdown {
     box-shadow: none !important;
 }
 
-/* Search wrapper on list pages */
+/* Search wrapper on list pages — explicit 40px height locks parity with
+   the adjacent `.Select__control` filter dropdowns (Open Tickets / All
+   Tickets) so the three controls in the filter row read as one aligned
+   strip. Without this rule the searchbox relied on the natural height
+   of its inner `<input>` (~36-38px depending on padding), so the row
+   showed a 2-3px height drift between dropdowns and search. Flex
+   centring keeps the inner input vertically centred regardless of its
+   own padding. The hero-page searchbox keeps its 60px override via the
+   `.searchscreen .searchbox` selector higher in the file (more specific). */
 html body .portal .searchbox {
+    height: 40px !important;
+    display: flex !important;
+    align-items: center;
     border-radius: var(--portal-radius-sm) !important;
     background-color: var(--portal-surface) !important;
     border: 1px solid var(--portal-border) !important;
@@ -1879,13 +2034,18 @@ html body .portal:has(.mandatory-hint) .details-form .details-group.card-panel {
     box-shadow: none !important;
 }
 
+/* Field labels — colour matched to the asterisk (`#F87171` coral) so the
+   "this field denotes a property of the form" cue and the "this field is
+   required" cue read as one signal instead of two competing tones (muted
+   slate label + bright coral asterisk). Mono + uppercase + tracking
+   stays — only the colour changes. */
 html body .portal .details-form label {
     font-family: var(--ik-font-mono) !important;
     font-size: 10.5px !important;
     font-weight: 500 !important;
     letter-spacing: 0.12em !important;
     text-transform: uppercase !important;
-    color: var(--portal-text-muted) !important;
+    color: #F87171 !important;
     margin-bottom: 8px !important;
     display: inline-block;
 }
@@ -1953,12 +2113,22 @@ html body .portal .details-form hr {
     margin: 16px 0 !important;
 }
 
-/* Slightly shorter inputs — 40px felt chunky next to 10.5px labels. */
+/* Form control min-height — bumped to 56px so the Contact and Site rows
+   (which render an avatar + 2-line composite value inside `.Select__control`
+   for "Electronic Music Academy / Electronic Music Academy/Main") have
+   room to breathe instead of cropping the avatar against the border. The
+   simpler single-line selects (Summary, Urgency, etc.) inherit the same
+   56px so the entire form column reads as one consistent ladder of
+   field rows. `min-height` (not `height`) lets Select__control still
+   grow further if multi-line content needs it. Plain `<input>` text
+   fields use `height` since their content is always single-line. */
 html body .portal .details-form input[type="text"]:not(.Select__input),
-html body .portal .details-form input:not([type]):not(.Select__input),
+html body .portal .details-form input:not([type]):not(.Select__input) {
+    height: 56px !important;
+    min-height: 56px !important;
+}
 html body .portal .details-form .Select__control {
-    height: 38px !important;
-    min-height: 38px !important;
+    min-height: 56px !important;
 }
 
 /* Froala editor */
@@ -2595,17 +2765,30 @@ html body .portal .listwidget .action-history-item.tile-item:hover {
 }
 
 /* Row layout — inner `.articleInfoSmall.kb` ships as a loose flex row.
-   Give it explicit gap so title + meta + chips don't collide. */
+   Give it explicit gap so title + meta + chips don't collide.
+   `column-gap` and `row-gap` are split so the horizontal spacing between
+   tags on row 2 is tighter than the gap that separates leading
+   view-count + title on row 1. */
 html body .portal .articleInfoSmall.kb {
     display: flex !important;
     align-items: center;
-    gap: 14px;
+    column-gap: 14px;
+    row-gap: 8px;
     flex-wrap: wrap;
 }
 
 /* Article title — the `.heading` inside the row. HaloPSA's default
    leaves this at 16px/400; push to 14.5/600 so it anchors the card
-   visually and matches the Top 5 Articles home widget. */
+   visually and matches the Top 5 Articles home widget.
+
+   `flex: 1 0 calc(100% - 80px)` is the lever that forces every `.kbtags`
+   sibling to wrap below the title. Heading wants nearly the full row
+   (minus ~80px reserved for the leading view-count chip on the left)
+   and `flex-shrink: 0` stops it collapsing to make room for short tags
+   like "CIPP" or "OFFBOARDING" — previously those squeezed onto the right
+   of the title row while longer tag groups wrapped, so half the list
+   placed tags inline and the other half placed them below. Locking the
+   heading wide makes every row consistent. */
 html body .portal .article .heading,
 html body .portal .articleInfoSmall.kb .heading {
     font-family: var(--ik-font-display) !important;
@@ -2613,8 +2796,17 @@ html body .portal .articleInfoSmall.kb .heading {
     font-weight: 600 !important;
     color: var(--portal-text) !important;
     letter-spacing: -0.005em;
-    flex: 1 1 60%;
+    flex: 1 0 calc(100% - 80px) !important;
     min-width: 0;
+}
+
+/* KB-list tag chips — drop the per-chip `margin` from the global rule so
+   the parent flex container's `column-gap` is the single source of truth
+   for horizontal rhythm, and the wrapped tag row sits flush against the
+   left edge of the card. */
+html body .portal .articleInfoSmall.kb > .kbtags,
+html body .portal .articleInfoSmall.kb span.kbtags {
+    margin: 0 !important;
 }
 
 /* Right-side chip block (`.articleRight`) — views count + ARTICLE pill.

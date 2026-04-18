@@ -1954,27 +1954,124 @@ html body .portal .attachment-container.edit:hover {
     background: var(--portal-accent-soft) !important;
 }
 
-/* Stepper */
+/* ─── Workflow stepper (rc-steps) ───────────────────────────
+   Target treatment — match the reference mock:
+     Completed (finish) → solid accent circle with white check
+     Active    (process)→ solid accent circle with white number
+     Future    (wait)   → pale surface circle with muted number
+   Connector is a 1px hairline through the centre. Icons are 40×40
+   (rc-steps ships 18×18 which reads as tiny dots against the body
+   text). Titles use display font in tonal states:
+     finish  → body-text colour
+     process → accent blue
+     wait    → muted text */
+
+/* Icon base — size + shape, inherited by all three states. */
+html body .portal .rc-steps-item-icon {
+    width: 40px !important;
+    height: 40px !important;
+    line-height: 38px !important;   /* visual centre for 1px border */
+    border-radius: 999px !important;
+    font-family: var(--ik-font-display) !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+    transition: background-color var(--ik-dur) var(--ik-ease),
+                border-color var(--ik-dur) var(--ik-ease),
+                color var(--ik-dur) var(--ik-ease) !important;
+}
+/* rc-steps uses a span inside — ensure the digit / check centres. */
+html body .portal .rc-steps-item-icon .rc-steps-icon {
+    font-family: var(--ik-font-display) !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+    color: inherit !important;
+}
+
+/* Connector line between steps — 1px hairline through the icon centre. */
+html body .portal .rc-steps-item-tail {
+    top: 20px !important;           /* centre of 40px icon */
+    padding: 0 !important;
+}
 html body .portal .rc-steps-item-tail::after {
     background: var(--portal-border) !important;
     height: 1px !important;
 }
+
+/* Vertical-label variant margin — rc-steps centres labels below
+   the icon; icon horizontal margin is `(trackWidth - iconWidth) / 2`
+   so the connector joins mid-icon cleanly. 40/2 = 20px → use
+   `margin: 0 32px` (rc-steps ships 36px default; 32 trims slightly
+   so the labels have enough horizontal room on 5-step ladders). */
 html body .portal .rc-steps-label-vertical .rc-steps-item-icon {
-    margin: 0 41px !important;
+    margin: 0 32px !important;
 }
-html body .portal .rc-steps-item-process .rc-steps-item-icon,
+
+/* FINISH — completed: solid accent circle, white check glyph. */
 html body .portal .rc-steps-item-finish .rc-steps-item-icon {
     background: var(--portal-action) !important;
-    border-color: var(--portal-action) !important;
+    border: 1px solid var(--portal-action) !important;
+    color: #fff !important;
+}
+html body .portal .rc-steps-item-finish .rc-steps-item-icon .rc-steps-icon {
+    color: #fff !important;
+}
+/* rc-steps renders the check via CSS content on `.rc-steps-icon`
+   when state is finish. Make sure it inherits ink. */
+html body .portal .rc-steps-item-finish .rc-steps-item-icon svg,
+html body .portal .rc-steps-item-finish .rc-steps-item-icon i,
+html body .portal .rc-steps-item-finish .rc-steps-item-icon .anticon {
+    color: #fff !important;
+    fill: currentColor !important;
+}
+/* Tail after a finish step — painted accent so completed section
+   visually extends toward the active step. */
+html body .portal .rc-steps-item-finish .rc-steps-item-tail::after {
+    background: var(--portal-action) !important;
+    opacity: 0.45 !important;
+}
+
+/* PROCESS — active: solid accent circle, white number. */
+html body .portal .rc-steps-item-process .rc-steps-item-icon {
+    background: var(--portal-action) !important;
+    border: 1px solid var(--portal-action) !important;
+    color: #fff !important;
+    box-shadow: 0 0 0 4px var(--portal-accent-subtle);
+}
+html body .portal .rc-steps-item-process .rc-steps-item-icon .rc-steps-icon {
+    color: #fff !important;
+}
+
+/* WAIT — future: pale surface circle, muted number, no coloured border. */
+html body .portal .rc-steps-item-wait .rc-steps-item-icon {
+    background: var(--portal-surface-active) !important;
+    border: 1px solid var(--portal-border) !important;
+    color: var(--portal-text-muted) !important;
+}
+html body .portal .rc-steps-item-wait .rc-steps-item-icon .rc-steps-icon {
+    color: var(--portal-text-muted) !important;
+}
+
+/* Titles — Montserrat (NOT mono) so the label reads as content,
+   not eyebrow metadata. Per-state colour below. */
+html body .portal .rc-steps-item-title {
+    font-family: var(--ik-font-display) !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase !important;
+    margin-top: 10px !important;
+}
+html body .portal .rc-steps-item-finish .rc-steps-item-title {
+    color: var(--portal-text) !important;
 }
 html body .portal .rc-steps-item-process .rc-steps-item-title {
     color: var(--portal-action) !important;
 }
-html body .portal .rc-steps-item-title {
-    font-family: var(--ik-font-mono) !important;
-    font-size: 11px !important;
-    letter-spacing: 0.1em !important;
-    text-transform: uppercase !important;
+html body .portal .rc-steps-item-wait .rc-steps-item-title {
+    color: var(--portal-text-muted) !important;
 }
 
 /* Switches segmented control */

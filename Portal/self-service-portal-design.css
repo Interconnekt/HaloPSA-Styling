@@ -1675,12 +1675,40 @@ html body .portal footer {
 }
 html body .portal footer a {
     color: var(--portal-text-muted) !important;
-    font-family: var(--ik-font-mono) !important;
-    font-size: 11px !important;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    font-family: var(--ik-font-display) !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    letter-spacing: normal !important;
+    text-transform: none !important;
 }
 html body .portal footer.page-footer a[href*="usehalo.com"] { display: none !important; }
+html body .portal footer.page-footer .center-align > .row:has(a[href*="usehalo.com"]) { display: none !important; }
+
+/* Strip the "https://" prefix from the website link in the footer.
+   CSS can't edit DOM text, so we zero the original then inject the
+   clean version via ::before. Scoped by href so only the site link
+   is affected — tel: and mailto: siblings keep their text. */
+html body .portal footer.page-footer .box1 a[href^="https://interconnekt"] > div {
+    font-size: 0 !important;
+}
+html body .portal footer.page-footer .box1 a[href^="https://interconnekt"] > div::before {
+    content: "interconnekt.com.au";
+    font-size: 12px;
+    font-weight: 400;
+    font-family: var(--ik-font-display);
+    color: var(--portal-text-muted);
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+/* ─── KB/Articles: kill HaloPSA's duplicate ARTICLE status chip ───
+   Top 5 Articles / KB index items render a `.status-avatar` TWICE:
+   once as a child of `.articleRight` (our styled pill), and once as
+   a direct child of `.articleInfoSmall.kb` (an older unstyled square
+   badge). Hide the duplicate so only our pill remains. */
+html body .portal .articleInfoSmall.kb > .status-avatar {
+    display: none !important;
+}
 
 
 /* ─────────────────────────────────────────────────────────

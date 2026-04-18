@@ -3209,17 +3209,34 @@ html body .portal .column-header button:has(i.fa-filter) {
     color: var(--portal-text-secondary) !important;
     border: 1px solid var(--portal-border) !important;
     border-radius: var(--portal-radius-xs) !important;
-    width: 28px !important;
-    height: 28px !important;
+    width: 24px !important;
+    height: 24px !important;
     padding: 0 !important;
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
     box-shadow: none !important;
     cursor: pointer;
-    transition: background-color var(--ik-dur) var(--ik-ease),
+    /* Hover-reveal — funnel stays out of the way until the column
+       header is hovered (or focused via keyboard). `pointer-events:
+       none` in the hidden state is deliberate: opacity alone leaves
+       an invisible clickable target and you get phantom-click weirdness
+       when columns resize. */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--ik-dur) var(--ik-ease),
+                background-color var(--ik-dur) var(--ik-ease),
                 border-color var(--ik-dur) var(--ik-ease),
                 color var(--ik-dur) var(--ik-ease) !important;
+}
+html body .portal .rt-th:hover button,
+html body .portal .rt-th:focus-within button,
+html body .portal .rt-th:hover .filter-btn,
+html body .portal .rt-th:hover .filter-button,
+html body .portal .column-header:hover button:has(.fa-filter),
+html body .portal .column-header:hover button:has(i.fa-filter) {
+    opacity: 1;
+    pointer-events: auto;
 }
 html body .portal .rt-th button:hover,
 html body .portal .rt-th .filter-btn:hover,
@@ -3244,7 +3261,7 @@ html body .portal .filter-button .fa,
 html body .portal .filter-button svg {
     color: inherit !important;
     fill: currentColor !important;
-    font-size: 12px !important;
+    font-size: 11px !important;
     margin: 0 !important;
 }
 

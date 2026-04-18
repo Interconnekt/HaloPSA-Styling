@@ -2281,28 +2281,29 @@ html body .portal .details-form hr {
     margin: 16px 0 !important;
 }
 
-/* Form control min-height — bumped to 56px so the Contact and Site rows
-   (which render an avatar + 2-line composite value inside `.Select__control`
-   for "Electronic Music Academy / Electronic Music Academy/Main") have
-   room to breathe instead of cropping the avatar against the border. The
-   simpler single-line selects (Summary, Urgency, etc.) inherit the same
-   56px so the entire form column reads as one consistent ladder of
-   field rows. `min-height` (not `height`) lets Select__control still
-   grow further if multi-line content needs it. Plain `<input>` text
-   fields use `height` since their content is always single-line. */
+/* Form control heights — keep plain inputs + simple selects at 42px
+   (standard single-line density) and hand the 56px tall variant only
+   to the Contact row. The Contact field renders a 2-line composite
+   ("Joel Kino" + "Shinjuku Group/Main") inside a `.Select__single-value`,
+   which we detect with `:has(> div > div + div)`. Every other select
+   (Site, Urgency, etc.) has a single child and stays at 42px.
+   `min-height` (not `height`) lets Select__control still grow further
+   if multi-line content appears. */
 html body .portal .details-form input[type="text"]:not(.Select__input),
 html body .portal .details-form input:not([type]):not(.Select__input) {
-    height: 56px !important;
-    min-height: 56px !important;
+    height: 42px !important;
+    min-height: 42px !important;
 }
 html body .portal .details-form .Select__control {
+    min-height: 42px !important;
+}
+/* Contact row — detect the 2-line composite value and give it the
+   extra headroom so the avatar and two text lines don't crop. */
+html body .portal .details-form .Select__control:has(.Select__single-value > div > div + div) {
     min-height: 56px !important;
 }
-/* New-ticket form has its own search box (asset selector etc.) — bump
-   it to match the surrounding 56px field rhythm so it doesn't look
-   stunted next to the taller Contact / Site / Urgency selects. */
 html body .portal .details-form .searchbox {
-    height: 56px !important;
+    height: 42px !important;
 }
 
 /* Froala editor */

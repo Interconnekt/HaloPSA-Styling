@@ -1379,7 +1379,19 @@ html body .portal .status-avatar.s-assigned {
    status's tokens. Class selectors above win when BOTH are
    present because they have one extra class specificity. */
 
-/* HaloPSA blue (Assigned / Open) */
+/* ═════════════════════════════════════════════════════════
+   Status chip palette — semantic title-based mapping (primary)
+   plus per-HaloPSA-hue rgb fallback (secondary). Every rule
+   below lists BOTH paths so a chip maps correctly whether
+   HaloPSA ships a known rgb OR a tenant-customised colour
+   (the `title` attribute still carries the semantic label).
+   This is the refactor that lets the stylesheet survive a
+   tenant changing their status hex codes without us
+   chasing rgb values.
+   ═════════════════════════════════════════════════════════ */
+
+/* Assigned — HaloPSA blue variants + title */
+html body .portal .status-avatar[title="Assigned"],
 html body .portal .status-avatar[style*="rgb(66, 133, 244)"],
 html body .portal .status-avatar[style*="rgb(0, 123, 255)"],
 html body .portal .status-avatar[style*="rgb(52, 131, 250)"],
@@ -1392,11 +1404,8 @@ html body .portal .status-avatar[style*="rgb(74, 116, 240)"] {
     background-color: var(--pill-assigned-bg) !important;
     color: var(--pill-assigned-ink) !important;
 }
-/* HaloPSA purple + teal (In Progress) → emerald progress green.
-   Tenants vary: older instances emit purple (#6F42C1 / #6610F2 /
-   #9933FF / #8A2BE2) while more recent setups use teal (#0C797D).
-   Both map to the same semantic "work is in flight" green so the
-   user sees a consistent signal regardless of tenant config. */
+/* In Progress — title-based primary + HaloPSA purple / teal rgbs */
+html body .portal .status-avatar[title="In Progress"],
 html body .portal .status-avatar[style*="rgb(111, 66, 193)"],
 html body .portal .status-avatar[style*="rgb(102, 16, 242)"],
 html body .portal .status-avatar[style*="rgb(153, 51, 255)"],
@@ -1406,7 +1415,8 @@ html body .portal .status-avatar[style*="rgb(12, 121, 125)"] {
     background-color: var(--pill-progress-bg) !important;
     color: var(--pill-progress-ink) !important;
 }
-/* HaloPSA amber + "Awaiting User" light grey → awaiting-user neutral */
+/* Awaiting User — title-based primary + HaloPSA amber / grey rgbs */
+html body .portal .status-avatar[title="Awaiting User"],
 html body .portal .status-avatar[style*="rgb(255, 193, 7)"],
 html body .portal .status-avatar[style*="rgb(255, 170, 0)"],
 html body .portal .status-avatar[style*="rgb(255, 152, 0)"],
@@ -1438,7 +1448,8 @@ html body .portal .status-avatar.bitsmall {
     background-color: var(--pill-progress-bg) !important;
     color: var(--pill-progress-ink) !important;
 }
-/* HaloPSA grey (Closed) → closed slate */
+/* Closed — title-based primary + grey rgbs */
+html body .portal .status-avatar[title="Closed"],
 html body .portal .status-avatar[style*="rgb(108, 117, 125)"],
 html body .portal .status-avatar[style*="rgb(128, 128, 128)"],
 html body .portal .status-avatar[style*="rgb(80, 80, 80)"],
@@ -1447,7 +1458,10 @@ html body .portal .status-avatar[style*="rgb(119, 119, 119)"] {
     background-color: var(--pill-closed-bg) !important;
     color: var(--pill-closed-ink) !important;
 }
-/* HaloPSA red (Overdue / Breached) → rejected */
+/* Rejected / Overdue — title + red rgbs */
+html body .portal .status-avatar[title="Rejected"],
+html body .portal .status-avatar[title*="Overdue"],
+html body .portal .status-avatar[title*="Breached"],
 html body .portal .status-avatar[style*="rgb(220, 53, 69)"],
 html body .portal .status-avatar[style*="rgb(255, 46, 0)"],
 html body .portal .status-avatar[style*="rgb(255, 0, 0)"],
@@ -1457,7 +1471,8 @@ html body .portal .status-avatar[style*="rgb(239, 68, 68)"] {
     background-color: var(--pill-rejected-bg) !important;
     color: var(--pill-rejected-ink) !important;
 }
-/* HaloPSA cyan (Info) → qualified sky */
+/* Qualified / Info cyan */
+html body .portal .status-avatar[title="Qualified"],
 html body .portal .status-avatar[style*="rgb(23, 162, 184)"],
 html body .portal .status-avatar[style*="rgb(13, 202, 240)"],
 html body .portal .status-avatar[style*="rgb(8, 145, 178)"] {
@@ -1465,11 +1480,79 @@ html body .portal .status-avatar[style*="rgb(8, 145, 178)"] {
     background-color: var(--pill-qualified-bg) !important;
     color: var(--pill-qualified-ink) !important;
 }
-/* HaloPSA brand yellow (New ticket) */
+/* New — title + brand yellow rgb */
+html body .portal .status-avatar[title="New"],
 html body .portal .status-avatar[style*="rgb(252, 220, 0)"] {
     background-image: linear-gradient(var(--pill-new-bg), var(--pill-new-bg)) !important;
     background-color: var(--pill-new-bg) !important;
     color: var(--pill-new-ink) !important;
+}
+
+/* Title-only semantic mappings — for statuses HaloPSA emits with a
+   non-default tenant colour that isn't in any rgb list above. These
+   rely purely on the `title` attribute and will keep working even
+   when a tenant customises their status hex codes. */
+html body .portal .status-avatar[title="Awaiting Supplier"] {
+    background-image: linear-gradient(var(--pill-awaiting-supplier-bg), var(--pill-awaiting-supplier-bg)) !important;
+    background-color: var(--pill-awaiting-supplier-bg) !important;
+    color: var(--pill-awaiting-supplier-ink) !important;
+}
+html body .portal .status-avatar[title="Action Required"] {
+    background-image: linear-gradient(var(--pill-action-required-bg), var(--pill-action-required-bg)) !important;
+    background-color: var(--pill-action-required-bg) !important;
+    color: var(--pill-action-required-ink) !important;
+}
+html body .portal .status-avatar[title="Approved"] {
+    background-image: linear-gradient(var(--pill-approved-bg), var(--pill-approved-bg)) !important;
+    background-color: var(--pill-approved-bg) !important;
+    color: var(--pill-approved-ink) !important;
+}
+html body .portal .status-avatar[title="Action Completed"] {
+    background-image: linear-gradient(var(--pill-action-completed-bg), var(--pill-action-completed-bg)) !important;
+    background-color: var(--pill-action-completed-bg) !important;
+    color: var(--pill-action-completed-ink) !important;
+}
+html body .portal .status-avatar[title="On Hold"] {
+    background-image: linear-gradient(var(--pill-on-hold-bg), var(--pill-on-hold-bg)) !important;
+    background-color: var(--pill-on-hold-bg) !important;
+    color: var(--pill-on-hold-ink) !important;
+}
+html body .portal .status-avatar[title="Updated"] {
+    background-image: linear-gradient(var(--pill-updated-bg), var(--pill-updated-bg)) !important;
+    background-color: var(--pill-updated-bg) !important;
+    color: var(--pill-updated-ink) !important;
+}
+html body .portal .status-avatar[title="Scheduled"] {
+    background-image: linear-gradient(var(--pill-scheduled-bg), var(--pill-scheduled-bg)) !important;
+    background-color: var(--pill-scheduled-bg) !important;
+    color: var(--pill-scheduled-ink) !important;
+}
+html body .portal .status-avatar[title*="Awaiting Approval"],
+html body .portal .status-avatar[title*="Customer Review"] {
+    background-image: linear-gradient(var(--pill-approval-bg), var(--pill-approval-bg)) !important;
+    background-color: var(--pill-approval-bg) !important;
+    color: var(--pill-approval-ink) !important;
+}
+html body .portal .status-avatar[title*="CAB"] {
+    background-image: linear-gradient(var(--pill-system-bg), var(--pill-system-bg)) !important;
+    background-color: var(--pill-system-bg) !important;
+    color: var(--pill-system-ink) !important;
+}
+html body .portal .status-avatar[title*="Triage Handoff"] {
+    background-image: linear-gradient(var(--pill-triage-handoff-bg), var(--pill-triage-handoff-bg)) !important;
+    background-color: var(--pill-triage-handoff-bg) !important;
+    color: var(--pill-triage-handoff-ink) !important;
+}
+html body .portal .status-avatar[title*="Billing Review"],
+html body .portal .status-avatar[title*="Change Review"] {
+    background-image: linear-gradient(var(--pill-review-bg), var(--pill-review-bg)) !important;
+    background-color: var(--pill-review-bg) !important;
+    color: var(--pill-review-ink) !important;
+}
+html body .portal .status-avatar[title*="Dispatch Review"] {
+    background-image: linear-gradient(var(--pill-dispatch-review-bg), var(--pill-dispatch-review-bg)) !important;
+    background-color: var(--pill-dispatch-review-bg) !important;
+    color: var(--pill-dispatch-review-ink) !important;
 }
 
 /* Semantic override — HaloPSA paints Completed / Resolved with the
@@ -1502,8 +1585,10 @@ html body .portal .status-avatar.s-neutral {
 
 /* Last-resort fallback — any HaloPSA inline bg we didn't map
    renders as an outlined Montserrat pill so a mystery chip
-   doesn't shout with a raw HaloPSA hue. */
-html body .portal .status-avatar[style*="background-color"]:not([style*="rgb(66, 133, 244)"]):not([style*="rgb(0, 123, 255)"]):not([style*="rgb(52, 131, 250)"]):not([style*="rgb(60, 134, 247)"]):not([style*="rgb(13, 110, 253)"]):not([style*="rgb(0, 102, 204)"]):not([style*="rgb(43, 92, 230)"]):not([style*="rgb(74, 116, 240)"]):not([style*="rgb(111, 66, 193)"]):not([style*="rgb(102, 16, 242)"]):not([style*="rgb(153, 51, 255)"]):not([style*="rgb(138, 43, 226)"]):not([style*="rgb(12, 121, 125)"]):not([style*="rgb(255, 193, 7)"]):not([style*="rgb(255, 170, 0)"]):not([style*="rgb(255, 152, 0)"]):not([style*="rgb(240, 173, 78)"]):not([style*="rgb(245, 158, 11)"]):not([style*="rgb(212, 212, 216)"]):not([style*="rgb(194, 65, 12)"]):not([style*="rgb(40, 167, 69)"]):not([style*="rgb(34, 139, 34)"]):not([style*="rgb(0, 190, 0)"]):not([style*="rgb(25, 135, 84)"]):not([style*="rgb(16, 185, 129)"]):not([style*="rgb(21, 128, 61)"]):not([style*="rgb(52, 211, 153)"]):not([style*="rgb(187, 52, 63)"]):not([style*="rgb(108, 117, 125)"]):not([style*="rgb(128, 128, 128)"]):not([style*="rgb(80, 80, 80)"]):not([style*="rgb(119, 119, 119)"]):not([style*="rgb(220, 53, 69)"]):not([style*="rgb(255, 46, 0)"]):not([style*="rgb(255, 0, 0)"]):not([style*="rgb(185, 28, 28)"]):not([style*="rgb(239, 68, 68)"]):not([style*="rgb(23, 162, 184)"]):not([style*="rgb(13, 202, 240)"]):not([style*="rgb(8, 145, 178)"]):not([style*="rgb(47, 53, 94)"]):not([style*="rgb(252, 220, 0)"]) {
+   doesn't shout with a raw HaloPSA hue. Excludes known rgbs AND
+   known `title` values — the title-based path means a tenant can
+   customise their hex codes without the chip falling through here. */
+html body .portal .status-avatar[style*="background-color"]:not([title="New"]):not([title="Assigned"]):not([title="In Progress"]):not([title="Awaiting User"]):not([title="Awaiting Supplier"]):not([title="Action Required"]):not([title="Closed"]):not([title="Approved"]):not([title="Rejected"]):not([title="Qualified"]):not([title="Action Completed"]):not([title="On Hold"]):not([title="Updated"]):not([title="Scheduled"]):not([title*="Completed"]):not([title*="Resolved"]):not([title*="CAB"]):not([title*="Overdue"]):not([title*="Breached"]):not([title*="Awaiting Approval"]):not([title*="Customer Review"]):not([title*="Triage Handoff"]):not([title*="Billing Review"]):not([title*="Change Review"]):not([title*="Dispatch Review"]):not([style*="rgb(66, 133, 244)"]):not([style*="rgb(0, 123, 255)"]):not([style*="rgb(52, 131, 250)"]):not([style*="rgb(60, 134, 247)"]):not([style*="rgb(13, 110, 253)"]):not([style*="rgb(0, 102, 204)"]):not([style*="rgb(43, 92, 230)"]):not([style*="rgb(74, 116, 240)"]):not([style*="rgb(111, 66, 193)"]):not([style*="rgb(102, 16, 242)"]):not([style*="rgb(153, 51, 255)"]):not([style*="rgb(138, 43, 226)"]):not([style*="rgb(12, 121, 125)"]):not([style*="rgb(255, 193, 7)"]):not([style*="rgb(255, 170, 0)"]):not([style*="rgb(255, 152, 0)"]):not([style*="rgb(240, 173, 78)"]):not([style*="rgb(245, 158, 11)"]):not([style*="rgb(212, 212, 216)"]):not([style*="rgb(194, 65, 12)"]):not([style*="rgb(40, 167, 69)"]):not([style*="rgb(34, 139, 34)"]):not([style*="rgb(0, 190, 0)"]):not([style*="rgb(25, 135, 84)"]):not([style*="rgb(16, 185, 129)"]):not([style*="rgb(21, 128, 61)"]):not([style*="rgb(52, 211, 153)"]):not([style*="rgb(187, 52, 63)"]):not([style*="rgb(108, 117, 125)"]):not([style*="rgb(128, 128, 128)"]):not([style*="rgb(80, 80, 80)"]):not([style*="rgb(119, 119, 119)"]):not([style*="rgb(220, 53, 69)"]):not([style*="rgb(255, 46, 0)"]):not([style*="rgb(255, 0, 0)"]):not([style*="rgb(185, 28, 28)"]):not([style*="rgb(239, 68, 68)"]):not([style*="rgb(23, 162, 184)"]):not([style*="rgb(13, 202, 240)"]):not([style*="rgb(8, 145, 178)"]):not([style*="rgb(47, 53, 94)"]):not([style*="rgb(252, 220, 0)"]) {
     background-image: none !important;
     background-color: transparent !important;
     border: 1px solid var(--portal-border) !important;
@@ -1918,26 +2003,48 @@ html body .portal .page-counts h98 {
     color: var(--portal-text-muted) !important;
     text-transform: uppercase;
 }
-html body .portal .buttons-container .solidbutton:not(.fabtn),
-html body .portal .buttons-container .solidbutton.menubtn:not(.fabtn) {
+/* Pagination row — prev / next chevrons AND the menubtn "..." share
+   one chrome family so the three icon buttons read as an aligned
+   set. Previously `.fabtn` was excluded, which left the prev/next
+   chevrons on HaloPSA's default chip chrome while the "..." button
+   was themed — giving a visual height + border-radius mismatch the
+   user flagged as an alignment issue. Flex centring pins the icon
+   glyph dead-centre regardless of its own box-sizing. */
+html body .portal .buttons-container .solidbutton,
+html body .portal .buttons-container .solidbutton.menubtn,
+html body .portal .buttons-container .solidbutton.fabtn {
     background-color: var(--portal-surface) !important;
-    color: var(--portal-text) !important;
+    color: var(--portal-text-secondary) !important;
     border: 1px solid var(--portal-border) !important;
     border-radius: var(--portal-radius-sm) !important;
     width: 32px !important;
     height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
     padding: 0 !important;
     display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
+    align-items: center !important;
+    justify-content: center !important;
+    vertical-align: middle !important;
     margin: 0 3px !important;
     box-shadow: none !important;
-    transition: all var(--ik-dur) var(--ik-ease);
+    transition: background-color var(--ik-dur) var(--ik-ease),
+                border-color var(--ik-dur) var(--ik-ease),
+                color var(--ik-dur) var(--ik-ease) !important;
 }
-html body .portal .buttons-container .solidbutton:not(.fabtn):hover {
+html body .portal .buttons-container .solidbutton:hover,
+html body .portal .buttons-container .solidbutton.fabtn:hover {
     background-color: var(--portal-surface-hover) !important;
     border-color: var(--portal-accent) !important;
     color: var(--portal-accent) !important;
+}
+html body .portal .buttons-container .solidbutton i,
+html body .portal .buttons-container .solidbutton .fa,
+html body .portal .buttons-container .solidbutton svg {
+    color: inherit !important;
+    fill: currentColor !important;
+    font-size: 12px !important;
+    margin: 0 !important;
 }
 html body .portal .buttons-container .ui.button.dropdown {
     background-color: transparent !important;
@@ -2030,6 +2137,44 @@ html body .portal .Select__menu {
     border: 1px solid var(--portal-border) !important;
     box-shadow: var(--portal-shadow-hover) !important;
     overflow: hidden;
+    background: var(--portal-surface) !important;
+    margin-top: 4px !important;
+}
+html body .portal .Select__menu-list {
+    padding: 4px !important;
+    background: var(--portal-surface) !important;
+}
+
+/* Option rows — react-select ships these as flat panels with emotion
+   class colours (bright-blue selected, mid-grey hovered) that don't
+   match our tonal chrome anywhere else in the portal. Rewrite the
+   three states (default / focused / selected) as brand-tinted rows
+   with our radius token so the menu reads as part of the same
+   surface family as dropdown menus, KB rows and account sidebar nav.
+   `!important` is needed because react-select applies its emotion
+   classes inline at runtime with high priority. */
+html body .portal .Select__option {
+    background: transparent !important;
+    color: var(--portal-text) !important;
+    padding: 8px 12px !important;
+    border-radius: var(--portal-radius-xs) !important;
+    margin: 2px 0 !important;
+    cursor: pointer;
+    transition: background-color var(--ik-dur) var(--ik-ease),
+                color var(--ik-dur) var(--ik-ease) !important;
+}
+html body .portal .Select__option--is-focused {
+    background: var(--portal-surface-hover) !important;
+    color: var(--portal-text) !important;
+}
+html body .portal .Select__option--is-selected,
+html body .portal .Select__option--is-selected.Select__option--is-focused {
+    background: var(--portal-accent-subtle) !important;
+    color: var(--portal-accent) !important;
+    font-weight: 600 !important;
+}
+html body .portal .Select__option:active {
+    background: var(--portal-accent-soft) !important;
 }
 
 /* Pagination — react-table ships `.-pagination` as a flex container
@@ -3301,13 +3446,19 @@ html body .portal .filter-button svg {
 /* ─────────────────────────────────────────────────────────
    20 · Account sidebar (My account drawer)
    ─────────────────────────────────────────────────────────
-   The slide-in panel that opens when clicking the user avatar in the
-   top-right. HaloPSA emits this as a Semantic UI `.ui.sidebar` —
-   without portal rules it renders with Semantic's default white bg +
-   default-blue links + unsized typography, which reads as unstyled
-   chrome next to our theme. Apply surface + text tokens, hairline
-   border, and re-skin the link list as ghost navigation rows. */
+   HaloPSA emits the account drawer as `#sidemenu.sidemenu` with
+   inner `.sidemenu-panel > .sidemenu-details > .sidemenu-links`
+   (NOT a Semantic `.ui.sidebar` — that selector was based on old
+   HaloPSA markup and never matched the current build). Selectors
+   below cover the actual component so the drawer picks up our
+   surface + text + hover tokens instead of shipping as raw
+   default-blue links on a grey wash. The `.ui.sidebar` parallels
+   remain for compatibility on any surface that still uses that
+   older Semantic variant. */
 
+html body .portal #sidemenu,
+html body .portal .sidemenu,
+html body .portal .sidemenu.sidemenu-enter-active,
 html body .portal .ui.sidebar,
 html body .portal .ui.sidebar.visible,
 html body .portal .ui.right.sidebar,
@@ -3320,7 +3471,21 @@ html body .portal .ui.right.sidebar.visible {
     font-family: var(--ik-font-display) !important;
 }
 
+/* Inner panel wrappers — HaloPSA stacks `.sidemenu-panel >
+   .sidemenu-details > .sidemenu-links`. Normalise background to
+   transparent so the outer `.sidemenu` surface token shows through. */
+html body .portal .sidemenu-panel,
+html body .portal .sidemenu-details,
+html body .portal .sidemenu-links {
+    background: transparent !important;
+    color: var(--portal-text) !important;
+}
+
 /* Sidebar header ("My account" + close button) */
+html body .portal .sidemenu .sidemenu-header,
+html body .portal .sidemenu h1,
+html body .portal .sidemenu h2,
+html body .portal .sidemenu h3,
 html body .portal .ui.sidebar h1,
 html body .portal .ui.sidebar h2,
 html body .portal .ui.sidebar h3,
@@ -3338,6 +3503,10 @@ html body .portal .ui.sidebar > div:first-child > div {
 
 /* Close (X) button — sits in the header's top-right. Ghost-square
    32×32 so it matches the Share / theme-toggle chrome icon family. */
+html body .portal .sidemenu .close,
+html body .portal .sidemenu button.close,
+html body .portal .sidemenu .close-icon,
+html body .portal .sidemenu [class*="close"],
 html body .portal .ui.sidebar .close,
 html body .portal .ui.sidebar button.close,
 html body .portal .ui.sidebar .close-icon,
@@ -3357,6 +3526,9 @@ html body .portal .ui.sidebar [class*="close"] {
                 border-color var(--ik-dur) var(--ik-ease),
                 color var(--ik-dur) var(--ik-ease) !important;
 }
+html body .portal .sidemenu .close:hover,
+html body .portal .sidemenu button.close:hover,
+html body .portal .sidemenu .close-icon:hover,
 html body .portal .ui.sidebar .close:hover,
 html body .portal .ui.sidebar button.close:hover,
 html body .portal .ui.sidebar .close-icon:hover {
@@ -3369,6 +3541,10 @@ html body .portal .ui.sidebar .close-icon:hover {
    + email. The avatar sits at ~80px by default; we bring it to a more
    restrained 52px so the name/email text column reads as the primary
    element and the avatar is a supporting cue. */
+html body .portal .sidemenu img,
+html body .portal .sidemenu .user-avatar,
+html body .portal .sidemenu .initials-avatar,
+html body .portal .sidemenu img.rounded-circle,
 html body .portal .ui.sidebar img,
 html body .portal .ui.sidebar .user-avatar,
 html body .portal .ui.sidebar .initials-avatar,
@@ -3390,6 +3566,10 @@ html body .portal .ui.sidebar img.rounded-circle {
 }
 
 /* Name + email lines */
+html body .portal .sidemenu .username,
+html body .portal .sidemenu .user-name,
+html body .portal .sidemenu .email,
+html body .portal .sidemenu .user-email,
 html body .portal .ui.sidebar .username,
 html body .portal .ui.sidebar .user-name,
 html body .portal .ui.sidebar .email,
@@ -3397,15 +3577,20 @@ html body .portal .ui.sidebar .user-email {
     font-family: var(--ik-font-display) !important;
     color: var(--portal-text) !important;
 }
+html body .portal .sidemenu .email,
+html body .portal .sidemenu .user-email,
 html body .portal .ui.sidebar .email,
 html body .portal .ui.sidebar .user-email {
     color: var(--portal-text-muted) !important;
     font-size: 12px !important;
 }
 
-/* Link list (Settings / Password & Security / Log out) — restyle each
-   link as a ghost row: mono eyebrow label, no default-blue, accent on
-   hover. The left rail sits flush with the sidebar's content padding. */
+/* Link list (Settings / Password & Security / Switch to Agent /
+   Log out) — restyle each link as a ghost row: no default-blue,
+   accent on hover. */
+html body .portal .sidemenu-links a,
+html body .portal .sidemenu-links > a,
+html body .portal .sidemenu a,
 html body .portal .ui.sidebar a,
 html body .portal .ui.sidebar .item,
 html body .portal .ui.sidebar .menu-item,
@@ -3414,7 +3599,7 @@ html body .portal .ui.sidebar nav a,
 html body .portal .ui.sidebar ul li a {
     display: block !important;
     padding: 12px 14px !important;
-    margin: 0 -14px !important;
+    margin: 2px -14px !important;
     font-family: var(--ik-font-display) !important;
     font-size: 14px !important;
     font-weight: 500 !important;
@@ -3427,6 +3612,9 @@ html body .portal .ui.sidebar ul li a {
     transition: background-color var(--ik-dur) var(--ik-ease),
                 color var(--ik-dur) var(--ik-ease) !important;
 }
+html body .portal .sidemenu-links a:hover,
+html body .portal .sidemenu-links > a:hover,
+html body .portal .sidemenu a:hover,
 html body .portal .ui.sidebar a:hover,
 html body .portal .ui.sidebar .item:hover,
 html body .portal .ui.sidebar .menu-item:hover,

@@ -222,6 +222,18 @@ html, body {
     text-rendering: optimizeLegibility;
 }
 
+/* HaloPSA paints `main.portal-container-height.theme-dark` with a hard
+   neutral `#353535` — which is neither our token `--portal-bg` nor
+   anywhere in the website palette. Override to the token so the main
+   canvas matches the website's dark-mode bg. Applying to both theme-
+   dark and theme-light variants keeps the mode switch working. */
+html body main.portal-container-height,
+html body main.portal-container-height.theme-dark,
+html body .page-portal-background,
+html body .theme-dark.page-portal-background {
+    background: var(--portal-bg) !important;
+}
+
 ::selection { background: var(--portal-accent); color: #fff; }
 
 /* Soft radial glow behind the page — same trick as the website hero.
@@ -384,6 +396,17 @@ html body .portal .portal-header::after {
     height: 1px;
     background: var(--ik-gradient-line);
     opacity: 0.5;
+}
+
+/* Nav container — match website header: dark elevated surface with
+   hairline bottom border. HaloPSA ships `.nhd-nav` as `#2F355E`
+   (purple-navy) which doesn't appear anywhere in the website palette.
+   We pin it to our token system so the nav sits visually inside the
+   same design language as the rest of the portal. */
+html body .portal .nhd-nav {
+    background: var(--portal-surface) !important;
+    border-bottom: 1px solid var(--portal-border-soft) !important;
+    box-shadow: var(--portal-shadow-sm) !important;
 }
 
 /* Nav buttons — Montserrat 13px 500, relaxed tracking. */

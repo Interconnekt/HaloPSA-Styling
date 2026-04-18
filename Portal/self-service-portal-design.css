@@ -1393,11 +1393,16 @@ html body .portal .status-avatar[style*="rgb(74, 116, 240)"] {
     background-color: var(--pill-assigned-bg) !important;
     color: var(--pill-assigned-ink) !important;
 }
-/* HaloPSA purple (In Progress) → emerald progress green */
+/* HaloPSA purple + teal (In Progress) → emerald progress green.
+   Tenants vary: older instances emit purple (#6F42C1 / #6610F2 /
+   #9933FF / #8A2BE2) while more recent setups use teal (#0C797D).
+   Both map to the same semantic "work is in flight" green so the
+   user sees a consistent signal regardless of tenant config. */
 html body .portal .status-avatar[style*="rgb(111, 66, 193)"],
 html body .portal .status-avatar[style*="rgb(102, 16, 242)"],
 html body .portal .status-avatar[style*="rgb(153, 51, 255)"],
-html body .portal .status-avatar[style*="rgb(138, 43, 226)"] {
+html body .portal .status-avatar[style*="rgb(138, 43, 226)"],
+html body .portal .status-avatar[style*="rgb(12, 121, 125)"] {
     background-image: linear-gradient(var(--pill-progress-bg), var(--pill-progress-bg)) !important;
     background-color: var(--pill-progress-bg) !important;
     color: var(--pill-progress-ink) !important;
@@ -1482,7 +1487,7 @@ html body .portal .status-avatar.s-neutral {
 /* Last-resort fallback — any HaloPSA inline bg we didn't map
    renders as an outlined Montserrat pill so a mystery chip
    doesn't shout with a raw HaloPSA hue. */
-html body .portal .status-avatar[style*="background-color"]:not([style*="rgb(66, 133, 244)"]):not([style*="rgb(0, 123, 255)"]):not([style*="rgb(52, 131, 250)"]):not([style*="rgb(60, 134, 247)"]):not([style*="rgb(13, 110, 253)"]):not([style*="rgb(0, 102, 204)"]):not([style*="rgb(43, 92, 230)"]):not([style*="rgb(74, 116, 240)"]):not([style*="rgb(111, 66, 193)"]):not([style*="rgb(102, 16, 242)"]):not([style*="rgb(153, 51, 255)"]):not([style*="rgb(138, 43, 226)"]):not([style*="rgb(255, 193, 7)"]):not([style*="rgb(255, 170, 0)"]):not([style*="rgb(255, 152, 0)"]):not([style*="rgb(240, 173, 78)"]):not([style*="rgb(245, 158, 11)"]):not([style*="rgb(212, 212, 216)"]):not([style*="rgb(194, 65, 12)"]):not([style*="rgb(40, 167, 69)"]):not([style*="rgb(34, 139, 34)"]):not([style*="rgb(0, 190, 0)"]):not([style*="rgb(25, 135, 84)"]):not([style*="rgb(16, 185, 129)"]):not([style*="rgb(21, 128, 61)"]):not([style*="rgb(52, 211, 153)"]):not([style*="rgb(187, 52, 63)"]):not([style*="rgb(108, 117, 125)"]):not([style*="rgb(128, 128, 128)"]):not([style*="rgb(80, 80, 80)"]):not([style*="rgb(119, 119, 119)"]):not([style*="rgb(220, 53, 69)"]):not([style*="rgb(255, 46, 0)"]):not([style*="rgb(255, 0, 0)"]):not([style*="rgb(185, 28, 28)"]):not([style*="rgb(239, 68, 68)"]):not([style*="rgb(23, 162, 184)"]):not([style*="rgb(13, 202, 240)"]):not([style*="rgb(8, 145, 178)"]):not([style*="rgb(47, 53, 94)"]):not([style*="rgb(252, 220, 0)"]) {
+html body .portal .status-avatar[style*="background-color"]:not([style*="rgb(66, 133, 244)"]):not([style*="rgb(0, 123, 255)"]):not([style*="rgb(52, 131, 250)"]):not([style*="rgb(60, 134, 247)"]):not([style*="rgb(13, 110, 253)"]):not([style*="rgb(0, 102, 204)"]):not([style*="rgb(43, 92, 230)"]):not([style*="rgb(74, 116, 240)"]):not([style*="rgb(111, 66, 193)"]):not([style*="rgb(102, 16, 242)"]):not([style*="rgb(153, 51, 255)"]):not([style*="rgb(138, 43, 226)"]):not([style*="rgb(12, 121, 125)"]):not([style*="rgb(255, 193, 7)"]):not([style*="rgb(255, 170, 0)"]):not([style*="rgb(255, 152, 0)"]):not([style*="rgb(240, 173, 78)"]):not([style*="rgb(245, 158, 11)"]):not([style*="rgb(212, 212, 216)"]):not([style*="rgb(194, 65, 12)"]):not([style*="rgb(40, 167, 69)"]):not([style*="rgb(34, 139, 34)"]):not([style*="rgb(0, 190, 0)"]):not([style*="rgb(25, 135, 84)"]):not([style*="rgb(16, 185, 129)"]):not([style*="rgb(21, 128, 61)"]):not([style*="rgb(52, 211, 153)"]):not([style*="rgb(187, 52, 63)"]):not([style*="rgb(108, 117, 125)"]):not([style*="rgb(128, 128, 128)"]):not([style*="rgb(80, 80, 80)"]):not([style*="rgb(119, 119, 119)"]):not([style*="rgb(220, 53, 69)"]):not([style*="rgb(255, 46, 0)"]):not([style*="rgb(255, 0, 0)"]):not([style*="rgb(185, 28, 28)"]):not([style*="rgb(239, 68, 68)"]):not([style*="rgb(23, 162, 184)"]):not([style*="rgb(13, 202, 240)"]):not([style*="rgb(8, 145, 178)"]):not([style*="rgb(47, 53, 94)"]):not([style*="rgb(252, 220, 0)"]) {
     background-image: none !important;
     background-color: transparent !important;
     border: 1px solid var(--portal-border) !important;
@@ -1591,12 +1596,14 @@ html body .portal .oneline > .priority-block {
 
 /* Low — sky blue (distinct from --portal-accent-soft which is reused
    as the selected-filter-row background — using accent-soft here made
-   the Low pill disappear onto a selected row). */
+   the Low pill disappear onto a selected row). `rgb(104, 188, 0)` is
+   this tenant's HaloPSA-default Low swatch (lime green). */
 html body .portal .oneline.p-low,
 html body .portal .oneline:has(> .priority-block[style*="rgb(0, 98, 177)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(0, 123, 255)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(108, 117, 125)"]),
-html body .portal .oneline:has(> .priority-block[style*="rgb(40, 167, 69)"]) {
+html body .portal .oneline:has(> .priority-block[style*="rgb(40, 167, 69)"]),
+html body .portal .oneline:has(> .priority-block[style*="rgb(104, 188, 0)"]) {
     --p-bg: #E0F2FE;
     --p-ink: #075985;
     --p-dot: #0EA5E9;
@@ -1621,12 +1628,14 @@ html body .portal .oneline:has(> .priority-block[style*="rgb(255, 87, 34)"]) {
     --p-dot: #EA580C;
 }
 /* Critical — red. Stronger than the previous pale coral so it can't
-   be mistaken for grey even on a selected-row wash. */
+   be mistaken for grey even on a selected-row wash. `rgb(244, 78, 59)`
+   is the HaloPSA-default vermillion this tenant ships. */
 html body .portal .oneline.p-critical,
 html body .portal .oneline:has(> .priority-block[style*="rgb(220, 53, 69)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(255, 0, 0)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(255, 46, 0)"]),
-html body .portal .oneline:has(> .priority-block[style*="rgb(183, 28, 28)"]) {
+html body .portal .oneline:has(> .priority-block[style*="rgb(183, 28, 28)"]),
+html body .portal .oneline:has(> .priority-block[style*="rgb(244, 78, 59)"]) {
     --p-bg: #FECACA;
     --p-ink: #7F1D1D;
     --p-dot: #DC2626;
@@ -1638,7 +1647,8 @@ html body .portal .oneline:has(> .priority-block[style*="rgb(183, 28, 28)"]) {
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(0, 98, 177)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(0, 123, 255)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(108, 117, 125)"]),
-.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(40, 167, 69)"]) {
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(40, 167, 69)"]),
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(104, 188, 0)"]) {
     --p-bg: rgba(14, 165, 233, 0.20);
     --p-ink: #7DD3FC;
     --p-dot: #38BDF8;
@@ -1663,7 +1673,8 @@ html body .portal .oneline:has(> .priority-block[style*="rgb(183, 28, 28)"]) {
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(220, 53, 69)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 0, 0)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 46, 0)"]),
-.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(183, 28, 28)"]) {
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(183, 28, 28)"]),
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(244, 78, 59)"]) {
     --p-bg: rgba(220, 38, 38, 0.24);
     --p-ink: #FCA5A5;
     --p-dot: #EF4444;

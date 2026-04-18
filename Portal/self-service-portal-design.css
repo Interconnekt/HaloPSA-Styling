@@ -1589,72 +1589,84 @@ html body .portal .oneline > .priority-block {
    class, fallback is the inline-rgb attribute selector. Both stamp the
    same `--p-bg / --p-ink / --p-dot` triplet onto `.oneline`. */
 
-/* Low — brand blue */
+/* Low — sky blue (distinct from --portal-accent-soft which is reused
+   as the selected-filter-row background — using accent-soft here made
+   the Low pill disappear onto a selected row). */
 html body .portal .oneline.p-low,
 html body .portal .oneline:has(> .priority-block[style*="rgb(0, 98, 177)"]),
-html body .portal .oneline:has(> .priority-block[style*="rgb(0, 123, 255)"]) {
-    --p-bg: var(--portal-accent-soft);
-    --p-ink: var(--portal-accent);
-    --p-dot: var(--portal-accent);
+html body .portal .oneline:has(> .priority-block[style*="rgb(0, 123, 255)"]),
+html body .portal .oneline:has(> .priority-block[style*="rgb(108, 117, 125)"]),
+html body .portal .oneline:has(> .priority-block[style*="rgb(40, 167, 69)"]) {
+    --p-bg: #E0F2FE;
+    --p-ink: #075985;
+    --p-dot: #0EA5E9;
 }
-/* Medium — amber */
+/* Medium — true yellow/amber. Pushed toward yellow so it can't be
+   confused with High's orange at glance distance. */
 html body .portal .oneline.p-medium,
 html body .portal .oneline:has(> .priority-block[style*="rgb(164, 221, 0)"]),
-html body .portal .oneline:has(> .priority-block[style*="rgb(252, 220, 0)"]) {
-    --p-bg: #FFE9C2;
-    --p-ink: #7A4400;
-    --p-dot: var(--portal-warn);
+html body .portal .oneline:has(> .priority-block[style*="rgb(252, 220, 0)"]),
+html body .portal .oneline:has(> .priority-block[style*="rgb(255, 193, 7)"]) {
+    --p-bg: #FEF3C7;
+    --p-ink: #713F12;
+    --p-dot: #D97706;
 }
-/* High — orange */
+/* High — saturated orange. Clearly one hue step warmer than Medium. */
 html body .portal .oneline.p-high,
 html body .portal .oneline:has(> .priority-block[style*="rgb(251, 158, 0)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(255, 152, 0)"]),
-html body .portal .oneline:has(> .priority-block[style*="rgb(255, 193, 7)"]) {
-    --p-bg: #FFE0CC;
-    --p-ink: #7A2E0A;
-    --p-dot: #F97316;
+html body .portal .oneline:has(> .priority-block[style*="rgb(255, 87, 34)"]) {
+    --p-bg: #FFE3CC;
+    --p-ink: #7C2D12;
+    --p-dot: #EA580C;
 }
-/* Critical — coral red */
+/* Critical — red. Stronger than the previous pale coral so it can't
+   be mistaken for grey even on a selected-row wash. */
 html body .portal .oneline.p-critical,
 html body .portal .oneline:has(> .priority-block[style*="rgb(220, 53, 69)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(255, 0, 0)"]),
-html body .portal .oneline:has(> .priority-block[style*="rgb(255, 46, 0)"]) {
-    --p-bg: #FBDAD4;
-    --p-ink: #7A1E10;
-    --p-dot: var(--portal-err);
+html body .portal .oneline:has(> .priority-block[style*="rgb(255, 46, 0)"]),
+html body .portal .oneline:has(> .priority-block[style*="rgb(183, 28, 28)"]) {
+    --p-bg: #FECACA;
+    --p-ink: #7F1D1D;
+    --p-dot: #DC2626;
 }
 
 /* Dark-mode tints — translucent washes + light ink, matching the
    status-pill dark treatment elsewhere in this file. */
 .theme-dark .portal .oneline.p-low,
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(0, 98, 177)"]),
-.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(0, 123, 255)"]) {
-    --p-bg: rgba(74, 116, 240, 0.18);
-    --p-ink: #93C5FD;
-    --p-dot: var(--portal-accent);
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(0, 123, 255)"]),
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(108, 117, 125)"]),
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(40, 167, 69)"]) {
+    --p-bg: rgba(14, 165, 233, 0.20);
+    --p-ink: #7DD3FC;
+    --p-dot: #38BDF8;
 }
 .theme-dark .portal .oneline.p-medium,
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(164, 221, 0)"]),
-.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(252, 220, 0)"]) {
-    --p-bg: rgba(251, 146, 60, 0.18);
-    --p-ink: #FDBA74;
-    --p-dot: var(--portal-warn);
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(252, 220, 0)"]),
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 193, 7)"]) {
+    --p-bg: rgba(217, 119, 6, 0.22);
+    --p-ink: #FCD34D;
+    --p-dot: #F59E0B;
 }
 .theme-dark .portal .oneline.p-high,
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(251, 158, 0)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 152, 0)"]),
-.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 193, 7)"]) {
-    --p-bg: rgba(249, 115, 22, 0.20);
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 87, 34)"]) {
+    --p-bg: rgba(234, 88, 12, 0.24);
     --p-ink: #FDBA74;
     --p-dot: #F97316;
 }
 .theme-dark .portal .oneline.p-critical,
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(220, 53, 69)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 0, 0)"]),
-.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 46, 0)"]) {
-    --p-bg: rgba(248, 113, 113, 0.20);
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 46, 0)"]),
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(183, 28, 28)"]) {
+    --p-bg: rgba(220, 38, 38, 0.24);
     --p-ink: #FCA5A5;
-    --p-dot: var(--portal-err);
+    --p-dot: #EF4444;
 }
 
 /* Respect users with reduced-motion preferences — drop the pulse, keep
@@ -1841,6 +1853,28 @@ html body .portal .details-form .rt-thead.-filters input[type="text"] {
 html body .portal .rt-thead.-header {
     border-bottom: 0 !important;
     box-shadow: none !important;
+}
+
+/* Sort indicator — react-table default paints a heavy 3px
+   `rgba(0,0,0,.6)` inset line above (asc) or below (desc) the sorted
+   column. Against the rest of the header typography that bar reads as
+   a raw unstyled default. Replace with a soft 2px accent-tinted
+   hairline that sits flush with the filter row underline. */
+html body .portal .rt-th.-sort-asc,
+html body .portal .rt-thead.-header .rt-th.-sort-asc {
+    box-shadow: inset 0 2px 0 0 var(--portal-accent) !important;
+}
+html body .portal .rt-th.-sort-desc,
+html body .portal .rt-thead.-header .rt-th.-sort-desc {
+    box-shadow: inset 0 -2px 0 0 var(--portal-accent) !important;
+}
+.theme-dark .portal .rt-th.-sort-asc,
+.theme-dark .portal .rt-thead.-header .rt-th.-sort-asc {
+    box-shadow: inset 0 2px 0 0 var(--portal-accent) !important;
+}
+.theme-dark .portal .rt-th.-sort-desc,
+.theme-dark .portal .rt-thead.-header .rt-th.-sort-desc {
+    box-shadow: inset 0 -2px 0 0 var(--portal-accent) !important;
 }
 
 /* Counter + prev/next */
@@ -2508,16 +2542,16 @@ html body .portal .kbdetails {
     line-height: 1.7;
     color: var(--portal-text);
     font-size: 16px;
-    background: var(--portal-surface);
-    border: 1px solid var(--portal-border);
-    border-radius: var(--portal-radius);
-    box-shadow: var(--portal-shadow-sm);
-    transition: border-color var(--ik-dur) var(--ik-ease),
-                box-shadow var(--ik-dur) var(--ik-ease);
-}
-html body .portal .kbdetails:hover {
-    border-color: var(--portal-border-soft);
-    box-shadow: var(--portal-shadow);
+    /* Flat reading surface — background/border/shadow intentionally
+       stripped so the article sits directly on the page instead of
+       being wrapped in a nested card (the outer page container
+       already supplies a card). The earlier hover-shift on
+       border-color + shadow was removed for the same reason: long-
+       form reading shouldn't feel like a hoverable tile. */
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
 }
 
 html body .portal .kbdetails h1 {
@@ -2999,23 +3033,30 @@ html body .portal .kblist .sidebar {
     transition: background-color var(--ik-dur) var(--ik-ease),
                 color var(--ik-dur) var(--ik-ease);
 }
-html body .portal .tree-menu .sidebar:hover,
-html body .portal .kblist .sidebar:hover {
+/* Section-toggle hover intentionally suppressed — `.sidebar` is the
+   collapsible section header ("Knowledge Base" at the top of the
+   tree). Adding a surface-hover wash there made the section read
+   like an interactive row when it's really just a disclosure toggle;
+   the `>` caret is enough affordance on its own. Individual article
+   rows still get their hover from the `.tree-node:hover` family. */
+html body .portal .tree-menu .tree-node:hover {
     background: var(--portal-surface-hover);
 }
 
 /* Selected tree-node — HaloPSA marks the active item via inline
    `background-color: rgb(47, 53, 94)` (heading purple). Re-skin as
-   a tonal accent with a left rule so the KB nav matches the rest
-   of the editorial-flavoured portal. */
+   a soft tonal pill — same accent-subtle wash + accent ink used on
+   other active-row surfaces (ticket list row, account sidebar nav).
+   Dropped the earlier 3px left stripe + square corners so the row
+   reads as one of the family rather than a special case. */
 html body .portal .tree-menu .tree-node[style*="rgb(47, 53, 94)"],
 html body .portal .tree-menu .tree-node[style*="background-color: rgb(47"] {
     background-color: var(--portal-accent-subtle) !important;
     color: var(--portal-accent) !important;
-    border-left: 3px solid var(--portal-accent);
-    padding-left: 7px !important;
+    border-left: 0 !important;
+    padding-left: 10px !important;
     font-weight: 600;
-    border-radius: 0 !important;
+    border-radius: var(--portal-radius-xs) !important;
 }
 
 /* KB sidebar search ("Filter articles..." input). HaloPSA ships
@@ -3086,7 +3127,17 @@ html body .portal * {
 
 /* ─────────────────────────────────────────────────────────
    17 · Semantic UI popup (share sheet) — carryover polish
-   ───────────────────────────────────────────────────────── */
+   ─────────────────────────────────────────────────────────
+   The Share icon on ticket + KB headers opens a Semantic UI popup
+   containing a "Share" heading + a "Copy link" solidbutton. Without
+   the rules below the popup ships with Semantic defaults: 12px flat
+   radius, default sans heading, tight 8px padding. Re-skin so the
+   card matches the rest of the editorial chrome (same surface/border
+   tokens as tooltips and menus), widen interior padding to give the
+   Copy-link pill room to breathe, and lift the "Share" label into the
+   mono eyebrow family used across other section headers. The `.ui.button`
+   inside the popup is already handled by the brand-action pill rule
+   up in the button block. */
 
 html body .portal .ui.popup,
 html body .portal .ui.popup.transition.visible {
@@ -3095,10 +3146,44 @@ html body .portal .ui.popup.transition.visible {
     border: 1px solid var(--portal-border) !important;
     border-radius: var(--portal-radius-sm) !important;
     box-shadow: var(--portal-shadow-hover) !important;
+    padding: 16px 18px !important;
+    font-family: var(--ik-font-display) !important;
+    min-width: 180px;
 }
 html body .portal .ui.popup::before {
     background: var(--portal-surface) !important;
     box-shadow: 1px 1px 0 0 var(--portal-border) !important;
+}
+
+/* Popup heading — "Share". Semantic ships this as a heavy default
+   h4; lift to mono eyebrow so it reads as a section label instead of
+   a page heading. */
+html body .portal .ui.popup .header,
+html body .portal .ui.popup > .header,
+html body .portal .ui.popup h1,
+html body .portal .ui.popup h2,
+html body .portal .ui.popup h3,
+html body .portal .ui.popup h4 {
+    font-family: var(--ik-font-mono) !important;
+    font-size: 10.5px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    color: var(--portal-text-muted) !important;
+    margin: 0 0 10px 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    line-height: 1.4;
+}
+
+/* Copy-link pill inside the share popup — pin to brand-action pill
+   geometry and give it full row width so it feels deliberate rather
+   than dropped in. */
+html body .portal .ui.popup .ui.button,
+html body .portal .ui.popup .solidbutton,
+html body .portal .ui.popup button.-btn {
+    width: 100% !important;
+    justify-content: center !important;
 }
 
 

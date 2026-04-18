@@ -573,19 +573,40 @@ html body .portal .dashbtn:hover {
 html body .portal .card.dashbtn:hover::before,
 html body .portal .dashbtn:hover::before { opacity: 0.85; }
 
+/* Icon chip — matches website's `inline-flex items-center justify-center
+   w-10 h-10 rounded-lg bg-primary-subtle text-primary` pattern. Sized
+   at 44px so a 24px Font Awesome icon sits centred with 10px padding
+   around it (40px was too tight for HaloPSA's native 26px glyphs and
+   caused the icon to overflow below the square). */
 html body .portal .dashbtn .card-img {
-    width: 40px !important;
-    height: 40px !important;
-    margin-bottom: 20px !important;
-    padding: 8px;
+    width: 44px !important;
+    height: 44px !important;
+    margin: 0 auto 20px !important;
+    padding: 0 !important;
     border-radius: var(--portal-radius-sm);
     background: var(--portal-accent-soft);
     color: var(--portal-accent) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    vertical-align: middle;
+    line-height: 1 !important;
+    overflow: hidden;
+}
+html body .portal .dashbtn .card-img > i,
+html body .portal .dashbtn .card-img > .fa {
+    font-size: 20px !important;
+    line-height: 1 !important;
+    color: var(--portal-accent) !important;
+    width: auto !important;
+    height: auto !important;
 }
 html body .portal .dashbtn .card-img svg,
 html body .portal .dashbtn .card-img img {
     color: var(--portal-accent) !important;
     filter: none;
+    width: 22px !important;
+    height: 22px !important;
 }
 
 html body .portal .dashbtn .card-title {

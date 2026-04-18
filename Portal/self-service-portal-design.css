@@ -1124,52 +1124,147 @@ html body .portal .status-avatar.s-info {
     color: var(--pill-info-ink) !important;
 }
 
+/* NEW — HaloPSA paints brand-yellow `rgb(252, 220, 0)` for freshly-
+   opened tickets. Map to emerald highlight so "NEW" reads as a
+   positive "fresh" state distinct from both open-blue (active work)
+   and amber-waiting. */
+:root {
+    --pill-new-bg: color-mix(in srgb, var(--portal-highlight) 18%, transparent);
+    --pill-new-ink: var(--portal-highlight);
+}
+html body .portal .status-avatar[style*="rgb(252, 220, 0)"],
+html body .portal .status-avatar.s-new {
+    background-image: linear-gradient(var(--pill-new-bg), var(--pill-new-bg)) !important;
+    background-color: var(--pill-new-bg) !important;
+    color: var(--pill-new-ink) !important;
+}
+
 /* NEUTRAL / CATEGORY chip — HaloPSA paints the ARTICLE chip and any
    non-status label with its heading navy `rgb(47, 53, 94)`. Re-skin
-   as the website's blog-category pill (OPINION/HOW-TO/STRATEGY): a
-   transparent outlined pill with mono uppercase text — NOT a filled
-   accent chip, since these aren't status signals. */
+   as a transparent outlined pill with Montserrat uppercase tracked
+   text — NOT a filled accent chip, since these aren't status signals. */
 html body .portal .status-avatar[style*="rgb(47, 53, 94)"],
 html body .portal .status-avatar.s-neutral {
     background-image: none !important;
     background-color: transparent !important;
     border: 1px solid var(--portal-border) !important;
     color: var(--portal-text) !important;
-    font-family: var(--ik-font-mono) !important;
-    font-size: 10px !important;
+    font-family: var(--ik-font-display) !important;
+    font-size: 10.5px !important;
     font-weight: 600 !important;
-    letter-spacing: 0.12em !important;
+    letter-spacing: 0.08em !important;
     text-transform: uppercase !important;
     padding: 3px 10px !important;
     border-radius: 999px !important;
 }
 
 /* Fallback — any `.status-avatar` HaloPSA paints with ANY inline
-   background-color we didn't map above gets the same neutral outlined
-   pill treatment. Previously this painted everything in accent-soft
-   blue, which is why every chip read as "the same colour". */
-html body .portal .status-avatar[style*="background-color"]:not([style*="rgb(66, 133, 244)"]):not([style*="rgb(0, 123, 255)"]):not([style*="rgb(52, 131, 250)"]):not([style*="rgb(60, 134, 247)"]):not([style*="rgb(13, 110, 253)"]):not([style*="rgb(0, 102, 204)"]):not([style*="rgb(43, 92, 230)"]):not([style*="rgb(74, 116, 240)"]):not([style*="rgb(111, 66, 193)"]):not([style*="rgb(102, 16, 242)"]):not([style*="rgb(153, 51, 255)"]):not([style*="rgb(138, 43, 226)"]):not([style*="rgb(255, 193, 7)"]):not([style*="rgb(255, 170, 0)"]):not([style*="rgb(255, 152, 0)"]):not([style*="rgb(240, 173, 78)"]):not([style*="rgb(245, 158, 11)"]):not([style*="rgb(212, 212, 216)"]):not([style*="rgb(194, 65, 12)"]):not([style*="rgb(40, 167, 69)"]):not([style*="rgb(34, 139, 34)"]):not([style*="rgb(0, 190, 0)"]):not([style*="rgb(25, 135, 84)"]):not([style*="rgb(16, 185, 129)"]):not([style*="rgb(21, 128, 61)"]):not([style*="rgb(52, 211, 153)"]):not([style*="rgb(187, 52, 63)"]):not([style*="rgb(108, 117, 125)"]):not([style*="rgb(128, 128, 128)"]):not([style*="rgb(80, 80, 80)"]):not([style*="rgb(119, 119, 119)"]):not([style*="rgb(220, 53, 69)"]):not([style*="rgb(255, 46, 0)"]):not([style*="rgb(255, 0, 0)"]):not([style*="rgb(185, 28, 28)"]):not([style*="rgb(239, 68, 68)"]):not([style*="rgb(23, 162, 184)"]):not([style*="rgb(13, 202, 240)"]):not([style*="rgb(8, 145, 178)"]):not([style*="rgb(47, 53, 94)"]) {
+   background-color we didn't map above gets the same neutral
+   outlined pill treatment, using Montserrat (the status-chip
+   typography everywhere else on the list view) rather than mono
+   so the overall row reads as one typography family. */
+html body .portal .status-avatar[style*="background-color"]:not([style*="rgb(66, 133, 244)"]):not([style*="rgb(0, 123, 255)"]):not([style*="rgb(52, 131, 250)"]):not([style*="rgb(60, 134, 247)"]):not([style*="rgb(13, 110, 253)"]):not([style*="rgb(0, 102, 204)"]):not([style*="rgb(43, 92, 230)"]):not([style*="rgb(74, 116, 240)"]):not([style*="rgb(111, 66, 193)"]):not([style*="rgb(102, 16, 242)"]):not([style*="rgb(153, 51, 255)"]):not([style*="rgb(138, 43, 226)"]):not([style*="rgb(255, 193, 7)"]):not([style*="rgb(255, 170, 0)"]):not([style*="rgb(255, 152, 0)"]):not([style*="rgb(240, 173, 78)"]):not([style*="rgb(245, 158, 11)"]):not([style*="rgb(212, 212, 216)"]):not([style*="rgb(194, 65, 12)"]):not([style*="rgb(40, 167, 69)"]):not([style*="rgb(34, 139, 34)"]):not([style*="rgb(0, 190, 0)"]):not([style*="rgb(25, 135, 84)"]):not([style*="rgb(16, 185, 129)"]):not([style*="rgb(21, 128, 61)"]):not([style*="rgb(52, 211, 153)"]):not([style*="rgb(187, 52, 63)"]):not([style*="rgb(108, 117, 125)"]):not([style*="rgb(128, 128, 128)"]):not([style*="rgb(80, 80, 80)"]):not([style*="rgb(119, 119, 119)"]):not([style*="rgb(220, 53, 69)"]):not([style*="rgb(255, 46, 0)"]):not([style*="rgb(255, 0, 0)"]):not([style*="rgb(185, 28, 28)"]):not([style*="rgb(239, 68, 68)"]):not([style*="rgb(23, 162, 184)"]):not([style*="rgb(13, 202, 240)"]):not([style*="rgb(8, 145, 178)"]):not([style*="rgb(47, 53, 94)"]):not([style*="rgb(252, 220, 0)"]) {
     background-image: none !important;
     background-color: transparent !important;
     border: 1px solid var(--portal-border) !important;
     color: var(--portal-text-secondary) !important;
-    font-family: var(--ik-font-mono) !important;
-    font-size: 10px !important;
+    font-family: var(--ik-font-display) !important;
+    font-size: 10.5px !important;
     font-weight: 600 !important;
-    letter-spacing: 0.12em !important;
+    letter-spacing: 0.08em !important;
     text-transform: uppercase !important;
     padding: 3px 10px !important;
 }
 
-/* ─── Priority chips — same language, colour on severity ─── */
+/* Unified status-avatar typography — every mapped colour variant
+   above sets bg/ink only; this single rule forces Montserrat +
+   matching tracking across ALL status chips so they read as one
+   family regardless of HaloPSA's inline colour. */
+html body .portal .status-avatar.fortable,
+html body .portal .status-avatar.small,
+html body .portal .status-avatar.bitsmall,
+html body .portal .status-avatar.smallest,
+html body .portal .status-avatar.fortile {
+    font-family: var(--ik-font-display) !important;
+    font-weight: 600 !important;
+    font-size: 10.5px !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase !important;
+}
+
+/* ─── Priority pills — warning-indicator language ─────────
+   HaloPSA renders each row's Priority cell as
+     <div class="oneline">
+       Medium                                       (text label)
+       <div class="priority-block" style="background-color: …"></div>  (tiny 8×8 swatch)
+     </div>
+   The swatch's inline colour is the priority level, not the text,
+   so we hide the swatch and re-skin the `.oneline` parent as a
+   tonal pill keyed on the swatch's inline colour via `:has()`.
+
+   HaloPSA palette → brand mapping:
+     rgb(0, 98, 177)     blue        → Low       (open blue, info)
+     rgb(164, 221, 0)    lime        → Medium    (amber)
+     rgb(252, 220, 0)    yellow      → Medium    (amber)
+     rgb(251, 158, 0)    orange      → High      (orange red)
+     rgb(220, 53, 69)    red         → Critical  (red)
+     rgb(255, 0, 0)      red         → Critical  (red) */
+
+html body .portal .rt-td .oneline:has(> .priority-block) {
+    display: inline-flex !important;
+    align-items: center;
+    padding: 2px 10px !important;
+    border-radius: 999px !important;
+    font-family: var(--ik-font-display) !important;
+    font-size: 10.5px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase;
+    line-height: 1.5;
+    background: var(--pill-closed-bg) !important;  /* default neutral */
+    color: var(--pill-closed-ink) !important;
+    border: 1px solid transparent !important;
+}
+html body .portal .rt-td .oneline > .priority-block {
+    display: none !important;
+}
+/* Low — HaloPSA deep blue */
+html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(0, 98, 177)"]),
+html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(0, 123, 255)"]) {
+    background: var(--pill-open-bg) !important;
+    color: var(--pill-open-ink) !important;
+}
+/* Medium — HaloPSA lime/yellow */
+html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(164, 221, 0)"]),
+html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(252, 220, 0)"]) {
+    background: var(--pill-waiting-bg) !important;
+    color: var(--pill-waiting-ink) !important;
+}
+/* High — HaloPSA orange */
+html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(251, 158, 0)"]),
+html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 152, 0)"]),
+html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 193, 7)"]) {
+    background: color-mix(in srgb, #F97316 20%, transparent) !important;
+    color: #F97316 !important;
+}
+/* Critical — HaloPSA red */
+html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(220, 53, 69)"]),
+html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 0, 0)"]),
+html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 46, 0)"]) {
+    background: var(--pill-overdue-bg) !important;
+    color: var(--pill-overdue-ink) !important;
+}
+
+/* Legacy `.priority-avatar` (if HaloPSA surfaces this class on any
+   screen) — same typography as the `.oneline` pill above. */
 html body .portal .priority-avatar,
 html body .portal .priority-chip {
     border-radius: 999px !important;
     padding: 2px 10px !important;
-    font-family: var(--ik-font-mono) !important;
-    font-size: 10px !important;
-    font-weight: 500 !important;
-    letter-spacing: 0.08em !important;
+    font-family: var(--ik-font-display) !important;
+    font-size: 10.5px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.06em !important;
     text-transform: uppercase;
 }
 html body .portal .priority-avatar[style*="rgb(220, 53, 69)"],
@@ -1254,13 +1349,20 @@ html body .portal .rt-th {
     font-size: 13px !important;
     color: var(--portal-text);
 }
-html body .portal .rt-th {
+/* Header row typography — scoped to `.-header` only so the filter
+   row below (`.-filters`) keeps its input chrome untouched. */
+html body .portal .rt-thead.-header .rt-th {
     font-family: var(--ik-font-mono) !important;
     font-size: 10.5px !important;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--portal-text-muted) !important;
     font-weight: 500 !important;
+    /* Match the body-cell 12px 14px so header text aligns with the
+       body column content below. HaloPSA default is 5px on all sides,
+       which pulled the header text 9px to the left of each body cell. */
+    padding: 12px 14px !important;
+    text-align: left;
 }
 
 html body .portal .rt-td {
@@ -1273,6 +1375,57 @@ html body .portal .rt-tr {
 }
 html body .portal .rt-tbody .rt-tr-group:hover {
     background: var(--portal-table-row-hover);
+}
+
+/* ─── Asset selector filter row ──
+   Inside New Ticket form, the asset-selection react-table renders
+   a `.rt-thead.-filters` row with one text input per column. HaloPSA
+   sets the thead to a fixed 40px height and `.rt-th` to `overflow:
+   hidden`, which clips the focus ring on the inputs AND makes inputs
+   sized wider than their column bleed into adjacent columns (the
+   "overlap" the user saw). Fixes:
+     - `.-filters` row → auto height + small padding so the thead
+       grows to fit a 30px input.
+     - `.rt-th` inside filters → `overflow: visible` so focus rings
+       aren't clipped, tight horizontal padding, and `box-sizing:
+       border-box` so 100%-wide inputs honour the cell's width.
+     - Inputs → 30px height, 100% width, box-sizing border-box,
+       tight 10px horizontal padding. */
+html body .portal .rt-thead.-filters {
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 8px 0 !important;
+    background: transparent !important;
+    border-bottom: 1px solid var(--portal-border-soft) !important;
+    box-shadow: none !important;
+}
+html body .portal .rt-thead.-filters .rt-tr {
+    height: auto !important;
+    border: 0 !important;
+}
+html body .portal .rt-thead.-filters .rt-th {
+    overflow: visible !important;
+    padding: 0 4px !important;
+    height: auto !important;
+    box-sizing: border-box;
+}
+html body .portal .rt-thead.-filters input[type="text"],
+html body .portal .details-form .rt-thead.-filters input[type="text"] {
+    height: 30px !important;
+    min-height: 30px !important;
+    font-family: var(--ik-font-display) !important;
+    font-size: 12.5px !important;
+    padding: 0 10px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    border-radius: var(--portal-radius-xs) !important;
+    border: 1px solid var(--portal-border-soft) !important;
+    background: var(--portal-bg) !important;
+}
+/* Header row above filters — drop the double separator. */
+html body .portal .rt-thead.-header {
+    border-bottom: 0 !important;
+    box-shadow: none !important;
 }
 
 /* Counter + prev/next */
@@ -1627,6 +1780,11 @@ html body .portal .fr-box .fr-view {
 }
 html body .portal .fr-placeholder { color: var(--portal-text-muted) !important; }
 
+/* "* denotes a mandatory field" hint — HaloPSA already ships the
+   leading `*` inside the element text, so an earlier `::before`
+   rule was duplicating it (user saw "* * denotes…"). No pseudo;
+   just tint the `*` via the asterisk colour token below via a
+   `:first-letter` rule. */
 html body .portal .mandatory-hint {
     font-family: var(--ik-font-mono) !important;
     font-size: 11px !important;
@@ -1636,9 +1794,20 @@ html body .portal .mandatory-hint {
     font-style: normal !important;
     opacity: 0.9;
 }
-html body .portal .mandatory-hint::before {
-    content: '* ';
-    color: var(--portal-accent);
+html body .portal .mandatory-hint::first-letter {
+    color: #F87171;   /* pink-red */
+    font-weight: 700;
+}
+
+/* Asterisks appearing next to each required field label — HaloPSA
+   renders them as `<h999 class="asterisk"> *</h999>`. Colour them
+   the same pink-red so the required signal reads consistently
+   across hint + per-field marker. */
+html body .portal .details-form label .asterisk,
+html body .portal .asterisk,
+html body .portal h999.asterisk {
+    color: #F87171 !important;
+    font-weight: 700 !important;
 }
 
 html body .portal .attachment-container.edit {

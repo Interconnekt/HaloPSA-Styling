@@ -82,6 +82,14 @@
     /* Blockquote */
     --portal-quote-border: var(--portal-accent);
     --portal-quote-bg: #f8f9fc;
+
+    /* Interconnekt brand tokens — referenced by the header/nav spec.
+       Mirrored from self-service-portal-design.css so selectors that
+       use these tokens work whichever file is loaded. */
+    --ik-font-display: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --ik-gradient-line: linear-gradient(90deg, transparent, #4A74F0 30%, #D946EF 70%, transparent);
+    --ik-dur: 180ms;
+    --ik-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* Dark mode variable overrides */
@@ -185,12 +193,24 @@ html body .portal *:not(i):not(svg):not(.fa):not(code):not(pre):not(pre *) {
     font-family: 'Montserrat', 'Poppins', sans-serif !important;
 }
 
-/* Header bar text override */
-header,
-.header,
-.portal-header {
-    background-color: #2F355E !important;
+/* ── Header bar + brand hairline ── */
+html body .portal header,
+html body .portal .header,
+html body .portal .portal-header {
+    background-color: #0A0F1C !important;
     color: #fff;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.3);
+}
+html body .portal header::after,
+html body .portal .portal-header::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 1px;
+    background: var(--ik-gradient-line);
+    opacity: 0.5;
 }
 
 header h1, header h2, header h3,
@@ -1318,16 +1338,16 @@ html body .portal .buttoncontainer.nav-search .Select__control {
     height: 36px !important;
 }
 html body .portal .buttoncontainer.nav-search .Select__control--is-focused {
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12) !important;
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14) !important;
 }
 html body .portal .buttoncontainer.nav-search .Select__placeholder,
 html body .portal .buttoncontainer.nav-search .Select__single-value,
 html body .portal .buttoncontainer.nav-search .Select__input-container {
-    color: rgba(255, 255, 255, 0.85) !important;
+    color: rgba(255, 255, 255, 0.72) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
-    letter-spacing: 0.26px;
+    letter-spacing: 0.04em !important;
 }
 
 /* Slim scrollbars — HaloPSA inherits default OS scrollbars which look
@@ -1349,59 +1369,69 @@ html body .portal * {
     scrollbar-color: var(--portal-border) transparent !important;
 }
 
-/* Site header typography — HaloPSA ships `.nhd-nav-btn` (and its children)
-   in Poppins 16px/400. Scope Montserrat to the whole nav wrapper so it
-   cascades to every nav item including tooltips and the user-menu popover.
-   Kept at 13px/500 with light letter-spacing so it reads as a compact
-   header rather than competing with page-title weight. */
+/* ── Nav button typography ──
+   HaloPSA ships `.nhd-nav-btn` children in Poppins 16px/400. Scope
+   Montserrat to the whole nav wrapper (buttons + tooltips + user-menu
+   popover). 13px/500 with light tracking keeps it compact under the
+   page title. */
 html body .portal .nhd-nav,
 html body .portal .nhd-nav button.nhd-nav-btn,
 html body .portal .nhd-nav .buttoncontainer {
-    font-family: 'Montserrat', 'Poppins', sans-serif !important;
+    font-family: var(--ik-font-display) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     letter-spacing: 0.02em;
 }
 
-/* Top nav buttons — hover/focus needs to read as a highlight, not a
-   drop-shadow. HaloPSA ships the base bg inline as `rgb(47, 53, 94)`,
-   so the previous `#30355b` hover was nearly the same value (~1pt
-   difference) and the navy-tinted box-shadow just looked like a puddle.
-   Instead, layer a white-alpha overlay via `background-image` linear-
-   gradient: keeps the inline-set `background-color` intact, lightens
-   the whole tab by a hue-agnostic amount, and self-corrects if HaloPSA
-   changes the navbar colour later. Transition covers the perceived
-   latency between pointer-in and paint. No shadow — rest of the portal
-   uses background-only hovers, so this keeps interaction language
-   consistent. Note: HaloPSA doesn't emit a `selected`/`active` class
-   for the current section; styling the true "current page" would need
-   JS to add a class based on URL. */
+/* ── Nav button resting state (beats HaloPSA's inline navy) ──
+   HaloPSA paints each button inline as `background-color: rgb(47, 53, 94)`.
+   We override with transparent so the bar colour shows through, and
+   set a reduced-alpha white ink so the label reads as "secondary"
+   text on the dark bar. Pair the plain class selector with the
+   attribute selector so the inline style loses the cascade. */
 html body .portal button.nhd-nav-btn,
 html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"] {
-    transition: background-image 150ms ease, background-color 150ms ease, box-shadow 150ms ease !important;
+    background-color: transparent !important;
+    color: rgba(255,255,255,0.82) !important;
+    transition: background-image var(--ik-dur) var(--ik-ease),
+                color var(--ik-dur) var(--ik-ease) !important;
 }
 
-/* Hover — DARKEN the nav chip via a black overlay so the button reads
-   as being "pressed into" the header, giving clear affordance without
-   introducing a new colour. Overrides HaloPSA's built-in hover rule
-   (which lands on `.nhd-nav-btn.menubtn:hover` with darker navy).
+/* ── Nav button hover / focus ──
+   Paint the wash with `background-image` (not `background-color`):
+   HaloPSA's inline `background-color: rgb(47, 53, 94)` wins over any
+   external background-color, even with `!important`, because inline
+   styles beat external at equal-specificity. A single-stop linear-
+   gradient is a paintable image fill that sits on top of the inline
+   navy — hue-agnostic and self-correcting if HaloPSA changes the bar
+   colour later. Label lifts 82% → 100% white.
 
-   `background-size: 100%` + `background-repeat: no-repeat` are *required*
-   here: HaloPSA ships `.nhd-nav-btn { background-size: 18px }` for the
-   hamburger-menu button's icon image. Without the reset, our hover
-   linear-gradient renders as an 18px stripe centred on the button
-   (the "thin compared to the text" symptom) instead of filling the
-   full 60px chip. */
+   `background-size: 100%` + `background-repeat: no-repeat` are
+   REQUIRED — HaloPSA ships `.nhd-nav-btn { background-size: 18px }`
+   for the hamburger icon; without the reset our hover gradient
+   renders as an 18px stripe centred on the button.
+
+   :not(.active) — selected tab keeps its own look; no hover wash.
+   :not(.highlight) — the right-aligned filled "Log out" style action
+   has its own primary look; don't double-apply.
+
+   Note: HaloPSA does NOT emit `.active` on the current-page nav
+   button — every nav button renders with `class="nhd-nav-btn undefined"`.
+   A JS shim setting .active via classList doesn't stick either because
+   HaloPSA's React render pins className to derived state and strips
+   it on the next reconciliation. See `portal-chrome.md → Navbar
+   selected state` for the full write-up. */
 html body .portal button.nhd-nav-btn:not(.active):hover,
 html body .portal button.nhd-nav-btn:not(.active):focus-visible,
 html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"]:not(.active):hover,
 html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"]:not(.active):focus-visible,
 html body .portal .nhd-nav-rightAlign button:not(.active):not(.highlight):hover {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.28)) !important;
+    background-image: linear-gradient(rgba(255,255,255,0.08), rgba(255,255,255,0.08)) !important;
     background-size: 100% 100% !important;
     background-repeat: no-repeat !important;
     background-position: 0 0 !important;
-    background-color: rgb(47, 53, 94) !important;
+    background-color: transparent !important;
+    color: #fff !important;
     box-shadow: none !important;
 }
 

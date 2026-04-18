@@ -3192,6 +3192,18 @@ html body .portal .articleRight {
     font-size: 12px;
 }
 
+/* HaloPSA wraps `.articleRight` in an un-classed leading `<div>` that
+   appears FIRST in the row's DOM (source order), so without special-
+   casing it the 10px-wide wrapper sits ahead of the `.heading` and
+   pushes the title ~24px to the right of where the tag pills below
+   align. The wrapped ARTICLE chip is already `display: none` via the
+   rule earlier in the file, so the whole leading wrapper can safely
+   collapse — hide it and the title snaps flush-left with the tags. */
+html body .portal .articleInfoSmall.kb > div:first-child:has(> .articleRight),
+html body .portal .article > div:first-child:has(> .articleRight) {
+    display: none !important;
+}
+
 /* ARTICLE chip styling removed — it's now `display: none` per the
    rule above. Kept this comment as a reference for why there's no
    per-chip style here. */
@@ -3481,6 +3493,16 @@ html body .portal .sidemenu-links {
     color: var(--portal-text) !important;
 }
 
+/* Breathing room between the identity block (avatar + name + email)
+   and the first link row. HaloPSA ships a tight 10px margin which
+   left "Settings" feeling crowded against the email line. 28px +
+   a hairline separator reads as a deliberate section break. */
+html body .portal .sidemenu-links {
+    margin-top: 28px !important;
+    padding-top: 20px !important;
+    border-top: 1px solid var(--portal-border-soft) !important;
+}
+
 /* Sidebar header ("My account" + close button) */
 html body .portal .sidemenu .sidemenu-header,
 html body .portal .sidemenu h1,
@@ -3502,7 +3524,13 @@ html body .portal .ui.sidebar > div:first-child > div {
 }
 
 /* Close (X) button — sits in the header's top-right. Ghost-square
-   32×32 so it matches the Share / theme-toggle chrome icon family. */
+   32×32 so it matches the Share / theme-toggle chrome icon family.
+   HaloPSA ships `.sidemenu-closebtn` with `position: absolute; right:
+   -10px; margin-left: 303px` which pushes the button OFF the sidebar
+   (10px protrusion into the scrim). Clamp it back inside the panel
+   with right: 20px and reset the margin so it sits within the 24px
+   padding on the top-right corner. */
+html body .portal .sidemenu-closebtn,
 html body .portal .sidemenu .close,
 html body .portal .sidemenu button.close,
 html body .portal .sidemenu .close-icon,
@@ -3511,6 +3539,11 @@ html body .portal .ui.sidebar .close,
 html body .portal .ui.sidebar button.close,
 html body .portal .ui.sidebar .close-icon,
 html body .portal .ui.sidebar [class*="close"] {
+    position: absolute !important;
+    top: 20px !important;
+    right: 20px !important;
+    left: auto !important;
+    margin: 0 !important;
     background: transparent !important;
     border: 1px solid var(--portal-border) !important;
     border-radius: var(--portal-radius-sm) !important;

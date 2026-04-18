@@ -2034,18 +2034,13 @@ html body .portal:has(.mandatory-hint) .details-form .details-group.card-panel {
     box-shadow: none !important;
 }
 
-/* Field labels — colour matched to the asterisk (`#F87171` coral) so the
-   "this field denotes a property of the form" cue and the "this field is
-   required" cue read as one signal instead of two competing tones (muted
-   slate label + bright coral asterisk). Mono + uppercase + tracking
-   stays — only the colour changes. */
 html body .portal .details-form label {
     font-family: var(--ik-font-mono) !important;
     font-size: 10.5px !important;
     font-weight: 500 !important;
     letter-spacing: 0.12em !important;
     text-transform: uppercase !important;
-    color: #F87171 !important;
+    color: var(--portal-text-muted) !important;
     margin-bottom: 8px !important;
     display: inline-block;
 }
@@ -2162,22 +2157,23 @@ html body .portal .fr-box .fr-view {
 }
 html body .portal .fr-placeholder { color: var(--portal-text-muted) !important; }
 
-/* "* denotes a mandatory field" hint — HaloPSA already ships the
-   leading `*` inside the element text, so an earlier `::before`
-   rule was duplicating it (user saw "* * denotes…"). No pseudo;
-   just tint the `*` via the asterisk colour token below via a
-   `:first-letter` rule. */
+/* "* denotes a mandatory field" hint — paint the WHOLE string in the
+   asterisk coral so the hint reads as one unified signal rather than a
+   coral `*` floating in front of muted body text. The `::first-letter`
+   rule still bumps the leading `*` to weight 700 so it visually pops
+   ahead of the lowercase-tracked label. HaloPSA already ships the `*`
+   inside the element text, so we don't add a `::before` (an earlier
+   pseudo had been duplicating it as "* * denotes…"). */
 html body .portal .mandatory-hint {
     font-family: var(--ik-font-mono) !important;
     font-size: 11px !important;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--portal-text-muted) !important;
+    color: #F87171 !important;
     font-style: normal !important;
     opacity: 0.9;
 }
 html body .portal .mandatory-hint::first-letter {
-    color: #F87171;   /* pink-red */
     font-weight: 700;
 }
 

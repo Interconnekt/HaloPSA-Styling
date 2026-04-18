@@ -45,7 +45,7 @@
     --ik-font-mono:    'JetBrains Mono', ui-monospace, Consolas, Menlo, monospace;
 
     /* ── LIGHT mode palette ── */
-    --portal-bg:              #FAFAF7;
+    --portal-bg:              #f8f9fa;
     --portal-bg-subtle:       #F2F1EB;
     --portal-surface:         #FFFFFF;
     --portal-surface-hover:   #F7F6F1;
@@ -121,9 +121,9 @@
 
 /* ── DARK mode token flip ── */
 .theme-dark {
-    --portal-bg:              #0A0F1C;
+    --portal-bg:              #0b0f1b;
     --portal-bg-subtle:       #0D1423;
-    --portal-surface:         #121929;
+    --portal-surface:         #131928;
     --portal-surface-hover:   #161E31;
     --portal-surface-active:  #1A2238;
 
@@ -541,16 +541,23 @@ html body .portal .dashbtn:hover::before { opacity: 0.85; }
 html body .portal .dashbtn .card-img {
     width: 40px !important;
     height: 40px !important;
-    margin-bottom: 20px !important;
+    margin: 0 auto 20px !important;
     padding: 8px;
     border-radius: var(--portal-radius-sm);
     background: var(--portal-accent-soft);
     color: var(--portal-accent) !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
 html body .portal .dashbtn .card-img svg,
 html body .portal .dashbtn .card-img img {
     color: var(--portal-accent) !important;
     filter: none;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
 }
 
 html body .portal .dashbtn .card-title {
@@ -1400,10 +1407,11 @@ html body .portal footer {
 }
 html body .portal footer a {
     color: var(--portal-text-muted) !important;
-    font-family: var(--ik-font-mono) !important;
-    font-size: 11px !important;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    font-family: var(--ik-font-display) !important;
+    font-size: 12px !important;
+    letter-spacing: normal;
+    text-transform: none;
+    font-weight: 400;
 }
 html body .portal footer.page-footer a[href*="usehalo.com"] { display: none !important; }
 

@@ -644,6 +644,11 @@ html body .portal .dashbtn .card-img > .fa {
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
+    /* HaloPSA ships `margin-top: 24px` inline on the FA icon, which
+       pushes the glyph below the chip's vertical centre. Reset every
+       side so the flex container centres the icon geometrically. */
+    margin: 0 !important;
+    padding: 0 !important;
 }
 html body .portal .dashbtn .card-img svg,
 html body .portal .dashbtn .card-img img {
@@ -761,7 +766,9 @@ html body .portal .action-history-item:hover {
    9 · Buttons, pills, status chips
    ───────────────────────────────────────────────────────── */
 
-/* Primary action — solid accent, tight radius, no drop shadow puddle */
+/* Primary action — solid accent pill, flex-centered so icon + label
+   line up on the same axis (HaloPSA ships `inline-block` which
+   leaves icons hanging off the text baseline). */
 html body .portal .nhd-button.curve,
 html body .portal button.nhd-button.curve,
 html body .portal .ui.popup .ui.button,
@@ -769,18 +776,36 @@ html body .portal .solidbutton:not(.menubtn):not(.fabtn),
 html body .portal button.-btn:hover:not([disabled]) {
     background-color: var(--portal-action) !important;
     color: #fff !important;
-    border-radius: var(--portal-radius-sm) !important;
+    border-radius: 999px !important;
     border: 1px solid transparent !important;
     box-shadow: none !important;
     font-family: var(--ik-font-display) !important;
+    font-size: 13px !important;
     font-weight: 500 !important;
     letter-spacing: -0.005em !important;
     transition: background-color var(--ik-dur) var(--ik-ease),
                 transform var(--ik-dur) var(--ik-ease),
                 box-shadow var(--ik-dur) var(--ik-ease) !important;
-    padding: 10px 18px !important;
+    padding: 0 18px !important;
+    height: 36px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px;
     position: relative;
     isolation: isolate;
+}
+/* Icons inside primary buttons — inherit the white label colour
+   instead of FA's global #555 grey. */
+html body .portal .nhd-button.curve i,
+html body .portal .nhd-button.curve .fa,
+html body .portal .nhd-button.curve svg,
+html body .portal button.nhd-button.curve i,
+html body .portal button.nhd-button.curve .fa,
+html body .portal button.nhd-button.curve svg {
+    color: inherit !important;
+    fill: currentColor !important;
+    margin: 0 !important;
 }
 html body .portal .nhd-button.curve:hover,
 html body .portal button.nhd-button.curve:hover,
@@ -1528,8 +1553,33 @@ html body .portal .details-form .Select__control--is-focused {
     box-shadow: 0 0 0 3px var(--portal-accent-subtle) !important;
 }
 
-html body .portal .details-form .mb-2,
-html body .portal .details-form .mb-3 { margin-bottom: 20px !important; }
+/* Tighten row-to-row rhythm. Default Bootstrap `.mb-3` (16px) +
+   HaloPSA's implicit 12px group gap compounds into 88–102px between
+   label baselines, which reads as airy/disjointed on a form with
+   many short rows. 10–12px margin keeps the form scannable. */
+html body .portal .details-form .mb-2 { margin-bottom: 10px !important; }
+html body .portal .details-form .mb-3 { margin-bottom: 14px !important; }
+html body .portal .details-form .details-group-header { margin-bottom: 4px !important; }
+html body .portal .details-form .details-group.card-panel {
+    margin-bottom: 4px !important;
+}
+
+/* Hairline separators between groups — subtle soft-border only,
+   matches the rest of the theme's border-soft token instead of
+   HaloPSA's default light-grey that stood out in dark mode. */
+html body .portal .details-form hr {
+    border: 0 !important;
+    border-top: 1px solid var(--portal-border-soft) !important;
+    margin: 16px 0 !important;
+}
+
+/* Slightly shorter inputs — 40px felt chunky next to 10.5px labels. */
+html body .portal .details-form input[type="text"]:not(.Select__input),
+html body .portal .details-form input:not([type]):not(.Select__input),
+html body .portal .details-form .Select__control {
+    height: 38px !important;
+    min-height: 38px !important;
+}
 
 /* Froala editor */
 html body .portal .fr-box {
@@ -1645,12 +1695,25 @@ html body .portal .switches > button[style*="rgb(47, 53, 94)"] {
 
 html body .portal .kbdetails {
     font-family: var(--ik-font-display) !important;
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 20px 0 60px;
+    /* Wider than the old 760px reading measure — KB articles carry
+       tables + screenshots that need room. Still bounded for
+       comfortable long-form reading on ultrawide displays. */
+    max-width: 1100px;
+    margin: 16px auto 40px;
+    padding: 28px 36px 44px;
     line-height: 1.7;
     color: var(--portal-text);
     font-size: 16px;
+    background: var(--portal-surface);
+    border: 1px solid var(--portal-border);
+    border-radius: var(--portal-radius);
+    box-shadow: var(--portal-shadow-sm);
+    transition: border-color var(--ik-dur) var(--ik-ease),
+                box-shadow var(--ik-dur) var(--ik-ease);
+}
+html body .portal .kbdetails:hover {
+    border-color: var(--portal-border-soft);
+    box-shadow: var(--portal-shadow);
 }
 
 html body .portal .kbdetails h1 {
@@ -1700,28 +1763,25 @@ html body .portal .kbdetails .kbmeta {
     color: var(--portal-text-muted) !important;
 }
 
-/* KB tags (`span.kbtags`) render below each article on the KB index
-   and on article pages. HaloPSA's default chrome paints them as a
-   flat dark-grey 2px-radius rectangle. Re-skin to match the website
-   blog-category pill (OPINION / HOW-TO / STRATEGY): transparent bg
-   with a hairline outline, mono font, uppercase, tracked-out text.
-   Surface-2 bg gives a subtle lift over the card surface without
-   competing with the card body. */
+/* KB tags (`span.kbtags`) — match the website's COMPLIANCE /
+   FEATURED-style pill: Jet Brains Mono at 11.5px with generous
+   padding, moderate tracking (not over-spaced), surface-active
+   bg so it lifts cleanly off both card and page surfaces. */
 html body .portal span.kbtags,
 html body .portal .kbtags {
     display: inline-block !important;
     background: var(--portal-surface-active) !important;
     color: var(--portal-text) !important;
     font-family: var(--ik-font-mono) !important;
-    font-size: 10px !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.12em !important;
+    font-size: 11.5px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.08em !important;
     text-transform: uppercase !important;
-    padding: 4px 10px !important;
-    border: 1px solid var(--portal-border-soft) !important;
+    padding: 5px 14px !important;
+    border: 1px solid transparent !important;
     border-radius: 999px !important;
     margin: 3px 6px 3px 0 !important;
-    line-height: 1.4 !important;
+    line-height: 1.5 !important;
     transition: border-color var(--ik-dur) var(--ik-ease),
                 color var(--ik-dur) var(--ik-ease),
                 background var(--ik-dur) var(--ik-ease);
@@ -1730,7 +1790,7 @@ html body .portal span.kbtags:hover,
 html body .portal .kbtags:hover {
     border-color: var(--portal-accent) !important;
     color: var(--portal-accent) !important;
-    background: var(--portal-surface-hover) !important;
+    background: var(--portal-accent-soft) !important;
 }
 
 /* Confluence panels — keep the left-accent, flatten radii & refresh tones */
@@ -1990,18 +2050,17 @@ html body .portal .articleInfoSmall.kb > .status-avatar {
    row as a hairline card matching the home-page tile-widgets so
    the KB index reads as a proper list of cards, not a bullet list. */
 /* Peer styling with `.action-history-item.tile-item` — both get the
-   same hairline surface, same padding, same lift-on-hover, so the
-   two Home-page columns (Recent Activity on the left, Top 5 Articles
-   on the right) read as siblings instead of two different card
-   languages. Article carries an accent-subtle left stripe to mirror
-   the status bar on activity tiles — articles don't have a status,
-   so the stripe is a neutral brand accent. */
+   same hairline surface, same padding, same lift-on-hover so the
+   two Home-page columns (Recent Activity / Top 5 Articles) read
+   as siblings. No coloured left stripe on articles — the Recent
+   Activity tiles carry theirs because HaloPSA emits a real status
+   colour inline; articles don't have a status, so a fake accent
+   stripe just created visual noise. */
 html body .portal .article,
 html body .portal .article.searchlist {
     display: block !important;
     background: var(--portal-surface) !important;
     border: 1px solid var(--portal-border) !important;
-    border-left: 4px solid var(--portal-accent) !important;
     border-radius: var(--portal-radius-md) !important;
     padding: 15px 18px !important;
     margin: 0 0 10px !important;
@@ -2012,9 +2071,16 @@ html body .portal .article.searchlist {
 html body .portal .article:hover,
 html body .portal .article.searchlist:hover {
     border-color: var(--portal-accent) !important;
-    border-left-color: var(--portal-accent-hover) !important;
     transform: translateY(-2px);
     box-shadow: var(--portal-shadow) !important;
+}
+
+/* ARTICLE pill on the right edge — hide. It's just a category label
+   duplicating the parent KB context; visually competes with the
+   tag row. The views count on its left keeps the meta block alive. */
+html body .portal .article .articleRight .status-avatar,
+html body .portal .articleInfoSmall.kb .articleRight .status-avatar {
+    display: none !important;
 }
 
 /* Harmonise the activity tile hover with articles so both columns
@@ -2069,23 +2135,9 @@ html body .portal .articleRight {
     font-size: 12px;
 }
 
-/* `ARTICLE` chip on the right edge — re-skin as a soft capsule
-   instead of HaloPSA's default heading-purple block. */
-html body .portal .article .articleRight .status-avatar {
-    background: var(--portal-surface-hover) !important;
-    color: var(--portal-text-muted) !important;
-    border: 1px solid var(--portal-border-soft) !important;
-    border-radius: 999px !important;
-    padding: 2px 10px !important;
-    font-family: var(--ik-font-mono) !important;
-    font-size: 9.5px !important;
-    font-weight: 500 !important;
-    letter-spacing: 0.08em !important;
-    text-transform: uppercase !important;
-    line-height: 1.5 !important;
-    white-space: nowrap !important;
-    word-break: keep-all !important;
-}
+/* ARTICLE chip styling removed — it's now `display: none` per the
+   rule above. Kept this comment as a reference for why there's no
+   per-chip style here. */
 
 /* Tree menu (left sidebar on KB pages) — slim down node size and
    align with our display font. HaloPSA ships these at Poppins 16px. */

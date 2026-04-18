@@ -8,7 +8,8 @@
    Design DNA pulled from the Interconnekt website rebuild:
    • Montserrat 300 display weight + Instrument Serif italic emphasis
    • JetBrains Mono eyebrows with leading em-dash (S/01 — …)
-   • Dark-first palette (#0A0F1C / #121929 / #1F2740), light cream mode
+   • Dark-first palette (#0A0F1C / #121929 / #1F2740), Bootstrap-style
+     cool-grey light mode (#F8F9FA / #E9ECEF / #CED4DA — Gray 1–4)
    • #4A74F0 primary → #D946EF accent gradient line
    • Tighter radii (10–16px), hairline borders, editorial rhythm
    • Ops-card texture — mono rows, pulsing status dot, delta chips
@@ -44,17 +45,23 @@
     --ik-font-serif:   'Instrument Serif', Georgia, 'Times New Roman', serif;
     --ik-font-mono:    'JetBrains Mono', ui-monospace, Consolas, Menlo, monospace;
 
-    /* ── LIGHT mode palette ── */
-    --portal-bg:              #f8f9fa;
-    --portal-bg-subtle:       #F2F1EB;
+    /* ── LIGHT mode palette ──
+       Bootstrap-style grey ramp aligned with the Interconnekt.com.au
+       rebuild. Gray 1 (#F8F9FA) → Gray 9 (#212529). Replaces the earlier
+       warm cream beige with something cooler and more neutral, so the
+       portal sits visually alongside the marketing site without a
+       palette jump. Shadows now tint off Gray 9 (33,37,41) instead of
+       the old navy (14,20,36). */
+    --portal-bg:              #F8F9FA;   /* Gray 1 */
+    --portal-bg-subtle:       #F1F3F5;   /* between Gray 1 & 2 */
     --portal-surface:         #FFFFFF;
-    --portal-surface-hover:   #F7F6F1;
-    --portal-surface-active:  #EEEDE5;
+    --portal-surface-hover:   #F1F3F5;   /* bg-subtle */
+    --portal-surface-active:  #E9ECEF;   /* Gray 2 */
 
-    --portal-text:            #0E1424;
-    --portal-text-secondary:  #515970;
-    --portal-text-muted:      #7D85A0;
-    --portal-heading:         #0E1424;
+    --portal-text:            #212529;   /* Gray 9 */
+    --portal-text-secondary:  #495057;   /* Gray 7 */
+    --portal-text-muted:      #6C757D;   /* Gray 6 */
+    --portal-heading:         #212529;   /* Gray 9 */
 
     /* Brand */
     --portal-accent:          #2B5CE6;
@@ -69,17 +76,17 @@
     --portal-action-shadow:   rgba(43, 92, 230, 0.22);
 
     /* Borders & shadows */
-    --portal-border:          #E5E3DB;
-    --portal-border-soft:     #EEEDE5;
-    --portal-border-light:    #EEEDE5;
-    --portal-shadow-sm:       0 1px 2px rgba(14, 20, 36, 0.04);
-    --portal-shadow:          0 4px 12px -2px rgba(14, 20, 36, 0.06), 0 2px 4px -2px rgba(14, 20, 36, 0.04);
-    --portal-shadow-hover:    0 16px 40px -12px rgba(14, 20, 36, 0.14), 0 4px 12px -2px rgba(14, 20, 36, 0.06);
+    --portal-border:          #CED4DA;   /* Gray 4 */
+    --portal-border-soft:     #DEE2E6;   /* Gray 3 */
+    --portal-border-light:    #DEE2E6;   /* Gray 3 */
+    --portal-shadow-sm:       0 1px 2px rgba(33, 37, 41, 0.04);
+    --portal-shadow:          0 4px 12px -2px rgba(33, 37, 41, 0.06), 0 2px 4px -2px rgba(33, 37, 41, 0.04);
+    --portal-shadow-hover:    0 16px 40px -12px rgba(33, 37, 41, 0.14), 0 4px 12px -2px rgba(33, 37, 41, 0.06);
 
     /* Table */
-    --portal-table-header-bg: rgba(14, 20, 36, 0.035);
-    --portal-table-border:    rgba(14, 20, 36, 0.08);
-    --portal-table-row-hover: rgba(14, 20, 36, 0.025);
+    --portal-table-header-bg: rgba(33, 37, 41, 0.035);
+    --portal-table-border:    rgba(33, 37, 41, 0.08);
+    --portal-table-row-hover: rgba(33, 37, 41, 0.025);
 
     /* Radii — ALL edited down from HaloPSA's 25px pill language.
        `--portal-radius` = the "big" one (cards, hero search); mid
@@ -90,15 +97,15 @@
     --portal-radius-xs:       8px;
 
     /* Code */
-    --portal-code-bg:         #F2F1EB;
+    --portal-code-bg:         #F1F3F5;   /* bg-subtle */
     --portal-code-text:       #B91C1C;
-    --portal-pre-bg:          #0E1424;
+    --portal-pre-bg:          #0A0F1C;   /* dark-mode bg — intentional */
     --portal-pre-text:        #EAEBEF;
     --portal-pre-border:      #1F2740;
 
     /* Blockquote */
     --portal-quote-border:    var(--portal-accent);
-    --portal-quote-bg:        #F7F6F1;
+    --portal-quote-bg:        #F1F3F5;   /* bg-subtle */
 
     /* Semantic */
     --portal-ok:              #15803D;
@@ -121,9 +128,9 @@
 
 /* ── DARK mode token flip ── */
 .theme-dark {
-    --portal-bg:              #0b0f1b;
+    --portal-bg:              #0A0F1C;
     --portal-bg-subtle:       #0D1423;
-    --portal-surface:         #131928;
+    --portal-surface:         #121929;
     --portal-surface-hover:   #161E31;
     --portal-surface-active:  #1A2238;
 
@@ -335,7 +342,7 @@ html body .portal .page-title h1 em::after {
 html body .portal header,
 html body .portal .header,
 html body .portal .portal-header {
-    background-color: #0E1424 !important;
+    background-color: #0A0F1C !important;
     color: #fff;
     border-bottom: 1px solid rgba(255,255,255,0.06);
     position: relative;
@@ -541,23 +548,16 @@ html body .portal .dashbtn:hover::before { opacity: 0.85; }
 html body .portal .dashbtn .card-img {
     width: 40px !important;
     height: 40px !important;
-    margin: 0 auto 20px !important;
+    margin-bottom: 20px !important;
     padding: 8px;
     border-radius: var(--portal-radius-sm);
     background: var(--portal-accent-soft);
     color: var(--portal-accent) !important;
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
 }
 html body .portal .dashbtn .card-img svg,
 html body .portal .dashbtn .card-img img {
     color: var(--portal-accent) !important;
     filter: none;
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: contain;
 }
 
 html body .portal .dashbtn .card-title {
@@ -693,7 +693,10 @@ html body .portal .nhd-button.curve::before {
 }
 html body .portal .nhd-button.curve:hover::before { opacity: 1; }
 
-/* Status pills — force full-pill, mono-ish tight caps. */
+/* ─── Status pill shape ───────────────────────────────────
+   Force full-pill geometry on every `.status-avatar` variant
+   HaloPSA emits. The colour system below replaces their
+   inline background-color rules. */
 html body .portal .status-avatar.fortable,
 html body .portal .status-avatar.small,
 html body .portal .status-avatar.bitsmall {
@@ -711,6 +714,199 @@ html body .portal .status-avatar.bitsmall {
     vertical-align: middle;
     width: auto !important;
     line-height: 1.5;
+    /* Tiny leading dot — editorial status language */
+    gap: 6px;
+}
+html body .portal .status-avatar.fortable::before,
+html body .portal .status-avatar.small::before,
+html body .portal .status-avatar.bitsmall::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.8;
+    flex: 0 0 auto;
+}
+
+/* ─── Status pill COLOUR SYSTEM ───────────────────────────
+   HaloPSA writes status colours inline as `style="background-color: rgb(…)"`.
+   We override each of the common palettes it ships, mapping to tokenised
+   pastel backgrounds + high-contrast ink. Dark mode swaps via .theme-dark.
+
+   Coverage:
+   • Open / New            → blue-indigo
+   • In Progress / Assigned→ violet
+   • Waiting / On Hold     → amber
+   • Resolved / Closed OK  → green
+   • Closed / Cancelled    → neutral
+   • Overdue / Breached    → red
+
+   The colour tokens are exposed on :root so other components
+   (priority chips, kanban headers, timeline dots) can reuse them. */
+:root {
+    --pill-open-bg:     #DBEAFE; --pill-open-ink:     #1E3A8A;
+    --pill-progress-bg: #EDE9FE; --pill-progress-ink: #4C1D95;
+    --pill-waiting-bg:  #FEF3C7; --pill-waiting-ink:  #78350F;
+    --pill-resolved-bg: #D1FAE5; --pill-resolved-ink: #064E3B;
+    --pill-closed-bg:   #E9ECEF; --pill-closed-ink:   #495057;
+    --pill-overdue-bg:  #FEE2E2; --pill-overdue-ink:  #7F1D1D;
+    --pill-info-bg:     #E0F4F9; --pill-info-ink:     #0E4A6A;
+}
+.theme-dark {
+    --pill-open-bg:     rgba(74,116,240,0.18);  --pill-open-ink:     #9AB5F7;
+    --pill-progress-bg: rgba(167,139,250,0.18); --pill-progress-ink: #C4B5FD;
+    --pill-waiting-bg:  rgba(251,191,36,0.18);  --pill-waiting-ink:  #FCD34D;
+    --pill-resolved-bg: rgba(52,211,153,0.18);  --pill-resolved-ink: #86EFAC;
+    --pill-closed-bg:   rgba(255,255,255,0.06); --pill-closed-ink:   #97A0B8;
+    --pill-overdue-bg:  rgba(248,113,113,0.18); --pill-overdue-ink:  #FCA5A5;
+    --pill-info-bg:     rgba(34,211,238,0.18);  --pill-info-ink:     #67E8F9;
+}
+
+/* Attribute-selector overrides for HaloPSA's inline colours.
+   HaloPSA typically emits one of these rgb() values. We match
+   with `[style*=]` so the inline `background-color: rgb(...)`
+   declaration is countered by our pastel token. Colour the text
+   via the sibling `color:` token so contrast stays WCAG-safe. */
+
+/* OPEN / NEW — HaloPSA commonly paints rgb(66, 133, 244), rgb(0, 123, 255),
+   rgb(52, 131, 250), rgb(13, 110, 253), rgb(0, 102, 204) */
+html body .portal .status-avatar[style*="rgb(66, 133, 244)"],
+html body .portal .status-avatar[style*="rgb(0, 123, 255)"],
+html body .portal .status-avatar[style*="rgb(52, 131, 250)"],
+html body .portal .status-avatar[style*="rgb(13, 110, 253)"],
+html body .portal .status-avatar[style*="rgb(0, 102, 204)"],
+html body .portal .status-avatar.s-open {
+    background-image: linear-gradient(var(--pill-open-bg), var(--pill-open-bg)) !important;
+    background-color: var(--pill-open-bg) !important;
+    color: var(--pill-open-ink) !important;
+}
+
+/* IN PROGRESS / ASSIGNED — rgb(111, 66, 193), rgb(102, 16, 242),
+   rgb(153, 51, 255), rgb(138, 43, 226) */
+html body .portal .status-avatar[style*="rgb(111, 66, 193)"],
+html body .portal .status-avatar[style*="rgb(102, 16, 242)"],
+html body .portal .status-avatar[style*="rgb(153, 51, 255)"],
+html body .portal .status-avatar[style*="rgb(138, 43, 226)"],
+html body .portal .status-avatar.s-progress {
+    background-image: linear-gradient(var(--pill-progress-bg), var(--pill-progress-bg)) !important;
+    background-color: var(--pill-progress-bg) !important;
+    color: var(--pill-progress-ink) !important;
+}
+
+/* WAITING / ON HOLD — rgb(255, 193, 7), rgb(255, 170, 0), rgb(255, 152, 0),
+   rgb(240, 173, 78), rgb(245, 158, 11) */
+html body .portal .status-avatar[style*="rgb(255, 193, 7)"],
+html body .portal .status-avatar[style*="rgb(255, 170, 0)"],
+html body .portal .status-avatar[style*="rgb(255, 152, 0)"],
+html body .portal .status-avatar[style*="rgb(240, 173, 78)"],
+html body .portal .status-avatar[style*="rgb(245, 158, 11)"],
+html body .portal .status-avatar.s-waiting {
+    background-image: linear-gradient(var(--pill-waiting-bg), var(--pill-waiting-bg)) !important;
+    background-color: var(--pill-waiting-bg) !important;
+    color: var(--pill-waiting-ink) !important;
+}
+
+/* RESOLVED / OK — rgb(40, 167, 69), rgb(34, 139, 34), rgb(0, 190, 0),
+   rgb(25, 135, 84), rgb(16, 185, 129) */
+html body .portal .status-avatar[style*="rgb(40, 167, 69)"],
+html body .portal .status-avatar[style*="rgb(34, 139, 34)"],
+html body .portal .status-avatar[style*="rgb(0, 190, 0)"],
+html body .portal .status-avatar[style*="rgb(25, 135, 84)"],
+html body .portal .status-avatar[style*="rgb(16, 185, 129)"],
+html body .portal .status-avatar.s-resolved {
+    background-image: linear-gradient(var(--pill-resolved-bg), var(--pill-resolved-bg)) !important;
+    background-color: var(--pill-resolved-bg) !important;
+    color: var(--pill-resolved-ink) !important;
+}
+
+/* CLOSED / CANCELLED — rgb(108, 117, 125), rgb(128, 128, 128),
+   rgb(80, 80, 80), rgb(119, 119, 119) */
+html body .portal .status-avatar[style*="rgb(108, 117, 125)"],
+html body .portal .status-avatar[style*="rgb(128, 128, 128)"],
+html body .portal .status-avatar[style*="rgb(80, 80, 80)"],
+html body .portal .status-avatar[style*="rgb(119, 119, 119)"],
+html body .portal .status-avatar.s-closed {
+    background-image: linear-gradient(var(--pill-closed-bg), var(--pill-closed-bg)) !important;
+    background-color: var(--pill-closed-bg) !important;
+    color: var(--pill-closed-ink) !important;
+}
+
+/* OVERDUE / BREACHED — rgb(220, 53, 69), rgb(255, 46, 0), rgb(255, 0, 0),
+   rgb(185, 28, 28), rgb(239, 68, 68) */
+html body .portal .status-avatar[style*="rgb(220, 53, 69)"],
+html body .portal .status-avatar[style*="rgb(255, 46, 0)"],
+html body .portal .status-avatar[style*="rgb(255, 0, 0)"],
+html body .portal .status-avatar[style*="rgb(185, 28, 28)"],
+html body .portal .status-avatar[style*="rgb(239, 68, 68)"],
+html body .portal .status-avatar.s-overdue {
+    background-image: linear-gradient(var(--pill-overdue-bg), var(--pill-overdue-bg)) !important;
+    background-color: var(--pill-overdue-bg) !important;
+    color: var(--pill-overdue-ink) !important;
+}
+
+/* INFO / PENDING CLIENT — rgb(23, 162, 184), rgb(13, 202, 240),
+   rgb(8, 145, 178) */
+html body .portal .status-avatar[style*="rgb(23, 162, 184)"],
+html body .portal .status-avatar[style*="rgb(13, 202, 240)"],
+html body .portal .status-avatar[style*="rgb(8, 145, 178)"],
+html body .portal .status-avatar.s-info {
+    background-image: linear-gradient(var(--pill-info-bg), var(--pill-info-bg)) !important;
+    background-color: var(--pill-info-bg) !important;
+    color: var(--pill-info-ink) !important;
+}
+
+/* Fallback — any `.status-avatar` HaloPSA paints with ANY inline
+   background-color that we didn't map above still gets our shape
+   and a neutral-tinted fill that blends with the card. This
+   prevents random bright inline colours from clashing. */
+html body .portal .status-avatar[style*="background-color"]:not([style*="rgb(66, 133, 244)"]):not([style*="rgb(0, 123, 255)"]):not([style*="rgb(52, 131, 250)"]):not([style*="rgb(13, 110, 253)"]):not([style*="rgb(0, 102, 204)"]):not([style*="rgb(111, 66, 193)"]):not([style*="rgb(102, 16, 242)"]):not([style*="rgb(153, 51, 255)"]):not([style*="rgb(138, 43, 226)"]):not([style*="rgb(255, 193, 7)"]):not([style*="rgb(255, 170, 0)"]):not([style*="rgb(255, 152, 0)"]):not([style*="rgb(240, 173, 78)"]):not([style*="rgb(245, 158, 11)"]):not([style*="rgb(40, 167, 69)"]):not([style*="rgb(34, 139, 34)"]):not([style*="rgb(0, 190, 0)"]):not([style*="rgb(25, 135, 84)"]):not([style*="rgb(16, 185, 129)"]):not([style*="rgb(108, 117, 125)"]):not([style*="rgb(128, 128, 128)"]):not([style*="rgb(80, 80, 80)"]):not([style*="rgb(119, 119, 119)"]):not([style*="rgb(220, 53, 69)"]):not([style*="rgb(255, 46, 0)"]):not([style*="rgb(255, 0, 0)"]):not([style*="rgb(185, 28, 28)"]):not([style*="rgb(239, 68, 68)"]):not([style*="rgb(23, 162, 184)"]):not([style*="rgb(13, 202, 240)"]):not([style*="rgb(8, 145, 178)"]) {
+    background-image: linear-gradient(var(--portal-accent-soft), var(--portal-accent-soft)) !important;
+    background-color: var(--portal-accent-soft) !important;
+    color: var(--portal-accent) !important;
+}
+
+/* ─── Priority chips — same language, colour on severity ─── */
+html body .portal .priority-avatar,
+html body .portal .priority-chip {
+    border-radius: 999px !important;
+    padding: 2px 10px !important;
+    font-family: var(--ik-font-mono) !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase;
+}
+html body .portal .priority-avatar[style*="rgb(220, 53, 69)"],
+html body .portal .priority-avatar.p1 { background-image: linear-gradient(var(--pill-overdue-bg), var(--pill-overdue-bg)) !important; background-color: var(--pill-overdue-bg) !important; color: var(--pill-overdue-ink) !important; }
+html body .portal .priority-avatar[style*="rgb(255, 152, 0)"],
+html body .portal .priority-avatar.p2 { background-image: linear-gradient(var(--pill-waiting-bg), var(--pill-waiting-bg)) !important; background-color: var(--pill-waiting-bg) !important; color: var(--pill-waiting-ink) !important; }
+html body .portal .priority-avatar.p3 { background-image: linear-gradient(var(--pill-open-bg), var(--pill-open-bg)) !important; background-color: var(--pill-open-bg) !important; color: var(--pill-open-ink) !important; }
+html body .portal .priority-avatar.p4 { background-image: linear-gradient(var(--pill-closed-bg), var(--pill-closed-bg)) !important; background-color: var(--pill-closed-bg) !important; color: var(--pill-closed-ink) !important; }
+
+/* ─── SLA countdown bar (home ticket cards) ─────────────── */
+html body .portal .sla-perc-bar {
+    height: 6px !important;
+    border-radius: 999px !important;
+    background: var(--portal-border-soft) !important;
+    overflow: hidden;
+}
+html body .portal .sla-perc-bar > div {
+    height: 100% !important;
+    border-radius: 999px !important;
+    transition: width 300ms var(--ik-ease);
+}
+html body .portal .sla-perc-bar > div[style*="rgb(255, 46, 0)"],
+html body .portal .sla-perc-bar > div[style*="rgb(220, 53, 69)"] {
+    background-image: linear-gradient(90deg, #DC2626, #F87171) !important;
+}
+html body .portal .sla-perc-bar > div[style*="rgb(255, 191, 0)"],
+html body .portal .sla-perc-bar > div[style*="rgb(255, 152, 0)"] {
+    background-image: linear-gradient(90deg, #F59E0B, #FBBF24) !important;
+}
+html body .portal .sla-perc-bar > div[style*="rgb(0, 190, 0)"],
+html body .portal .sla-perc-bar > div[style*="rgb(40, 167, 69)"],
+html body .portal .sla-perc-bar > div[style*="rgb(34, 139, 34)"] {
+    background-image: linear-gradient(90deg, #059669, #34D399) !important;
 }
 
 
@@ -1407,11 +1603,10 @@ html body .portal footer {
 }
 html body .portal footer a {
     color: var(--portal-text-muted) !important;
-    font-family: var(--ik-font-display) !important;
-    font-size: 12px !important;
-    letter-spacing: normal;
-    text-transform: none;
-    font-weight: 400;
+    font-family: var(--ik-font-mono) !important;
+    font-size: 11px !important;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 }
 html body .portal footer.page-footer a[href*="usehalo.com"] { display: none !important; }
 

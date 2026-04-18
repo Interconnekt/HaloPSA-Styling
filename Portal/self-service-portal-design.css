@@ -63,12 +63,28 @@
     --portal-text-muted:      #6C757D;   /* Gray 6 */
     --portal-heading:         #212529;   /* Gray 9 */
 
-    /* Brand */
+    /* Brand — primary blue, same as website --primary */
     --portal-accent:          #2B5CE6;
     --portal-accent-hover:    #1E49C9;
     --portal-accent-subtle:   rgba(43, 92, 230, 0.08);
-    --portal-accent-soft:     #EBF0FD;
-    --portal-accent-2:        #C026D3;   /* gradient end */
+    --portal-accent-soft:     #DBE7FE;              /* website --primary-subtle */
+    --portal-accent-2:        #C026D3;              /* gradient end / plum */
+    --portal-accent-2-hover:  #A21CAF;
+    --portal-accent-2-subtle: #F5E0FA;
+
+    /* Highlight — emerald. Third brand colour alongside blue + plum,
+       used for delight moments (featured pills, live dots, alt icon
+       chips). Distinct from --portal-ok which handles semantic success. */
+    --portal-highlight:        #10B981;
+    --portal-highlight-hover:  #059669;
+    --portal-highlight-subtle: #D1FAE5;
+
+    /* Section tints — cool + warm for page rhythm. Used for alternating
+       tinted panels (e.g. highlighted announcements, featured KB
+       categories) to break up long pages without going to full colour. */
+    --portal-tint-cool:       #D6E4FB;
+    --portal-tint-warm:       #FBE3CD;
+    --portal-band-bg:         #CED4DA;              /* Gray 4 — carousels/strips */
 
     /* Action (buttons, H1, stepper active) */
     --portal-action:          #2B5CE6;
@@ -142,8 +158,20 @@
     --portal-accent:          #4A74F0;
     --portal-accent-hover:    #6B8DF3;
     --portal-accent-subtle:   rgba(74, 116, 240, 0.14);
-    --portal-accent-soft:     rgba(74, 116, 240, 0.10);
+    --portal-accent-soft:     rgba(74, 116, 240, 0.18);  /* website --primary-subtle */
     --portal-accent-2:        #D946EF;
+    --portal-accent-2-hover:  #E879F9;
+    --portal-accent-2-subtle: rgba(217, 70, 239, 0.16);
+
+    /* Highlight — brighter green for dark mode contrast */
+    --portal-highlight:        #4ADE80;
+    --portal-highlight-hover:  #86EFAC;
+    --portal-highlight-subtle: rgba(74, 222, 128, 0.16);
+
+    /* Dark tints — cooler deep blue + warmer plum-tinted deep */
+    --portal-tint-cool:       #112346;
+    --portal-tint-warm:       #241829;
+    --portal-band-bg:         #131B30;
 
     --portal-action:          #4A74F0;
     --portal-action-hover:    #6B8DF3;

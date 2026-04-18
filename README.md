@@ -42,10 +42,14 @@ HaloPSA has two separate CSS injection points for Knowledge Base articles. This 
 The Custom CSS field in HaloPSA contains a single line:
 
 ```css
-@import url('https://interconnekt.github.io/HaloPSA-Styling/Portal/self-service-portal.css');
+@import url('https://interconnekt.github.io/HaloPSA-Styling/Portal/self-service-portal-design.css');
 ```
 
-`self-service-portal.css` is served via GitHub Pages. Edit the file, commit, push — changes are live within ~10 minutes.
+`self-service-portal-design.css` is the **live** file — rebuilt for the 2026 Interconnekt website refresh (Montserrat + Instrument Serif + JetBrains Mono, neutral-grey dark mode, brand gradient accents, ghost-button family).
+
+`self-service-portal.css` remains in the repo as a **legacy fallback**: same token names + same visual chrome, maintained to parity but not loaded by default. If anything goes wrong with the design file, swap the `@import` URL to the legacy one.
+
+Both files are served via GitHub Pages. Edit, commit, push — changes are live within ~10 minutes.
 
 ### Layer 3 — Iframe JS shim (email bodies)
 
@@ -64,11 +68,14 @@ Add once in HaloPSA admin:
 
 | File | Purpose |
 |------|---------|
-| `Portal/self-service-portal.css` | Custom CSS: portal chrome, article light/dark mode overrides, code/blockquote/hr/list styling, responsive layout, print styles |
-| `Portal/iframe-theme.js` | JS shim that themes email-body iframes (`iframe.halo-html-renderer`) — injects Montserrat + `#3598db` link colour into same-origin iframe documents. Loaded in HaloPSA admin via `<script src="...">` |
+| `Portal/self-service-portal-design.css` | **Live** Custom CSS — Interconnekt 2026 design system: Montserrat + Instrument Serif + JetBrains Mono, neutral-grey dark mode, brand gradient accents, ghost buttons, status/priority pill colour system |
+| `Portal/self-service-portal.css` | **Legacy fallback** — same chrome + same tokens, maintained to parity. Use as the `@import` target if the design file needs to be rolled back |
+| `Portal/iframe-theme.js` | JS shim loaded via `<script src="...">` in HaloPSA admin. Two IIFEs: (1) injects Montserrat + `#3598db` link colour into same-origin email-body iframes; (2) formats the ticket-list `Age` column to 2 decimal places via MutationObserver |
+| `Portal/website-portal-mapping.md` | **Website ⇄ Portal theme mapping spec** — per-token mapping, component mapping, status-pill inline-colour table, update workflow. Start here when a website colour/font/pattern needs to propagate into the portal |
 | `Portal/portal-chrome.md` | Portal chrome reference: design tokens, key rules per page, iframe shim notes, gotchas |
 | `Portal/light-mode-checklist.md` | Light-mode test checklist for portal chrome (home, tickets list, ticket view, kanban, iframe) |
 | `Portal/dark-mode-test-checklist.md` | Test checklist covering KB articles across both portals, both modes, responsive breakpoints, and print |
+| `Portal/email-iframe-theming.md` | Notes on HaloPSA's iframe email rendering + why a JS shim is required |
 | `Knowledge Base/style-profile-rules.css` | Style Profile reference: each block maps to one HaloPSA Style Profile rule |
 | `AGENTS.md` | Instructions for AI agents working on this codebase |
 
@@ -200,9 +207,15 @@ Style Profile rules are wrapped as `.kbdetails selector { properties }`. There i
 ## Adapting for Your Portal
 
 1. Fork this repository
-2. In `self-service-portal.css`, update the CSS variables in `:root` and `.theme-dark` to match your brand colours
+2. In `self-service-portal-design.css` (and `self-service-portal.css` if you keep the legacy fallback), update the CSS variables in `:root` and `.theme-dark` to match your brand colours. See `Portal/website-portal-mapping.md` §2 for the full token list
 3. In `style-profile-rules.css`, update the hardcoded colours (table header bg, panel border accents, link colour, blockquote border) to your brand palette
 4. Enable GitHub Pages and update the `@import` URL
 5. Enter the Style Profile rules manually in HaloPSA
 
-The font import (`Montserrat` via Google Fonts) can be swapped in Section 1 of `self-service-portal.css`. Note that the Style Profile rules also reference `'Montserrat', sans-serif` — update those too if you change fonts.
+The font imports (Montserrat + Instrument Serif + JetBrains Mono via Google Fonts) can be swapped at the top of `self-service-portal-design.css`. The matching `--ik-font-*` tokens in `:root` need to update to the new family name. Also update `Portal/iframe-theme.js` if the primary display font changes (the shim injects it into email-body iframes).
+
+---
+
+## Keeping website + portal in sync
+
+When a colour, font, radius, or component changes on the Interconnekt website (`Interconnekt/Website`, `src/app/globals.css`), use `Portal/website-portal-mapping.md` to find the matching portal token / selector and apply the change here. The mapping doc has a section §11 "Update workflow" with step-by-step recipes for the common change scenarios.

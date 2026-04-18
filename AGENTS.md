@@ -6,9 +6,16 @@ This file provides context for AI agents working on this repository.
 
 ## What This Repo Does
 
-CSS styling for a HaloPSA Self-Service Portal and Knowledge Base articles. Articles are sourced from Confluence, so the HTML contains Confluence-specific class names.
+CSS styling for a HaloPSA Self-Service Portal and Knowledge Base articles. Articles are sourced from Confluence, so the HTML contains Confluence-specific class names. The portal chrome is aligned to the Interconnekt 2026 website refresh — tokens, fonts, and component patterns are shared via `Portal/website-portal-mapping.md`.
 
 There are **two separate CSS layers** in HaloPSA, each with different deployment mechanics and scope.
+
+**Live CSS file:** `Portal/self-service-portal-design.css` (loaded via HaloPSA Custom CSS `@import`). The older `Portal/self-service-portal.css` is kept as a parity fallback — same tokens, same chrome, maintained to match.
+
+**Start here when:**
+- A website token/font/colour changed → read `Portal/website-portal-mapping.md`
+- A HaloPSA element needs restyling → grep `self-service-portal-design.css` for the class, scope new rules under `html body .portal …`
+- A new status / priority colour appeared in the live DOM → see mapping doc §7 (status pills) / §8 (priority)
 
 ---
 
@@ -119,9 +126,17 @@ Both inline `code` and `pre` blocks use a dark background with light text (Catpp
 
 ### Changing Custom CSS (portal chrome, dark mode overrides)
 
-1. Edit `self-service-portal.css`
-2. Commit and push
-3. GitHub Pages serves the updated file within ~10 minutes
+1. Edit `self-service-portal-design.css` (the live file)
+2. If the change is a token value (colour, radius, shadow, font) OR a widely-used component pattern: mirror the change into `self-service-portal.css` (legacy fallback) so the two stay in sync
+3. Commit and push
+4. GitHub Pages serves the updated file within ~10 minutes. Hard-refresh the portal (Cmd+Shift+R) to bust the browser CSS cache
+
+### Token governance
+
+- Token source of truth: `:root` + `.theme-dark` blocks at the top of `self-service-portal-design.css`
+- Website → portal mapping: `Portal/website-portal-mapping.md` — every `--portal-*` token has a website counterpart listed there
+- **Never hardcode a hex** that has a token (run `grep -n '#[0-9A-Fa-f]' Portal/self-service-portal-design.css` periodically to catch drift)
+- HaloPSA's inline `rgb(...)` status/priority colours go through the pill colour system — don't style individual pills with hardcoded hex; add a new mapping entry referencing brand tokens (see mapping doc §7)
 
 ### Changing Style Profile rules
 

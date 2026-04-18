@@ -1105,8 +1105,12 @@ html body .portal .status-avatar.fortile::before {
     --pill-progress-bg:          #CCEAEB; --pill-progress-ink:          #08474A;
     /* Action Required — warm peach */
     --pill-action-required-bg:   #FFE3D4; --pill-action-required-ink:   #7A3A1C;
-    /* Awaiting User — neutral cool */
-    --pill-awaiting-user-bg:     #ECECEE; --pill-awaiting-user-ink:     #404046;
+    /* Awaiting User — pink (high-visibility cue: this status flags
+       tickets that need the customer's attention, so we lift it out of
+       the neutral grey family it shared with Awaiting Supplier and
+       paint it in a brighter pink that catches the eye in a long row
+       of mostly-grey waiting chips) */
+    --pill-awaiting-user-bg:     #FCE4EC; --pill-awaiting-user-ink:     #9B1C4D;
     /* Awaiting Supplier — graphite */
     --pill-awaiting-supplier-bg: #E4E4E7; --pill-awaiting-supplier-ink: #2E2E35;
     /* Closed — slate */
@@ -1148,7 +1152,7 @@ html body .portal .status-avatar.fortile::before {
     --pill-new-bg:               rgba(252,220,0,0.18);    --pill-new-ink:               #F3D565;
     --pill-progress-bg:          rgba(20,184,166,0.20);   --pill-progress-ink:          #5EEAD4;
     --pill-action-required-bg:   rgba(255,174,136,0.20);  --pill-action-required-ink:   #FFC9AE;
-    --pill-awaiting-user-bg:     rgba(255,255,255,0.06);  --pill-awaiting-user-ink:     #A1A1AA;
+    --pill-awaiting-user-bg:     rgba(244,114,182,0.20);  --pill-awaiting-user-ink:     #F9A8D4;
     --pill-awaiting-supplier-bg: rgba(113,113,122,0.26);  --pill-awaiting-supplier-ink: #D4D4D8;
     --pill-closed-bg:            rgba(255,255,255,0.08);  --pill-closed-ink:            #ADB5BD;
     --pill-system-bg:            rgba(255,255,255,0.10);  --pill-system-ink:            #CED4DA;
@@ -1829,6 +1833,37 @@ html body .portal .Select__option {
     font-size: 13px !important;
 }
 
+/* Search box inner input — make the input transparent so the wrapper's
+   bg shows through. Without this, HaloPSA's inner `<input>` paints its
+   own (lighter) background that becomes visible on focus, leaving a
+   weird grey panel on the left half of the search box while the right
+   half stays dark. Also fills the wrapper height + width so the click
+   target matches the visible chrome. Webkit autofill override stops
+   Chrome painting a yellow wash on prefilled values. */
+html body .portal .searchbox .searchholder,
+html body .portal .searchbox .searchholder input,
+html body .portal .searchbox input[type="text"],
+html body .portal .searchbox input[name="searchbox"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    width: 100% !important;
+    height: 100% !important;
+    padding: 0 14px !important;
+    color: var(--portal-text) !important;
+}
+html body .portal .searchbox input::placeholder {
+    color: var(--portal-text-muted) !important;
+}
+html body .portal .searchbox input:-webkit-autofill,
+html body .portal .searchbox input:-webkit-autofill:focus,
+html body .portal .searchbox input:-webkit-autofill:hover {
+    -webkit-text-fill-color: var(--portal-text) !important;
+    -webkit-box-shadow: 0 0 0 1000px var(--portal-surface) inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
 html body .portal .Select__control {
     border-radius: var(--portal-radius-sm) !important;
     border-color: var(--portal-border) !important;
@@ -2144,6 +2179,12 @@ html body .portal .details-form input:not([type]):not(.Select__input) {
 html body .portal .details-form .Select__control {
     min-height: 56px !important;
 }
+/* New-ticket form has its own search box (asset selector etc.) — bump
+   it to match the surrounding 56px field rhythm so it doesn't look
+   stunted next to the taller Contact / Site / Urgency selects. */
+html body .portal .details-form .searchbox {
+    height: 56px !important;
+}
 
 /* Froala editor */
 html body .portal .fr-box {
@@ -2441,17 +2482,18 @@ html body .portal .kbdetails .kbmeta {
     color: var(--portal-text-muted) !important;
 }
 
-/* KB tags (`span.kbtags`) — JetBrains Mono uppercase pill, slightly
-   more compact than the COMPLIANCE-style reference. Font family is
-   spelled out explicitly (not just via the var) so the legacy
-   self-service-portal.css and older deploys that don't resolve the
-   --ik-font-mono token still get JetBrains Mono. */
+/* KB tags (`span.kbtags`) — JetBrains Mono uppercase pill. `'JetBrains
+   Mono'` is listed FIRST in the stack (ahead of the var) so even if the
+   custom-property cascade fails to resolve `--ik-font-mono` (e.g. on
+   legacy deploys or in Style-Profile-injected contexts where vars don't
+   inherit cleanly), the literal name still wins and the user gets the
+   intended font instead of falling back to the surrounding Montserrat. */
 html body .portal span.kbtags,
 html body .portal .kbtags {
     display: inline-block !important;
     background: var(--portal-surface-active) !important;
     color: var(--portal-text) !important;
-    font-family: var(--ik-font-mono), 'JetBrains Mono', ui-monospace, Consolas, Menlo, monospace !important;
+    font-family: 'JetBrains Mono', var(--ik-font-mono), ui-monospace, Consolas, Menlo, monospace !important;
     font-size: 10px !important;
     font-weight: 500 !important;
     letter-spacing: 0.1em !important;
@@ -2817,11 +2859,19 @@ html body .portal .articleInfoSmall.kb .heading {
 
 /* KB-list tag chips — drop the per-chip `margin` from the global rule so
    the parent flex container's `column-gap` is the single source of truth
-   for horizontal rhythm, and the wrapped tag row sits flush against the
-   left edge of the card. */
+   for horizontal rhythm. The leading pill gets a -12px left margin so its
+   bg edge tucks back under the card's content padding, snapping the pill
+   TEXT to the same left edge as the article title text above it (without
+   the negative margin, the pill text sat 12px right of the title text
+   because of the pill's own internal padding). Subsequent pills keep
+   their natural left edge — `column-gap` handles the horizontal rhythm. */
 html body .portal .articleInfoSmall.kb > .kbtags,
 html body .portal .articleInfoSmall.kb span.kbtags {
     margin: 0 !important;
+}
+html body .portal .articleInfoSmall.kb > .kbtags:first-of-type,
+html body .portal .articleInfoSmall.kb span.kbtags:first-of-type {
+    margin-left: -12px !important;
 }
 
 /* Right-side chip block (`.articleRight`) — views count + ARTICLE pill.
@@ -2954,4 +3004,82 @@ html body .portal .ui.popup.transition.visible {
 html body .portal .ui.popup::before {
     background: var(--portal-surface) !important;
     box-shadow: 1px 1px 0 0 var(--portal-border) !important;
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   18 · View-mode dropdown menu (Tile / Kanban / Gantt)
+   ─────────────────────────────────────────────────────────
+   The "..." menubtn next to the page-counts ("1-4 OF 4") opens a
+   Semantic UI dropdown menu listing alternate ticket-view modes.
+   HaloPSA emits this as a `.ui.menu.transition.visible` floating panel
+   with `.item` children carrying the icon + label. Default Semantic
+   chrome is a flat white panel — restyle to match the rest of the
+   portal popovers (surface bg, hairline border, slim radius, deep
+   shadow). Targeting both `.ui.menu` and the bare `.menu.transition`
+   covers HaloPSA's wrapper variant + any unwrapped Semantic menu. */
+html body .portal .ui.menu.transition.visible,
+html body .portal .ui.dropdown .menu,
+html body .portal .menu.transition.visible {
+    background: var(--portal-surface) !important;
+    color: var(--portal-text) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-sm) !important;
+    box-shadow: var(--portal-shadow-hover) !important;
+    padding: 6px !important;
+    min-width: 180px;
+    overflow: hidden;
+}
+
+/* Items inside the menu — generous tap target, body-text size, mono-
+   spaced icon column on the left so labels line up. Hover lights up to
+   the accent-soft tint so it reads as a clickable row. */
+html body .portal .ui.menu.transition.visible .item,
+html body .portal .ui.dropdown .menu .item,
+html body .portal .menu.transition.visible .item,
+html body .portal .ui.menu.transition.visible > a,
+html body .portal .menu.transition.visible > a {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px !important;
+    border-radius: var(--portal-radius-xs) !important;
+    background: transparent !important;
+    color: var(--portal-text) !important;
+    font-family: var(--ik-font-display) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    border: 0 !important;
+    cursor: pointer;
+    text-decoration: none !important;
+    transition: background-color var(--ik-dur) var(--ik-ease),
+                color var(--ik-dur) var(--ik-ease) !important;
+}
+html body .portal .ui.menu.transition.visible .item:hover,
+html body .portal .ui.dropdown .menu .item:hover,
+html body .portal .menu.transition.visible .item:hover,
+html body .portal .ui.menu.transition.visible > a:hover,
+html body .portal .menu.transition.visible > a:hover {
+    background: var(--portal-accent-soft) !important;
+    color: var(--portal-accent) !important;
+}
+
+/* Icons inside menu items — inherit colour from the item so they flip
+   to accent on hover alongside the label. Size locked so the icon
+   column reads as a consistent 16px gutter. */
+html body .portal .ui.menu.transition.visible .item i,
+html body .portal .ui.menu.transition.visible .item .fa,
+html body .portal .ui.menu.transition.visible .item svg,
+html body .portal .ui.dropdown .menu .item i,
+html body .portal .ui.dropdown .menu .item .fa,
+html body .portal .ui.dropdown .menu .item svg,
+html body .portal .menu.transition.visible .item i,
+html body .portal .menu.transition.visible .item .fa,
+html body .portal .menu.transition.visible .item svg {
+    color: inherit !important;
+    fill: currentColor !important;
+    width: 16px !important;
+    text-align: center;
+    margin: 0 !important;
+    font-size: 14px !important;
 }

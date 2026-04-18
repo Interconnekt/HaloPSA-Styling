@@ -130,14 +130,15 @@
     function formatCell(td) {
         if (td.getAttribute(MARKER)) return;
         var raw = (td.textContent || '').trim();
-        // Only format plain positive floats with >2 decimals. Skip
-        // blanks, whole numbers, and anything that's not a number (e.g.
-        // "N/A", "—"). Allow leading minus for negatives.
-        if (!/^-?\d+\.\d{3,}$/.test(raw)) return;
+        // Format any float with 2+ decimals down to a single decimal place.
+        // Skip blanks, whole numbers, and non-numeric text (e.g. "N/A",
+        // "—"). Allow leading minus for negatives. Threshold is `\d{2,}`
+        // so a value already at one decimal ("4.2") is left alone.
+        if (!/^-?\d+\.\d{2,}$/.test(raw)) return;
         var n = parseFloat(raw);
         if (!isFinite(n)) return;
         td.setAttribute(MARKER, '1');
-        td.textContent = n.toFixed(2);
+        td.textContent = n.toFixed(1);
     }
 
     function formatTable(table) {

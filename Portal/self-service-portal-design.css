@@ -1192,67 +1192,89 @@ html body .portal .status-avatar.fortile {
     text-transform: uppercase !important;
 }
 
-/* ─── Priority pills — warning-indicator language ─────────
+/* ─── Priority indicator — coloured swatch + label ─────────
    HaloPSA renders each row's Priority cell as
      <div class="oneline">
        Medium                                       (text label)
-       <div class="priority-block" style="background-color: …"></div>  (tiny 8×8 swatch)
+       <div class="priority-block" style="background-color: …"></div>  (8×8 swatch)
      </div>
-   The swatch's inline colour is the priority level, not the text,
-   so we hide the swatch and re-skin the `.oneline` parent as a
-   tonal pill keyed on the swatch's inline colour via `:has()`.
+   Layout: small rounded coloured square BEFORE the text (flex row-reverse
+   so the swatch sits on the left regardless of DOM order), body-size
+   text in the normal cell colour. This reads as a status-indicator
+   dot + label rather than a full tonal pill, matching the user's
+   reference.
 
-   HaloPSA palette → brand mapping:
-     rgb(0, 98, 177)     blue        → Low       (open blue, info)
-     rgb(164, 221, 0)    lime        → Medium    (amber)
-     rgb(252, 220, 0)    yellow      → Medium    (amber)
-     rgb(251, 158, 0)    orange      → High      (orange red)
-     rgb(220, 53, 69)    red         → Critical  (red)
-     rgb(255, 0, 0)      red         → Critical  (red) */
+   HaloPSA palette → brand colour mapping (via attribute selectors
+   on the swatch's inline `background-color: rgb(...)`):
+     rgb(0, 98, 177)     deep blue   → Low       (--portal-accent)
+     rgb(164, 221, 0)    lime        → Medium    (--portal-warn amber)
+     rgb(252, 220, 0)    yellow      → Medium    (same)
+     rgb(251, 158, 0)    orange      → High      (#F97316)
+     rgb(220, 53, 69)    red         → Critical  (--portal-err)
+     rgb(255, 0, 0)      red         → Critical  (same)
+     rgb(255, 46, 0)     red-orange  → Critical  (same) */
 
 html body .portal .rt-td .oneline:has(> .priority-block) {
     display: inline-flex !important;
+    flex-direction: row-reverse;        /* swatch first, text second */
     align-items: center;
-    padding: 2px 10px !important;
-    border-radius: 999px !important;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
     font-family: var(--ik-font-display) !important;
-    font-size: 10.5px !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.06em !important;
-    text-transform: uppercase;
-    line-height: 1.5;
-    background: var(--pill-closed-bg) !important;  /* default neutral */
-    color: var(--pill-closed-ink) !important;
-    border: 1px solid transparent !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--portal-text) !important;
+    line-height: 1.4;
 }
+/* The coloured swatch — render as a 10×10 rounded square, aligned
+   with the text baseline. `!important` on `display` overrides an
+   earlier `display: none` that might still be cached, and the
+   per-level background colour overrides HaloPSA's inline bg. */
 html body .portal .rt-td .oneline > .priority-block {
-    display: none !important;
+    display: inline-block !important;
+    width: 10px !important;
+    height: 10px !important;
+    border-radius: 3px !important;
+    flex: 0 0 10px;
+    padding: 0 !important;
+    margin: 0 !important;
 }
-/* Low — HaloPSA deep blue */
-html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(0, 98, 177)"]),
-html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(0, 123, 255)"]) {
-    background: var(--pill-open-bg) !important;
-    color: var(--pill-open-ink) !important;
+
+/* Colour remap — paint the swatch with brand tokens keyed on
+   HaloPSA's inline rgb(). `background-image` wins over the inline
+   `background-color` (same trick we use for status pills). */
+
+/* Low — HaloPSA deep blue → brand primary blue */
+html body .portal .rt-td .oneline > .priority-block[style*="rgb(0, 98, 177)"],
+html body .portal .rt-td .oneline > .priority-block[style*="rgb(0, 123, 255)"] {
+    background-image: linear-gradient(var(--portal-accent), var(--portal-accent)) !important;
+    background-color: var(--portal-accent) !important;
 }
-/* Medium — HaloPSA lime/yellow */
-html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(164, 221, 0)"]),
-html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(252, 220, 0)"]) {
-    background: var(--pill-waiting-bg) !important;
-    color: var(--pill-waiting-ink) !important;
+/* Medium — HaloPSA lime / yellow → brand amber (--portal-warn) */
+html body .portal .rt-td .oneline > .priority-block[style*="rgb(164, 221, 0)"],
+html body .portal .rt-td .oneline > .priority-block[style*="rgb(252, 220, 0)"] {
+    background-image: linear-gradient(var(--portal-warn), var(--portal-warn)) !important;
+    background-color: var(--portal-warn) !important;
 }
-/* High — HaloPSA orange */
-html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(251, 158, 0)"]),
-html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 152, 0)"]),
-html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 193, 7)"]) {
-    background: color-mix(in srgb, #F97316 20%, transparent) !important;
-    color: #F97316 !important;
+/* High — HaloPSA orange → brand orange #F97316 */
+html body .portal .rt-td .oneline > .priority-block[style*="rgb(251, 158, 0)"],
+html body .portal .rt-td .oneline > .priority-block[style*="rgb(255, 152, 0)"],
+html body .portal .rt-td .oneline > .priority-block[style*="rgb(255, 193, 7)"] {
+    background-image: linear-gradient(#F97316, #F97316) !important;
+    background-color: #F97316 !important;
 }
-/* Critical — HaloPSA red */
-html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(220, 53, 69)"]),
-html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 0, 0)"]),
-html body .portal .rt-td .oneline:has(> .priority-block[style*="rgb(255, 46, 0)"]) {
-    background: var(--pill-overdue-bg) !important;
-    color: var(--pill-overdue-ink) !important;
+/* Critical — HaloPSA red → brand err (coral) */
+html body .portal .rt-td .oneline > .priority-block[style*="rgb(220, 53, 69)"],
+html body .portal .rt-td .oneline > .priority-block[style*="rgb(255, 0, 0)"],
+html body .portal .rt-td .oneline > .priority-block[style*="rgb(255, 46, 0)"] {
+    background-image: linear-gradient(var(--portal-err), var(--portal-err)) !important;
+    background-color: var(--portal-err) !important;
 }
 
 /* Legacy `.priority-avatar` (if HaloPSA surfaces this class on any

@@ -209,16 +209,16 @@ All pills share unified typography via `.status-avatar.{fortable,small,bitsmall,
 
 ---
 
-## 8 · Priority pill mapping
+## 8 · Priority indicator mapping
 
-HaloPSA renders the Priority column as `<div class="oneline">Low<div class="priority-block" style="background-color: rgb(...)"></div></div>`. Swatch is hidden; parent `.oneline` is the pill, tinted per severity via `:has(> .priority-block[style*="..."])`.
+HaloPSA renders the Priority column as `<div class="oneline">Low<div class="priority-block" style="background-color: rgb(...)"></div></div>`. Layout reversed via `flex-direction: row-reverse` so the coloured swatch sits on the LEFT of the text label. Swatch is shown as a 10×10 rounded square; its colour is remapped to a brand token keyed on HaloPSA's inline `rgb(...)`. Text label uses normal cell typography (no pill bg).
 
-| Level | HaloPSA swatch colour(s) | Portal pill colour | Token |
+| Level | HaloPSA swatch colour(s) | Portal swatch colour | Token |
 |---|---|---|---|
-| Low | `rgb(0, 98, 177)`, `rgb(0, 123, 255)` | Blue | `--pill-open-bg/ink` |
-| Medium | `rgb(164, 221, 0)`, `rgb(252, 220, 0)` | Amber | `--pill-waiting-bg/ink` |
+| Low | `rgb(0, 98, 177)`, `rgb(0, 123, 255)` | Brand blue | `--portal-accent` |
+| Medium | `rgb(164, 221, 0)`, `rgb(252, 220, 0)` | Amber | `--portal-warn` |
 | High | `rgb(251, 158, 0)`, `rgb(255, 152, 0)`, `rgb(255, 193, 7)` | Orange | `#F97316` (literal) |
-| Critical | `rgb(220, 53, 69)`, `rgb(255, 0, 0)`, `rgb(255, 46, 0)` | Red | `--pill-overdue-bg/ink` |
+| Critical | `rgb(220, 53, 69)`, `rgb(255, 0, 0)`, `rgb(255, 46, 0)` | Coral red | `--portal-err` |
 
 ---
 

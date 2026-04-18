@@ -1843,97 +1843,42 @@ footer a svg {
     font-size: 1.5rem;
 }
 
-/* ── Panel outer wrappers: border-radius + overflow clipping + left border accent ──
-   border-left goes on the OUTER wrapper so it isn't clipped by overflow: hidden.
-   border: none first kills any Confluence inline border, then border-left re-adds just the accent.
-   padding: 0 on the wrapper ensures only the body has padding (consistent spacing). ── */
-.kbdetails .confluence-information-macro {
-    border-radius: 12px !important;
-    overflow: hidden !important;
-    border: none !important;
-    padding: 0 !important;
-    margin: 15px 0;
-}
-
-.kbdetails .confluence-information-macro-information {
-    border: none !important;
-    border-left: 4px solid #2684ff !important;
-}
-
-.kbdetails .confluence-information-macro-note {
-    border: none !important;
-    border-left: 4px solid #6554c0 !important;
-}
-
-.kbdetails .confluence-information-macro-warning {
-    border: none !important;
-    border-left: 4px solid #de350b !important;
-}
-
-.kbdetails .confluence-information-macro-error {
-    border: none !important;
-    border-left: 4px solid #de350b !important;
-}
-
-.kbdetails .confluence-information-macro-tip {
-    border: none !important;
-    border-left: 4px solid #00875a !important;
-}
-
-.kbdetails .confluence-information-macro-success {
-    border: none !important;
-    border-left: 4px solid #00875a !important;
-}
-
+/* ── Panel outer wrappers: unified modern card (no coloured side border) ──
+   All Confluence info/note/warning/tip/error/success macros and generic
+   `.panel` render as one tonal surface card: hairline border, subtle
+   surface bg, rounded, NO saturated left stripe. The Confluence-shipped
+   `.aui-icon` at the start of each body communicates type (ⓘ ⚠ ✓), so
+   the left stripe was redundant and fought the portal's tonal chrome.
+   Tokens auto-flip via `:root` / `.theme-dark` variable blocks, so no
+   separate dark-mode body-bg overrides are required (see section 10).
+   ── */
+.kbdetails .confluence-information-macro,
 .kbdetails .panel {
     border-radius: 12px !important;
     overflow: hidden !important;
-    border: none !important;
+    border: 1px solid var(--portal-border) !important;
+    background: var(--portal-surface) !important;
     padding: 0 !important;
     margin: 15px 0;
 }
 
-/* ── Confluence Panels: per-type background colours ──
-   color: #1a1d23 (explicit dark text) rather than inherit — ensures readable
-   text in the Agent Portal dark mode where inherit picks up an unset value.
-   Self-Service Portal dark mode overrides this to #ddd in section 10. ── */
-/* Catch-all: kill Confluence inline borders on ALL panel bodies */
-.kbdetails .confluence-information-macro-body {
+/* Shared body rule — transparent bg so the outer surface token shows
+   through and handles both light + dark, readable `--portal-text` ink,
+   consistent padding. Catch-all `border: none` kills any Confluence
+   inline body borders. */
+.kbdetails [class*="confluence-information-macro-"] > .confluence-information-macro-body,
+.kbdetails .panel .panelContent {
+    background: transparent !important;
     border: none !important;
-}
-
-/* Shared padding + text colour for all panel bodies. Per-type rules
-   below only set background. `color: var(--portal-text)` auto-flips
-   via the `:root` / `.theme-dark` token overrides — no dark-mode
-   duplicates needed. Panel backgrounds stay as light tints because
-   the dark-mode overrides in section 10 set per-type dark surfaces. */
-.kbdetails [class*="confluence-information-macro-"] > .confluence-information-macro-body {
     color: var(--portal-text) !important;
     padding: 15px 25px !important;
 }
 
-.kbdetails .confluence-information-macro-information .confluence-information-macro-body {
-    background: #eaf2fd !important;
-}
-
-.kbdetails .confluence-information-macro-note .confluence-information-macro-body {
-    background: #f7eefd !important;
-}
-
-.kbdetails .confluence-information-macro-warning .confluence-information-macro-body {
-    background: #fcedec !important;
-}
-
-.kbdetails .confluence-information-macro-error .confluence-information-macro-body {
-    background: #fcedec !important;
-}
-
-.kbdetails .confluence-information-macro-tip .confluence-information-macro-body {
-    background: #e3fef2 !important;
-}
-
-.kbdetails .confluence-information-macro-success .confluence-information-macro-body {
-    background: #e3fef2 !important;
+/* Leading `.aui-icon` tint — a single accent colour for all panel
+   types, since the icon is now the sole differentiator. */
+.kbdetails .confluence-information-macro-icon {
+    color: var(--portal-accent) !important;
+    margin-right: 4px;
 }
 
 /* ── Tables: clean modern style (no border-radius, no zebra stripes) ──
@@ -2094,83 +2039,11 @@ footer a svg {
    tokens at the top of this file (alpha-tinted, auto-adapts). No
    dark-mode-specific overrides needed here. */
 
-/* ── Confluence Panel outer wrappers: dark mode border-left accents ── */
-.theme-dark .kbdetails .confluence-information-macro-information {
-    border-left: 4px solid #4c9aff !important;
-}
-
-.theme-dark .kbdetails .confluence-information-macro-note {
-    border-left: 4px solid #8777d9 !important;
-}
-
-.theme-dark .kbdetails .confluence-information-macro-warning,
-.theme-dark .kbdetails .confluence-information-macro-error {
-    border-left: 4px solid #ff5630 !important;
-}
-
-.theme-dark .kbdetails .confluence-information-macro-tip,
-.theme-dark .kbdetails .confluence-information-macro-success {
-    border-left: 4px solid #36b37e !important;
-}
-
-/* ── Confluence Panel bodies: dark mode backgrounds ── */
-.theme-dark .kbdetails .confluence-information-macro-body {
-    border: none !important;
-}
-
-/* Dark-mode backgrounds only — text colour is handled by the shared
-   `color: var(--portal-text) !important` rule in section 9. */
-.theme-dark .kbdetails .confluence-information-macro-information .confluence-information-macro-body {
-    background: #1a2744 !important;
-}
-
-.theme-dark .kbdetails .confluence-information-macro-note .confluence-information-macro-body {
-    background: #2a2044 !important;
-}
-
-.theme-dark .kbdetails .confluence-information-macro-warning .confluence-information-macro-body,
-.theme-dark .kbdetails .confluence-information-macro-error .confluence-information-macro-body {
-    background: #3d2020 !important;
-}
-
-.theme-dark .kbdetails .confluence-information-macro-tip .confluence-information-macro-body,
-.theme-dark .kbdetails .confluence-information-macro-success .confluence-information-macro-body {
-    background: #1a3d2a !important;
-}
-
-/* ── Generic Panels (.panel/.panelContent) — dark overlay preserving hue ── */
-.theme-dark .kbdetails .panel {
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-.theme-dark .kbdetails .panel::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(10, 10, 10, 0.50);
-    pointer-events: none;
-    z-index: 0;
-}
-
-.theme-dark .kbdetails .panel .panelHeader,
-.theme-dark .kbdetails .panel .panelContent {
-    position: relative;
-    z-index: 1;
-}
-
-.theme-dark .kbdetails .panel .panelHeader {
-    background: transparent !important;
-    color: #ddd !important;
-    font-weight: 600;
-}
-
-.theme-dark .kbdetails div.panelContent {
-    background: transparent !important;
-    color: #ddd !important;
-    padding: 15px 25px;
-}
+/* Confluence panels: no dark-mode body-bg overrides needed. Section 9
+   sets `background: var(--portal-surface)` on the outer wrapper and
+   `background: transparent` + `color: var(--portal-text)` on the body,
+   all of which auto-flip via the `:root` / `.theme-dark` token block.
+   Generic `.panel` / `.panelContent` share the same rules. */
 
 /* ── Status Macros: dark mode pill colours ── */
 .theme-dark .kbdetails .status-macro.aui-lozenge-complete  { background-color: #1a3366 !important; color: #8bb3e0 !important; }

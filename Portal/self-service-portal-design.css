@@ -454,7 +454,26 @@ html body .portal .nhd-nav-rightAlign button:not(.active):not(.highlight):hover 
     box-shadow: none !important;
 }
 
-/* Navbar search — flatten, restore pill on focus, Montserrat. */
+/* Navbar search — flatten, restore pill on focus, Montserrat.
+   Header is 60px tall; the control sits at y=10-48 inside, leaving a
+   12px gap between the control's bottom and the header's bottom edge.
+   When the results `.Select__menu` opens we push it down by that 12px
+   so the dropdown hangs flush with the header bottom (rather than
+   floating with a visible sliver of header behind it). */
+html body .portal .buttoncontainer.nav-search .Select,
+html body .portal .buttoncontainer.nav-search .Select__control,
+html body .portal .buttoncontainer.nav-search .Select__value-container,
+html body .portal .buttoncontainer.nav-search .Select__input-container,
+html body .portal .buttoncontainer.nav-search .Select__input,
+html body .portal .buttoncontainer.nav-search .Select__input input,
+html body .portal .buttoncontainer.nav-search .Select__placeholder,
+html body .portal .buttoncontainer.nav-search .Select__single-value {
+    font-family: var(--ik-font-display) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.02em !important;
+    line-height: normal !important;
+}
 html body .portal .buttoncontainer.nav-search .Select__control {
     background-color: transparent !important;
     border: 0 !important;
@@ -471,9 +490,12 @@ html body .portal .buttoncontainer.nav-search .Select__placeholder,
 html body .portal .buttoncontainer.nav-search .Select__single-value,
 html body .portal .buttoncontainer.nav-search .Select__input-container {
     color: rgba(255,255,255,0.72) !important;
-    font-size: 13px !important;
-    font-weight: 500 !important;
-    letter-spacing: 0.04em !important;
+}
+/* Results dropdown — drop to header bottom edge. `margin-top` lives on
+   the portaled `.Select__menu` so the dropdown visually disconnects
+   from the translucent pill and lands on the solid header edge. */
+html body .portal .buttoncontainer.nav-search .Select__menu {
+    margin-top: 12px !important;
 }
 
 /* Status strip under the nav (add via Custom HTML if available).
@@ -502,6 +524,56 @@ html body .portal .ik-status-strip .dot {
     50%     { box-shadow: 0 0 0 6px color-mix(in srgb, var(--portal-ok) 8%, transparent); }
 }
 
+/* Impersonation banner (`.app-notice`) — shown to Agent Portal users
+   when they're logged in AS another user ("You are currently logged
+   in as ..."). HaloPSA ships this with a brutal inline set that pins
+   the pill to 84ch wide using `left: 50%; right: 50%; margin-left:
+   -42ch; margin-right: -42ch` and hard-codes the navy background
+   `rgb(47, 53, 94)` + 27px height. The inline styles are on the
+   element directly, so we need attribute selectors for the specific
+   inline `background-color` AND `position` values plus high-
+   specificity overrides with `!important` to win.
+   The refresh: soft-warning pill (amber-tinted surface + accent
+   border + rounded), centred naturally via `transform`, inset
+   16px below the nav so it feels like a deliberate system banner
+   rather than a floating strip. */
+html body .portal .app-notice,
+html body .portal div.app-notice[style*="background-color: rgb(47, 53, 94)"],
+html body .portal div.app-notice[style*="position: absolute"] {
+    position: fixed !important;
+    top: 72px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    margin: 0 !important;
+    width: auto !important;
+    max-width: 720px !important;
+    min-width: 320px !important;
+    height: auto !important;
+    padding: 10px 20px !important;
+    background: color-mix(in srgb, var(--portal-warn, #d97706) 14%, var(--portal-surface)) !important;
+    color: var(--portal-text) !important;
+    border: 1px solid color-mix(in srgb, var(--portal-warn, #d97706) 55%, var(--portal-border)) !important;
+    border-radius: 999px !important;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.18) !important;
+    font-family: var(--ik-font-display) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.01em !important;
+    text-align: center !important;
+    z-index: 1000 !important;
+    cursor: pointer;
+    transition: background-color var(--ik-dur) var(--ik-ease),
+                border-color var(--ik-dur) var(--ik-ease),
+                box-shadow var(--ik-dur) var(--ik-ease) !important;
+}
+html body .portal .app-notice:hover,
+html body .portal div.app-notice[style*="background-color: rgb(47, 53, 94)"]:hover {
+    background: color-mix(in srgb, var(--portal-warn, #d97706) 22%, var(--portal-surface)) !important;
+    border-color: var(--portal-warn, #d97706) !important;
+    box-shadow: 0 14px 32px rgba(0,0,0,0.24) !important;
+}
+
 
 /* ─────────────────────────────────────────────────────────
    5 · Home hero + search
@@ -528,15 +600,31 @@ html body .portal .searchscreen .search-title {
     line-height: 1.05;
 }
 
-/* Search box — not a pill anymore; editorial rounded rect. */
-html body .portal .searchscreen .searchbox,
-html body .portal .theme-dark .searchscreen .searchbox,
+/* Search box — not a pill anymore; editorial rounded rect.
+   72px height (bumped from 60px) lets the placeholder breathe and
+   reads as the hero's primary affordance on a big landing page.
+   `:not(.searchscreen-full)` scopes this ONLY to the home hero —
+   the search RESULTS page reuses `.searchbox` too, and an 72px
+   pill there would compete with the results list below. */
+html body .portal .searchscreen:not(.searchscreen-full) .searchbox,
 html body .portal .theme-dark .searchscreen:not(.searchscreen-full) .searchbox {
+    background: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--portal-shadow) !important;
+    height: 72px;
+    overflow: hidden;
+    transition: border-color var(--ik-dur) var(--ik-ease),
+                box-shadow var(--ik-dur) var(--ik-ease);
+}
+/* Generic fallback (results-page search + legacy selector) keeps
+   the original 60px so it matches the list-top filter controls. */
+html body .portal .searchscreen .searchbox,
+html body .portal .theme-dark .searchscreen .searchbox {
     background: var(--portal-surface) !important;
     border: 1px solid var(--portal-border) !important;
     border-radius: 14px !important;
     box-shadow: var(--portal-shadow) !important;
-    height: 60px;
     overflow: hidden;
     transition: border-color var(--ik-dur) var(--ik-ease),
                 box-shadow var(--ik-dur) var(--ik-ease);
@@ -1911,13 +1999,69 @@ html body .portal .rt-thead.-header .rt-th {
 html body .portal .rt-td {
     display: flex !important;
     align-items: center;
-    padding: 12px 14px !important;
+    padding: 14px 16px !important;
 }
 html body .portal .rt-tr {
     border-bottom: 1px solid var(--portal-border-soft) !important;
 }
+
+/* List view (react-table) row polish — modern card-row feel without
+   wrapping each row in its own border box. `.rt-tr-group` is the
+   grouping wrapper HaloPSA uses per row; giving IT a subtle inset
+   bg on hover + a left accent bar makes rows feel responsive and
+   scannable without chopping the table into a card grid. */
+html body .portal .ReactTable.main-table {
+    background: transparent !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-md) !important;
+    overflow: hidden;
+}
+html body .portal .ReactTable.main-table .rt-thead.-header {
+    background: var(--portal-table-header-bg) !important;
+    border-bottom: 1px solid var(--portal-border) !important;
+    box-shadow: none !important;
+}
+html body .portal .ReactTable.main-table .rt-thead .rt-th {
+    color: var(--portal-text-muted) !important;
+    font-family: var(--ik-font-mono) !important;
+    font-size: 10.5px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase;
+    border-right: 1px solid var(--portal-border-soft) !important;
+    padding: 14px 16px !important;
+}
+html body .portal .ReactTable.main-table .rt-thead .rt-th:last-child {
+    border-right: 0 !important;
+}
+html body .portal .rt-tbody .rt-tr-group {
+    margin: 0 !important;
+    border-bottom: 1px solid var(--portal-border-soft) !important;
+    transition: background-color var(--ik-dur) var(--ik-ease),
+                border-color var(--ik-dur) var(--ik-ease);
+    position: relative;
+}
+html body .portal .rt-tbody .rt-tr-group:last-child {
+    border-bottom: 0 !important;
+}
 html body .portal .rt-tbody .rt-tr-group:hover {
-    background: var(--portal-table-row-hover);
+    background: var(--portal-surface-hover) !important;
+}
+/* Left accent bar on hover — appears/hides via border-color so there's
+   no layout shift. Priority/status stamping (see section 7) runs on
+   `.rt-td` children and tints the pills; the accent bar here just
+   signals "focused row". */
+html body .portal .rt-tbody .rt-tr-group::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--portal-accent);
+    opacity: 0;
+    transition: opacity var(--ik-dur) var(--ik-ease);
+}
+html body .portal .rt-tbody .rt-tr-group:hover::before {
+    opacity: 1;
 }
 
 /* ─── Asset selector filter row ──
@@ -2163,9 +2307,15 @@ html body .portal .Select__option {
     transition: background-color var(--ik-dur) var(--ik-ease),
                 color var(--ik-dur) var(--ik-ease) !important;
 }
+/* Hover tint matches `.ui.dropdown .menu .item:hover` (view-mode menu):
+   both use `accent-soft` bg + `accent` ink so every dropdown on the
+   portal shares one hover signature. Previously react-select options
+   used a flat `surface-hover` grey that read as "unstyled OS menu"
+   next to the tinted Semantic UI menu — the asymmetry the user
+   flagged on the tickets-vs-KB hover screenshots. */
 html body .portal .Select__option--is-focused {
-    background: var(--portal-surface-hover) !important;
-    color: var(--portal-text) !important;
+    background: var(--portal-accent-soft) !important;
+    color: var(--portal-accent) !important;
 }
 html body .portal .Select__option--is-selected,
 html body .portal .Select__option--is-selected.Select__option--is-focused {
@@ -2343,6 +2493,70 @@ html body .portal .react-kanban-card__description {
     line-height: 1.5;
 }
 
+/* HaloPSA's Kanban actually ships `.board-card` > `.board-card-content`
+   (NOT `.react-kanban-card` — that's the library's own class which
+   isn't present here). The `.board-card-content` default is a flat
+   grey (#484848) with 3px radius and a 1px dark-grey border — reads
+   as unstyled chrome next to the tokenised column surface around it.
+   Reskin to portal tokens so each ticket card reads as a peer of the
+   KB/activity tiles. */
+html body .portal .board-card {
+    background: transparent !important;
+    border: 0 !important;
+}
+html body .portal .board-card-content {
+    background: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-sm) !important;
+    padding: 12px 14px !important;
+    margin: 0 0 8px !important;
+    box-shadow: var(--portal-shadow-sm) !important;
+    font-family: var(--ik-font-display) !important;
+    color: var(--portal-text) !important;
+    transition: border-color var(--ik-dur) var(--ik-ease),
+                transform var(--ik-dur) var(--ik-ease),
+                box-shadow var(--ik-dur) var(--ik-ease) !important;
+    cursor: pointer;
+    position: relative;
+}
+html body .portal .board-card-content:hover {
+    border-color: var(--portal-accent) !important;
+    transform: translateY(-1px);
+    box-shadow: var(--portal-shadow) !important;
+}
+/* Top accent bar — HaloPSA paints `.board-card-bar` inline with a
+   priority colour. Promote it to a clean top edge line (matches the
+   list-view ticket status line treatment) instead of its default
+   ~4px bleed. */
+html body .portal .board-card-content .board-card-bar {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-top-left-radius: var(--portal-radius-sm);
+    border-top-right-radius: var(--portal-radius-sm);
+}
+/* Summary line — ticket # + priority lozenge. Bold, slight size
+   bump so it reads as the card's title. */
+html body .portal .board-card-content .board-card-summary {
+    font-size: 13.5px !important;
+    font-weight: 600 !important;
+    color: var(--portal-heading) !important;
+    letter-spacing: -0.005em;
+    margin-top: 6px;
+}
+/* Detail rows — smaller, secondary colour, tight spacing. */
+html body .portal .board-card-content .board-card-details {
+    font-size: 12px !important;
+    color: var(--portal-text-muted) !important;
+    line-height: 1.5;
+    margin-top: 4px;
+}
+html body .portal .board-card-content .board-card-details:empty {
+    display: none !important;
+}
+
 
 /* ─────────────────────────────────────────────────────────
    11b · Gantt view (react-calendar-timeline)
@@ -2497,6 +2711,17 @@ html body .portal .searchscreen.searchscreen-full {
     max-width: 1160px;
     margin: 24px auto 40px;
     padding: 0 24px;
+    /* HaloPSA ships `.searchscreen-full` with a hardcoded dark-grey
+       background (#212529) and 0 border-radius — a flat square panel
+       that read as "out-of-theme" next to the tokenised portal
+       chrome. Drop the chrome so the results list sits directly on
+       the page bg (which already uses `--portal-bg`), matching the
+       rest of the list/index pages (KB index, ticket list) where the
+       outer area is transparent and each row is its own card. */
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
 }
 
 /* Clear (X) button — HaloPSA ships `.searchclear` at right: 35px
@@ -3120,52 +3345,48 @@ html body .portal .kbtags:hover {
     background: var(--portal-accent-soft) !important;
 }
 
-/* Confluence panels — keep the left-accent, flatten radii & refresh tones */
+/* Confluence panels — modern unified card.
+   All info/note/warning/tip/error/success macros AND generic `.panel`
+   share one tonal surface card: hairline border, subtle bg, rounded,
+   NO coloured side-border. The Confluence-shipped `.aui-icon` at the
+   start of each panel body already communicates type (ⓘ ⚠ ✓), which
+   is all the differentiation we need; a saturated left stripe felt
+   dated and fought the rest of the portal's tonal chrome.
+   Backgrounds, borders and text colour use `--portal-*` tokens so
+   light/dark mode auto-flip via the `:root`/`.theme-dark` variable
+   blocks — no separate dark-mode overrides required. This also fixes
+   a prior dark-mode regression where a `.theme-dark .portal ...`
+   selector never matched (HaloPSA puts `.theme-dark` INSIDE the
+   `.portal` wrapper, not above it), leaving panels on their light
+   hardcoded bg with white body text → unreadable. */
 html body .portal .kbdetails .confluence-information-macro,
 html body .portal .kbdetails .panel {
     border-radius: var(--portal-radius-sm) !important;
     overflow: hidden !important;
-    border: 1px solid var(--portal-border-soft) !important;
-    border-left-width: 0 !important;
+    border: 1px solid var(--portal-border) !important;
+    background: var(--portal-surface) !important;
     padding: 0 !important;
     margin: 20px 0;
 }
-html body .portal .kbdetails .confluence-information-macro-information {
-    border-left: 3px solid #2B5CE6 !important;
-}
-html body .portal .kbdetails .confluence-information-macro-note {
-    border-left: 3px solid #8B3AD9 !important;
-}
-html body .portal .kbdetails .confluence-information-macro-warning,
-html body .portal .kbdetails .confluence-information-macro-error {
-    border-left: 3px solid var(--portal-err) !important;
-}
-html body .portal .kbdetails .confluence-information-macro-tip,
-html body .portal .kbdetails .confluence-information-macro-success {
-    border-left: 3px solid var(--portal-ok) !important;
-}
-html body .portal .kbdetails [class*="confluence-information-macro-"] > .confluence-information-macro-body {
+html body .portal .kbdetails [class*="confluence-information-macro-"] > .confluence-information-macro-body,
+html body .portal .kbdetails .panel .panelContent {
+    background: transparent !important;
+    border: none !important;
     color: var(--portal-text) !important;
     padding: 16px 22px !important;
     font-size: 15px !important;
     line-height: 1.65 !important;
 }
-html body .portal .kbdetails .confluence-information-macro-information .confluence-information-macro-body { background: var(--portal-accent-soft) !important; }
-html body .portal .kbdetails .confluence-information-macro-note .confluence-information-macro-body        { background: #F7EEFD !important; }
-html body .portal .kbdetails .confluence-information-macro-warning .confluence-information-macro-body,
-html body .portal .kbdetails .confluence-information-macro-error .confluence-information-macro-body        { background: #FCEDEC !important; }
-html body .portal .kbdetails .confluence-information-macro-tip .confluence-information-macro-body,
-html body .portal .kbdetails .confluence-information-macro-success .confluence-information-macro-body     { background: #E3FEF2 !important; }
 
-/* Dark overrides for panel bodies */
-.theme-dark.portal .kbdetails .confluence-information-macro-information .confluence-information-macro-body,
-html body .portal.theme-dark .kbdetails .confluence-information-macro-information .confluence-information-macro-body,
-html body .theme-dark .portal .kbdetails .confluence-information-macro-information .confluence-information-macro-body { background: rgba(74,116,240,0.12) !important; }
-html body .theme-dark .portal .kbdetails .confluence-information-macro-note .confluence-information-macro-body        { background: rgba(168,86,239,0.12) !important; }
-html body .theme-dark .portal .kbdetails .confluence-information-macro-warning .confluence-information-macro-body,
-html body .theme-dark .portal .kbdetails .confluence-information-macro-error .confluence-information-macro-body        { background: rgba(248,113,113,0.10) !important; }
-html body .theme-dark .portal .kbdetails .confluence-information-macro-tip .confluence-information-macro-body,
-html body .theme-dark .portal .kbdetails .confluence-information-macro-success .confluence-information-macro-body     { background: rgba(52,211,153,0.10) !important; }
+/* Confluence ships a leading `.aui-icon` inline that picks up a
+   brand colour per type. Keep the icon visible — it's our sole
+   differentiator now that the left stripe is gone — and tint it
+   with the same action blue used elsewhere in the portal so it
+   reads as a consistent "I'm a callout" affordance. */
+html body .portal .kbdetails .confluence-information-macro-icon {
+    color: var(--portal-accent) !important;
+    margin-right: 4px;
+}
 
 /* Code */
 html body .portal .kbdetails code {
@@ -3424,6 +3645,26 @@ html body .portal .article.searchlist:hover:not(.search-result-item) {
     box-shadow: var(--portal-shadow) !important;
 }
 
+/* Inner `.article.searchlist` inside `.search-result-item` — neutralise
+   the card chrome applied by the generic `.article:not(.search-result-item)`
+   rule above. The inner DIV doesn't carry `.search-result-item` itself
+   (that class is on the OUTER wrapper), so `:not(.search-result-item)`
+   alone can't exclude it. Overriding here (later in the cascade) strips
+   the duplicate bg/border/radius/shadow/margin/transform so the outer
+   `.search-result-item` is the ONLY card visible. Padding stays —
+   that's the inner content inset. Hover overrides kill the lift
+   on the inner so only the outer card reacts. */
+html body .portal .search-result-item .article.searchlist,
+html body .portal .search-result-item .article.searchlist:hover {
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    transform: none !important;
+    padding: 18px 22px !important;
+}
+
 /* ARTICLE pill on the right edge — hide. It's just a category label
    duplicating the parent KB context; visually competes with the
    tag row. The views count on its left keeps the meta block alive. */
@@ -3475,7 +3716,16 @@ html body .portal .articleInfoSmall.kb {
    like "CIPP" or "OFFBOARDING" — previously those squeezed onto the right
    of the title row while longer tag groups wrapped, so half the list
    placed tags inline and the other half placed them below. Locking the
-   heading wide makes every row consistent. */
+   heading wide makes every row consistent.
+
+   `padding-left: 12px` matches the `.kbtags` horizontal padding below,
+   so the title TEXT and each tag pill's TEXT sit on the same vertical
+   axis. Without it, title text started flush with the card edge while
+   the tag's internal padding pushed tag text 12px right — the residual
+   misalignment the user flagged after the last round of fixes. The
+   pill backgrounds still start at the card content edge (tag pill bg
+   left = card padding edge), so the pill chrome doesn't extrude into
+   the card's gutter. */
 html body .portal .article .heading,
 html body .portal .articleInfoSmall.kb .heading {
     font-family: var(--ik-font-display) !important;
@@ -3485,6 +3735,7 @@ html body .portal .articleInfoSmall.kb .heading {
     letter-spacing: -0.005em;
     flex: 1 0 calc(100% - 80px) !important;
     min-width: 0;
+    padding-left: 12px !important;
 }
 
 /* KB-list tag chips — drop the per-chip `margin` from the global rule so

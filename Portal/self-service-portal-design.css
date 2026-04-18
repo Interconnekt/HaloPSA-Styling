@@ -2754,19 +2754,31 @@ html body .portal .web-announcement-img-enhanced {
     color: #fff;
 }
 
+/* Footer — hardcoded dark navy in both themes (same pattern + same hex
+   as the header bar). Light-mode footers used to pick up `--portal-bg`
+   (Gray 1), which made the footer melt into the page; anchoring to the
+   dark navy gives the page a clear book-ended frame and matches the
+   header spec locked in the website-portal mapping doc. Text + links
+   flip to light semi-transparent white (mirroring the nav-button resting
+   tone) so contrast remains AA against the navy bg in both modes. */
 html body .portal footer {
-    background: var(--portal-bg) !important;
-    border-top: 1px solid var(--portal-border-soft);
+    background: #0A0F1C !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
     padding: 20px 24px;
     text-align: center;
+    color: rgba(255, 255, 255, 0.72) !important;
 }
 html body .portal footer a {
-    color: var(--portal-text-muted) !important;
+    color: rgba(255, 255, 255, 0.82) !important;
     font-family: var(--ik-font-display) !important;
     font-size: 12px !important;
     font-weight: 400 !important;
     letter-spacing: normal !important;
     text-transform: none !important;
+    transition: color var(--ik-dur) var(--ik-ease);
+}
+html body .portal footer a:hover {
+    color: #fff !important;
 }
 html body .portal footer.page-footer a[href*="usehalo.com"] { display: none !important; }
 html body .portal footer.page-footer .center-align > .row:has(a[href*="usehalo.com"]) { display: none !important; }
@@ -2783,7 +2795,7 @@ html body .portal footer.page-footer .box1 a[href^="https://interconnekt"] > div
     font-size: 12px;
     font-weight: 400;
     font-family: var(--ik-font-display);
-    color: var(--portal-text-muted);
+    color: rgba(255, 255, 255, 0.82);
     text-transform: none;
     letter-spacing: normal;
 }
@@ -2895,19 +2907,15 @@ html body .portal .articleInfoSmall.kb .heading {
 
 /* KB-list tag chips — drop the per-chip `margin` from the global rule so
    the parent flex container's `column-gap` is the single source of truth
-   for horizontal rhythm. The leading pill gets a -12px left margin so its
-   bg edge tucks back under the card's content padding, snapping the pill
-   TEXT to the same left edge as the article title text above it (without
-   the negative margin, the pill text sat 12px right of the title text
-   because of the pill's own internal padding). Subsequent pills keep
-   their natural left edge — `column-gap` handles the horizontal rhythm. */
+   for horizontal rhythm. The leading pill sits flush with the card's
+   content edge so its background aligns with the article title's left
+   edge above it. (Previous -12px negative-margin hack aligned pill TEXT
+   to title text but left the pill BG extruding into the card padding,
+   which read as misaligned chrome — user flagged this on the Top
+   Articles widget.) */
 html body .portal .articleInfoSmall.kb > .kbtags,
 html body .portal .articleInfoSmall.kb span.kbtags {
     margin: 0 !important;
-}
-html body .portal .articleInfoSmall.kb > .kbtags:first-of-type,
-html body .portal .articleInfoSmall.kb span.kbtags:first-of-type {
-    margin-left: -12px !important;
 }
 
 /* Right-side chip block (`.articleRight`) — views count + ARTICLE pill.

@@ -1157,13 +1157,12 @@ html body .portal .status-avatar.fortile::before {
        #E2F3CC/#2E5200 — the two greens need to read differently since
        "in progress" and "approved" are semantically orthogonal. */
     --pill-progress-bg:          #D1FAE5; --pill-progress-ink:          #065F46;
-    /* Completed / Resolved — soft neutral grey. Spec originally seeded
-       this from the In Progress teal, but the user wants resolved
-       tickets to read as "quietly done" rather than "still active", so
-       we move it to a muted grey LIGHTER than `--pill-closed` (which is
-       the darker terminal slate). Sits between closed and the system
-       neutrals in visual weight. */
-    --pill-resolved-bg:          #F1F3F5; --pill-resolved-ink:          #6C757D;
+    /* Completed / Resolved — muted forest green. The resolved pill
+       should read as "done" (green cue) while staying visually quieter
+       than `--pill-progress` (emerald, active-work green) so finished
+       tickets don't compete for attention in a list of active ones.
+       Darker ink + softer bg = pull-back not a shout. */
+    --pill-resolved-bg:          #DCE8DE; --pill-resolved-ink:          #1F4A33;
     /* Agent - Triage Handoff — keeps the deep teal that In Progress
        used to share. The workflow meaning (ticket sitting in the triage
        queue waiting for engineering handoff) is distinct enough from
@@ -1219,8 +1218,8 @@ html body .portal .status-avatar.fortile::before {
     --pill-new-bg:               rgba(252,220,0,0.18);    --pill-new-ink:               #F3D565;
     /* In Progress — emerald (green) in dark mode */
     --pill-progress-bg:          rgba(16,185,129,0.20);   --pill-progress-ink:          #6EE7B7;
-    /* Resolved — soft translucent grey */
-    --pill-resolved-bg:          rgba(255,255,255,0.06);  --pill-resolved-ink:          #CED4DA;
+    /* Resolved — muted dark-mode forest */
+    --pill-resolved-bg:          rgba(75, 140, 105, 0.18);  --pill-resolved-ink:          #8FC7A5;
     /* Triage Handoff — retains teal */
     --pill-triage-handoff-bg:    rgba(20,184,166,0.20);   --pill-triage-handoff-ink:    #5EEAD4;
     --pill-action-required-bg:   rgba(255,174,136,0.20);  --pill-action-required-ink:   #FFC9AE;
@@ -1472,6 +1471,23 @@ html body .portal .status-avatar[style*="rgb(252, 220, 0)"] {
     background-color: var(--pill-new-bg) !important;
     color: var(--pill-new-ink) !important;
 }
+
+/* Semantic override — HaloPSA paints Completed / Resolved with the
+   same teal `rgb(12, 121, 125)` it uses for In Progress, so the rgb
+   fallback alone can't tell them apart and both would land on the
+   active-work emerald. Every `.status-avatar` ships a `title=`
+   attribute with the exact label text, which gives us a CSS-only
+   discriminator. This rule fires AFTER the teal→progress mapping
+   above, so matching chips get pulled back to the muted-forest
+   resolved tokens (less eye-catching, reads as "quietly done"). */
+html body .portal .status-avatar[title*="Completed" i],
+html body .portal .status-avatar[title*="Resolved" i] {
+    background-image: linear-gradient(var(--pill-resolved-bg), var(--pill-resolved-bg)) !important;
+    background-color: var(--pill-resolved-bg) !important;
+    color: var(--pill-resolved-ink) !important;
+    border: 0 !important;
+    padding: 3px 10px !important;
+}
 /* HaloPSA heading navy (neutral category — ARTICLE chip, etc.)
    → outlined pill, not a filled colour. */
 html body .portal .status-avatar[style*="rgb(47, 53, 94)"],
@@ -1618,11 +1634,14 @@ html body .portal .oneline:has(> .priority-block[style*="rgb(255, 193, 7)"]) {
     --p-ink: #713F12;
     --p-dot: #D97706;
 }
-/* High — saturated orange. Clearly one hue step warmer than Medium. */
+/* High — saturated orange. Clearly one hue step warmer than Medium.
+   `rgb(254, 146, 0)` is a HaloPSA variant seen on older records
+   (1-digit off the more common 251/158 default). */
 html body .portal .oneline.p-high,
 html body .portal .oneline:has(> .priority-block[style*="rgb(251, 158, 0)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(255, 152, 0)"]),
-html body .portal .oneline:has(> .priority-block[style*="rgb(255, 87, 34)"]) {
+html body .portal .oneline:has(> .priority-block[style*="rgb(255, 87, 34)"]),
+html body .portal .oneline:has(> .priority-block[style*="rgb(254, 146, 0)"]) {
     --p-bg: #FFE3CC;
     --p-ink: #7C2D12;
     --p-dot: #EA580C;
@@ -1664,7 +1683,8 @@ html body .portal .oneline:has(> .priority-block[style*="rgb(244, 78, 59)"]) {
 .theme-dark .portal .oneline.p-high,
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(251, 158, 0)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 152, 0)"]),
-.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 87, 34)"]) {
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 87, 34)"]),
+.theme-dark .portal .oneline:has(> .priority-block[style*="rgb(254, 146, 0)"]) {
     --p-bg: rgba(234, 88, 12, 0.24);
     --p-ink: #FDBA74;
     --p-dot: #F97316;

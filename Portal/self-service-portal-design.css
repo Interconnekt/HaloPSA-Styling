@@ -786,6 +786,31 @@ html body .portal .action-history-item:hover {
     border-color: var(--portal-border) !important;
 }
 
+/* User avatar on action-history rows — HaloPSA ships the image at its
+   intrinsic size (typically ~75-80px), which dominates a compact
+   activity card and leaves the avatar sitting flush with the card
+   edge while the text block floats further right. Pin to a modest
+   44×44 circle, sized down with `object-fit: cover` so profile pics
+   stay cropped correctly, and zero the left margin so the card's 18px
+   padding is the single source of truth for the avatar's left edge
+   (matches the title column's indent above/below). */
+html body .portal .action-history-item img,
+html body .portal .action-history-item > img,
+html body .portal .action-history-item .useravatar,
+html body .portal .action-history-item .user-avatar,
+html body .portal .action-history-item img[alt],
+html body .portal .action-history-item img.rounded-circle,
+html body .portal .action-history-item img.avatar {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    border-radius: 999px !important;
+    object-fit: cover !important;
+    margin: 0 14px 0 0 !important;
+    flex: 0 0 44px !important;
+}
+
 
 /* ─────────────────────────────────────────────────────────
    9 · Buttons, pills, status chips
@@ -3074,6 +3099,216 @@ html body .portal .ui.popup.transition.visible {
 html body .portal .ui.popup::before {
     background: var(--portal-surface) !important;
     box-shadow: 1px 1px 0 0 var(--portal-border) !important;
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   19 · Column filter button (react-table header funnel)
+   ─────────────────────────────────────────────────────────
+   The funnel icon next to column headers ("USER", etc.) that opens the
+   column filter picker. HaloPSA emits this as a small button —
+   commonly `.filter-btn`, `.filter-button`, or a bare button carrying
+   `i.fa-filter`. Without our ghost-button treatment applied, it sits
+   as a default-styled Semantic UI light-grey chip. Bring into the
+   chrome-icon family (same shape + hover as the ticket-view Share /
+   Print / Download fabtns). */
+html body .portal .rt-th button,
+html body .portal .rt-th .filter-btn,
+html body .portal .rt-th .filter-button,
+html body .portal button.filter-btn,
+html body .portal button.filter-button,
+html body .portal .column-header button:has(.fa-filter),
+html body .portal .column-header button:has(i.fa-filter) {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: var(--portal-text-secondary) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-xs) !important;
+    width: 28px !important;
+    height: 28px !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none !important;
+    cursor: pointer;
+    transition: background-color var(--ik-dur) var(--ik-ease),
+                border-color var(--ik-dur) var(--ik-ease),
+                color var(--ik-dur) var(--ik-ease) !important;
+}
+html body .portal .rt-th button:hover,
+html body .portal .rt-th .filter-btn:hover,
+html body .portal .rt-th .filter-button:hover,
+html body .portal button.filter-btn:hover,
+html body .portal button.filter-button:hover {
+    background-color: var(--portal-accent-soft) !important;
+    border-color: var(--portal-accent) !important;
+    color: var(--portal-accent) !important;
+}
+/* Icon inside the button — inherit colour so it flips to accent on
+   hover. Also force a uniform size since FA sometimes ships icons at
+   inconsistent pixel sizes inside table headers. */
+html body .portal .rt-th button i,
+html body .portal .rt-th button .fa,
+html body .portal .rt-th button svg,
+html body .portal .filter-btn i,
+html body .portal .filter-btn .fa,
+html body .portal .filter-btn svg,
+html body .portal .filter-button i,
+html body .portal .filter-button .fa,
+html body .portal .filter-button svg {
+    color: inherit !important;
+    fill: currentColor !important;
+    font-size: 12px !important;
+    margin: 0 !important;
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   20 · Account sidebar (My account drawer)
+   ─────────────────────────────────────────────────────────
+   The slide-in panel that opens when clicking the user avatar in the
+   top-right. HaloPSA emits this as a Semantic UI `.ui.sidebar` —
+   without portal rules it renders with Semantic's default white bg +
+   default-blue links + unsized typography, which reads as unstyled
+   chrome next to our theme. Apply surface + text tokens, hairline
+   border, and re-skin the link list as ghost navigation rows. */
+
+html body .portal .ui.sidebar,
+html body .portal .ui.sidebar.visible,
+html body .portal .ui.right.sidebar,
+html body .portal .ui.right.sidebar.visible {
+    background: var(--portal-surface) !important;
+    color: var(--portal-text) !important;
+    border-left: 1px solid var(--portal-border) !important;
+    box-shadow: var(--portal-shadow-hover) !important;
+    padding: 24px !important;
+    font-family: var(--ik-font-display) !important;
+}
+
+/* Sidebar header ("My account" + close button) */
+html body .portal .ui.sidebar h1,
+html body .portal .ui.sidebar h2,
+html body .portal .ui.sidebar h3,
+html body .portal .ui.sidebar .header,
+html body .portal .ui.sidebar .sidebar-header,
+html body .portal .ui.sidebar > div:first-child > span,
+html body .portal .ui.sidebar > div:first-child > div {
+    font-family: var(--ik-font-display) !important;
+    font-size: 1.25rem !important;
+    font-weight: 300 !important;
+    letter-spacing: -0.02em !important;
+    color: var(--portal-heading) !important;
+    margin-bottom: 20px !important;
+}
+
+/* Close (X) button — sits in the header's top-right. Ghost-square
+   32×32 so it matches the Share / theme-toggle chrome icon family. */
+html body .portal .ui.sidebar .close,
+html body .portal .ui.sidebar button.close,
+html body .portal .ui.sidebar .close-icon,
+html body .portal .ui.sidebar [class*="close"] {
+    background: transparent !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-sm) !important;
+    color: var(--portal-text-secondary) !important;
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color var(--ik-dur) var(--ik-ease),
+                border-color var(--ik-dur) var(--ik-ease),
+                color var(--ik-dur) var(--ik-ease) !important;
+}
+html body .portal .ui.sidebar .close:hover,
+html body .portal .ui.sidebar button.close:hover,
+html body .portal .ui.sidebar .close-icon:hover {
+    background-color: var(--portal-accent-soft) !important;
+    border-color: var(--portal-accent) !important;
+    color: var(--portal-accent) !important;
+}
+
+/* Avatar + identity block — HaloPSA renders an initials circle + name
+   + email. The avatar sits at ~80px by default; we bring it to a more
+   restrained 52px so the name/email text column reads as the primary
+   element and the avatar is a supporting cue. */
+html body .portal .ui.sidebar img,
+html body .portal .ui.sidebar .user-avatar,
+html body .portal .ui.sidebar .initials-avatar,
+html body .portal .ui.sidebar img.rounded-circle {
+    width: 52px !important;
+    height: 52px !important;
+    min-width: 52px !important;
+    border-radius: 999px !important;
+    object-fit: cover !important;
+    background: var(--portal-accent-soft) !important;
+    color: var(--portal-accent) !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--ik-font-display) !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0;
+}
+
+/* Name + email lines */
+html body .portal .ui.sidebar .username,
+html body .portal .ui.sidebar .user-name,
+html body .portal .ui.sidebar .email,
+html body .portal .ui.sidebar .user-email {
+    font-family: var(--ik-font-display) !important;
+    color: var(--portal-text) !important;
+}
+html body .portal .ui.sidebar .email,
+html body .portal .ui.sidebar .user-email {
+    color: var(--portal-text-muted) !important;
+    font-size: 12px !important;
+}
+
+/* Link list (Settings / Password & Security / Log out) — restyle each
+   link as a ghost row: mono eyebrow label, no default-blue, accent on
+   hover. The left rail sits flush with the sidebar's content padding. */
+html body .portal .ui.sidebar a,
+html body .portal .ui.sidebar .item,
+html body .portal .ui.sidebar .menu-item,
+html body .portal .ui.sidebar > a,
+html body .portal .ui.sidebar nav a,
+html body .portal .ui.sidebar ul li a {
+    display: block !important;
+    padding: 12px 14px !important;
+    margin: 0 -14px !important;
+    font-family: var(--ik-font-display) !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    letter-spacing: -0.005em;
+    color: var(--portal-text) !important;
+    text-decoration: none !important;
+    border-radius: var(--portal-radius-xs) !important;
+    border: 0 !important;
+    background: transparent !important;
+    transition: background-color var(--ik-dur) var(--ik-ease),
+                color var(--ik-dur) var(--ik-ease) !important;
+}
+html body .portal .ui.sidebar a:hover,
+html body .portal .ui.sidebar .item:hover,
+html body .portal .ui.sidebar .menu-item:hover,
+html body .portal .ui.sidebar > a:hover,
+html body .portal .ui.sidebar nav a:hover,
+html body .portal .ui.sidebar ul li a:hover {
+    background: var(--portal-accent-soft) !important;
+    color: var(--portal-accent) !important;
+}
+
+/* Dimmer behind the sidebar (Semantic UI ships a semi-opaque overlay) */
+html body .portal .ui.dimmer,
+html body .portal .ui.page.dimmer,
+html body .portal .ui.dimmer.visible {
+    background: rgba(10, 15, 28, 0.6) !important;
+    backdrop-filter: blur(2px);
 }
 
 

@@ -929,6 +929,21 @@ html body .portal button.backbtn:hover {
     transform: none !important;
 }
 
+/* Icons / SVG arrow inside .backbtn must inherit the button's
+   `color` so they flip from text-secondary at rest to accent-blue
+   on hover. Previously HaloPSA ships the chevron with a hardcoded
+   `color: #fff` or `fill: #fff` inline — which vanishes against
+   the light accent-soft hover background. */
+html body .portal .backbtn i,
+html body .portal .backbtn .fa,
+html body .portal .backbtn svg,
+html body .portal button.backbtn i,
+html body .portal button.backbtn .fa,
+html body .portal button.backbtn svg {
+    color: inherit !important;
+    fill: currentColor !important;
+}
+
 /* ─── Status pill shape ───────────────────────────────────
    Force full-pill geometry on every `.status-avatar` variant
    HaloPSA emits. Clean pill — no leading dot — labels carry

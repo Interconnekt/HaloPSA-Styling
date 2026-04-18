@@ -391,20 +391,14 @@ html body .portal .page-title h1 em::after {
 html body .portal header,
 html body .portal .header,
 html body .portal .portal-header {
-    /* Light mode: navy brand bar. Dark mode: sit one step below
-       --portal-bg so the nav chrome reads darker than the page. */
+    /* Navy brand bar in BOTH modes — the logo is white-on-navy so
+       flipping the bar to a light surface would leave the logo
+       stranded on a pale background. Keep it dark in light mode too. */
     background-color: #0A0F1C !important;
     color: #fff;
     border-bottom: 1px solid rgba(255,255,255,0.06);
     position: relative;
     box-shadow: 0 1px 0 rgba(0,0,0,0.3);
-}
-html body.theme-dark .portal header,
-html body .theme-dark .portal header,
-html body .portal .theme-dark header,
-html body.theme-dark .portal .portal-header,
-html body .theme-dark .portal .portal-header {
-    background-color: #0F1012 !important;   /* one step below --portal-bg */
 }
 html body .portal header::after,
 html body .portal .portal-header::after {
@@ -416,15 +410,15 @@ html body .portal .portal-header::after {
     opacity: 0.5;
 }
 
-/* Nav container — match website header: dark elevated surface with
-   hairline bottom border. HaloPSA ships `.nhd-nav` as `#2F355E`
-   (purple-navy) which doesn't appear anywhere in the website palette.
-   We pin it to our token system so the nav sits visually inside the
-   same design language as the rest of the portal. */
+/* Nav container — navy in both light and dark modes so the
+   white-on-navy logo always sits on its correct background.
+   HaloPSA ships `.nhd-nav` as `#2F355E` (purple-navy); we deepen
+   to match the website's `#0A0F1C` dark-mode bg and add a 1px
+   hairline underline. */
 html body .portal .nhd-nav {
-    background: var(--portal-surface) !important;
-    border-bottom: 1px solid var(--portal-border-soft) !important;
-    box-shadow: var(--portal-shadow-sm) !important;
+    background: #0A0F1C !important;
+    border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.3) !important;
 }
 
 /* Nav buttons — Montserrat 13px 500, relaxed tracking. */
@@ -615,17 +609,23 @@ html body .portal .card.dashbtn:hover::before,
 html body .portal .dashbtn:hover::before { opacity: 0.85; }
 
 /* Icon chip — matches website's `inline-flex items-center justify-center
-   w-10 h-10 rounded-lg bg-primary-subtle text-primary` pattern. Sized
-   at 44px so a 24px Font Awesome icon sits centred with 10px padding
-   around it (40px was too tight for HaloPSA's native 26px glyphs and
-   caused the icon to overflow below the square). */
+   w-12 h-12 rounded-xl bg-primary-subtle text-primary` pattern. Bumped
+   to 56×56 so a 22px Font Awesome glyph has proper breathing room
+   (previous 44×44 felt cramped and unbalanced against the card's
+   padding + title size).
+
+   HaloPSA paints `.card-img` with an inline `background-color` that's
+   a similar-hue lighter blue — on which our accent-blue icon vanishes
+   into the bg. Force `background-color !important` to win over the
+   inline + set the icon on a clearly-lifted tonal tint. */
 html body .portal .dashbtn .card-img {
-    width: 44px !important;
-    height: 44px !important;
-    margin: 0 auto 20px !important;
+    width: 56px !important;
+    height: 56px !important;
+    margin: 0 auto 18px !important;
     padding: 0 !important;
-    border-radius: var(--portal-radius-sm);
-    background: var(--portal-accent-soft);
+    border-radius: var(--portal-radius-md) !important;
+    background-color: var(--portal-accent-soft) !important;
+    background-image: none !important;
     color: var(--portal-accent) !important;
     display: inline-flex !important;
     align-items: center !important;
@@ -636,18 +636,23 @@ html body .portal .dashbtn .card-img {
 }
 html body .portal .dashbtn .card-img > i,
 html body .portal .dashbtn .card-img > .fa {
-    font-size: 20px !important;
+    font-size: 22px !important;
     line-height: 1 !important;
     color: var(--portal-accent) !important;
     width: auto !important;
     height: auto !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
 }
 html body .portal .dashbtn .card-img svg,
 html body .portal .dashbtn .card-img img {
     color: var(--portal-accent) !important;
+    fill: currentColor !important;
     filter: none;
-    width: 22px !important;
-    height: 22px !important;
+    width: 24px !important;
+    height: 24px !important;
+    display: block;
 }
 
 html body .portal .dashbtn .card-title {
@@ -797,6 +802,114 @@ html body .portal .nhd-button.curve::before {
     z-index: -1;
 }
 html body .portal .nhd-button.curve:hover::before { opacity: 1; }
+
+/* ─── Ghost action family — View All / View More / Back ───
+   Mirror the website's "View all posts" link chrome (site-nav /
+   blog-section): pill, hairline border, transparent fill, muted
+   text that inverts to fg-on-bg on hover. One treatment shared
+   across every secondary nav/action button so the portal reads
+   as one family instead of three competing button styles. */
+
+/* "View more" — home page, under Top 5 Articles (bare <a> that
+   HaloPSA emits as first child after `.results-table`). */
+html body .portal .results-table + div {
+    text-align: center;
+    margin-top: 14px;
+}
+html body .portal .results-table + div > a,
+html body .portal a.view-all,
+html body .portal .view-more {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: var(--ik-font-display) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    letter-spacing: -0.005em !important;
+    color: var(--portal-text-secondary) !important;
+    background: transparent !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: 999px !important;
+    padding: 8px 18px !important;
+    box-shadow: none !important;
+    text-decoration: none !important;
+    transition: background-color var(--ik-dur) var(--ik-ease),
+                border-color var(--ik-dur) var(--ik-ease),
+                color var(--ik-dur) var(--ik-ease) !important;
+}
+html body .portal .results-table + div > a:hover,
+html body .portal a.view-all:hover,
+html body .portal .view-more:hover {
+    background: var(--portal-text) !important;
+    border-color: var(--portal-text) !important;
+    color: var(--portal-bg) !important;
+    text-decoration: none !important;
+}
+
+/* "View all" button that HaloPSA emits above/below listwidgets as
+   `.nhd-button.curve` with text "View All" — we can't text-match
+   in CSS, so we rely on the primary rule above already styling
+   all `.nhd-button.curve`. Remap it to the ghost family so secondary
+   list-widget actions don't compete with the main CTA on each page.
+   Scope tightly to the listwidget so we don't hit the primary "Log
+   a Ticket" / "Add Note" action pills elsewhere. */
+html body .portal .listwidget .nhd-button.curve,
+html body .portal .listwidget button.nhd-button.curve {
+    background-color: transparent !important;
+    border: 1px solid var(--portal-border) !important;
+    color: var(--portal-text-secondary) !important;
+    box-shadow: none !important;
+    padding: 8px 18px !important;
+    border-radius: 999px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+}
+html body .portal .listwidget .nhd-button.curve::before {
+    display: none !important;
+}
+html body .portal .listwidget .nhd-button.curve:hover,
+html body .portal .listwidget button.nhd-button.curve:hover {
+    background: var(--portal-text) !important;
+    border-color: var(--portal-text) !important;
+    color: var(--portal-bg) !important;
+    transform: none;
+    box-shadow: none !important;
+}
+
+/* Back button — ticket / KB article view, top-left of the page.
+   HaloPSA ships `.backbtn` with heading-purple inline bg that
+   disappears against dark surfaces. Swap to the ghost family so
+   Back reads as a peer of View All / View More. Keep circular
+   32x32 geometry — the icon is a single chevron. */
+html body .portal .backbtn,
+html body .portal button.backbtn {
+    background-color: transparent !important;
+    border: 1px solid var(--portal-border) !important;
+    color: var(--portal-text-secondary) !important;
+    box-shadow: none !important;
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    margin: 14px 10px 0 20px !important;
+    border-radius: 999px !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px !important;
+    cursor: pointer;
+    transition: background-color var(--ik-dur) var(--ik-ease),
+                border-color var(--ik-dur) var(--ik-ease),
+                color var(--ik-dur) var(--ik-ease) !important;
+    transform: none !important;
+}
+html body .portal .backbtn:hover,
+html body .portal button.backbtn:hover {
+    background: var(--portal-text) !important;
+    border-color: var(--portal-text) !important;
+    color: var(--portal-bg) !important;
+    transform: none !important;
+}
 
 /* ─── Status pill shape ───────────────────────────────────
    Force full-pill geometry on every `.status-avatar` variant
@@ -978,14 +1091,41 @@ html body .portal .status-avatar.s-info {
     color: var(--pill-info-ink) !important;
 }
 
+/* NEUTRAL / CATEGORY chip — HaloPSA paints the ARTICLE chip and any
+   non-status label with its heading navy `rgb(47, 53, 94)`. Re-skin
+   as the website's blog-category pill (OPINION/HOW-TO/STRATEGY): a
+   transparent outlined pill with mono uppercase text — NOT a filled
+   accent chip, since these aren't status signals. */
+html body .portal .status-avatar[style*="rgb(47, 53, 94)"],
+html body .portal .status-avatar.s-neutral {
+    background-image: none !important;
+    background-color: transparent !important;
+    border: 1px solid var(--portal-border) !important;
+    color: var(--portal-text) !important;
+    font-family: var(--ik-font-mono) !important;
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    padding: 3px 10px !important;
+    border-radius: 999px !important;
+}
+
 /* Fallback — any `.status-avatar` HaloPSA paints with ANY inline
-   background-color that we didn't map above still gets our shape
-   and a neutral-tinted fill that blends with the card. This
-   prevents random bright inline colours from clashing. */
-html body .portal .status-avatar[style*="background-color"]:not([style*="rgb(66, 133, 244)"]):not([style*="rgb(0, 123, 255)"]):not([style*="rgb(52, 131, 250)"]):not([style*="rgb(13, 110, 253)"]):not([style*="rgb(0, 102, 204)"]):not([style*="rgb(111, 66, 193)"]):not([style*="rgb(102, 16, 242)"]):not([style*="rgb(153, 51, 255)"]):not([style*="rgb(138, 43, 226)"]):not([style*="rgb(255, 193, 7)"]):not([style*="rgb(255, 170, 0)"]):not([style*="rgb(255, 152, 0)"]):not([style*="rgb(240, 173, 78)"]):not([style*="rgb(245, 158, 11)"]):not([style*="rgb(40, 167, 69)"]):not([style*="rgb(34, 139, 34)"]):not([style*="rgb(0, 190, 0)"]):not([style*="rgb(25, 135, 84)"]):not([style*="rgb(16, 185, 129)"]):not([style*="rgb(108, 117, 125)"]):not([style*="rgb(128, 128, 128)"]):not([style*="rgb(80, 80, 80)"]):not([style*="rgb(119, 119, 119)"]):not([style*="rgb(220, 53, 69)"]):not([style*="rgb(255, 46, 0)"]):not([style*="rgb(255, 0, 0)"]):not([style*="rgb(185, 28, 28)"]):not([style*="rgb(239, 68, 68)"]):not([style*="rgb(23, 162, 184)"]):not([style*="rgb(13, 202, 240)"]):not([style*="rgb(8, 145, 178)"]) {
-    background-image: linear-gradient(var(--portal-accent-soft), var(--portal-accent-soft)) !important;
-    background-color: var(--portal-accent-soft) !important;
-    color: var(--portal-accent) !important;
+   background-color we didn't map above gets the same neutral outlined
+   pill treatment. Previously this painted everything in accent-soft
+   blue, which is why every chip read as "the same colour". */
+html body .portal .status-avatar[style*="background-color"]:not([style*="rgb(66, 133, 244)"]):not([style*="rgb(0, 123, 255)"]):not([style*="rgb(52, 131, 250)"]):not([style*="rgb(60, 134, 247)"]):not([style*="rgb(13, 110, 253)"]):not([style*="rgb(0, 102, 204)"]):not([style*="rgb(43, 92, 230)"]):not([style*="rgb(74, 116, 240)"]):not([style*="rgb(111, 66, 193)"]):not([style*="rgb(102, 16, 242)"]):not([style*="rgb(153, 51, 255)"]):not([style*="rgb(138, 43, 226)"]):not([style*="rgb(255, 193, 7)"]):not([style*="rgb(255, 170, 0)"]):not([style*="rgb(255, 152, 0)"]):not([style*="rgb(240, 173, 78)"]):not([style*="rgb(245, 158, 11)"]):not([style*="rgb(212, 212, 216)"]):not([style*="rgb(194, 65, 12)"]):not([style*="rgb(40, 167, 69)"]):not([style*="rgb(34, 139, 34)"]):not([style*="rgb(0, 190, 0)"]):not([style*="rgb(25, 135, 84)"]):not([style*="rgb(16, 185, 129)"]):not([style*="rgb(21, 128, 61)"]):not([style*="rgb(52, 211, 153)"]):not([style*="rgb(187, 52, 63)"]):not([style*="rgb(108, 117, 125)"]):not([style*="rgb(128, 128, 128)"]):not([style*="rgb(80, 80, 80)"]):not([style*="rgb(119, 119, 119)"]):not([style*="rgb(220, 53, 69)"]):not([style*="rgb(255, 46, 0)"]):not([style*="rgb(255, 0, 0)"]):not([style*="rgb(185, 28, 28)"]):not([style*="rgb(239, 68, 68)"]):not([style*="rgb(23, 162, 184)"]):not([style*="rgb(13, 202, 240)"]):not([style*="rgb(8, 145, 178)"]):not([style*="rgb(47, 53, 94)"]) {
+    background-image: none !important;
+    background-color: transparent !important;
+    border: 1px solid var(--portal-border) !important;
+    color: var(--portal-text-secondary) !important;
+    font-family: var(--ik-font-mono) !important;
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    padding: 3px 10px !important;
 }
 
 /* ─── Priority chips — same language, colour on severity ─── */
@@ -1531,31 +1671,35 @@ html body .portal .kbdetails .kbmeta {
 
 /* KB tags (`span.kbtags`) render below each article on the KB index
    and on article pages. HaloPSA's default chrome paints them as a
-   flat dark-grey 2px-radius rectangle — we re-skin as hairline pills
-   sitting on our surface token. They live side-by-side with no
-   natural spacing, so we add margin-right too. */
+   flat dark-grey 2px-radius rectangle. Re-skin to match the website
+   blog-category pill (OPINION / HOW-TO / STRATEGY): transparent bg
+   with a hairline outline, mono font, uppercase, tracked-out text.
+   Surface-2 bg gives a subtle lift over the card surface without
+   competing with the card body. */
 html body .portal span.kbtags,
 html body .portal .kbtags {
     display: inline-block !important;
-    background: var(--portal-surface) !important;
-    color: var(--portal-text-secondary) !important;
-    font-family: var(--ik-font-display) !important;
-    font-size: 11px !important;
-    font-weight: 500 !important;
-    letter-spacing: 0.02em !important;
-    text-transform: none;
-    padding: 3px 10px !important;
+    background: var(--portal-surface-active) !important;
+    color: var(--portal-text) !important;
+    font-family: var(--ik-font-mono) !important;
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    padding: 4px 10px !important;
     border: 1px solid var(--portal-border-soft) !important;
     border-radius: 999px !important;
-    margin: 2px 4px 2px 0 !important;
-    line-height: 1.6 !important;
+    margin: 3px 6px 3px 0 !important;
+    line-height: 1.4 !important;
     transition: border-color var(--ik-dur) var(--ik-ease),
-                color var(--ik-dur) var(--ik-ease);
+                color var(--ik-dur) var(--ik-ease),
+                background var(--ik-dur) var(--ik-ease);
 }
 html body .portal span.kbtags:hover,
 html body .portal .kbtags:hover {
     border-color: var(--portal-accent) !important;
     color: var(--portal-accent) !important;
+    background: var(--portal-surface-hover) !important;
 }
 
 /* Confluence panels — keep the left-accent, flatten radii & refresh tones */
@@ -1814,13 +1958,21 @@ html body .portal .articleInfoSmall.kb > .status-avatar {
    effectively unstyled, just a stack of text blobs. Reframe each
    row as a hairline card matching the home-page tile-widgets so
    the KB index reads as a proper list of cards, not a bullet list. */
+/* Peer styling with `.action-history-item.tile-item` — both get the
+   same hairline surface, same padding, same lift-on-hover, so the
+   two Home-page columns (Recent Activity on the left, Top 5 Articles
+   on the right) read as siblings instead of two different card
+   languages. Article carries an accent-subtle left stripe to mirror
+   the status bar on activity tiles — articles don't have a status,
+   so the stripe is a neutral brand accent. */
 html body .portal .article,
 html body .portal .article.searchlist {
     display: block !important;
     background: var(--portal-surface) !important;
     border: 1px solid var(--portal-border) !important;
+    border-left: 4px solid var(--portal-accent) !important;
     border-radius: var(--portal-radius-md) !important;
-    padding: 14px 18px !important;
+    padding: 15px 18px !important;
     margin: 0 0 10px !important;
     transition: border-color var(--ik-dur) var(--ik-ease),
                 transform var(--ik-dur) var(--ik-ease),
@@ -1829,8 +1981,26 @@ html body .portal .article.searchlist {
 html body .portal .article:hover,
 html body .portal .article.searchlist:hover {
     border-color: var(--portal-accent) !important;
-    transform: translateX(2px);
-    box-shadow: var(--portal-shadow-sm) !important;
+    border-left-color: var(--portal-accent-hover) !important;
+    transform: translateY(-2px);
+    box-shadow: var(--portal-shadow) !important;
+}
+
+/* Harmonise the activity tile hover with articles so both columns
+   lift the same way. (The bar colour is inline per status and
+   shows through per the earlier fix.) */
+html body .portal .action-history-item.tile-item,
+html body .portal .listwidget .action-history-item.tile-item {
+    padding: 15px 18px 15px 22px !important;
+    transition: border-color var(--ik-dur) var(--ik-ease),
+                transform var(--ik-dur) var(--ik-ease),
+                box-shadow var(--ik-dur) var(--ik-ease) !important;
+}
+html body .portal .action-history-item.tile-item:hover,
+html body .portal .listwidget .action-history-item.tile-item:hover {
+    border-color: var(--portal-accent) !important;
+    transform: translateY(-2px);
+    box-shadow: var(--portal-shadow) !important;
 }
 
 /* Row layout — inner `.articleInfoSmall.kb` ships as a loose flex row.

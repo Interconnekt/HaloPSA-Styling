@@ -1,7 +1,7 @@
 /**
  * Self-Service Portal — chrome JS shims
  *
- * Two independent IIFEs in this file:
+ * Three independent IIFEs in this file:
  *
  * 1. iframe theming — HaloPSA renders email bodies inside
  *    `<iframe class="halo-html-renderer">`, a same-origin iframe with
@@ -15,6 +15,14 @@
  *    numeric text content, so we post-process the DOM to format each
  *    Age cell to 2 decimal places. Runs on load + MutationObserver so
  *    sort/filter/pagination don't leave stale raw floats.
+ *
+ * 3. Status-chip class stamping — HaloPSA ships status pills as
+ *    `.status-avatar` with the state name in textContent, but with
+ *    only an inline `background-color` as a colour signal. We read
+ *    the label and stamp a matching `.s-*` class so CSS can render
+ *    the named-status palette (see status pill system in
+ *    self-service-portal-design.css). A MutationObserver catches
+ *    re-renders (sort/filter/kanban/page change).
  */
 (function () {
     'use strict';
@@ -173,6 +181,124 @@
                 if (needsSweep) break;
             }
             if (needsSweep) sweep();
+        });
+        obs.observe(document.body, { childList: true, subtree: true });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', start);
+    } else {
+        start();
+    }
+})();
+
+
+/**
+ * Status-chip class stamper.
+ *
+ * HaloPSA renders `.status-avatar` elements with the status name as
+ * textContent and only an inline `background-color` as a colour
+ * signal. The portal CSS has a named-status palette keyed on
+ * `.s-<slug>` classes — we read each chip's textContent and stamp
+ * the matching class so CSS can render the brand tint + ink.
+ *
+ * Class lookup is case-insensitive and trims trailing whitespace.
+ * Unknown status names get no class — they'll fall through to the
+ * inline-rgb fallback rules in the CSS (which map HaloPSA's
+ * default colours to the closest brand state).
+ *
+ * A MutationObserver catches re-renders from react-table
+ * sort/filter/pagination, kanban drag, and ticket navigation.
+ * `data-status-stamped` marks chips that already have their class
+ * to prevent redundant DOM writes (the observer fires again when
+ * we add the class; the marker breaks the loop).
+ */
+(function () {
+    'use strict';
+
+    var STATUS_MAP = {
+        'new': 's-new',
+        'in progress': 's-progress',
+        'action required': 's-action-required',
+        'awaiting user': 's-awaiting-user',
+        'awaiting supplier': 's-awaiting-supplier',
+        'completed': 's-resolved',
+        'resolved': 's-resolved',
+        'closed': 's-closed',
+        'with cab': 's-with-cab',
+        'open order': 's-open-order',
+        'closed order': 's-closed-order',
+        'open item': 's-open-item',
+        'closed item': 's-closed-item',
+        'invoiced': 's-invoiced',
+        'awaiting approval': 's-awaiting-approval',
+        'approved': 's-approved',
+        'rejected': 's-rejected',
+        'action completed': 's-action-completed',
+        'on hold': 's-on-hold',
+        'updated': 's-updated',
+        'scheduled': 's-scheduled',
+        'qualified': 's-qualified',
+        'awaiting change review': 's-awaiting-change-review',
+        'quote raised': 's-quote-raised',
+        'quote sent': 's-quote-sent',
+        'scoped': 's-scoped',
+        'assigned': 's-assigned',
+        'billing review': 's-billing-review',
+        'customer review': 's-customer-review',
+        'agent - triage handoff': 's-triage-handoff',
+        'dispatch review': 's-dispatch-review'
+    };
+
+    var MARKER = 'data-status-stamped';
+
+    /* All existing .s-* classes we manage, so a chip whose label
+       changes (e.g. New → Assigned after the first action) gets
+       re-classed cleanly. Kept in sync with STATUS_MAP values. */
+    var MANAGED_CLASSES = Object.keys(STATUS_MAP).map(function (k) {
+        return STATUS_MAP[k];
+    });
+
+    function stampChip(el) {
+        var key = (el.textContent || '').trim().toLowerCase();
+        if (!key) return;
+        var cls = STATUS_MAP[key];
+        // If the chip already has the correct class and marker, skip.
+        if (cls && el.classList.contains(cls) && el.getAttribute(MARKER) === key) return;
+        // Remove any other managed class before adding the new one
+        // (covers label-change cases).
+        for (var i = 0; i < MANAGED_CLASSES.length; i++) {
+            if (MANAGED_CLASSES[i] !== cls && el.classList.contains(MANAGED_CLASSES[i])) {
+                el.classList.remove(MANAGED_CLASSES[i]);
+            }
+        }
+        if (cls) el.classList.add(cls);
+        el.setAttribute(MARKER, key);
+    }
+
+    function sweep(root) {
+        (root || document).querySelectorAll('.status-avatar').forEach(stampChip);
+    }
+
+    function start() {
+        sweep();
+        if (!document.body) return;
+        var obs = new MutationObserver(function (muts) {
+            for (var i = 0; i < muts.length; i++) {
+                var added = muts[i].addedNodes;
+                for (var j = 0; j < added.length; j++) {
+                    var node = added[j];
+                    if (node.nodeType !== 1) continue;
+                    if (node.matches && node.matches('.status-avatar')) {
+                        stampChip(node);
+                    } else if (node.querySelectorAll) {
+                        sweep(node);
+                    }
+                }
+                // Also catch textContent changes on an existing chip
+                // (characterData mutations don't surface here; the
+                // next added-node sweep will catch the re-render).
+            }
         });
         obs.observe(document.body, { childList: true, subtree: true });
     }

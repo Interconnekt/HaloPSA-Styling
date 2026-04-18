@@ -186,26 +186,55 @@ Locked spec — see §10 below.
 
 ---
 
-## 7 · Status pill colour mapping
+## 7 · Status pill colour system
 
-HaloPSA paints status chips with inline `background-color: rgb(...)` per state. The portal intercepts each known inline colour and re-paints with brand tokens.
+**Named-status palette with JS-stamped classes.** Every workflow status gets a pastel tint + dark ink pair (light mode) and a translucent tint + light ink pair (dark mode), seeded from the ops-config palette and desaturated so pills sit flat on cards.
 
-| State | HaloPSA inline colour(s) | Portal token | Ink | Used for |
+### How it works
+
+1. Portal CSS defines token pairs for every named state (`--pill-new-bg / -ink`, `--pill-assigned-bg / -ink`, etc. — full list below).
+2. Portal CSS has a `.status-avatar.s-<slug>` rule per state that paints via `background-image: linear-gradient(var(--bg), var(--bg))`. `background-image` is a different property than HaloPSA's inline `background-color`, so the wash sits on top without needing `!important` on the inline side.
+3. `Portal/iframe-theme.js` reads each `.status-avatar` textContent and stamps the matching `.s-*` class, keyed via a `STATUS_MAP` dict. A MutationObserver catches re-renders.
+4. Inline-rgb attribute selectors (`[style*="rgb(…)"]`) remain as a **fallback** — they fire for pills that render before the JS stamps a class, and for status names the map doesn't know yet. Class selectors win via specificity when both match.
+
+### Palette
+
+| Status | Seed | Light bg / ink | Dark bg / ink | Class |
 |---|---|---|---|---|
-| Open / Assigned | `rgb(66, 133, 244)`, `rgb(60, 134, 247)`, `rgb(43, 92, 230)`, `rgb(74, 116, 240)` | `--pill-open-bg` | `--pill-open-ink` = `--portal-accent` | Blue |
-| In Progress | `rgb(111, 66, 193)`, `rgb(102, 16, 242)`, `rgb(153, 51, 255)`, `rgb(138, 43, 226)` | `--pill-progress-bg` | `--pill-progress-ink` = `--portal-accent-2` | Plum |
-| Waiting / Awaiting User | `rgb(255, 193, 7)`, `rgb(212, 212, 216)`, `rgb(245, 158, 11)`, `rgb(194, 65, 12)` | `--pill-waiting-bg` | `--pill-waiting-ink` = `--portal-warn` | Amber |
-| Resolved / Active | `rgb(40, 167, 69)`, `rgb(34, 139, 34)`, `rgb(0, 190, 0)`, `rgb(16, 185, 129)`, `rgb(187, 52, 63)` (asset "Active") | `--pill-resolved-bg` | `--pill-resolved-ink` = `--portal-highlight` | Emerald |
-| Closed / Cancelled | `rgb(108, 117, 125)`, `rgb(128, 128, 128)`, `rgb(80, 80, 80)`, `rgb(119, 119, 119)` | `--pill-closed-bg` | `--pill-closed-ink` = `--portal-text-muted` | Neutral |
-| Overdue / Breached | `rgb(220, 53, 69)`, `rgb(255, 46, 0)`, `rgb(185, 28, 28)`, `rgb(239, 68, 68)` | `--pill-overdue-bg` | `--pill-overdue-ink` = `--portal-err` | Red |
-| Info / Pending Client | `rgb(23, 162, 184)`, `rgb(13, 202, 240)`, `rgb(8, 145, 178)` | `--pill-info-bg` | `--pill-info-ink` = `--portal-accent` | Info blue |
-| New (fresh ticket) | `rgb(252, 220, 0)` | `--pill-new-bg` | `--pill-new-ink` = `--portal-highlight` | Emerald |
-| Neutral / Category | `rgb(47, 53, 94)` (HaloPSA heading navy) | transparent | `--portal-text` | Outlined pill (ARTICLE chip, etc.) |
-| Fallback (anything else) | * | transparent | `--portal-text-secondary` | Outlined pill |
+| New | `#FCDC00` | `#FFF7C2` / `#6B5A00` | `rgba(252,220,0,0.18)` / `#F3D565` | `.s-new` |
+| In Progress / Resolved / Triage Handoff | `#0C797D` | `#CCEAEB` / `#08474A` | `rgba(20,184,166,0.20)` / `#5EEAD4` | `.s-progress`, `.s-resolved`, `.s-triage-handoff` |
+| Action Required | `#FFAE88` | `#FFE3D4` / `#7A3A1C` | `rgba(255,174,136,0.20)` / `#FFC9AE` | `.s-action-required` |
+| Awaiting User | `#D4D4D8` | `#ECECEE` / `#404046` | `rgba(255,255,255,0.06)` / `#A1A1AA` | `.s-awaiting-user` |
+| Awaiting Supplier | `#52525B` | `#E4E4E7` / `#2E2E35` | `rgba(113,113,122,0.26)` / `#D4D4D8` | `.s-awaiting-supplier` |
+| Closed | `#343A40` | `#DEE2E6` / `#343A40` | `rgba(255,255,255,0.08)` / `#ADB5BD` | `.s-closed` |
+| With CAB / Open Order / Open Item / Invoiced | `#000000` | `#E9ECEF` / `#212529` | `rgba(255,255,255,0.10)` / `#CED4DA` | `.s-with-cab`, `.s-open-order`, `.s-open-item`, `.s-invoiced` |
+| Closed Order / Closed Item | `#000000` | `#DEE2E6` / `#495057` | `rgba(255,255,255,0.06)` / `#ADB5BD` | `.s-closed-order`, `.s-closed-item` |
+| Awaiting Approval / Customer Review | `#FA28FF` | `#FCE4FD` / `#6B126E` | `rgba(250,40,255,0.18)` / `#F0ABFC` | `.s-awaiting-approval`, `.s-customer-review` |
+| Approved | `#68BC00` | `#E2F3CC` / `#2E5200` | `rgba(163,230,53,0.20)` / `#BEF264` | `.s-approved` |
+| Rejected | `#D33115` | `#FAD8D2` / `#7A1C0C` | `rgba(248,113,113,0.20)` / `#FCA5A5` | `.s-rejected` |
+| Action Completed | `#16A5A5` | `#D1EEEE` / `#0E5F5F` | `rgba(34,211,238,0.18)` / `#67E8F9` | `.s-action-completed` |
+| On Hold | `#7D4F4F` | `#EADADA` / `#4A2A2A` | `rgba(180,130,130,0.20)` / `#D6A9A9` | `.s-on-hold` |
+| Updated | `#F44E3B` | `#FBDAD4` / `#7A1E10` | `rgba(244,78,59,0.18)` / `#FCA5A5` | `.s-updated` |
+| Scheduled | `#7B64FF` | `#E2DBFF` / `#30237A` | `rgba(123,100,255,0.20)` / `#C4B5FD` | `.s-scheduled` |
+| Qualified | `#009CE0` | `#CEEAF7` / `#004F74` | `rgba(0,156,224,0.20)` / `#7DD3FC` | `.s-qualified` |
+| Awaiting Change Review / Billing Review | `#FE9200` | `#FFE4C2` / `#7A4400` | `rgba(254,146,0,0.20)` / `#FDBA74` | `.s-awaiting-change-review`, `.s-billing-review` |
+| Dispatch Review | `#E27300` | `#FADDC4` / `#6B3600` | `rgba(226,115,0,0.20)` / `#FDBA74` | `.s-dispatch-review` |
+| Quote Raised / Scoped | `#73D8FF` | `#DBF2FF` / `#0E5A7F` | `rgba(115,216,255,0.20)` / `#BAE6FD` | `.s-quote-raised`, `.s-scoped` |
+| Quote Sent | `#2F355E` | `#D5D7E5` / `#2F355E` | `rgba(100,116,180,0.22)` / `#A5B4FC` | `.s-quote-sent` |
+| Assigned | `#3C86F7` | `#D8E5FB` / `#15347A` | `rgba(60,134,247,0.20)` / `#93C5FD` | `.s-assigned` |
+| Neutral / Category (ARTICLE chip) | — | transparent + `--portal-border` outline | same | (HaloPSA inline `rgb(47, 53, 94)`) |
+| Fallback (any un-mapped inline colour) | — | transparent + `--portal-border` outline | same | inline-rgb `:not(…)` catchall |
 
-All pills share unified typography via `.status-avatar.{fortable,small,bitsmall,smallest,fortile}`: **Montserrat / 10.5px / weight 600 / 0.06em tracking / uppercase**.
+**Shared typography** for every `.status-avatar.{fortable,small,bitsmall,smallest,fortile}`: Montserrat / 10.5px / weight 600 / 0.06em tracking / uppercase.
 
-**Adding a new state:** add a new `--pill-X-bg / --pill-X-ink` pair near the existing block in the CSS, then add a selector mapping the HaloPSA inline `rgb(...)` to it AND add that rgb to the fallback `:not()` exclusion list so it doesn't fall through.
+### Adding a new status
+
+1. Pick a seed hex for the status.
+2. Derive: light bg = HSL lightness ~92% with saturation dropped 30-50%; light ink = HSL lightness ~20-28% same hue. Dark bg = `rgba(hue-seed, 0.16-0.22)`; dark ink = HSL lightness ~72-82%.
+3. Add `--pill-<slug>-bg / -ink` token pairs to both `:root` and `.theme-dark` in `self-service-portal-design.css`.
+4. Add a `html body .portal .status-avatar.s-<slug>` rule using the `background-image: linear-gradient(var(--pill-<slug>-bg), var(--pill-<slug>-bg))` pattern.
+5. Add the textContent → class mapping to `STATUS_MAP` in `Portal/iframe-theme.js`.
+6. If HaloPSA emits a distinct inline `rgb()` for this state, add it to the relevant `[style*=]` fallback selector in the CSS.
 
 ---
 

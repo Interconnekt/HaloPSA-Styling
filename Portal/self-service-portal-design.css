@@ -1042,50 +1042,232 @@ html body .portal .status-avatar.fortile::before {
     display: none !important;
 }
 
-/* ─── Status pill COLOUR SYSTEM ───────────────────────────
-   HaloPSA writes status colours inline as `style="background-color: rgb(…)"`.
-   We intercept those inline values and re-paint using the brand palette:
+/* ═════════════════════════════════════════════════════════
+   Status pill COLOUR SYSTEM — Interconnekt / HaloPSA mapping
+   ─────────────────────────────────────────────────────────
+   Every named workflow status gets a pastel tint + dark ink
+   pair in light mode, and a translucent tint + light ink
+   pair in dark mode. Hues are seeded from the ops-config
+   palette; bgs are desaturated + lightened so pills sit flat
+   on a card without clashing with body copy.
 
-       Status                 →   Brand token
-       ──────────────────────────────────────────────
-       Open / New             →   --portal-accent    (primary blue)
-       In Progress / Assigned →   --portal-accent-2  (plum)
-       Waiting / On Hold      →   --portal-warn      (amber)
-       Resolved / Active      →   --portal-highlight (emerald)
-       Closed / Cancelled     →   --portal-text-muted(neutral grey)
-       Overdue / Breached     →   --portal-err       (red)
+   Implementation: paint via `background-image: linear-gradient(
+   var(--bg), var(--bg))` so the wash sits ON TOP of HaloPSA's
+   inline `background-color` — a different CSS property, so we
+   don't need to enumerate every rgb() HaloPSA might emit.
 
-   Using `color-mix()` on the live tokens means the pill colour
-   **automatically re-derives for light vs dark mode** — no need
-   to maintain two parallel palettes. The tint alpha (18%) gives
-   a soft chip against either bg while keeping the base token
-   contrast-safe as the ink colour. */
+   Classes are stamped at runtime by `iframe-theme.js` (see
+   STATUS_MAP) which reads `.status-avatar` textContent and adds
+   the matching `.s-*` class. Inline-rgb attribute selectors
+   below act as a FALLBACK for pills that get the DOM before
+   the JS runs, or for a status name JS doesn't know yet.
+
+   Near-black statuses (#000000 / #343A40) all share one
+   neutral "system" slate — With CAB, Open Order, Open Item,
+   Invoiced are all workflow-plumbing labels that don't need
+   their own hue. Closed Order / Closed Item share a darker
+   neutral to read as "terminal".
+   ═════════════════════════════════════════════════════════ */
+
 :root {
-    --pill-open-bg:     color-mix(in srgb, var(--portal-accent)      18%, transparent);
-    --pill-open-ink:    var(--portal-accent);
-    --pill-progress-bg: color-mix(in srgb, var(--portal-accent-2)    18%, transparent);
-    --pill-progress-ink:var(--portal-accent-2);
-    --pill-waiting-bg:  color-mix(in srgb, var(--portal-warn)        18%, transparent);
-    --pill-waiting-ink: var(--portal-warn);
-    --pill-resolved-bg: color-mix(in srgb, var(--portal-highlight)   18%, transparent);
-    --pill-resolved-ink:var(--portal-highlight);
-    --pill-closed-bg:   color-mix(in srgb, var(--portal-text-muted)  15%, transparent);
-    --pill-closed-ink:  var(--portal-text-muted);
-    --pill-overdue-bg:  color-mix(in srgb, var(--portal-err)         18%, transparent);
-    --pill-overdue-ink: var(--portal-err);
-    --pill-info-bg:     color-mix(in srgb, var(--portal-accent)      12%, transparent);
-    --pill-info-ink:    var(--portal-accent);
+    /* New — signal yellow */
+    --pill-new-bg:               #FFF7C2; --pill-new-ink:               #6B5A00;
+    /* In Progress / Resolved / Triage Handoff — deep teal */
+    --pill-progress-bg:          #CCEAEB; --pill-progress-ink:          #08474A;
+    /* Action Required — warm peach */
+    --pill-action-required-bg:   #FFE3D4; --pill-action-required-ink:   #7A3A1C;
+    /* Awaiting User — neutral cool */
+    --pill-awaiting-user-bg:     #ECECEE; --pill-awaiting-user-ink:     #404046;
+    /* Awaiting Supplier — graphite */
+    --pill-awaiting-supplier-bg: #E4E4E7; --pill-awaiting-supplier-ink: #2E2E35;
+    /* Closed — slate */
+    --pill-closed-bg:            #DEE2E6; --pill-closed-ink:            #343A40;
+    /* System neutral — the #000000 statuses (With CAB, Open
+       Order, Open Item, Invoiced) all share this "workflow
+       plumbing" slate */
+    --pill-system-bg:            #E9ECEF; --pill-system-ink:            #212529;
+    /* Closed-state system neutral — Closed Order / Closed Item */
+    --pill-system-closed-bg:     #DEE2E6; --pill-system-closed-ink:     #495057;
+    /* Awaiting Approval / Customer Review — magenta */
+    --pill-approval-bg:          #FCE4FD; --pill-approval-ink:          #6B126E;
+    /* Approved — fresh green */
+    --pill-approved-bg:          #E2F3CC; --pill-approved-ink:          #2E5200;
+    /* Rejected — brick red */
+    --pill-rejected-bg:          #FAD8D2; --pill-rejected-ink:          #7A1C0C;
+    /* Action Completed — cyan teal */
+    --pill-action-completed-bg:  #D1EEEE; --pill-action-completed-ink:  #0E5F5F;
+    /* On Hold — dusty rose */
+    --pill-on-hold-bg:           #EADADA; --pill-on-hold-ink:           #4A2A2A;
+    /* Updated — vermillion */
+    --pill-updated-bg:           #FBDAD4; --pill-updated-ink:           #7A1E10;
+    /* Scheduled — indigo */
+    --pill-scheduled-bg:         #E2DBFF; --pill-scheduled-ink:         #30237A;
+    /* Qualified — sky blue */
+    --pill-qualified-bg:         #CEEAF7; --pill-qualified-ink:         #004F74;
+    /* Awaiting Change Review / Billing Review — orange */
+    --pill-review-bg:            #FFE4C2; --pill-review-ink:            #7A4400;
+    --pill-dispatch-review-bg:   #FADDC4; --pill-dispatch-review-ink:   #6B3600;
+    /* Quote Raised / Scoped — powder blue */
+    --pill-quote-raised-bg:      #DBF2FF; --pill-quote-raised-ink:      #0E5A7F;
+    /* Quote Sent — brand navy */
+    --pill-quote-sent-bg:        #D5D7E5; --pill-quote-sent-ink:        #2F355E;
+    /* Assigned — bright blue */
+    --pill-assigned-bg:          #D8E5FB; --pill-assigned-ink:          #15347A;
 }
 
-/* Attribute-selector overrides for HaloPSA's inline colours.
-   HaloPSA typically emits one of these rgb() values. We match
-   with `[style*=]` so the inline `background-color: rgb(...)`
-   declaration is countered by our pastel token. Colour the text
-   via the sibling `color:` token so contrast stays WCAG-safe. */
+.theme-dark {
+    --pill-new-bg:               rgba(252,220,0,0.18);    --pill-new-ink:               #F3D565;
+    --pill-progress-bg:          rgba(20,184,166,0.20);   --pill-progress-ink:          #5EEAD4;
+    --pill-action-required-bg:   rgba(255,174,136,0.20);  --pill-action-required-ink:   #FFC9AE;
+    --pill-awaiting-user-bg:     rgba(255,255,255,0.06);  --pill-awaiting-user-ink:     #A1A1AA;
+    --pill-awaiting-supplier-bg: rgba(113,113,122,0.26);  --pill-awaiting-supplier-ink: #D4D4D8;
+    --pill-closed-bg:            rgba(255,255,255,0.08);  --pill-closed-ink:            #ADB5BD;
+    --pill-system-bg:            rgba(255,255,255,0.10);  --pill-system-ink:            #CED4DA;
+    --pill-system-closed-bg:     rgba(255,255,255,0.06);  --pill-system-closed-ink:     #ADB5BD;
+    --pill-approval-bg:          rgba(250,40,255,0.18);   --pill-approval-ink:          #F0ABFC;
+    --pill-approved-bg:          rgba(163,230,53,0.20);   --pill-approved-ink:          #BEF264;
+    --pill-rejected-bg:          rgba(248,113,113,0.20);  --pill-rejected-ink:          #FCA5A5;
+    --pill-action-completed-bg:  rgba(34,211,238,0.18);   --pill-action-completed-ink:  #67E8F9;
+    --pill-on-hold-bg:           rgba(180,130,130,0.20);  --pill-on-hold-ink:           #D6A9A9;
+    --pill-updated-bg:           rgba(244,78,59,0.18);    --pill-updated-ink:           #FCA5A5;
+    --pill-scheduled-bg:         rgba(123,100,255,0.20);  --pill-scheduled-ink:         #C4B5FD;
+    --pill-qualified-bg:         rgba(0,156,224,0.20);    --pill-qualified-ink:         #7DD3FC;
+    --pill-review-bg:            rgba(254,146,0,0.20);    --pill-review-ink:            #FDBA74;
+    --pill-dispatch-review-bg:   rgba(226,115,0,0.20);    --pill-dispatch-review-ink:   #FDBA74;
+    --pill-quote-raised-bg:      rgba(115,216,255,0.20);  --pill-quote-raised-ink:      #BAE6FD;
+    --pill-quote-sent-bg:        rgba(100,116,180,0.22);  --pill-quote-sent-ink:        #A5B4FC;
+    --pill-assigned-bg:          rgba(60,134,247,0.20);   --pill-assigned-ink:          #93C5FD;
+}
 
-/* OPEN / NEW — HaloPSA paints any of these blue tones for open tickets.
-   Expanded list includes rgb(60, 134, 247) which this portal emits
-   for "Assigned" state and rgb(43, 92, 230) which is our --portal-accent. */
+/* ─── Named-status class rules ─────────────────────────────
+   One class per workflow status, stamped via JS (see
+   iframe-theme.js STATUS_MAP). Uses the background-image
+   trick to beat HaloPSA's inline background-color. */
+
+html body .portal .status-avatar.s-new {
+    background-image: linear-gradient(var(--pill-new-bg), var(--pill-new-bg)) !important;
+    background-color: var(--pill-new-bg) !important;
+    color: var(--pill-new-ink) !important;
+}
+html body .portal .status-avatar.s-progress,
+html body .portal .status-avatar.s-resolved,
+html body .portal .status-avatar.s-triage-handoff {
+    background-image: linear-gradient(var(--pill-progress-bg), var(--pill-progress-bg)) !important;
+    background-color: var(--pill-progress-bg) !important;
+    color: var(--pill-progress-ink) !important;
+}
+html body .portal .status-avatar.s-action-required {
+    background-image: linear-gradient(var(--pill-action-required-bg), var(--pill-action-required-bg)) !important;
+    background-color: var(--pill-action-required-bg) !important;
+    color: var(--pill-action-required-ink) !important;
+}
+html body .portal .status-avatar.s-awaiting-user {
+    background-image: linear-gradient(var(--pill-awaiting-user-bg), var(--pill-awaiting-user-bg)) !important;
+    background-color: var(--pill-awaiting-user-bg) !important;
+    color: var(--pill-awaiting-user-ink) !important;
+}
+html body .portal .status-avatar.s-awaiting-supplier {
+    background-image: linear-gradient(var(--pill-awaiting-supplier-bg), var(--pill-awaiting-supplier-bg)) !important;
+    background-color: var(--pill-awaiting-supplier-bg) !important;
+    color: var(--pill-awaiting-supplier-ink) !important;
+}
+html body .portal .status-avatar.s-closed {
+    background-image: linear-gradient(var(--pill-closed-bg), var(--pill-closed-bg)) !important;
+    background-color: var(--pill-closed-bg) !important;
+    color: var(--pill-closed-ink) !important;
+}
+/* System neutrals — near-black seeds share one slate */
+html body .portal .status-avatar.s-with-cab,
+html body .portal .status-avatar.s-open-order,
+html body .portal .status-avatar.s-open-item,
+html body .portal .status-avatar.s-invoiced {
+    background-image: linear-gradient(var(--pill-system-bg), var(--pill-system-bg)) !important;
+    background-color: var(--pill-system-bg) !important;
+    color: var(--pill-system-ink) !important;
+}
+html body .portal .status-avatar.s-closed-order,
+html body .portal .status-avatar.s-closed-item {
+    background-image: linear-gradient(var(--pill-system-closed-bg), var(--pill-system-closed-bg)) !important;
+    background-color: var(--pill-system-closed-bg) !important;
+    color: var(--pill-system-closed-ink) !important;
+}
+html body .portal .status-avatar.s-awaiting-approval,
+html body .portal .status-avatar.s-customer-review {
+    background-image: linear-gradient(var(--pill-approval-bg), var(--pill-approval-bg)) !important;
+    background-color: var(--pill-approval-bg) !important;
+    color: var(--pill-approval-ink) !important;
+}
+html body .portal .status-avatar.s-approved {
+    background-image: linear-gradient(var(--pill-approved-bg), var(--pill-approved-bg)) !important;
+    background-color: var(--pill-approved-bg) !important;
+    color: var(--pill-approved-ink) !important;
+}
+html body .portal .status-avatar.s-rejected {
+    background-image: linear-gradient(var(--pill-rejected-bg), var(--pill-rejected-bg)) !important;
+    background-color: var(--pill-rejected-bg) !important;
+    color: var(--pill-rejected-ink) !important;
+}
+html body .portal .status-avatar.s-action-completed {
+    background-image: linear-gradient(var(--pill-action-completed-bg), var(--pill-action-completed-bg)) !important;
+    background-color: var(--pill-action-completed-bg) !important;
+    color: var(--pill-action-completed-ink) !important;
+}
+html body .portal .status-avatar.s-on-hold {
+    background-image: linear-gradient(var(--pill-on-hold-bg), var(--pill-on-hold-bg)) !important;
+    background-color: var(--pill-on-hold-bg) !important;
+    color: var(--pill-on-hold-ink) !important;
+}
+html body .portal .status-avatar.s-updated {
+    background-image: linear-gradient(var(--pill-updated-bg), var(--pill-updated-bg)) !important;
+    background-color: var(--pill-updated-bg) !important;
+    color: var(--pill-updated-ink) !important;
+}
+html body .portal .status-avatar.s-scheduled {
+    background-image: linear-gradient(var(--pill-scheduled-bg), var(--pill-scheduled-bg)) !important;
+    background-color: var(--pill-scheduled-bg) !important;
+    color: var(--pill-scheduled-ink) !important;
+}
+html body .portal .status-avatar.s-qualified {
+    background-image: linear-gradient(var(--pill-qualified-bg), var(--pill-qualified-bg)) !important;
+    background-color: var(--pill-qualified-bg) !important;
+    color: var(--pill-qualified-ink) !important;
+}
+html body .portal .status-avatar.s-awaiting-change-review,
+html body .portal .status-avatar.s-billing-review {
+    background-image: linear-gradient(var(--pill-review-bg), var(--pill-review-bg)) !important;
+    background-color: var(--pill-review-bg) !important;
+    color: var(--pill-review-ink) !important;
+}
+html body .portal .status-avatar.s-dispatch-review {
+    background-image: linear-gradient(var(--pill-dispatch-review-bg), var(--pill-dispatch-review-bg)) !important;
+    background-color: var(--pill-dispatch-review-bg) !important;
+    color: var(--pill-dispatch-review-ink) !important;
+}
+html body .portal .status-avatar.s-quote-raised,
+html body .portal .status-avatar.s-scoped {
+    background-image: linear-gradient(var(--pill-quote-raised-bg), var(--pill-quote-raised-bg)) !important;
+    background-color: var(--pill-quote-raised-bg) !important;
+    color: var(--pill-quote-raised-ink) !important;
+}
+html body .portal .status-avatar.s-quote-sent {
+    background-image: linear-gradient(var(--pill-quote-sent-bg), var(--pill-quote-sent-bg)) !important;
+    background-color: var(--pill-quote-sent-bg) !important;
+    color: var(--pill-quote-sent-ink) !important;
+}
+html body .portal .status-avatar.s-assigned {
+    background-image: linear-gradient(var(--pill-assigned-bg), var(--pill-assigned-bg)) !important;
+    background-color: var(--pill-assigned-bg) !important;
+    color: var(--pill-assigned-ink) !important;
+}
+
+/* ─── Inline-rgb fallback selectors ────────────────────────
+   For pills that render before the STATUS_MAP JS has stamped
+   a class, or for status names the map doesn't know. Each
+   HaloPSA inline colour is mapped to the closest named
+   status's tokens. Class selectors above win when BOTH are
+   present because they have one extra class specificity. */
+
+/* HaloPSA blue (Assigned / Open) */
 html body .portal .status-avatar[style*="rgb(66, 133, 244)"],
 html body .portal .status-avatar[style*="rgb(0, 123, 255)"],
 html body .portal .status-avatar[style*="rgb(52, 131, 250)"],
@@ -1093,47 +1275,34 @@ html body .portal .status-avatar[style*="rgb(60, 134, 247)"],
 html body .portal .status-avatar[style*="rgb(13, 110, 253)"],
 html body .portal .status-avatar[style*="rgb(0, 102, 204)"],
 html body .portal .status-avatar[style*="rgb(43, 92, 230)"],
-html body .portal .status-avatar[style*="rgb(74, 116, 240)"],
-html body .portal .status-avatar.s-open {
-    background-image: linear-gradient(var(--pill-open-bg), var(--pill-open-bg)) !important;
-    background-color: var(--pill-open-bg) !important;
-    color: var(--pill-open-ink) !important;
+html body .portal .status-avatar[style*="rgb(74, 116, 240)"] {
+    background-image: linear-gradient(var(--pill-assigned-bg), var(--pill-assigned-bg)) !important;
+    background-color: var(--pill-assigned-bg) !important;
+    color: var(--pill-assigned-ink) !important;
 }
-
-/* IN PROGRESS / ASSIGNED — rgb(111, 66, 193), rgb(102, 16, 242),
-   rgb(153, 51, 255), rgb(138, 43, 226) */
+/* HaloPSA purple (In Progress) → teal progress */
 html body .portal .status-avatar[style*="rgb(111, 66, 193)"],
 html body .portal .status-avatar[style*="rgb(102, 16, 242)"],
 html body .portal .status-avatar[style*="rgb(153, 51, 255)"],
-html body .portal .status-avatar[style*="rgb(138, 43, 226)"],
-html body .portal .status-avatar.s-progress {
+html body .portal .status-avatar[style*="rgb(138, 43, 226)"] {
     background-image: linear-gradient(var(--pill-progress-bg), var(--pill-progress-bg)) !important;
     background-color: var(--pill-progress-bg) !important;
     color: var(--pill-progress-ink) !important;
 }
-
-/* WAITING / ON HOLD / AWAITING USER — amber + the light grey HaloPSA
-   uses for "Awaiting User" rgb(212, 212, 216). The grey maps to amber
-   (not neutral) because semantically it's a "hold pending something"
-   state, not a terminal closed state. */
+/* HaloPSA amber + "Awaiting User" light grey → awaiting-user neutral */
 html body .portal .status-avatar[style*="rgb(255, 193, 7)"],
 html body .portal .status-avatar[style*="rgb(255, 170, 0)"],
 html body .portal .status-avatar[style*="rgb(255, 152, 0)"],
 html body .portal .status-avatar[style*="rgb(240, 173, 78)"],
 html body .portal .status-avatar[style*="rgb(245, 158, 11)"],
 html body .portal .status-avatar[style*="rgb(212, 212, 216)"],
-html body .portal .status-avatar[style*="rgb(194, 65, 12)"],
-html body .portal .status-avatar.s-waiting {
-    background-image: linear-gradient(var(--pill-waiting-bg), var(--pill-waiting-bg)) !important;
-    background-color: var(--pill-waiting-bg) !important;
-    color: var(--pill-waiting-ink) !important;
+html body .portal .status-avatar[style*="rgb(194, 65, 12)"] {
+    background-image: linear-gradient(var(--pill-awaiting-user-bg), var(--pill-awaiting-user-bg)) !important;
+    background-color: var(--pill-awaiting-user-bg) !important;
+    color: var(--pill-awaiting-user-ink) !important;
 }
-
-/* RESOLVED / ACTIVE / OK — covers both ticket "Resolved" and asset
-   "Active". HaloPSA's native greens + `bitsmall` asset variants land
-   here. Note: `rgb(187, 52, 63)` appears red but HaloPSA tags it
-   to asset "Active" — we interpret "Active" as a positive live
-   state and render in emerald rather than copy their odd red. */
+/* HaloPSA green (Resolved / Active asset) → progress teal
+   (per spec: Completed / Resolved share In Progress seed) */
 html body .portal .status-avatar[style*="rgb(40, 167, 69)"],
 html body .portal .status-avatar[style*="rgb(34, 139, 34)"],
 html body .portal .status-avatar[style*="rgb(0, 190, 0)"],
@@ -1142,98 +1311,64 @@ html body .portal .status-avatar[style*="rgb(16, 185, 129)"],
 html body .portal .status-avatar[style*="rgb(21, 128, 61)"],
 html body .portal .status-avatar[style*="rgb(52, 211, 153)"],
 html body .portal .status-avatar[style*="rgb(187, 52, 63)"],
-html body .portal .status-avatar.s-resolved,
 html body .portal .status-avatar.bitsmall {
-    background-image: linear-gradient(var(--pill-resolved-bg), var(--pill-resolved-bg)) !important;
-    background-color: var(--pill-resolved-bg) !important;
-    color: var(--pill-resolved-ink) !important;
+    background-image: linear-gradient(var(--pill-progress-bg), var(--pill-progress-bg)) !important;
+    background-color: var(--pill-progress-bg) !important;
+    color: var(--pill-progress-ink) !important;
 }
-
-/* CLOSED / CANCELLED — rgb(108, 117, 125), rgb(128, 128, 128),
-   rgb(80, 80, 80), rgb(119, 119, 119) */
+/* HaloPSA grey (Closed) → closed slate */
 html body .portal .status-avatar[style*="rgb(108, 117, 125)"],
 html body .portal .status-avatar[style*="rgb(128, 128, 128)"],
 html body .portal .status-avatar[style*="rgb(80, 80, 80)"],
-html body .portal .status-avatar[style*="rgb(119, 119, 119)"],
-html body .portal .status-avatar.s-closed {
+html body .portal .status-avatar[style*="rgb(119, 119, 119)"] {
     background-image: linear-gradient(var(--pill-closed-bg), var(--pill-closed-bg)) !important;
     background-color: var(--pill-closed-bg) !important;
     color: var(--pill-closed-ink) !important;
 }
-
-/* OVERDUE / BREACHED — rgb(220, 53, 69), rgb(255, 46, 0), rgb(255, 0, 0),
-   rgb(185, 28, 28), rgb(239, 68, 68) */
+/* HaloPSA red (Overdue / Breached) → rejected */
 html body .portal .status-avatar[style*="rgb(220, 53, 69)"],
 html body .portal .status-avatar[style*="rgb(255, 46, 0)"],
 html body .portal .status-avatar[style*="rgb(255, 0, 0)"],
 html body .portal .status-avatar[style*="rgb(185, 28, 28)"],
-html body .portal .status-avatar[style*="rgb(239, 68, 68)"],
-html body .portal .status-avatar.s-overdue {
-    background-image: linear-gradient(var(--pill-overdue-bg), var(--pill-overdue-bg)) !important;
-    background-color: var(--pill-overdue-bg) !important;
-    color: var(--pill-overdue-ink) !important;
+html body .portal .status-avatar[style*="rgb(239, 68, 68)"] {
+    background-image: linear-gradient(var(--pill-rejected-bg), var(--pill-rejected-bg)) !important;
+    background-color: var(--pill-rejected-bg) !important;
+    color: var(--pill-rejected-ink) !important;
 }
-
-/* INFO / PENDING CLIENT — rgb(23, 162, 184), rgb(13, 202, 240),
-   rgb(8, 145, 178) */
+/* HaloPSA cyan (Info) → qualified sky */
 html body .portal .status-avatar[style*="rgb(23, 162, 184)"],
 html body .portal .status-avatar[style*="rgb(13, 202, 240)"],
-html body .portal .status-avatar[style*="rgb(8, 145, 178)"],
-html body .portal .status-avatar.s-info {
-    background-image: linear-gradient(var(--pill-info-bg), var(--pill-info-bg)) !important;
-    background-color: var(--pill-info-bg) !important;
-    color: var(--pill-info-ink) !important;
+html body .portal .status-avatar[style*="rgb(8, 145, 178)"] {
+    background-image: linear-gradient(var(--pill-qualified-bg), var(--pill-qualified-bg)) !important;
+    background-color: var(--pill-qualified-bg) !important;
+    color: var(--pill-qualified-ink) !important;
 }
-
-/* NEW — HaloPSA paints brand-yellow `rgb(252, 220, 0)` for freshly-
-   opened tickets. Map to emerald highlight so "NEW" reads as a
-   positive "fresh" state distinct from both open-blue (active work)
-   and amber-waiting. */
-:root {
-    --pill-new-bg: color-mix(in srgb, var(--portal-highlight) 18%, transparent);
-    --pill-new-ink: var(--portal-highlight);
-}
-html body .portal .status-avatar[style*="rgb(252, 220, 0)"],
-html body .portal .status-avatar.s-new {
+/* HaloPSA brand yellow (New ticket) */
+html body .portal .status-avatar[style*="rgb(252, 220, 0)"] {
     background-image: linear-gradient(var(--pill-new-bg), var(--pill-new-bg)) !important;
     background-color: var(--pill-new-bg) !important;
     color: var(--pill-new-ink) !important;
 }
-
-/* NEUTRAL / CATEGORY chip — HaloPSA paints the ARTICLE chip and any
-   non-status label with its heading navy `rgb(47, 53, 94)`. Re-skin
-   as a transparent outlined pill with Montserrat uppercase tracked
-   text — NOT a filled accent chip, since these aren't status signals. */
+/* HaloPSA heading navy (neutral category — ARTICLE chip, etc.)
+   → outlined pill, not a filled colour. */
 html body .portal .status-avatar[style*="rgb(47, 53, 94)"],
 html body .portal .status-avatar.s-neutral {
     background-image: none !important;
     background-color: transparent !important;
     border: 1px solid var(--portal-border) !important;
     color: var(--portal-text) !important;
-    font-family: var(--ik-font-display) !important;
-    font-size: 10.5px !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.08em !important;
-    text-transform: uppercase !important;
     padding: 3px 10px !important;
     border-radius: 999px !important;
 }
 
-/* Fallback — any `.status-avatar` HaloPSA paints with ANY inline
-   background-color we didn't map above gets the same neutral
-   outlined pill treatment, using Montserrat (the status-chip
-   typography everywhere else on the list view) rather than mono
-   so the overall row reads as one typography family. */
+/* Last-resort fallback — any HaloPSA inline bg we didn't map
+   renders as an outlined Montserrat pill so a mystery chip
+   doesn't shout with a raw HaloPSA hue. */
 html body .portal .status-avatar[style*="background-color"]:not([style*="rgb(66, 133, 244)"]):not([style*="rgb(0, 123, 255)"]):not([style*="rgb(52, 131, 250)"]):not([style*="rgb(60, 134, 247)"]):not([style*="rgb(13, 110, 253)"]):not([style*="rgb(0, 102, 204)"]):not([style*="rgb(43, 92, 230)"]):not([style*="rgb(74, 116, 240)"]):not([style*="rgb(111, 66, 193)"]):not([style*="rgb(102, 16, 242)"]):not([style*="rgb(153, 51, 255)"]):not([style*="rgb(138, 43, 226)"]):not([style*="rgb(255, 193, 7)"]):not([style*="rgb(255, 170, 0)"]):not([style*="rgb(255, 152, 0)"]):not([style*="rgb(240, 173, 78)"]):not([style*="rgb(245, 158, 11)"]):not([style*="rgb(212, 212, 216)"]):not([style*="rgb(194, 65, 12)"]):not([style*="rgb(40, 167, 69)"]):not([style*="rgb(34, 139, 34)"]):not([style*="rgb(0, 190, 0)"]):not([style*="rgb(25, 135, 84)"]):not([style*="rgb(16, 185, 129)"]):not([style*="rgb(21, 128, 61)"]):not([style*="rgb(52, 211, 153)"]):not([style*="rgb(187, 52, 63)"]):not([style*="rgb(108, 117, 125)"]):not([style*="rgb(128, 128, 128)"]):not([style*="rgb(80, 80, 80)"]):not([style*="rgb(119, 119, 119)"]):not([style*="rgb(220, 53, 69)"]):not([style*="rgb(255, 46, 0)"]):not([style*="rgb(255, 0, 0)"]):not([style*="rgb(185, 28, 28)"]):not([style*="rgb(239, 68, 68)"]):not([style*="rgb(23, 162, 184)"]):not([style*="rgb(13, 202, 240)"]):not([style*="rgb(8, 145, 178)"]):not([style*="rgb(47, 53, 94)"]):not([style*="rgb(252, 220, 0)"]) {
     background-image: none !important;
     background-color: transparent !important;
     border: 1px solid var(--portal-border) !important;
     color: var(--portal-text-secondary) !important;
-    font-family: var(--ik-font-display) !important;
-    font-size: 10.5px !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.08em !important;
-    text-transform: uppercase !important;
     padding: 3px 10px !important;
 }
 
@@ -1350,11 +1485,16 @@ html body .portal .priority-chip {
     letter-spacing: 0.06em !important;
     text-transform: uppercase;
 }
+/* Legacy .priority-avatar.{p1..p4} — HaloPSA doesn't emit these on
+   our current pages (the priority column uses `.oneline >
+   .priority-block` swatch + text pattern, styled elsewhere) but we
+   keep a rule here as a safety net. Remapped to the new pill token
+   names so nothing references the old --pill-open/waiting/etc. */
 html body .portal .priority-avatar[style*="rgb(220, 53, 69)"],
-html body .portal .priority-avatar.p1 { background-image: linear-gradient(var(--pill-overdue-bg), var(--pill-overdue-bg)) !important; background-color: var(--pill-overdue-bg) !important; color: var(--pill-overdue-ink) !important; }
+html body .portal .priority-avatar.p1 { background-image: linear-gradient(var(--pill-rejected-bg), var(--pill-rejected-bg)) !important; background-color: var(--pill-rejected-bg) !important; color: var(--pill-rejected-ink) !important; }
 html body .portal .priority-avatar[style*="rgb(255, 152, 0)"],
-html body .portal .priority-avatar.p2 { background-image: linear-gradient(var(--pill-waiting-bg), var(--pill-waiting-bg)) !important; background-color: var(--pill-waiting-bg) !important; color: var(--pill-waiting-ink) !important; }
-html body .portal .priority-avatar.p3 { background-image: linear-gradient(var(--pill-open-bg), var(--pill-open-bg)) !important; background-color: var(--pill-open-bg) !important; color: var(--pill-open-ink) !important; }
+html body .portal .priority-avatar.p2 { background-image: linear-gradient(var(--pill-review-bg), var(--pill-review-bg)) !important; background-color: var(--pill-review-bg) !important; color: var(--pill-review-ink) !important; }
+html body .portal .priority-avatar.p3 { background-image: linear-gradient(var(--pill-assigned-bg), var(--pill-assigned-bg)) !important; background-color: var(--pill-assigned-bg) !important; color: var(--pill-assigned-ink) !important; }
 html body .portal .priority-avatar.p4 { background-image: linear-gradient(var(--pill-closed-bg), var(--pill-closed-bg)) !important; background-color: var(--pill-closed-bg) !important; color: var(--pill-closed-ink) !important; }
 
 /* ─── SLA countdown bar ─────────────────────────────────────

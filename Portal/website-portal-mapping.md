@@ -230,6 +230,22 @@ HaloPSA renders the Priority column as `<div class="oneline">Low<div class="prio
 
 ---
 
+## 9.5 · Content width
+
+Website and portal share the same content rail: **1240px max-width, centered, with `24px` horizontal padding mobile / `40px` desktop** (matches `md:px-10` on the website).
+
+| Target | Selector | Max-width | Notes |
+|---|---|---|---|
+| Website nav | `mx-auto max-w-[1240px]` inside `px-6 md:px-10` outer | 1240px | site-nav.tsx |
+| Website sections | `mx-auto max-w-[1240px]` on every `<section>` | 1240px | |
+| Portal header inner | `html body .portal .nhd-nav-wrapper` | 1240px | Bar bg stays full-width; wrapper caps content |
+| Portal main content | `html body .portal .container`, `html body .portal .container-large` | 1240px | Both Bootstrap containers capped |
+| **Exception** | `.kbdetails` (KB article reading view) | 1100px | Deliberately narrower for long-form readability |
+
+**Change the content width:** update the `1240px` literal in all four places listed above (two header rules, one container rule, keep `.kbdetails` untouched). The value is kept as a literal, not a token, because it's a shared website design constant — one of the few cross-repo numbers.
+
+---
+
 ## 10 · Header & nav spec (locked)
 
 See full spec doc: header + nav styling is locked to the website's dark chrome. Key tokens:

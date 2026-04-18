@@ -767,11 +767,13 @@ html body .portal .nhd-button.curve:hover::before { opacity: 1; }
 
 /* ─── Status pill shape ───────────────────────────────────
    Force full-pill geometry on every `.status-avatar` variant
-   HaloPSA emits. The colour system below replaces their
-   inline background-color rules. */
+   HaloPSA emits. Clean pill — no leading dot — labels carry
+   enough signal on their own with the colour mapping below. */
 html body .portal .status-avatar.fortable,
 html body .portal .status-avatar.small,
-html body .portal .status-avatar.bitsmall {
+html body .portal .status-avatar.bitsmall,
+html body .portal .status-avatar.smallest,
+html body .portal .status-avatar.fortile {
     border-radius: 999px !important;
     padding: 3px 12px !important;
     font-family: var(--ik-font-display) !important;
@@ -786,52 +788,53 @@ html body .portal .status-avatar.bitsmall {
     vertical-align: middle;
     width: auto !important;
     line-height: 1.5;
-    /* Tiny leading dot — editorial status language */
-    gap: 6px;
+    gap: 0;   /* no leading dot */
 }
+/* Explicitly kill the ::before dot in case an older deploy still
+   has cached rules applying it — previous iteration rendered a
+   5px circle before the label, user wants it gone. */
 html body .portal .status-avatar.fortable::before,
 html body .portal .status-avatar.small::before,
-html body .portal .status-avatar.bitsmall::before {
-    content: '';
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: currentColor;
-    opacity: 0.8;
-    flex: 0 0 auto;
+html body .portal .status-avatar.bitsmall::before,
+html body .portal .status-avatar.smallest::before,
+html body .portal .status-avatar.fortile::before {
+    content: none !important;
+    display: none !important;
 }
 
 /* ─── Status pill COLOUR SYSTEM ───────────────────────────
    HaloPSA writes status colours inline as `style="background-color: rgb(…)"`.
-   We override each of the common palettes it ships, mapping to tokenised
-   pastel backgrounds + high-contrast ink. Dark mode swaps via .theme-dark.
+   We intercept those inline values and re-paint using the brand palette:
 
-   Coverage:
-   • Open / New            → blue-indigo
-   • In Progress / Assigned→ violet
-   • Waiting / On Hold     → amber
-   • Resolved / Closed OK  → green
-   • Closed / Cancelled    → neutral
-   • Overdue / Breached    → red
+       Status                 →   Brand token
+       ──────────────────────────────────────────────
+       Open / New             →   --portal-accent    (primary blue)
+       In Progress / Assigned →   --portal-accent-2  (plum)
+       Waiting / On Hold      →   --portal-warn      (amber)
+       Resolved / Active      →   --portal-highlight (emerald)
+       Closed / Cancelled     →   --portal-text-muted(neutral grey)
+       Overdue / Breached     →   --portal-err       (red)
 
-   The colour tokens are exposed on :root so other components
-   (priority chips, kanban headers, timeline dots) can reuse them. */
+   Using `color-mix()` on the live tokens means the pill colour
+   **automatically re-derives for light vs dark mode** — no need
+   to maintain two parallel palettes. The tint alpha (18%) gives
+   a soft chip against either bg while keeping the base token
+   contrast-safe as the ink colour. */
 :root {
-    --pill-open-bg:     #DBEAFE; --pill-open-ink:     #1E3A8A;
-    --pill-progress-bg: #EDE9FE; --pill-progress-ink: #4C1D95;
-    --pill-waiting-bg:  #FEF3C7; --pill-waiting-ink:  #78350F;
-    --pill-resolved-bg: #D1FAE5; --pill-resolved-ink: #064E3B;
-    --pill-closed-bg:   #E9ECEF; --pill-closed-ink:   #495057;
-    --pill-overdue-bg:  #FEE2E2; --pill-overdue-ink:  #7F1D1D;
-    --pill-info-bg:     #E0F4F9; --pill-info-ink:     #0E4A6A;
-}
-.theme-dark {
-    --pill-open-bg:     rgba(74,116,240,0.18);  --pill-open-ink:     #9AB5F7;
-    --pill-progress-bg: rgba(167,139,250,0.18); --pill-progress-ink: #C4B5FD;
-    --pill-waiting-bg:  rgba(251,191,36,0.18);  --pill-waiting-ink:  #FCD34D;
-    --pill-resolved-bg: rgba(52,211,153,0.18);  --pill-resolved-ink: #86EFAC;
-    --pill-closed-bg:   rgba(255,255,255,0.06); --pill-closed-ink:   #97A0B8;
-    --pill-overdue-bg:  rgba(248,113,113,0.18); --pill-overdue-ink:  #FCA5A5;
-    --pill-info-bg:     rgba(34,211,238,0.18);  --pill-info-ink:     #67E8F9;
+    --pill-open-bg:     color-mix(in srgb, var(--portal-accent)      18%, transparent);
+    --pill-open-ink:    var(--portal-accent);
+    --pill-progress-bg: color-mix(in srgb, var(--portal-accent-2)    18%, transparent);
+    --pill-progress-ink:var(--portal-accent-2);
+    --pill-waiting-bg:  color-mix(in srgb, var(--portal-warn)        18%, transparent);
+    --pill-waiting-ink: var(--portal-warn);
+    --pill-resolved-bg: color-mix(in srgb, var(--portal-highlight)   18%, transparent);
+    --pill-resolved-ink:var(--portal-highlight);
+    --pill-closed-bg:   color-mix(in srgb, var(--portal-text-muted)  15%, transparent);
+    --pill-closed-ink:  var(--portal-text-muted);
+    --pill-overdue-bg:  color-mix(in srgb, var(--portal-err)         18%, transparent);
+    --pill-overdue-ink: var(--portal-err);
+    --pill-info-bg:     color-mix(in srgb, var(--portal-accent)      12%, transparent);
+    --pill-info-ink:    var(--portal-accent);
 }
 
 /* Attribute-selector overrides for HaloPSA's inline colours.
@@ -840,13 +843,17 @@ html body .portal .status-avatar.bitsmall::before {
    declaration is countered by our pastel token. Colour the text
    via the sibling `color:` token so contrast stays WCAG-safe. */
 
-/* OPEN / NEW — HaloPSA commonly paints rgb(66, 133, 244), rgb(0, 123, 255),
-   rgb(52, 131, 250), rgb(13, 110, 253), rgb(0, 102, 204) */
+/* OPEN / NEW — HaloPSA paints any of these blue tones for open tickets.
+   Expanded list includes rgb(60, 134, 247) which this portal emits
+   for "Assigned" state and rgb(43, 92, 230) which is our --portal-accent. */
 html body .portal .status-avatar[style*="rgb(66, 133, 244)"],
 html body .portal .status-avatar[style*="rgb(0, 123, 255)"],
 html body .portal .status-avatar[style*="rgb(52, 131, 250)"],
+html body .portal .status-avatar[style*="rgb(60, 134, 247)"],
 html body .portal .status-avatar[style*="rgb(13, 110, 253)"],
 html body .portal .status-avatar[style*="rgb(0, 102, 204)"],
+html body .portal .status-avatar[style*="rgb(43, 92, 230)"],
+html body .portal .status-avatar[style*="rgb(74, 116, 240)"],
 html body .portal .status-avatar.s-open {
     background-image: linear-gradient(var(--pill-open-bg), var(--pill-open-bg)) !important;
     background-color: var(--pill-open-bg) !important;
@@ -865,27 +872,38 @@ html body .portal .status-avatar.s-progress {
     color: var(--pill-progress-ink) !important;
 }
 
-/* WAITING / ON HOLD — rgb(255, 193, 7), rgb(255, 170, 0), rgb(255, 152, 0),
-   rgb(240, 173, 78), rgb(245, 158, 11) */
+/* WAITING / ON HOLD / AWAITING USER — amber + the light grey HaloPSA
+   uses for "Awaiting User" rgb(212, 212, 216). The grey maps to amber
+   (not neutral) because semantically it's a "hold pending something"
+   state, not a terminal closed state. */
 html body .portal .status-avatar[style*="rgb(255, 193, 7)"],
 html body .portal .status-avatar[style*="rgb(255, 170, 0)"],
 html body .portal .status-avatar[style*="rgb(255, 152, 0)"],
 html body .portal .status-avatar[style*="rgb(240, 173, 78)"],
 html body .portal .status-avatar[style*="rgb(245, 158, 11)"],
+html body .portal .status-avatar[style*="rgb(212, 212, 216)"],
+html body .portal .status-avatar[style*="rgb(194, 65, 12)"],
 html body .portal .status-avatar.s-waiting {
     background-image: linear-gradient(var(--pill-waiting-bg), var(--pill-waiting-bg)) !important;
     background-color: var(--pill-waiting-bg) !important;
     color: var(--pill-waiting-ink) !important;
 }
 
-/* RESOLVED / OK — rgb(40, 167, 69), rgb(34, 139, 34), rgb(0, 190, 0),
-   rgb(25, 135, 84), rgb(16, 185, 129) */
+/* RESOLVED / ACTIVE / OK — covers both ticket "Resolved" and asset
+   "Active". HaloPSA's native greens + `bitsmall` asset variants land
+   here. Note: `rgb(187, 52, 63)` appears red but HaloPSA tags it
+   to asset "Active" — we interpret "Active" as a positive live
+   state and render in emerald rather than copy their odd red. */
 html body .portal .status-avatar[style*="rgb(40, 167, 69)"],
 html body .portal .status-avatar[style*="rgb(34, 139, 34)"],
 html body .portal .status-avatar[style*="rgb(0, 190, 0)"],
 html body .portal .status-avatar[style*="rgb(25, 135, 84)"],
 html body .portal .status-avatar[style*="rgb(16, 185, 129)"],
-html body .portal .status-avatar.s-resolved {
+html body .portal .status-avatar[style*="rgb(21, 128, 61)"],
+html body .portal .status-avatar[style*="rgb(52, 211, 153)"],
+html body .portal .status-avatar[style*="rgb(187, 52, 63)"],
+html body .portal .status-avatar.s-resolved,
+html body .portal .status-avatar.bitsmall {
     background-image: linear-gradient(var(--pill-resolved-bg), var(--pill-resolved-bg)) !important;
     background-color: var(--pill-resolved-bg) !important;
     color: var(--pill-resolved-ink) !important;

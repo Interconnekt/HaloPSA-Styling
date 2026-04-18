@@ -1510,22 +1510,65 @@ html body .portal .Select__menu {
     overflow: hidden;
 }
 
-/* Pagination */
+/* Pagination — react-table ships `.-pagination` as a flex container
+   with three children (.-previous, .-center, .-next) each at `flex: 1`.
+   Default `.-btn` sits at `width: 100%` inside, so Previous / Next
+   stretched to fill a third of the row each — the bug the user
+   flagged as "alignment is wrong" (huge empty pills either side of
+   the page counter).
+   Fix: side wrappers content-sized; center fills the remainder and
+   is centred horizontally; buttons shrink to their label + padding. */
 html body .portal .-pagination {
-    padding: 14px 12px !important;
+    padding: 14px 18px !important;
+    display: flex !important;
+    flex-direction: row !important;
     align-items: center !important;
-    gap: 12px;
+    justify-content: space-between !important;
+    gap: 16px;
     border-top: 1px solid var(--portal-border) !important;
     box-shadow: none !important;
 }
+html body .portal .-pagination .-previous,
+html body .portal .-pagination .-next {
+    flex: 0 0 auto !important;
+    display: inline-flex !important;
+    align-items: center;
+    padding: 0 !important;
+    text-align: inherit !important;
+}
+html body .portal .-pagination .-center {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px;
+    flex-wrap: wrap;
+    text-align: center !important;
+}
+/* .-pageJump wraps the page-number input; .-totalPages sits after. */
+html body .portal .-pagination .-pageJump {
+    display: inline-flex;
+    align-items: center;
+    margin: 0 !important;
+}
+html body .portal .-pagination .-totalPages {
+    font-family: var(--ik-font-display) !important;
+    font-size: 13px !important;
+    color: var(--portal-text-secondary) !important;
+}
+
+/* Prev / Next / page-jump buttons — share ghost-family chrome with
+   the rest of the portal. Width shrinks to content (not 100% of the
+   flex parent). */
 html body .portal .-pagination .-btn,
 html body .portal button.-btn {
-    background-color: var(--portal-surface) !important;
-    color: var(--portal-text) !important;
+    background-color: transparent !important;
+    color: var(--portal-text-secondary) !important;
     border: 1px solid var(--portal-border) !important;
-    border-radius: var(--portal-radius-sm) !important;
+    border-radius: 999px !important;
+    width: auto !important;
     height: 36px !important;
-    padding: 0 20px !important;
+    padding: 0 22px !important;
     font-family: var(--ik-font-display) !important;
     font-weight: 500 !important;
     font-size: 13px !important;
@@ -1533,14 +1576,18 @@ html body .portal button.-btn {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    transition: all var(--ik-dur) var(--ik-ease);
+    transition: background-color var(--ik-dur) var(--ik-ease),
+                border-color var(--ik-dur) var(--ik-ease),
+                color var(--ik-dur) var(--ik-ease) !important;
 }
 html body .portal button.-btn:hover:not([disabled]) {
-    background-color: var(--portal-action) !important;
-    color: #fff !important;
-    border-color: var(--portal-action) !important;
+    background-color: var(--portal-accent-soft) !important;
+    color: var(--portal-accent) !important;
+    border-color: var(--portal-accent) !important;
 }
 html body .portal button.-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+
+/* Page-number input — centred pill matching form-field chrome. */
 html body .portal .-pagination input {
     height: 32px !important;
     border-radius: var(--portal-radius-xs) !important;
@@ -1548,8 +1595,10 @@ html body .portal .-pagination input {
     background: var(--portal-surface) !important;
     text-align: center;
     padding: 0 8px;
-    width: 50px;
+    width: 56px;
     font-family: var(--ik-font-mono) !important;
+    font-size: 12.5px !important;
+    color: var(--portal-text) !important;
 }
 
 

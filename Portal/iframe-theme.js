@@ -260,10 +260,32 @@
         return STATUS_MAP[k];
     });
 
+    /* Status labels sorted longest-first so "awaiting user" beats
+       "user" when we scan the chip text for a known status. Rebuilt
+       once at module load. */
+    var STATUS_KEYS_LONGEST_FIRST = Object.keys(STATUS_MAP).sort(function (a, b) {
+        return b.length - a.length;
+    });
+
+    function matchStatusKey(text) {
+        // Fast path: exact equality (the common case in the table chip).
+        if (STATUS_MAP.hasOwnProperty(text)) return text;
+        // Filter sidebar / kanban headers sometimes suffix a count or
+        // icon-text ("In Progress (5)", "On Hold  ›"). Fall back to a
+        // substring scan against longest-key-first so compound labels
+        // beat their substrings.
+        for (var i = 0; i < STATUS_KEYS_LONGEST_FIRST.length; i++) {
+            var k = STATUS_KEYS_LONGEST_FIRST[i];
+            if (text.indexOf(k) !== -1) return k;
+        }
+        return null;
+    }
+
     function stampChip(el) {
-        var key = (el.textContent || '').trim().toLowerCase();
-        if (!key) return;
-        var cls = STATUS_MAP[key];
+        var text = (el.textContent || '').trim().toLowerCase();
+        if (!text) return;
+        var key = matchStatusKey(text);
+        var cls = key ? STATUS_MAP[key] : null;
         // If the chip already has the correct class and marker, skip.
         if (cls && el.classList.contains(cls) && el.getAttribute(MARKER) === key) return;
         // Remove any other managed class before adding the new one
@@ -274,7 +296,7 @@
             }
         }
         if (cls) el.classList.add(cls);
-        el.setAttribute(MARKER, key);
+        el.setAttribute(MARKER, key || '');
     }
 
     function sweep(root) {
@@ -340,19 +362,40 @@
     'use strict';
 
     var PRIORITY_MAP = {
-        'low': 'p-low',
-        'medium': 'p-medium',
-        'normal': 'p-medium',
-        'high': 'p-high',
         'critical': 'p-critical',
-        'urgent': 'p-critical'
+        'urgent':   'p-critical',
+        'medium':   'p-medium',
+        'normal':   'p-medium',
+        'high':     'p-high',
+        'low':      'p-low'
     };
 
     var MARKER = 'data-priority-stamped';
     var MANAGED = ['p-low', 'p-medium', 'p-high', 'p-critical'];
 
+    /* Longest-first scan order so "critical" beats "critic" (if any
+       tenant ever shipped a shorter superset) and no priority word is
+       a substring of another in this map. */
+    var PRIORITY_KEYS_LONGEST_FIRST = Object.keys(PRIORITY_MAP).sort(function (a, b) {
+        return b.length - a.length;
+    });
+
+    function matchPriorityKey(text) {
+        // Fast path — exact match on the label (table cell).
+        if (PRIORITY_MAP.hasOwnProperty(text)) return text;
+        // Filter sidebar / saved-view chips sometimes suffix a ticket
+        // count ("Low (0)", "Critical  3") or wrap the label in extra
+        // spans. Fall back to substring match against the priority
+        // vocabulary — longest key wins first.
+        for (var i = 0; i < PRIORITY_KEYS_LONGEST_FIRST.length; i++) {
+            var k = PRIORITY_KEYS_LONGEST_FIRST[i];
+            if (text.indexOf(k) !== -1) return k;
+        }
+        return null;
+    }
+
     function stampWrapper(wrapper, key) {
-        var cls = PRIORITY_MAP[key];
+        var cls = key ? PRIORITY_MAP[key] : null;
         if (cls && wrapper.classList.contains(cls) && wrapper.getAttribute(MARKER) === key) return;
         for (var i = 0; i < MANAGED.length; i++) {
             if (MANAGED[i] !== cls && wrapper.classList.contains(MANAGED[i])) {
@@ -378,8 +421,9 @@
     function stampBySwatch(swatch) {
         var parent = swatch.parentElement;
         if (!parent) return;
-        var key = readSiblingText(parent, swatch);
-        if (!key) return;
+        var text = readSiblingText(parent, swatch);
+        if (!text) return;
+        var key = matchPriorityKey(text);
         stampWrapper(parent, key);
     }
 

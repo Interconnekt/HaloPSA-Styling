@@ -1101,8 +1101,26 @@ html body .portal .status-avatar.fortile::before {
 :root {
     /* New — signal yellow */
     --pill-new-bg:               #FFF7C2; --pill-new-ink:               #6B5A00;
-    /* In Progress / Resolved / Triage Handoff — deep teal */
-    --pill-progress-bg:          #CCEAEB; --pill-progress-ink:          #08474A;
+    /* In Progress — emerald green. Spec originally seeded this from
+       the same teal as Triage Handoff, but for end-user-facing surfaces
+       we lift it to a brighter active-work green. Emerald (not lime) so
+       it's visually distinct from `--pill-approved` which sits at lime
+       #E2F3CC/#2E5200 — the two greens need to read differently since
+       "in progress" and "approved" are semantically orthogonal. */
+    --pill-progress-bg:          #D1FAE5; --pill-progress-ink:          #065F46;
+    /* Completed / Resolved — soft neutral grey. Spec originally seeded
+       this from the In Progress teal, but the user wants resolved
+       tickets to read as "quietly done" rather than "still active", so
+       we move it to a muted grey LIGHTER than `--pill-closed` (which is
+       the darker terminal slate). Sits between closed and the system
+       neutrals in visual weight. */
+    --pill-resolved-bg:          #F1F3F5; --pill-resolved-ink:          #6C757D;
+    /* Agent - Triage Handoff — keeps the deep teal that In Progress
+       used to share. The workflow meaning (ticket sitting in the triage
+       queue waiting for engineering handoff) is distinct enough from
+       generic In Progress that the teal differentiation helps an agent
+       scan the queue. */
+    --pill-triage-handoff-bg:    #CCEAEB; --pill-triage-handoff-ink:    #08474A;
     /* Action Required — warm peach */
     --pill-action-required-bg:   #FFE3D4; --pill-action-required-ink:   #7A3A1C;
     /* Awaiting User — pink (high-visibility cue: this status flags
@@ -1150,7 +1168,12 @@ html body .portal .status-avatar.fortile::before {
 
 .theme-dark {
     --pill-new-bg:               rgba(252,220,0,0.18);    --pill-new-ink:               #F3D565;
-    --pill-progress-bg:          rgba(20,184,166,0.20);   --pill-progress-ink:          #5EEAD4;
+    /* In Progress — emerald (green) in dark mode */
+    --pill-progress-bg:          rgba(16,185,129,0.20);   --pill-progress-ink:          #6EE7B7;
+    /* Resolved — soft translucent grey */
+    --pill-resolved-bg:          rgba(255,255,255,0.06);  --pill-resolved-ink:          #CED4DA;
+    /* Triage Handoff — retains teal */
+    --pill-triage-handoff-bg:    rgba(20,184,166,0.20);   --pill-triage-handoff-ink:    #5EEAD4;
     --pill-action-required-bg:   rgba(255,174,136,0.20);  --pill-action-required-ink:   #FFC9AE;
     --pill-awaiting-user-bg:     rgba(244,114,182,0.20);  --pill-awaiting-user-ink:     #F9A8D4;
     --pill-awaiting-supplier-bg: rgba(113,113,122,0.26);  --pill-awaiting-supplier-ink: #D4D4D8;
@@ -1182,12 +1205,20 @@ html body .portal .status-avatar.s-new {
     background-color: var(--pill-new-bg) !important;
     color: var(--pill-new-ink) !important;
 }
-html body .portal .status-avatar.s-progress,
-html body .portal .status-avatar.s-resolved,
-html body .portal .status-avatar.s-triage-handoff {
+html body .portal .status-avatar.s-progress {
     background-image: linear-gradient(var(--pill-progress-bg), var(--pill-progress-bg)) !important;
     background-color: var(--pill-progress-bg) !important;
     color: var(--pill-progress-ink) !important;
+}
+html body .portal .status-avatar.s-resolved {
+    background-image: linear-gradient(var(--pill-resolved-bg), var(--pill-resolved-bg)) !important;
+    background-color: var(--pill-resolved-bg) !important;
+    color: var(--pill-resolved-ink) !important;
+}
+html body .portal .status-avatar.s-triage-handoff {
+    background-image: linear-gradient(var(--pill-triage-handoff-bg), var(--pill-triage-handoff-bg)) !important;
+    background-color: var(--pill-triage-handoff-bg) !important;
+    color: var(--pill-triage-handoff-ink) !important;
 }
 html body .portal .status-avatar.s-action-required {
     background-image: linear-gradient(var(--pill-action-required-bg), var(--pill-action-required-bg)) !important;
@@ -1313,7 +1344,7 @@ html body .portal .status-avatar[style*="rgb(74, 116, 240)"] {
     background-color: var(--pill-assigned-bg) !important;
     color: var(--pill-assigned-ink) !important;
 }
-/* HaloPSA purple (In Progress) → teal progress */
+/* HaloPSA purple (In Progress) → emerald progress green */
 html body .portal .status-avatar[style*="rgb(111, 66, 193)"],
 html body .portal .status-avatar[style*="rgb(102, 16, 242)"],
 html body .portal .status-avatar[style*="rgb(153, 51, 255)"],
@@ -1334,8 +1365,13 @@ html body .portal .status-avatar[style*="rgb(194, 65, 12)"] {
     background-color: var(--pill-awaiting-user-bg) !important;
     color: var(--pill-awaiting-user-ink) !important;
 }
-/* HaloPSA green (Resolved / Active asset) → progress teal
-   (per spec: Completed / Resolved share In Progress seed) */
+/* HaloPSA green (active asset pills, any unmapped green emission) →
+   emerald progress green. Note: "Resolved" tickets no longer land
+   here — JS class stamping applies `.s-resolved` (grey) via textContent
+   before this rgb fallback can match, so resolved rows get grey while
+   active assets and generic green emissions still get the progress
+   green. `.status-avatar.bitsmall` is HaloPSA's active-asset pill and
+   remains on progress-green as a semantic "this asset is live" cue. */
 html body .portal .status-avatar[style*="rgb(40, 167, 69)"],
 html body .portal .status-avatar[style*="rgb(34, 139, 34)"],
 html body .portal .status-avatar[style*="rgb(0, 190, 0)"],

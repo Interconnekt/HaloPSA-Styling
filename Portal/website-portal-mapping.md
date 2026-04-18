@@ -202,7 +202,9 @@ Locked spec — see §10 below.
 | Status | Seed | Light bg / ink | Dark bg / ink | Class |
 |---|---|---|---|---|
 | New | `#FCDC00` | `#FFF7C2` / `#6B5A00` | `rgba(252,220,0,0.18)` / `#F3D565` | `.s-new` |
-| In Progress / Resolved / Triage Handoff | `#0C797D` | `#CCEAEB` / `#08474A` | `rgba(20,184,166,0.20)` / `#5EEAD4` | `.s-progress`, `.s-resolved`, `.s-triage-handoff` |
+| In Progress | `#10B981` (emerald; overrides the spec's `#0C797D` teal for end-user clarity) | `#D1FAE5` / `#065F46` | `rgba(16,185,129,0.20)` / `#6EE7B7` | `.s-progress` |
+| Completed / Resolved | neutral grey (overrides the spec's `#0C797D` teal — resolved reads as "quietly done", not "still active") | `#F1F3F5` / `#6C757D` | `rgba(255,255,255,0.06)` / `#CED4DA` | `.s-resolved` |
+| Agent - Triage Handoff | `#0C797D` (retains the original spec teal, now distinct from In Progress) | `#CCEAEB` / `#08474A` | `rgba(20,184,166,0.20)` / `#5EEAD4` | `.s-triage-handoff` |
 | Action Required | `#FFAE88` | `#FFE3D4` / `#7A3A1C` | `rgba(255,174,136,0.20)` / `#FFC9AE` | `.s-action-required` |
 | Awaiting User | `#D4D4D8` | `#ECECEE` / `#404046` | `rgba(255,255,255,0.06)` / `#A1A1AA` | `.s-awaiting-user` |
 | Awaiting Supplier | `#52525B` | `#E4E4E7` / `#2E2E35` | `rgba(113,113,122,0.26)` / `#D4D4D8` | `.s-awaiting-supplier` |

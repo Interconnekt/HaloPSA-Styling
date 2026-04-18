@@ -1,0 +1,39 @@
+<!--
+  Tile template — NEW (Interconnekt 2026 refresh).
+
+  Paste into: Configuration → Tickets → Field Lists → Tile Template
+
+  Semantic BEM structure. No inline styles — all visual work lives in
+  Portal/self-service-portal-design.css, keyed on the .ticket-tile
+  classes and data-* attributes below.
+
+  data-* attributes:
+    data-priority — drives the priority accent bar/colour
+    data-status   — drives the status lozenge tint
+    data-type     — drives the leading icon (CSS ::before by type)
+
+  Missing placeholders (not in the tile/kanban dialect):
+    $tickettype_icon — no icon variable. Leave the placeholder; CSS
+      injects a per-type icon via `.ticket-tile[data-type="..."]::before`.
+      If the placeholder renders as literal text, delete it from the
+      template and lean on the CSS ::before entirely.
+-->
+<div class="ticket-tile" data-priority="$priority_name" data-status="$status_name" data-type="$tickettype_id">
+  <div class="ticket-tile__header">
+    <span class="ticket-tile__id">#$id</span>
+    <span class="ticket-tile__type">$tickettype_icon $tickettype_id</span>
+    <span class="ticket-tile__status">$status_name</span>
+  </div>
+  <div class="ticket-tile__body">
+    <div class="ticket-tile__summary">$summary</div>
+    <div class="ticket-tile__meta">
+      <span class="ticket-tile__user">$user_name</span>
+      <span class="ticket-tile__client">$client_name</span>
+    </div>
+  </div>
+  <div class="ticket-tile__footer">
+    <span class="ticket-tile__priority">$priority_name</span>
+    <span class="ticket-tile__sla">$sla_bar</span>
+    <span class="ticket-tile__updated">$lastactiondate</span>
+  </div>
+</div>

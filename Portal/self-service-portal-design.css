@@ -852,6 +852,132 @@ html body .portal .col-xl-6 > h2 {
     color: var(--portal-heading) !important;
 }
 
+/* ─────────────────────────────────────────────────────────
+   Ticket Tile view — `.main-tile-item` cards
+   ─────────────────────────────────────────────────────────
+   The /tickets Tile view (3-dot menu → Tile View) renders each
+   ticket as a `.main-tile-item.table-tr` wrapper containing the
+   HaloPSA tile template — currently a legacy <table> layout with
+   inline font-size/colour spans and a `.status-avatar.fortile.small`
+   status pill. HaloPSA ships the tile at bg #404040 with no border
+   or radius, so out-of-the-box tiles read as HaloPSA-grey strips
+   floating on the darker portal bg. Reskin to the same card family
+   as KB index / Recent Activity / Kanban — surface + border + radius
+   + hover lift, tighten the inline cell typography so the three
+   table rows read as a clean card hierarchy. */
+html body .portal .main-tile-item {
+    background: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-md) !important;
+    margin: 8px 0 !important;
+    padding: 14px 18px !important;
+    color: var(--portal-text) !important;
+    transition: border-color var(--ik-dur) var(--ik-ease),
+                transform var(--ik-dur) var(--ik-ease),
+                box-shadow var(--ik-dur) var(--ik-ease);
+    cursor: pointer;
+}
+html body .portal .main-tile-item:hover {
+    border-color: var(--portal-accent) !important;
+    transform: translateY(-1px);
+    box-shadow: var(--portal-shadow-sm) !important;
+}
+
+/* On-hold state — HaloPSA ships `.main-tile-item.hold` with a
+   native rule that paints EVERY descendant (user name, id, type,
+   date, summary, status pill) in a bright blue (rgb(0, 165, 255)),
+   yielding an all-blue tile that's both harder to read and visually
+   screaming "this is urgent" when really the ticket is just paused.
+   Restore our portal text tokens so only the status pill carries
+   colour; the `.hold` class itself can still signal state via a
+   subtle left accent bar if we want it visible. */
+html body .portal .main-tile-item.hold,
+html body .portal .main-tile-item.hold td,
+html body .portal .main-tile-item.hold span {
+    color: var(--portal-text) !important;
+}
+html body .portal .main-tile-item.hold span[style*="rgb(119, 119, 119)"],
+html body .portal .main-tile-item span[style*="rgb(119, 119, 119)"] {
+    color: var(--portal-text-muted) !important;
+}
+
+/* Tile template <table> — strip HaloPSA's default table chrome
+   and let the rows sit directly inside the card padding. Legacy
+   template uses table-layout:auto with inline `height: 77px` on
+   the table and `height: 30px` per row; we override to auto so
+   the rows size to content. */
+html body .portal .main-tile-item table {
+    width: 100% !important;
+    height: auto !important;
+    border-collapse: collapse;
+    border-spacing: 0;
+    background: transparent !important;
+}
+html body .portal .main-tile-item tr {
+    height: auto !important;
+    background: transparent !important;
+}
+html body .portal .main-tile-item td {
+    padding: 2px 0 !important;
+    font-family: var(--ik-font-display) !important;
+    color: inherit;
+    line-height: 1.5;
+    vertical-align: middle;
+}
+
+/* Row 1 typography — user name + ticket ID. HaloPSA's template
+   sets these to 14px inline; we keep the size but bump weight to
+   600 so the identity line anchors the card. */
+html body .portal .main-tile-item tr:first-child td span {
+    font-size: 13.5px !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.005em;
+    color: var(--portal-heading) !important;
+}
+
+/* Secondary rows (type, date, summary, priority, status pill) —
+   normalise to 12px. The inline grey spans already get remapped
+   to `--portal-text-muted` via the `rgb(119, 119, 119)` selector
+   above; this rule handles the un-tinted spans (type, priority)
+   and enforces our font. */
+html body .portal .main-tile-item tr:not(:first-child) td span {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.002em;
+}
+
+/* Status pill inside a tile — HaloPSA stamps
+   `.status-avatar.fortile.small` with inline bg + `max-width: 90px`
+   which truncates longer labels like "COMPLETED / RESOLVED" into
+   "COMPLETED / RESOL…". Drop the max-width so the pill grows to fit
+   its label, normalise typography into the same Montserrat pill
+   family used elsewhere. The bg colour comes from the existing
+   status-pill mapping system (title-based JS stamper + rgb()
+   fallbacks), so no per-status colour rules needed here. */
+html body .portal .main-tile-item .status-avatar.fortile,
+html body .portal .main-tile-item .status-avatar.fortile.small {
+    max-width: none !important;
+    width: auto !important;
+    padding: 4px 12px !important;
+    font-family: var(--ik-font-display) !important;
+    font-size: 10.5px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.06em !important;
+    line-height: 1.2 !important;
+    border-radius: 999px !important;
+    text-transform: uppercase !important;
+    display: inline-block !important;
+}
+
+/* The tile template wraps the status pill in a `<div style="margin-right:20px">`
+   that forces a trailing gutter on the right cell. Drop the inline
+   margin so the pill sits flush against the cell's right edge where
+   the user expects it. */
+html body .portal .main-tile-item td div[style*="margin-right:20px"],
+html body .portal .main-tile-item td div[style*="margin-right: 20px"] {
+    margin-right: 0 !important;
+}
+
 
 /* ─────────────────────────────────────────────────────────
    8 · Cards, panels, generic containers

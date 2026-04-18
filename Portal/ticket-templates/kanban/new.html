@@ -1,0 +1,39 @@
+<!--
+  Kanban card template — NEW (Interconnekt 2026 refresh).
+
+  Paste into: Configuration → Tickets → Field Lists → Kanban Template
+
+  Semantic BEM structure. No inline styles — all visual work lives in
+  Portal/self-service-portal-design.css, keyed on the .kanban-card
+  classes and data-* attributes below.
+
+  data-* attributes:
+    data-priority — drives the priority accent top bar/colour
+    data-status   — drives the status lozenge tint
+    data-type     — drives the leading icon (CSS ::before by type)
+
+  Missing placeholders (not in the tile/kanban dialect):
+    $tickettype_icon — no icon variable. CSS injects per-type via
+      `.kanban-card[data-type="..."]::before`.
+    $agent_image — no agent-avatar variable on the card. The <img> will
+      fail to resolve; either delete the <img> line and drive avatars
+      from CSS (e.g. initials generated from $agent_name) or swap to
+      a HaloPSA field-list column if one becomes available.
+-->
+<div class="kanban-card" data-priority="$priority_name" data-status="$status_name" data-type="$tickettype_id">
+  <div class="kanban-card__header">
+    <span class="kanban-card__id">#$id</span>
+    <span class="kanban-card__type">$tickettype_icon</span>
+    <span class="kanban-card__status">$status_name</span>
+  </div>
+  <div class="kanban-card__summary">$summary</div>
+  <div class="kanban-card__details">$details</div>
+  <div class="kanban-card__sla">$sla_bar</div>
+  <div class="kanban-card__footer">
+    <span class="kanban-card__agent">
+      <img class="kanban-card__avatar" src="$agent_image" alt="" />
+      <span class="kanban-card__agent-name">$agent_name</span>
+    </span>
+    <span class="kanban-card__updated">$lastactiondate</span>
+  </div>
+</div>

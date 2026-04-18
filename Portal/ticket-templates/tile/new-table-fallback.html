@@ -1,0 +1,33 @@
+<!--
+  Tile template — NEW, TABLE FALLBACK variant.
+
+  Only use this if HaloPSA's tile template editor strips `class`
+  attributes off <div> elements when saving new.html. Same BEM hooks,
+  same data-* attributes, same CSS targets — just hosted on a
+  table skeleton that matches the legacy WYSIWYG output format.
+
+  If this is the version that survives a round-trip through the
+  editor, point self-service-portal-design.css at it and delete
+  new.html. Otherwise prefer new.html — semantic, easier to restyle.
+-->
+<table class="ticket-tile" data-priority="$priority_name" data-status="$status_name" data-type="$tickettype_id" style="width:100%;">
+	<tbody>
+		<tr class="ticket-tile__header">
+			<td class="ticket-tile__id">#$id</td>
+			<td class="ticket-tile__type">$tickettype_icon $tickettype_id</td>
+			<td class="ticket-tile__status">$status_icon $status_name</td>
+		</tr>
+		<tr class="ticket-tile__body">
+			<td class="ticket-tile__summary" colspan="3">$summary</td>
+		</tr>
+		<tr class="ticket-tile__meta">
+			<td class="ticket-tile__user">$user_name</td>
+			<td class="ticket-tile__client">$client_name</td>
+			<td class="ticket-tile__updated">$lastactiondate</td>
+		</tr>
+		<tr class="ticket-tile__footer">
+			<td class="ticket-tile__priority">$priority_name</td>
+			<td class="ticket-tile__sla" colspan="2">$sla_bar</td>
+		</tr>
+	</tbody>
+</table>

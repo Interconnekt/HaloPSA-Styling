@@ -1,0 +1,30 @@
+<!--
+  Kanban card template — NEW, TABLE FALLBACK variant.
+
+  Only use this if HaloPSA's kanban template editor strips `class`
+  attributes off <div> elements when saving new.html. Same BEM hooks,
+  same data-* attributes, same CSS targets — just hosted on a
+  table skeleton that matches the legacy WYSIWYG output format.
+-->
+<table class="kanban-card" data-priority="$priority_name" data-status="$status_name" data-type="$tickettype_id" style="width:100%;">
+	<tbody>
+		<tr class="kanban-card__header">
+			<td class="kanban-card__id">#$id</td>
+			<td class="kanban-card__type">$tickettype_icon</td>
+			<td class="kanban-card__status">$status_icon $status_name</td>
+		</tr>
+		<tr class="kanban-card__body">
+			<td class="kanban-card__summary" colspan="3">$summary</td>
+		</tr>
+		<tr class="kanban-card__details-row">
+			<td class="kanban-card__details" colspan="3">$details</td>
+		</tr>
+		<tr class="kanban-card__sla-row">
+			<td class="kanban-card__sla" colspan="3">$sla_bar</td>
+		</tr>
+		<tr class="kanban-card__footer">
+			<td class="kanban-card__agent" colspan="2">$agent_name</td>
+			<td class="kanban-card__updated">$lastactiondate</td>
+		</tr>
+	</tbody>
+</table>

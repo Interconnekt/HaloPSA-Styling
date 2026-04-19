@@ -693,13 +693,15 @@ html body .portal .searchscreen .search-title {
 }
 
 /* Search box — not a pill anymore; editorial rounded rect.
-   88px height: 60 → 72 → 88 progression. At the clamped display-type
-   title size (2rem – 3rem) a 72px box still read as undersized next
-   to "How can we help you today?"; 88px lands the search as the hero's
-   primary affordance without tipping into hero-form-fill territory.
+   64px height: 8px-grid aligned and ~24px taller than the 40px list-
+   search baseline, so it reads as the hero's primary affordance while
+   staying below "marketing landing-page email capture" scale. The prior
+   88px was oversized for a support-portal hero — under a 2-3rem H1 the
+   input dominated instead of supporting. 64px matches common help-centre
+   hero benchmarks (GitHub Docs, Shopify Help, Algolia DocSearch hero).
    `:not(.searchscreen-full)` scopes this ONLY to the home hero — the
-   search RESULTS page reuses `.searchbox` too, and an 88px pill there
-   would compete with the results list below. */
+   search RESULTS page reuses `.searchbox` too, and a hero-scale pill
+   there would compete with the results list below. */
 html body .portal .searchscreen:not(.searchscreen-full) .searchbox,
 html body .portal .theme-dark .searchscreen:not(.searchscreen-full) .searchbox {
     background: var(--portal-surface) !important;
@@ -711,7 +713,7 @@ html body .portal .theme-dark .searchscreen:not(.searchscreen-full) .searchbox {
        page parity with `.Select__control`. Without `!important` here,
        that lower rule wins on cascade order despite this rule's higher
        specificity, and the hero collapses to 40px. */
-    height: 88px !important;
+    height: 64px !important;
     overflow: hidden;
     transition: border-color var(--ik-dur) var(--ik-ease),
                 box-shadow var(--ik-dur) var(--ik-ease);

@@ -1286,10 +1286,15 @@ html body .portal .solidbutton.fabtn.noprint {
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
-    /* Vertical margin matches `.backbtn` so the buttons land on the same
-       baseline whether they sit in `.buttons-container`, the article header
-       row, or the ticket-view `.history-options-portal`. Horizontal gap
-       handled by the `.buttons-container` flex `gap` rule below. */
+    /* Vertical margin matches `.backbtn` baseline on KB article header
+       rows where these chrome buttons sit on the same line as a back
+       button. On the ticket-view `.history-options-portal` toolbar
+       there is no `.backbtn` — only primary pills (Add Note / Time
+       Entry) with zero top margin — so the 14px here pushed these
+       icon buttons 14px below their neighbours and 14px below the top
+       of the activity card, which is what Joel flagged. The scoped
+       override immediately below pulls them back to zero in that
+       context; everywhere else, the 14px still earns its keep. */
     margin: 14px 0 0 0 !important;
     padding: 0 !important;
     font-family: var(--ik-font-display) !important;
@@ -1307,6 +1312,18 @@ html body .portal .solidbutton.fabtn.noprint {
 html body .portal .solidbutton.fabtn.notext,
 html body .portal .solidbutton.fabtn.noprint {
     width: 32px !important;
+}
+
+/* Ticket-view history toolbar — drop the 14px top margin so the
+   collapse / jump-down icon buttons sit flush with the Add Note /
+   Time Entry pills on the same row, and therefore line up with the
+   top edge of the activity card below. The 14px was baseline parity
+   with `.backbtn` on KB pages; no `.backbtn` exists here, so the
+   offset was landing purely as visual drift. */
+html body .portal .history-options-portal .solidbutton.fabtn,
+html body .portal .history-options-portal .solidbutton.fabtn.notext,
+html body .portal .history-options-portal .solidbutton.fabtn.noprint {
+    margin-top: 0 !important;
 }
 
 /* Text-bearing fabtns (Generate PDF, Print, Download with label) get an
@@ -3371,8 +3388,18 @@ html body .portal .attachment-container.edit:hover {
      process → accent blue
      wait    → muted text */
 
-/* Icon base — size + shape, inherited by all three states. */
+/* Icon base — size + shape, inherited by all three states.
+
+   `position: relative; z-index: 2` is load-bearing: rc-steps renders
+   `.rc-steps-item-tail` as `position: absolute; right: 0; width:
+   100%`, so the connector line spans the FULL width of the step item
+   including the space under the icon. Without an explicit stacking
+   order the line was painting on top of the right half of the number
+   glyph. Raising the icon above the tail keeps the circle — and its
+   digit — the top layer regardless of DOM order. */
 html body .portal .rc-steps-item-icon {
+    position: relative !important;
+    z-index: 2 !important;
     width: 40px !important;
     height: 40px !important;
     line-height: 38px !important;   /* visual centre for 1px border */

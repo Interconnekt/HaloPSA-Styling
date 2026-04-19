@@ -433,7 +433,21 @@ html body .portal .details-form .details-group-header.title {
     color: var(--portal-heading) !important;
     line-height: 1.1 !important;
     margin-top: 2px;
-    margin-bottom: 10px;
+    margin-bottom: 4px;
+}
+
+/* Page-title block margin — HaloPSA defaults `.page-title` to
+   ~30px top margin, which adds dead space between the back-arrow
+   chrome and the H1 (visible on KB index, ticket list, etc).
+   12px keeps a clear separation from the back button without the
+   "stranded title" feel.
+
+   The `.kbdetails .page-title` rule later in the file zeroes this
+   for the inner H1+meta block inside a reading-view article — that
+   rule is more specific and wins. */
+html body .portal .page-title {
+    margin-top: 12px !important;
+    margin-bottom: 4px !important;
 }
 
 /* Italic-serif underlay for emphasised word(s) in page titles.
@@ -692,7 +706,12 @@ html body .portal .theme-dark .searchscreen:not(.searchscreen-full) .searchbox {
     border: 1px solid var(--portal-border) !important;
     border-radius: 16px !important;
     box-shadow: var(--portal-shadow) !important;
-    height: 88px;
+    /* `!important` is load-bearing: the generic `.portal .searchbox`
+       rule lower in the file pins `height: 40px !important` for list-
+       page parity with `.Select__control`. Without `!important` here,
+       that lower rule wins on cascade order despite this rule's higher
+       specificity, and the hero collapses to 40px. */
+    height: 88px !important;
     overflow: hidden;
     transition: border-color var(--ik-dur) var(--ik-ease),
                 box-shadow var(--ik-dur) var(--ik-ease);
@@ -1428,6 +1447,19 @@ html body .portal .status-avatar.fortile {
     line-height: 1.5;
     gap: 0;   /* no leading dot */
 }
+/* Status-cell wrapper indent — the tickets-list `.rt-td` for the
+   Status column wraps the pill in an unstyled `<div>` that ships
+   with `padding-left: 3px` from HaloPSA defaults. That 3px pushes
+   the pill's left edge 3px past where the column header text
+   starts (visible as a misalignment vs the Priority column, which
+   has no equivalent wrapper). Zero the wrapper's left padding so
+   the pill aligns with its column header. `:has()` scopes the rule
+   to cells that actually contain a status pill — other cells with
+   wrappers (date columns, etc) keep their default chrome. */
+html body .portal .rt-td > div:has(> .status-avatar) {
+    padding-left: 0 !important;
+}
+
 /* Explicitly kill the ::before dot in case an older deploy still
    has cached rules applying it — previous iteration rendered a
    5px circle before the label, user wants it gone. */
@@ -3515,7 +3547,20 @@ html body .portal .rc-steps .rc-steps-item-container {
 html body .portal .rc-steps .rc-steps-item-icon {
     margin: 0 auto !important;
     display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     float: none !important;
+}
+/* Inner digit/check span — flex parent ignores the 38px line-height we
+   set on `.rc-steps-item-icon`, so the digit was pinned to the top of
+   the circle (visible in tickets 176791 / 176793). Resetting the span's
+   line-height to 1 keeps the glyph compact so flex centring lands it
+   on the true vertical midline instead of inheriting a 38px line box. */
+html body .portal .rc-steps .rc-steps-item-icon .rc-steps-icon {
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 html body .portal .rc-steps .rc-steps-item-content {
     display: block !important;
@@ -3628,14 +3673,15 @@ html body .portal .kbdetails {
        tables + screenshots that need room. Still bounded for
        comfortable long-form reading on ultrawide displays. */
     max-width: 1100px;
-    /* Tightened from 16/40 + 28/36/44 after Joel's "too much white
-       space" pass — recovers ~40px of scroll real estate between
-       the card's outer bounds and its first/last content, and
-       another ~16px around. Horizontal padding stays comfortable
-       (32px) because KB articles often carry wide code blocks and
-       screenshots that need breathing room at the measure. */
+    /* Second tightening pass after Joel's KB-page red-box review —
+       the inner `.article.nohover` wrapper inherits 15px padding
+       from the `.portal .article` rule (KB index list styling),
+       and that compounds with kbdetails's own padding-top to push
+       the H1 ~31px below the card edge. We zero the inner wrapper's
+       padding (rule below) and trim kbdetails's own top padding to
+       4px so the title sits close to the card edge. */
     margin: 8px auto 24px;
-    padding: 16px 32px 28px;
+    padding: 4px 32px 20px;
     line-height: 1.7;
     color: var(--portal-text);
     font-size: 16px;
@@ -3649,6 +3695,17 @@ html body .portal .kbdetails {
     box-shadow: none !important;
 }
 
+/* Inner article wrapper — `.kbdetails > .article.nohover` inherits
+   15px padding from the KB-index `.portal .article` rule. In the
+   reading view that padding is dead weight: kbdetails already
+   provides the card padding. Zero it so the title + meta + body
+   chain starts flush with the kbdetails edge instead of inset by
+   another 15px on every side. */
+html body .portal .kbdetails > .article {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
 /* Article H1 + metadata stack — the tightest-wound block in the
    reading view, because three separately-spaced elements (h1
    margins + padding-bottom + border + kbmeta margin-top) used to
@@ -3660,10 +3717,30 @@ html body .portal .kbdetails h1 {
     font-weight: 300 !important;
     letter-spacing: -0.02em !important;
     line-height: 1.1;
-    margin: 4px 0 10px !important;
+    margin: 0 0 4px !important;
     color: var(--portal-heading) !important;
-    padding-bottom: 12px;
+    padding-bottom: 6px;
     border-bottom: 1px solid var(--portal-border-soft);
+}
+
+/* Inner page-title block (H1 + CREATED-BY meta line) — HaloPSA wraps
+   these two in a `.page-title` div whose `.page-subtitle` child
+   carries `margin: 20px 0 10px` from the global eyebrow rule. Inside
+   the reading view that 30px of vertical air is excessive against
+   the rest of the now-tighter spacing chain — collapse to 8/4. */
+html body .portal .kbdetails .page-title {
+    margin: 0 !important;
+}
+html body .portal .kbdetails .page-title .page-subtitle {
+    margin: 8px 0 4px !important;
+}
+
+/* Body content block (everything below the H1+meta header) — sits at
+   `.kbdetails > .article > .content` with a 20px top margin that
+   was visible as the "gap before Description" the user flagged.
+   8px lands the Description heading ~half a line below the meta. */
+html body .portal .kbdetails > .article > .content {
+    margin-top: 8px !important;
 }
 html body .portal .kbdetails h1 em {
     font-family: var(--ik-font-serif) !important;
@@ -4457,9 +4534,11 @@ html body .portal .article > div:first-child:has(> .articleRight) {
 
 /* Tree menu (left sidebar on KB pages) — slim down node size and
    align with our display font. HaloPSA ships these at Poppins 16px.
-   Padding 6 → 5 and margin 2 → 1 after the KB spacing pass — long
-   tree lists compound the margins so shaving a couple of px per node
-   surfaces several more rows above the fold. */
+   Padding 5 → 3 and margin 1 → 0 after Joel's red-box spacing pass
+   — long tree lists compound the margins so shaving 3-4px per node
+   surfaces several more rows above the fold. The hover wash still
+   reads cleanly at 3px because the radius keeps the active pill
+   visually contained. */
 html body .portal .tree-menu .tree-node,
 html body .portal .kblist .tree-node,
 html body .portal .tree-menu .sidebar,
@@ -4467,8 +4546,8 @@ html body .portal .kblist .sidebar {
     font-family: var(--ik-font-display) !important;
     font-size: 13.5px !important;
     border-radius: var(--portal-radius-xs) !important;
-    padding: 5px 10px;
-    margin: 1px 0;
+    padding: 3px 10px;
+    margin: 0;
     transition: background-color var(--ik-dur) var(--ik-ease),
                 color var(--ik-dur) var(--ik-ease);
 }
@@ -4880,13 +4959,50 @@ html body .portal .sidemenu.sidemenu-enter-active,
 html body .portal .ui.sidebar,
 html body .portal .ui.sidebar.visible,
 html body .portal .ui.right.sidebar,
-html body .portal .ui.right.sidebar.visible {
+html body .portal .ui.right.sidebar.visible,
+html body .portal .app-nav-menu {
     background: var(--portal-surface) !important;
     color: var(--portal-text) !important;
     border-left: 1px solid var(--portal-border) !important;
     box-shadow: var(--portal-shadow-hover) !important;
     padding: 24px !important;
     font-family: var(--ik-font-display) !important;
+}
+
+/* Mobile primary-nav drawer (`.app-nav-menu`) — same surface treatment
+   as the My-account drawer (`.sidemenu`), but slides in from the LEFT
+   instead of the right. Mirror the border accent and the shadow
+   direction so the chrome reads as the symmetric counterpart of the
+   right-side drawer rather than a separate-feeling component. */
+html body .portal .app-nav-menu {
+    border-left: 0 !important;
+    border-right: 1px solid var(--portal-border) !important;
+    box-shadow: 24px 0 60px -20px rgba(0, 0, 0, 0.55),
+                4px 0 12px -4px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Mobile-nav link rows — match the ghost-row treatment used in the
+   `.sidemenu-links a` rule below. HaloPSA ships these as bare anchors
+   with no padding/hover, so they read as plain text. Re-skin to the
+   same ghost row + accent-on-hover language so navigating from a
+   mobile screen feels consistent with the My-account drawer. */
+html body .portal .app-nav-menu > a {
+    display: block !important;
+    padding: 12px 14px !important;
+    margin: 2px 0 !important;
+    font-family: var(--ik-font-display) !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    letter-spacing: -0.005em;
+    color: var(--portal-text) !important;
+    text-decoration: none !important;
+    border-radius: var(--portal-radius-xs) !important;
+    transition: background-color var(--ik-dur) var(--ik-ease),
+                color var(--ik-dur) var(--ik-ease) !important;
+}
+html body .portal .app-nav-menu > a:hover {
+    background: var(--portal-accent-soft) !important;
+    color: var(--portal-accent) !important;
 }
 
 /* Inner panel wrappers — HaloPSA stacks `.sidemenu-panel >

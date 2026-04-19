@@ -539,7 +539,21 @@
     'use strict';
 
     var MARKER = 'data-on-hold-indicator';
-    var TILE_SELECTOR = '.action-history-item.tile-item, .listwidget .action-history-item.tile-item';
+    /* Containers where HaloPSA may emit a bare "On Hold" leaf in place of
+       the SLA bar / countdown:
+         - `.action-history-item.tile-item`  → Recent Activity tiles
+         - `.main-tile-item`                 → My Tickets widget on the home page
+         - `.details-form`                   → ticket detail page sidebar (SLA section
+                                               renders "On Hold" as a blue link below
+                                               Response Target when SLA is paused)
+       The leaf + exact-text-match guard inside `stampTile` keeps this from
+       accidentally wrapping unrelated text inside form fields. */
+    var TILE_SELECTOR = [
+        '.action-history-item.tile-item',
+        '.listwidget .action-history-item.tile-item',
+        '.main-tile-item',
+        '.details-form'
+    ].join(', ');
 
     function stampTile(tile) {
         var elements = tile.querySelectorAll('*');

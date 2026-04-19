@@ -649,18 +649,20 @@ html body .portal .searchscreen .search-title {
 }
 
 /* Search box — not a pill anymore; editorial rounded rect.
-   72px height (bumped from 60px) lets the placeholder breathe and
-   reads as the hero's primary affordance on a big landing page.
-   `:not(.searchscreen-full)` scopes this ONLY to the home hero —
-   the search RESULTS page reuses `.searchbox` too, and an 72px
-   pill there would compete with the results list below. */
+   88px height: 60 → 72 → 88 progression. At the clamped display-type
+   title size (2rem – 3rem) a 72px box still read as undersized next
+   to "How can we help you today?"; 88px lands the search as the hero's
+   primary affordance without tipping into hero-form-fill territory.
+   `:not(.searchscreen-full)` scopes this ONLY to the home hero — the
+   search RESULTS page reuses `.searchbox` too, and an 88px pill there
+   would compete with the results list below. */
 html body .portal .searchscreen:not(.searchscreen-full) .searchbox,
 html body .portal .theme-dark .searchscreen:not(.searchscreen-full) .searchbox {
     background: var(--portal-surface) !important;
     border: 1px solid var(--portal-border) !important;
     border-radius: 16px !important;
     box-shadow: var(--portal-shadow) !important;
-    height: 72px;
+    height: 88px;
     overflow: hidden;
     transition: border-color var(--ik-dur) var(--ik-ease),
                 box-shadow var(--ik-dur) var(--ik-ease);
@@ -2381,8 +2383,16 @@ html body .portal .rt-thead.-filters .rt-th {
     height: auto !important;
     box-sizing: border-box;
 }
-html body .portal .rt-thead.-filters input[type="text"],
-html body .portal .details-form .rt-thead.-filters input[type="text"] {
+/* Match all filter-row inputs regardless of `type` — HaloPSA emits
+   text for most columns but `type="date"` for START DATE / TARGET
+   DATE / NEXT DATE. The earlier `[type="text"]` scope missed those
+   and left them on browser-default chrome (split input + chevron +
+   inconsistent height), which read as "two weird rounded boxes" in
+   each date column. The `:not([type="checkbox"]):not([type="radio"])`
+   carve-out keeps boolean filters rendering as their native toggles
+   rather than getting squashed into text-input geometry. */
+html body .portal .rt-thead.-filters input:not([type="checkbox"]):not([type="radio"]),
+html body .portal .details-form .rt-thead.-filters input:not([type="checkbox"]):not([type="radio"]) {
     height: 30px !important;
     min-height: 30px !important;
     font-family: var(--ik-font-display) !important;
@@ -2393,6 +2403,21 @@ html body .portal .details-form .rt-thead.-filters input[type="text"] {
     border-radius: var(--portal-radius-xs) !important;
     border: 1px solid var(--portal-border-soft) !important;
     background: var(--portal-bg) !important;
+    color: var(--portal-text) !important;
+    appearance: none;
+    -webkit-appearance: none;
+}
+/* Native date-picker indicator — the tiny calendar chevron that
+   Chrome/Edge render inside `input[type="date"]`. Pull it into the
+   tokenised text colour so it stops flashing as black against our
+   surface tokens. */
+html body .portal .rt-thead.-filters input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0.55;
+    cursor: pointer;
+    filter: grayscale(1);
+}
+html body .portal .rt-thead.-filters input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 0.9;
 }
 /* Header row above filters — drop the double separator. */
 html body .portal .rt-thead.-header {
@@ -3608,23 +3633,34 @@ html body .portal .kbdetails .kbmeta {
     color: var(--portal-text-muted) !important;
 }
 
-/* KB tags (`span.kbtags`) — JetBrains Mono uppercase pill. `'JetBrains
-   Mono'` is listed FIRST in the stack (ahead of the var) so even if the
-   custom-property cascade fails to resolve `--ik-font-mono` (e.g. on
-   legacy deploys or in Style-Profile-injected contexts where vars don't
-   inherit cleanly), the literal name still wins and the user gets the
-   intended font instead of falling back to the surrounding Montserrat. */
+/* KB tags (`span.kbtags`) — JetBrains Mono uppercase pill, assigned-
+   blue palette (matches the status pill of the same name so tags read
+   as part of the existing colour language instead of a neutral grey
+   chip). Colour via `--pill-assigned-*` tokens so light/dark mode
+   flips come for free.
+
+   `'JetBrains Mono'` is listed FIRST in the font stack (ahead of the
+   var) so even if the custom-property cascade fails to resolve
+   `--ik-font-mono` (e.g. on legacy deploys or in Style-Profile-
+   injected contexts where vars don't inherit cleanly), the literal
+   name still wins and the user gets the intended font instead of
+   falling back to the surrounding Montserrat.
+
+   Tightened geometry from 10px/4px 12px to 9px/3px 10px — Joel
+   flagged the chips as feeling slightly heavy against the list-card
+   density. Hover flips to the full accent family so interactions
+   stay consistent with every other chip in the portal. */
 html body .portal span.kbtags,
 html body .portal .kbtags {
     display: inline-block !important;
-    background: var(--portal-surface-active) !important;
-    color: var(--portal-text) !important;
+    background: var(--pill-assigned-bg) !important;
+    color: var(--pill-assigned-ink) !important;
     font-family: 'JetBrains Mono', var(--ik-font-mono), ui-monospace, Consolas, Menlo, monospace !important;
-    font-size: 10px !important;
+    font-size: 9px !important;
     font-weight: 500 !important;
     letter-spacing: 0.1em !important;
     text-transform: uppercase !important;
-    padding: 4px 12px !important;
+    padding: 3px 10px !important;
     border: 1px solid transparent !important;
     border-radius: 999px !important;
     margin: 3px 6px 3px 0 !important;
@@ -4194,13 +4230,17 @@ html body .portal .listwidget .action-history-item.tile-item:hover {
 
 /* Row layout — inner `.articleInfoSmall.kb` ships as a loose flex row.
    Give it explicit gap so title + meta + chips don't collide.
-   `column-gap` and `row-gap` are split so the horizontal spacing between
-   tags on row 2 is tighter than the gap that separates leading
-   view-count + title on row 1. */
+   `column-gap` bumped to 10px — with the tags' own `margin-right: 6px`
+   this adds ~16px of visual breathing room between adjacent chips,
+   which reads as the "bit of spacing between tags" Joel asked for
+   without tipping into sparse. `row-gap` stays tight at 8px because
+   the only row-change is between the title line and the tag row
+   below it, and we want that coupling to still read as "this row
+   belongs to the title above." */
 html body .portal .articleInfoSmall.kb {
     display: flex !important;
     align-items: center;
-    column-gap: 14px;
+    column-gap: 10px;
     row-gap: 8px;
     flex-wrap: wrap;
 }
@@ -4209,23 +4249,22 @@ html body .portal .articleInfoSmall.kb {
    leaves this at 16px/400; push to 14.5/600 so it anchors the card
    visually and matches the Top 5 Articles home widget.
 
-   `flex: 1 0 calc(100% - 80px)` is the lever that forces every `.kbtags`
-   sibling to wrap below the title. Heading wants nearly the full row
-   (minus ~80px reserved for the leading view-count chip on the left)
-   and `flex-shrink: 0` stops it collapsing to make room for short tags
-   like "CIPP" or "OFFBOARDING" — previously those squeezed onto the right
-   of the title row while longer tag groups wrapped, so half the list
-   placed tags inline and the other half placed them below. Locking the
-   heading wide makes every row consistent.
+   `flex: 1 0 100%` makes the heading take the full row, which
+   guarantees every `.kbtags` sibling wraps onto its own line below
+   regardless of how many tags the article has. The previous value
+   was `calc(100% - 80px)` — 80px reserved for a leading view-count
+   chip — but when that chip was absent (most external-facing KB
+   rows), the slack became a slot that short tags like "CIPP" or
+   "OFFBOARDING" happily squeezed into on the right of the title,
+   giving the list a split layout: some tags inline with title, some
+   below. Locking heading to 100% ends the inconsistency. If a
+   view-count chip does appear on a future row, it wraps to its own
+   line cleanly rather than forcing the tag pattern to split.
 
-   `padding-left: 12px` matches the `.kbtags` horizontal padding below,
-   so the title TEXT and each tag pill's TEXT sit on the same vertical
-   axis. Without it, title text started flush with the card edge while
-   the tag's internal padding pushed tag text 12px right — the residual
-   misalignment the user flagged after the last round of fixes. The
-   pill backgrounds still start at the card content edge (tag pill bg
-   left = card padding edge), so the pill chrome doesn't extrude into
-   the card's gutter. */
+   `padding-left: 8px` keeps the title TEXT on the same vertical
+   axis as each tag pill's TEXT below it (the 8px matches the tag's
+   internal `padding-left`). The pill backgrounds still start at the
+   card content edge, so the chrome doesn't extrude into the gutter. */
 html body .portal .article .heading,
 html body .portal .articleInfoSmall.kb .heading {
     font-family: var(--ik-font-display) !important;
@@ -4233,9 +4272,9 @@ html body .portal .articleInfoSmall.kb .heading {
     font-weight: 600 !important;
     color: var(--portal-text) !important;
     letter-spacing: -0.005em;
-    flex: 1 0 calc(100% - 80px) !important;
+    flex: 1 0 100% !important;
     min-width: 0;
-    padding-left: 12px !important;
+    padding-left: 8px !important;
 }
 
 /* KB-list tag chips — drop the per-chip `margin` from the global rule so

@@ -377,7 +377,7 @@ html body .portal .page-title .page-subtitle {
     text-transform: uppercase !important;
     color: var(--portal-text-muted) !important;
     opacity: 1 !important;
-    margin-bottom: 18px !important;
+    margin-bottom: 10px !important;
     display: inline-flex !important;
     align-items: center;
     gap: 12px;
@@ -403,7 +403,8 @@ html body .portal .details-form .details-group-header.title {
     letter-spacing: -0.02em !important;
     color: var(--portal-heading) !important;
     line-height: 1.1 !important;
-    margin-top: 4px;
+    margin-top: 2px;
+    margin-bottom: 10px;
 }
 
 /* Italic-serif underlay for emphasised word(s) in page titles.
@@ -1229,7 +1230,10 @@ html body .portal button.backbtn {
     width: 32px !important;
     height: 32px !important;
     padding: 0 !important;
-    margin: 14px 10px 0 20px !important;
+    /* Top margin tightened 14 → 8 after KB spacing pass — the 14
+       was a leftover from the older 28px-top `.kbdetails` padding
+       era, which pushed everything down further than it needed to. */
+    margin: 8px 10px 0 20px !important;
     border-radius: 999px !important;
     display: inline-flex !important;
     align-items: center;
@@ -3569,32 +3573,41 @@ html body .portal .kbdetails {
        tables + screenshots that need room. Still bounded for
        comfortable long-form reading on ultrawide displays. */
     max-width: 1100px;
-    margin: 16px auto 40px;
-    padding: 28px 36px 44px;
+    /* Tightened from 16/40 + 28/36/44 after Joel's "too much white
+       space" pass — recovers ~40px of scroll real estate between
+       the card's outer bounds and its first/last content, and
+       another ~16px around. Horizontal padding stays comfortable
+       (32px) because KB articles often carry wide code blocks and
+       screenshots that need breathing room at the measure. */
+    margin: 8px auto 24px;
+    padding: 16px 32px 28px;
     line-height: 1.7;
     color: var(--portal-text);
     font-size: 16px;
     /* Flat reading surface — background/border/shadow intentionally
        stripped so the article sits directly on the page instead of
        being wrapped in a nested card (the outer page container
-       already supplies a card). The earlier hover-shift on
-       border-color + shadow was removed for the same reason: long-
-       form reading shouldn't feel like a hoverable tile. */
+       already supplies a card). */
     background: transparent !important;
     border: 0 !important;
     border-radius: 0 !important;
     box-shadow: none !important;
 }
 
+/* Article H1 + metadata stack — the tightest-wound block in the
+   reading view, because three separately-spaced elements (h1
+   margins + padding-bottom + border + kbmeta margin-top) used to
+   compound into ~40–50px of gap between title and date/author.
+   Collapsed to ~20px total. */
 html body .portal .kbdetails h1 {
     font-family: var(--ik-font-display) !important;
     font-size: 2.25rem !important;
     font-weight: 300 !important;
     letter-spacing: -0.02em !important;
     line-height: 1.1;
-    margin: 10px 0 18px !important;
+    margin: 4px 0 10px !important;
     color: var(--portal-heading) !important;
-    padding-bottom: 20px;
+    padding-bottom: 12px;
     border-bottom: 1px solid var(--portal-border-soft);
 }
 html body .portal .kbdetails h1 em {
@@ -3603,24 +3616,29 @@ html body .portal .kbdetails h1 em {
     font-weight: 400;
 }
 
+/* Section headings — `margin-top: 40px` on h2 was the single
+   biggest contributor to the "gap before Description" complaint.
+   24px still reads as a clear section break (body is 16px with
+   1.7 line-height so ~24px is ~1 line of blank space) without
+   giving up as much above-the-fold real estate. */
 html body .portal .kbdetails h2 {
     font-size: 1.375rem !important;
     font-weight: 500 !important;
-    margin-top: 40px !important;
-    margin-bottom: 12px !important;
+    margin-top: 24px !important;
+    margin-bottom: 8px !important;
     letter-spacing: -0.015em;
 }
 html body .portal .kbdetails h3 {
     font-size: 1.125rem !important;
     font-weight: 500 !important;
-    margin-top: 28px !important;
-    margin-bottom: 10px !important;
+    margin-top: 18px !important;
+    margin-bottom: 8px !important;
 }
 
 html body .portal .kbdetails p {
     font-size: 16px !important;
     line-height: 1.7 !important;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     color: var(--portal-text);
 }
 
@@ -4408,7 +4426,10 @@ html body .portal .article > div:first-child:has(> .articleRight) {
    per-chip style here. */
 
 /* Tree menu (left sidebar on KB pages) — slim down node size and
-   align with our display font. HaloPSA ships these at Poppins 16px. */
+   align with our display font. HaloPSA ships these at Poppins 16px.
+   Padding 6 → 5 and margin 2 → 1 after the KB spacing pass — long
+   tree lists compound the margins so shaving a couple of px per node
+   surfaces several more rows above the fold. */
 html body .portal .tree-menu .tree-node,
 html body .portal .kblist .tree-node,
 html body .portal .tree-menu .sidebar,
@@ -4416,8 +4437,8 @@ html body .portal .kblist .sidebar {
     font-family: var(--ik-font-display) !important;
     font-size: 13.5px !important;
     border-radius: var(--portal-radius-xs) !important;
-    padding: 6px 10px;
-    margin: 2px 0;
+    padding: 5px 10px;
+    margin: 1px 0;
     transition: background-color var(--ik-dur) var(--ik-ease),
                 color var(--ik-dur) var(--ik-ease);
 }
@@ -4597,53 +4618,130 @@ html body .portal .preview-noneselected:hover {
    Copy-link pill room to breathe, and lift the "Share" label into the
    mono eyebrow family used across other section headers. The `.ui.button`
    inside the popup is already handled by the brand-action pill rule
-   up in the button block. */
+   up in the button block.
 
-html body .portal .ui.popup,
-html body .portal .ui.popup.transition.visible {
-    background: var(--portal-surface) !important;
-    color: var(--portal-text) !important;
-    border: 1px solid var(--portal-border) !important;
-    border-radius: var(--portal-radius-sm) !important;
-    box-shadow: var(--portal-shadow-hover) !important;
+   Scope note: Semantic UI's popup portal-mounts OUTSIDE `.portal` at
+   the document body level, so an `html body .portal .ui.popup` rule
+   never matches — that's why Joel kept seeing default-light popup
+   chrome in dark mode. The selectors below deliberately drop the
+   `.portal` ancestor and instead rely on `.ui.popup` + `.theme-dark`
+   (which HaloPSA stamps on `html` or `body` depending on the
+   viewport). Fallback values (`#1F2125`, `#E5E7EB`, etc.) follow the
+   CSS var so the styling still holds even if custom-property
+   inheritance fails to cross the portal boundary. */
+
+html body .ui.popup,
+html body .ui.popup.transition.visible {
+    background: var(--portal-surface, #FFFFFF) !important;
+    color: var(--portal-text, #0F172A) !important;
+    border: 1px solid var(--portal-border, rgba(15, 23, 42, 0.1)) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18) !important;
     padding: 16px 18px !important;
-    font-family: var(--ik-font-display) !important;
-    min-width: 180px;
+    font-family: 'Montserrat', var(--ik-font-display), sans-serif !important;
+    min-width: 200px;
 }
-html body .portal .ui.popup::before {
-    background: var(--portal-surface) !important;
-    box-shadow: 1px 1px 0 0 var(--portal-border) !important;
+html body .ui.popup::before {
+    background: var(--portal-surface, #FFFFFF) !important;
+    box-shadow: 1px 1px 0 0 var(--portal-border, rgba(15, 23, 42, 0.1)) !important;
+}
+
+/* Dark-mode popup. `.theme-dark` may sit on `html` or `body` — both
+   cases covered so the compound selector lands regardless. Uses the
+   same surface/text tokens as the main portal chrome plus a heavier
+   shadow so the popup reads as "floating above the page" against
+   the darker bg. */
+html.theme-dark body .ui.popup,
+html body.theme-dark .ui.popup,
+html.theme-dark body .ui.popup.transition.visible,
+html body.theme-dark .ui.popup.transition.visible {
+    background: var(--portal-surface, #1F2125) !important;
+    color: var(--portal-text, #E5E7EB) !important;
+    border-color: var(--portal-border, rgba(255, 255, 255, 0.08)) !important;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55) !important;
+}
+html.theme-dark body .ui.popup::before,
+html body.theme-dark .ui.popup::before {
+    background: var(--portal-surface, #1F2125) !important;
+    box-shadow: 1px 1px 0 0 var(--portal-border, rgba(255, 255, 255, 0.08)) !important;
 }
 
 /* Popup heading — "Share". Semantic ships this as a heavy default
    h4; lift to mono eyebrow so it reads as a section label instead of
    a page heading. */
-html body .portal .ui.popup .header,
-html body .portal .ui.popup > .header,
-html body .portal .ui.popup h1,
-html body .portal .ui.popup h2,
-html body .portal .ui.popup h3,
-html body .portal .ui.popup h4 {
-    font-family: var(--ik-font-mono) !important;
+html body .ui.popup .header,
+html body .ui.popup > .header,
+html body .ui.popup h1,
+html body .ui.popup h2,
+html body .ui.popup h3,
+html body .ui.popup h4 {
+    font-family: 'JetBrains Mono', var(--ik-font-mono), ui-monospace, monospace !important;
     font-size: 10.5px !important;
     font-weight: 500 !important;
     letter-spacing: 0.12em !important;
     text-transform: uppercase !important;
-    color: var(--portal-text-muted) !important;
+    color: var(--portal-text-muted, #64748B) !important;
     margin: 0 0 10px 0 !important;
     padding: 0 !important;
     border: 0 !important;
     line-height: 1.4;
 }
+html.theme-dark body .ui.popup .header,
+html.theme-dark body .ui.popup h1,
+html.theme-dark body .ui.popup h2,
+html.theme-dark body .ui.popup h3,
+html.theme-dark body .ui.popup h4,
+html body.theme-dark .ui.popup .header,
+html body.theme-dark .ui.popup h1,
+html body.theme-dark .ui.popup h2,
+html body.theme-dark .ui.popup h3,
+html body.theme-dark .ui.popup h4 {
+    color: var(--portal-text-muted, #94A3B8) !important;
+}
 
 /* Copy-link pill inside the share popup — pin to brand-action pill
    geometry and give it full row width so it feels deliberate rather
-   than dropped in. */
-html body .portal .ui.popup .ui.button,
-html body .portal .ui.popup .solidbutton,
-html body .portal .ui.popup button.-btn {
+   than dropped in. 36px height + 999px radius matches every other
+   primary pill in the portal; tight icon-label gap handled by
+   flex-centring (the icon is emitted as a leading `<svg>` or `<i>`). */
+html body .ui.popup .ui.button,
+html body .ui.popup .solidbutton,
+html body .ui.popup button.-btn,
+html body .ui.popup button {
     width: 100% !important;
-    justify-content: center !important;
+    height: 36px !important;
+    padding: 0 16px !important;
+    background-color: var(--portal-action, #2563EB) !important;
+    background-image: none !important;
+    color: #FFFFFF !important;
+    border: 0 !important;
+    border-radius: 999px !important;
+    font-family: 'Montserrat', var(--ik-font-display), sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: none !important;
+    cursor: pointer;
+    transition: background-color var(--ik-dur, 180ms) var(--ik-ease, ease),
+                transform var(--ik-dur, 180ms) var(--ik-ease, ease) !important;
+}
+html body .ui.popup .ui.button:hover,
+html body .ui.popup button:hover {
+    background-color: var(--portal-action-hover, #1D4ED8) !important;
+    transform: translateY(-1px);
+}
+html body .ui.popup .ui.button i,
+html body .ui.popup .ui.button .fa,
+html body .ui.popup .ui.button svg,
+html body .ui.popup button i,
+html body .ui.popup button svg {
+    color: inherit !important;
+    fill: currentColor !important;
+    font-size: 13px !important;
+    margin: 0 !important;
 }
 
 

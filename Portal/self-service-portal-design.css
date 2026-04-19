@@ -852,41 +852,20 @@ html body .portal .tile-widget:hover {
 }
 
 /* `.tile-widget-bar` — the coloured status indicator on each home-page
-   ticket tile (`.action-history-item.tile-item`). HaloPSA paints the
-   stripe colour inline per ticket status — we only set geometry. Do NOT
-   set `background` here: it would override the inline status colour and
-   make every indicator the same flat surface colour.
-
-   Treatment: flipped from a 4px LEFT stripe (dated "progress bar" chrome)
-   to a thin 3px TOP edge line that runs the full card width. Gets the
-   card to read like a Linear/Notion-style tab indicator — modern, less
-   visually heavy, leaves the left edge clean for the content grid. The
-   inline colour still works as the status cue, just on a different
-   geometric axis. Anchored via absolute positioning so we don't have to
-   fight HaloPSA's native layout or rewire the stripe into the card's
-   content flow. */
+   ticket tile (`.action-history-item.tile-item`). HaloPSA paints its
+   colour inline per ticket status.
+     V1: 4px left leading stripe (progress-bar chrome — too MSP-heavy)
+     V2: 3px top edge line (Linear/Notion tab style)
+     V3: hidden altogether — the status pill and priority label already
+         encode state, so any geometric stripe was just redundant
+         visual noise against a clean card surface.
+   We `display: none` rather than deleting the element because HaloPSA
+   emits it in the tile template; we just don't want it painted. No
+   parent positioning context needed anymore since there's no absolute
+   child to anchor. */
 html body .portal .action-history-item .tile-widget-bar,
 html body .portal .tile-item .tile-widget-bar {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: auto !important;
-    width: auto !important;
-    height: 3px !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    margin: 0 !important;
-    opacity: 0.9;
-}
-/* Parent card must establish a positioning context for the absolute
-   bar, and clip its own rounded corners so the bar doesn't poke past
-   the top edge. */
-html body .portal .action-history-item.tile-item,
-html body .portal .tile-item {
-    position: relative !important;
-    overflow: hidden !important;
+    display: none !important;
 }
 
 /* Section headings on the home page ("Recent Tickets", "Top Articles") */
@@ -4121,10 +4100,10 @@ html body .portal .articleInfoSmall.kb .articleRight .status-avatar {
 }
 
 /* Harmonise the activity tile hover with articles so both columns lift
-   the same way. Padding is now symmetric 18px/18px — the old 22px on
-   the left reserved room for the 4px leading stripe, which has been
-   flipped to a top edge line so the extra left indent no longer makes
-   sense. */
+   the same way. Padding is symmetric 18px/18px — the old 22px on the
+   left reserved room for the leading status stripe, which has since
+   been removed entirely (see `.tile-widget-bar` rule above), so the
+   extra left indent no longer makes sense. */
 html body .portal .action-history-item.tile-item,
 html body .portal .listwidget .action-history-item.tile-item {
     padding: 15px 18px !important;

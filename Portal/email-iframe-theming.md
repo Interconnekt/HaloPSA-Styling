@@ -154,3 +154,21 @@ If none of the above hold, accepting the default Segoe UI for end-user email bod
 | Date | Decision | Rationale |
 |------|----------|-----------|
 | 2026-04 | Deferred — accept Segoe UI email bodies for end-users for now | Cosmetic-only; Cloudflare Worker infra not justified by a single script. Path documented here for future reactivation. |
+| 2026-04-19 | **Reactivated — queued for completion.** Cloudflare Worker reverse-proxy is the chosen path. | Multiple `iframe-theme.js` features now live in the repo and depend on JS being injected into the SSP: On-Hold pill stamping (home tiles + ticket sidebar), status / priority class stamping, ticket-list `Age` column 2dp formatting, and email-body Montserrat injection. All shipped to the repo but inert on the SSP without a delivery mechanism. The Worker also unlocks future script-injection needs (analytics, feature flags) without a per-feature deploy story. |
+
+---
+
+## Implementation checklist (Cloudflare Worker)
+
+Tracked here as the actionable task. Tick off as completed.
+
+- [ ] Confirm Entra app registration's redirect URI hostname is `portal.interconnekt.com.au/...`
+- [ ] Stand up `portal-staging.interconnekt.com.au` → Halo origin via Cloudflare + Worker
+- [ ] Ask HaloPSA to register the staging hostname as an additional portal URL
+- [ ] Add staging hostname as an additional redirect URI in Entra
+- [ ] Test full login + 1-hour token refresh + logout cycle on staging
+- [ ] Verify `iframe-theme.js` features fire on staging: email Montserrat, On-Hold pill on home `.main-tile-item`, On-Hold pill in ticket sidebar `.details-form`, Age column 2dp, status pill class stamping
+- [ ] Confirm Worker bypasses non-HTML responses (`/api/*`, token endpoints) — check Cloudflare analytics for transformed-vs-passthrough split
+- [ ] Production DNS cutover (weekend / low-traffic window)
+- [ ] Post-cutover smoke test: log in, open a ticket with an email body, verify SLA-paused ticket shows red On-Hold pill on home + sidebar
+- [ ] Document the kill-switch procedure (Cloudflare "Pause Cloudflare on Site" toggle) in this file's runbook section

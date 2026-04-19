@@ -1,7 +1,7 @@
 /**
  * Self-Service Portal — chrome JS shims
  *
- * Three independent IIFEs in this file:
+ * Five independent IIFEs in this file:
  *
  * 1. iframe theming — HaloPSA renders email bodies inside
  *    `<iframe class="halo-html-renderer">`, a same-origin iframe with
@@ -23,6 +23,18 @@
  *    the named-status palette (see status pill system in
  *    self-service-portal-design.css). A MutationObserver catches
  *    re-renders (sort/filter/kanban/page change).
+ *
+ * 4. Priority-pill class stamping — the `.oneline` priority wrapper
+ *    ships as `<swatch><text>`. We stamp a matching `.p-*` class on
+ *    the wrapper from its text (or the swatch rgb as a fallback) so
+ *    CSS can render the tonal pill tokens.
+ *
+ * 5. On-hold indicator stamping — on home-page ticket tiles HaloPSA
+ *    substitutes the `$sla_bar` placeholder with the raw string
+ *    "On Hold" when a ticket's SLA is paused. The text ships with no
+ *    class hook, so we walk candidate tiles, find the leaf element
+ *    whose trimmed textContent is exactly "On Hold", and wrap it in
+ *    a `data-on-hold-indicator` span that CSS paints as a red pill.
  */
 (function () {
     'use strict';
@@ -442,6 +454,94 @@
                     if (node.nodeType !== 1) continue;
                     if (node.matches && node.matches('.priority-block')) {
                         stampBySwatch(node);
+                    } else if (node.querySelectorAll) {
+                        sweep(node);
+                    }
+                }
+            }
+        });
+        obs.observe(document.body, { childList: true, subtree: true });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', start);
+    } else {
+        start();
+    }
+})();
+
+
+/**
+ * On-hold indicator stamper.
+ *
+ * On home-page ticket tiles (`.action-history-item.tile-item`) HaloPSA
+ * replaces the SLA countdown bar with the raw string "On Hold" when a
+ * ticket's SLA is paused. The text ships as a bare text node inside
+ * whatever leaf element received the `$sla_bar` substitution — no
+ * class, no attribute, no hook for CSS to target (CSS has no way to
+ * select an element by its text content).
+ *
+ * Strategy: walk candidate tiles, find the leaf element whose trimmed
+ * textContent is exactly "On Hold", and wrap the text in a
+ * `<span data-on-hold-indicator>`. CSS paints that span as a red pill
+ * with a pause-glyph prefix, mirroring the `.status-avatar.s-awaiting-user`
+ * shape from self-service-portal-design.css.
+ *
+ * Wrap-in-span (rather than styling the host element directly)
+ * because the host could be a <div>, <span>, or <td> — forcing
+ * `display: inline-flex` on an unknown container could disrupt the
+ * surrounding layout. A dedicated span insulates our styling.
+ *
+ * Re-render safety: if HaloPSA re-renders the tile and wipes our
+ * span, the next mutation sweep sees a plain "On Hold" leaf again
+ * and re-wraps. The `children.length > 0` leaf guard stops an already-
+ * wrapped host from being re-visited (it now has a child span so it's
+ * no longer a leaf), and the inner span carries the MARKER attribute
+ * so it skips itself.
+ */
+(function () {
+    'use strict';
+
+    var MARKER = 'data-on-hold-indicator';
+    var TILE_SELECTOR = '.action-history-item.tile-item, .listwidget .action-history-item.tile-item';
+
+    function stampTile(tile) {
+        var elements = tile.querySelectorAll('*');
+        for (var i = 0; i < elements.length; i++) {
+            var el = elements[i];
+            // Only leaf elements — we want the node that directly
+            // holds the "On Hold" text, not an ancestor that contains
+            // it alongside other content.
+            if (el.children.length > 0) continue;
+            // Already wrapped (we stamped this run or a previous one).
+            if (el.hasAttribute(MARKER)) continue;
+            var text = (el.textContent || '').trim();
+            if (text !== 'On Hold') continue;
+            // Replace text with a marked span so CSS can style the
+            // pill shape without fighting the host's default display.
+            el.textContent = '';
+            var pill = document.createElement('span');
+            pill.setAttribute(MARKER, '');
+            pill.textContent = 'On Hold';
+            el.appendChild(pill);
+        }
+    }
+
+    function sweep(root) {
+        (root || document).querySelectorAll(TILE_SELECTOR).forEach(stampTile);
+    }
+
+    function start() {
+        sweep();
+        if (!document.body) return;
+        var obs = new MutationObserver(function (muts) {
+            for (var i = 0; i < muts.length; i++) {
+                var added = muts[i].addedNodes;
+                for (var j = 0; j < added.length; j++) {
+                    var node = added[j];
+                    if (node.nodeType !== 1) continue;
+                    if (node.matches && node.matches(TILE_SELECTOR)) {
+                        stampTile(node);
                     } else if (node.querySelectorAll) {
                         sweep(node);
                     }

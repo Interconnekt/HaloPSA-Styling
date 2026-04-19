@@ -2149,6 +2149,53 @@ html body .portal .rt-td .sla-perc-bar {
     min-width: 60px;
 }
 
+/* ─── "On Hold" indicator pill ─────────────────────────────
+   On home-page ticket tiles HaloPSA replaces the SLA countdown bar
+   with the raw string "On Hold" when a ticket's SLA is paused. The
+   text ships with no class hook to target, so `iframe-theme.js`
+   wraps it in a `<span data-on-hold-indicator>` — this rule paints
+   that span as a pill matching the `.status-avatar.s-awaiting-user`
+   shape (uppercase 700 Montserrat, 999px radius, letter-spaced)
+   but in a red palette that pairs with the SLA-overdue countdown
+   colour (`#DC2626` family) from `.sla-perc-bar` above.
+
+   `\23F8` (U+23F8, pause) as a `::before` glyph. `font-variant-emoji:
+   text` forces monochrome rendering — without it macOS/iOS Safari
+   upgrades it to a colour emoji, which clashes with the flat red
+   pill. Same icon-font shim pattern as the ADF panel icons earlier
+   in the file.
+
+   Dark mode uses the compound `.portal.theme-dark` selector because
+   HaloPSA stamps BOTH classes on the same `.app-container` element
+   — a descendant combinator (`.portal .theme-dark`) never matches. */
+html body .portal [data-on-hold-indicator] {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px 5px 11px !important;
+    background-color: #FEE2E2 !important;
+    color: #991B1B !important;
+    font-family: 'Montserrat', var(--ik-font-display) !important;
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase;
+    line-height: 1 !important;
+    border-radius: 999px !important;
+    white-space: nowrap;
+}
+html body .portal [data-on-hold-indicator]::before {
+    content: "\23F8";
+    font-size: 12px;
+    line-height: 1;
+    display: inline-block;
+    font-variant-emoji: text;
+}
+html body .portal.theme-dark [data-on-hold-indicator] {
+    background-color: rgba(239, 68, 68, 0.20) !important;
+    color: #FCA5A5 !important;
+}
+
 
 /* ─────────────────────────────────────────────────────────
    10 · Ticket list — table, filters, pagination

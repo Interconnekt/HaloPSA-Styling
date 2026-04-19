@@ -3564,24 +3564,106 @@ html body .portal .kbdetails.kbdetails .confluence-information-macro-success.con
     background: var(--panel-tip-bg) !important;
     border: 1px solid var(--panel-tip-border) !important;
 }
-/* Generic `.panel` (ADF Warning / Custom types use this wrapper)
-   gets the neutral surface treatment — their actual tint comes from
-   Confluence inline bg on `.panelContent`. */
-html body .portal .kbdetails.kbdetails .panel.panel {
-    background: var(--portal-surface) !important;
-    border: 1px solid var(--portal-border) !important;
+/* Generic `.panel` (ADF Note / Warning / Custom panel types export
+   as `<div class="panel">` — NO per-type confluence-information-macro-*
+   class). Confluence stamps per-panel colour inline:
+     Note    → background-color: #EAE6FF (purple)
+     Warning → background-color: #FFFAE6 (yellow)
+     Custom  → background-color: #E6FCFF (cyan, or author-picked)
+   We'd LIKE to just let the inline bg paint through, but a phantom
+   (0,4,2)+!important rule elsewhere in HaloPSA's cascade paints the
+   wrapper white (same ghost rule that plagued the confluence-macro
+   types — not enumerable via document.styleSheets, likely a CORS-
+   blocked or platform-injected sheet). Doubled-class specificity
+   `.kbdetails.kbdetails .panel.panel[style*="#HEX"]` at (0,5,1) plus
+   an attribute selector keyed on the exact Confluence hex beats it.
+   Each rule re-applies the same colour Confluence already intended;
+   we just have to quote it back louder. Dark-mode darkening is
+   handled via the `::before` overlay block further down.
+   `position: relative` anchors the dark-mode `::before` overlay. */
+html body .portal .kbdetails .panel {
+    position: relative;
+}
+
+/* Re-paint Confluence's common inline hex values at higher specificity.
+   Case-both variants so mixed-case exports work (`#EAE6FF` vs `#eae6ff`).
+   Border uses Confluence's own matching darker hue. */
+/* Note — purple */
+html body .portal .kbdetails.kbdetails .panel.panel[style*="#EAE6FF"],
+html body .portal .kbdetails.kbdetails .panel.panel[style*="#eae6ff"] {
+    background-color: #EAE6FF !important;
+    border: 1px solid #998DD9 !important;
+}
+/* Warning — yellow */
+html body .portal .kbdetails.kbdetails .panel.panel[style*="#FFFAE6"],
+html body .portal .kbdetails.kbdetails .panel.panel[style*="#fffae6"],
+html body .portal .kbdetails.kbdetails .panel.panel[style*="#FDF7CD"],
+html body .portal .kbdetails.kbdetails .panel.panel[style*="#fdf7cd"] {
+    background-color: #FFFAE6 !important;
+    border: 1px solid #F0C808 !important;
+}
+/* Custom (common author choice) — cyan */
+html body .portal .kbdetails.kbdetails .panel.panel[style*="#E6FCFF"],
+html body .portal .kbdetails.kbdetails .panel.panel[style*="#e6fcff"],
+html body .portal .kbdetails.kbdetails .panel.panel[style*="#EBF9FE"],
+html body .portal .kbdetails.kbdetails .panel.panel[style*="#ebf9fe"] {
+    background-color: #E6FCFF !important;
+    border: 1px solid rgba(12, 121, 125, 0.35) !important;
 }
 
 /* Body: transparent so the wrapper tint shows, portal text colour
-   (auto-flips), consistent padding + type scale. */
+   (auto-flips), compact padding + type scale. `z-index: 1` on the
+   panel body lifts it above the dark-mode `::before` overlay.
+   Padding tightened from 16px/22px → 12px/18px after live-DOM
+   measurement showed the previous values left ~28px of phantom
+   whitespace on single-line panels (trailing `<p>` margin-bottom
+   was adding a second phantom gap — zeroed below). */
 html body .portal .kbdetails [class*="confluence-information-macro-"] > .confluence-information-macro-body,
 html body .portal .kbdetails .panel .panelContent {
     background: transparent !important;
     border: none !important;
     color: var(--portal-text) !important;
-    padding: 16px 22px !important;
+    padding: 12px 18px !important;
     font-size: 15px !important;
     line-height: 1.65 !important;
+    position: relative;
+    z-index: 1;
+}
+
+/* Zero the trailing paragraph margin inside panel bodies. Confluence
+   exports each line as a `<p>` with `margin: 0 0 16px`, which on a
+   one-line panel adds a 16px ghost gap below the text before the
+   body's own padding closes out. Kill it on the last-child so multi-
+   paragraph panels keep inter-paragraph spacing. */
+html body .portal .kbdetails .confluence-information-macro-body > p:last-child,
+html body .portal .kbdetails .panel .panelContent > p:last-child {
+    margin-bottom: 0 !important;
+}
+
+/* Dark-mode: `.panel` elements carry their hue via Confluence's
+   INLINE bg (e.g. `#EAE6FF` purple), which reads as a jarring bright
+   light pill against our dark canvas. Overlay a 55% black scrim via
+   `::before` — absolutely positioned, `z-index: 0`, under the content
+   layer — to darken while preserving hue. The `.panelHeader` and
+   `.panelContent` both get `z-index: 1` so text sits above the scrim.
+   Same pattern used in the old `self-service-portal.css` block for
+   `.theme-dark .kbdetails .panel` — reinstated here now that this
+   file is the single source of truth. */
+html body .portal .theme-dark .kbdetails .panel {
+    overflow: hidden;
+}
+html body .portal .theme-dark .kbdetails .panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 10, 10, 0.55);
+    pointer-events: none;
+    z-index: 0;
+}
+html body .portal .theme-dark .kbdetails .panel .panelHeader,
+html body .portal .theme-dark .kbdetails .panel .panelContent {
+    position: relative;
+    z-index: 1;
 }
 
 /* Leading `.aui-icon` — per-type tint matching the panel hue,

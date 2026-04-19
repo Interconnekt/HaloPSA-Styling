@@ -10,7 +10,9 @@ CSS styling for a HaloPSA Self-Service Portal and Knowledge Base articles. Artic
 
 There are **two separate CSS layers** in HaloPSA, each with different deployment mechanics and scope.
 
-**Live CSS file:** `Portal/self-service-portal-design.css` (loaded via HaloPSA Custom CSS `@import`). The older `Portal/self-service-portal.css` is kept as a parity fallback — same tokens, same chrome, maintained to match.
+**Live CSS file:** `Portal/self-service-portal-design.css` (loaded via HaloPSA Custom CSS `@import` from GitHub Pages — confirmed via `document.styleSheets` inspection).
+
+**`Portal/self-service-portal.css` is UNUSED** — a legacy file kept in the repo only for historical reference. HaloPSA's Custom CSS slot contains a single `@import url('https://interconnekt.github.io/HaloPSA-Styling/Portal/self-service-portal-design.css');` line; no second stylesheet is loaded. **Do not mirror changes into `self-service-portal.css`** — edits made there have zero effect on the live portal and just create drift.
 
 **Start here when:**
 - A website token/font/colour changed → read `Portal/website-portal-mapping.md`
@@ -32,10 +34,10 @@ There are **two separate CSS layers** in HaloPSA, each with different deployment
 ### Layer 2: Custom CSS
 
 - **Scope:** Self-Service Portal ONLY
-- **Deployment:** Edit `self-service-portal.css`, commit, push to GitHub → served via GitHub Pages → live in ~10 minutes
+- **Deployment:** Edit `self-service-portal-design.css`, commit, push to GitHub → served via GitHub Pages → live in ~10 minutes
 - **Not auto-scoped:** Selectors are used exactly as written
-- **HaloPSA field contains:** A single `@import url('...')` line pointing to the GitHub Pages URL
-- **Source:** `self-service-portal.css`
+- **HaloPSA field contains:** A single `@import url('https://interconnekt.github.io/HaloPSA-Styling/Portal/self-service-portal-design.css');` line
+- **Source:** `self-service-portal-design.css` (ONLY — `self-service-portal.css` is legacy and unused, see note at top)
 
 ### What Goes Where
 
@@ -56,7 +58,7 @@ There are **two separate CSS layers** in HaloPSA, each with different deployment
 
 HaloPSA places `.theme-dark` on `div.app-container`, which is a DOM ancestor of `.kbdetails`. Style Profile rules are auto-scoped under `.kbdetails`, so `.theme-dark h1` becomes `.kbdetails .theme-dark h1` — which never matches because `.theme-dark` is above, not inside, `.kbdetails`.
 
-**Rule:** All dark mode overrides must be in `self-service-portal.css` using `.theme-dark .kbdetails ...` selectors.
+**Rule:** All dark mode overrides must be in `self-service-portal-design.css` using `.theme-dark .kbdetails ...` selectors. Prefer the token-flip approach (define a CSS custom property in `:root` + override in `.theme-dark`, then reference `var(--foo)` in the rule) — one rule handles both modes automatically. See the `--panel-*-bg/border/icon` tokens for an example.
 
 ### 2. Confluence exports inline styles — `!important` is mandatory
 
@@ -82,27 +84,29 @@ The Style Profile has Precedence 28 rules for `.confluence-information-macro` an
 
 ### 4. Panel types: ADF panels, class mapping, and generic panels
 
-Confluence ADF defines 6 panel types. When exported to HaloPSA, they map to CSS classes as follows:
+Confluence ADF defines 6 panel types. They split into **two families** by export format:
 
-| ADF Panel Type | Confluence CSS Class | Background | Border-left |
-|----------------|---------------------|------------|-------------|
-| Info | `.confluence-information-macro-information` | #eaf2fd (blue) | #2684ff |
-| Note | `.confluence-information-macro-note` | #f7eefd (purple) | #6554c0 |
-| Error | `.confluence-information-macro-warning` | #fcedec (red) | #de350b |
-| Success/Tip | `.confluence-information-macro-tip` | #e3fef2 (green) | #00875a |
-| Warning | _(none -- uses Confluence inline styles)_ | #fdf7cd (yellow) | inline |
-| Custom | _(none -- uses Confluence inline styles)_ | #ebf9fe (teal) | inline |
+**Family A — `.confluence-information-macro-*`** (ADF Info, Note, Error, Success/Tip). These export as `<div class="confluence-information-macro confluence-information-macro-{type}">` with NO inline style. Our CSS paints them via per-type `--panel-{info|note|warn|tip}-*` tokens that auto-flip in `.theme-dark`.
 
-**Legacy naming quirk:** ADF "error" panels render with the `.confluence-information-macro-warning` class, not `-error`. This is a legacy Confluence naming convention -- the class name says "warning" but the panel is visually red/error.
+**Family B — `<div class="panel">`** (ADF Note-panel, Warning-panel, Custom-panel). These export as a bare `<div class="panel">` with Confluence stamping colour INLINE: `style="background-color: #HEX; border-color: #HEX"`. No per-type class to target. Our CSS re-paints known Confluence default hex values via attribute selectors, and in dark mode a `::before` scrim darkens them while preserving hue.
 
-**Fallback rules:** The Style Profile and Custom CSS include rules for `.confluence-information-macro-error` (red) and `.confluence-information-macro-success` (green) as fallbacks, in case Confluence ever uses these class names directly. They duplicate the error and tip colours respectively.
+| ADF Type | DOM class | Inline bg | Portal light | Portal dark |
+|---|---|---|---|---|
+| Info | `.confluence-information-macro-information` | — | `var(--panel-info-bg)` #EAF2FD | `rgba(74,116,240,0.15)` |
+| Note | `.confluence-information-macro-note` | — | `var(--panel-note-bg)` #F7EEFD | `rgba(168,86,239,0.15)` |
+| Error | `.confluence-information-macro-warning` (sic) | — | `var(--panel-warn-bg)` #FCEDEC | `rgba(248,113,113,0.12)` |
+| Success/Tip | `.confluence-information-macro-tip` | — | `var(--panel-tip-bg)` #E3FEF2 | `rgba(52,211,153,0.12)` |
+| Note-panel | `.panel` | `#EAE6FF` | `#EAE6FF` painted via attr selector | `::before` scrim darkens |
+| Warning-panel | `.panel` | `#FFFAE6` or `#FDF7CD` | yellow painted via attr selector | `::before` scrim darkens |
+| Custom-panel | `.panel` | `#E6FCFF` or author-picked | cyan painted via attr selector | `::before` scrim darkens |
 
-**ADF Warning and Custom panels:** These two panel types rely entirely on Confluence inline styles (yellow #fdf7cd and teal #ebf9fe). No Style Profile or Custom CSS override is needed for them -- they render correctly out of the box. In dark mode, the generic panel `::before` overlay handles darkening.
+**Legacy naming quirk:** ADF "Error" panels render with the `.confluence-information-macro-warning` class, not `-error`. The class name says "warning" but the panel is visually red/error. Don't let the name mislead you — treat `-warning` as red, treat the yellow "Warning panel" as the Family-B `.panel` variant.
 
-**Catch-all body border reset:** A rule targeting `.confluence-information-macro-body` with `border: none !important` is applied across all panel types. This kills any secondary borders Confluence adds to the inner content div, regardless of panel type. Every per-type `-body` rule also includes `border: none !important`.
+**Author-label mismatch — watch out:** In Confluence the author chooses a panel TYPE when inserting. The panel has no "label" in the exported DOM, so an article author who labels a Family-B purple Note-panel as "Warning Panel" in their body text produces markup where the visible label and the rendered colour don't agree. The CSS is rendering ADF semantics faithfully; if the author wanted yellow they should have used the Warning-panel macro type. Example: `/kb?btn=46&faqlist=1&id=16` — the "Warning Panel" row there uses `.confluence-information-macro-note` and renders purple.
 
-- **Standard Confluence macros** (`.confluence-information-macro-information`, `-note`, `-warning`, `-tip`, plus fallbacks `-error`, `-success`) get explicit per-type colour rules on the body and left border accents on the outer wrapper. Each per-type wrapper has `border: none !important; border-left: 4px solid #xxx !important`. Each per-type body rule has `border: none !important`.
-- **Generic panels** use `.panel` / `.panelContent` and carry whatever background Confluence exported inline. In dark mode, a `::before` overlay (`rgba(10,10,10,0.50)`) darkens these while preserving the hue, since there's no standard class to target for recolouring.
+**The phantom white-bg rule:** Panel wrappers are being painted white by a (0,4,2)+`!important` rule that doesn't appear in programmatic `document.styleSheets` iteration — likely a HaloPSA-platform-injected sheet that's CORS-blocked or stored outside the enumerable API. The fix across all panel rules is doubled-class specificity: `.kbdetails.kbdetails .confluence-information-macro-note.confluence-information-macro-note` or `.kbdetails.kbdetails .panel.panel[style*="#HEX"]`. Bumps specificity to (0,5,2) → wins cleanly. Browsers collapse duplicate classes at parse time, no runtime cost.
+
+**Custom-panel colour coverage:** Family-B panels are keyed on the inline hex. We ship rules for the common Confluence defaults (`#EAE6FF`, `#FFFAE6`, `#FDF7CD`, `#E6FCFF`, `#EBF9FE`). If an author picks an uncommon hex via the Custom panel colour picker, the panel falls back to unstyled (white). Add a new attribute-selector rule matching that hex to support it.
 
 ### 5. Agent Portal dark mode has no article styling from this project
 
@@ -110,7 +114,7 @@ Custom CSS applies only to the Self-Service Portal. The Agent Portal gets Style 
 
 ### 6. Font loading gap in Agent Portal
 
-The Google Fonts `@import` for Montserrat is in `self-service-portal.css` (Custom CSS), which only loads in the Self-Service Portal. Style Profile rules reference `font-family: 'Montserrat', sans-serif` — in the Agent Portal this falls back to `sans-serif` unless HaloPSA's theme independently loads Montserrat.
+The Google Fonts `@import` for Montserrat is in `self-service-portal-design.css` (Custom CSS), which only loads in the Self-Service Portal. Style Profile rules reference `font-family: 'Montserrat', sans-serif` — in the Agent Portal this falls back to `sans-serif` unless HaloPSA's theme independently loads Montserrat.
 
 ### 7. Tables use clean modern styling — no border-radius, no zebra stripes
 
@@ -126,10 +130,11 @@ Both inline `code` and `pre` blocks use a dark background with light text (Catpp
 
 ### Changing Custom CSS (portal chrome, dark mode overrides)
 
-1. Edit `self-service-portal-design.css` (the live file)
-2. If the change is a token value (colour, radius, shadow, font) OR a widely-used component pattern: mirror the change into `self-service-portal.css` (legacy fallback) so the two stay in sync
-3. Commit and push
-4. GitHub Pages serves the updated file within ~10 minutes. Hard-refresh the portal (Cmd+Shift+R) to bust the browser CSS cache
+1. Edit `self-service-portal-design.css` (the live file — only file the portal actually loads)
+2. Commit and push
+3. GitHub Pages serves the updated file within ~10 minutes. Hard-refresh the portal (Cmd+Shift+R) to bust the browser CSS cache
+
+**Do NOT edit `self-service-portal.css`.** It's legacy, unused, and changes there don't propagate to the portal. If you find yourself about to "mirror" a change into it, stop — you're doubling the maintenance burden for zero runtime benefit.
 
 ### Token governance
 
@@ -163,7 +168,7 @@ This project has a companion Confluence article (internal, not linked here) that
 
 ## CSS Variable Structure
 
-`self-service-portal.css` uses CSS custom properties for all colours. Two variable sets:
+`self-service-portal-design.css` uses CSS custom properties for all colours. Two variable sets:
 
 ```css
 :root { ... }          /* Light mode — portal bg, surface, text, accent, border, shadow, code, blockquote */

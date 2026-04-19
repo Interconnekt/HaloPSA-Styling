@@ -146,6 +146,13 @@
     --panel-tip-bg:           #E3FEF2;
     --panel-tip-border:       rgba(12, 121, 125, 0.28);
     --panel-tip-icon:         #0C797D;
+    /* Yellow warning — used when HaloPSA's ADF import stamps a real
+       Warning panel as `.confluence-information-macro-note` (purple
+       class) but leaves the `aui-iconfont-warning` glyph inside. We
+       disambiguate via `:has(.aui-iconfont-warning)` further down. */
+    --panel-warnyellow-bg:     #FFFAE6;
+    --panel-warnyellow-border: rgba(240, 200, 8, 0.45);
+    --panel-warnyellow-icon:   #8A6D00;
 
     /* Gradient system */
     --ik-gradient-brand: linear-gradient(135deg, #2B5CE6 0%, #8B3AD9 55%, #C026D3 100%);
@@ -246,6 +253,9 @@
     --panel-tip-bg:           rgba(52, 211, 153, 0.12);
     --panel-tip-border:       rgba(52, 211, 153, 0.38);
     --panel-tip-icon:         #34D399;
+    --panel-warnyellow-bg:     rgba(240, 200, 8, 0.14);
+    --panel-warnyellow-border: rgba(240, 200, 8, 0.45);
+    --panel-warnyellow-icon:   #F0C808;
 
     --ik-gradient-brand: linear-gradient(135deg, #4A74F0 0%, #A856EF 55%, #D946EF 100%);
     --ik-gradient-line:  linear-gradient(90deg, transparent, #4A74F0 30%, #D946EF 70%, transparent);
@@ -2172,19 +2182,30 @@ html body .portal .rt-th {
     color: var(--portal-text);
 }
 /* Header row typography — scoped to `.-header` only so the filter
-   row below (`.-filters`) keeps its input chrome untouched. */
+   row below (`.-filters`) keeps its input chrome untouched.
+
+   Montserrat bold (not mono) so the header reads as part of the
+   Interconnekt display-type family, matching card titles / section
+   headings elsewhere in the portal. `display: flex; align-items:
+   center` vertically centres both the label TEXT and the
+   `.column-filter-button` funnel on the same middle axis — HaloPSA
+   renders them as sibling children of `.rt-th`, so flex-centring the
+   parent handles both in one rule. */
 html body .portal .rt-thead.-header .rt-th {
-    font-family: var(--ik-font-mono) !important;
-    font-size: 10.5px !important;
-    letter-spacing: 0.12em;
+    font-family: var(--ik-font-display) !important;
+    font-size: 11.5px !important;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--portal-text-muted) !important;
-    font-weight: 500 !important;
+    font-weight: 700 !important;
     /* Match the body-cell 12px 14px so header text aligns with the
        body column content below. HaloPSA default is 5px on all sides,
        which pulled the header text 9px to the left of each body cell. */
     padding: 12px 14px !important;
     text-align: left;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px;
 }
 
 html body .portal .rt-td {
@@ -2212,17 +2233,20 @@ html body .portal .ReactTable.main-table .rt-thead.-header {
     border-bottom: 1px solid var(--portal-border) !important;
     box-shadow: none !important;
 }
-html body .portal .ReactTable.main-table .rt-thead .rt-th {
+html body .portal .ReactTable.main-table .rt-thead.-header .rt-th {
     color: var(--portal-text-muted) !important;
-    font-family: var(--ik-font-mono) !important;
-    font-size: 10.5px !important;
-    font-weight: 500 !important;
-    letter-spacing: 0.12em !important;
+    font-family: var(--ik-font-display) !important;
+    font-size: 11.5px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.08em !important;
     text-transform: uppercase;
     border-right: 1px solid var(--portal-border-soft) !important;
     padding: 14px 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px;
 }
-html body .portal .ReactTable.main-table .rt-thead .rt-th:last-child {
+html body .portal .ReactTable.main-table .rt-thead.-header .rt-th:last-child {
     border-right: 0 !important;
 }
 html body .portal .rt-tbody .rt-tr-group {
@@ -3581,6 +3605,17 @@ html body .portal .kbdetails.kbdetails .confluence-information-macro-note.conflu
     background: var(--panel-note-bg) !important;
     border: 1px solid var(--panel-note-border) !important;
 }
+/* Semantic-mismatch rescue: HaloPSA's ADF import stamps real ADF
+   Warning panels with the `-note` wrapper class but leaves the
+   `aui-iconfont-warning` glyph inside. Detect via `:has()` and repaint
+   yellow. Same specificity ladder as the -note rule above (doubled
+   class + doubled wrapper) plus the :has() pseudo — source order
+   lets it win. Scoped tightly to the mismatch so genuine Note
+   panels (which carry `aui-iconfont-note` or no icon) stay purple. */
+html body .portal .kbdetails.kbdetails .confluence-information-macro-note.confluence-information-macro-note:has(.aui-iconfont-warning) {
+    background: var(--panel-warnyellow-bg) !important;
+    border: 1px solid var(--panel-warnyellow-border) !important;
+}
 html body .portal .kbdetails.kbdetails .confluence-information-macro-warning.confluence-information-macro-warning,
 html body .portal .kbdetails.kbdetails .confluence-information-macro-error.confluence-information-macro-error {
     background: var(--panel-warn-bg) !important;
@@ -3673,13 +3708,19 @@ html body .portal .kbdetails .panel .panelContent > p:last-child {
    `::before` — absolutely positioned, `z-index: 0`, under the content
    layer — to darken while preserving hue. The `.panelHeader` and
    `.panelContent` both get `z-index: 1` so text sits above the scrim.
-   Same pattern used in the old `self-service-portal.css` block for
-   `.theme-dark .kbdetails .panel` — reinstated here now that this
-   file is the single source of truth. */
-html body .portal .theme-dark .kbdetails .panel {
+
+   Selector note: HaloPSA puts `.portal` and `.theme-dark` on the SAME
+   `.app-container` element, so `.portal .theme-dark` (with space,
+   descendant combinator) never matches. Use `.portal.theme-dark`
+   (compound, no space) instead — that's why Note/Custom panels
+   previously rendered with their bright inline light-mode bg against
+   light text in dark mode. This bug affects several other dark-mode
+   rules in this file (priority pills, sort carets, lozenges) — flagged
+   in AGENTS.md for a sweep pass. */
+html body .portal.theme-dark .kbdetails .panel {
     overflow: hidden;
 }
-html body .portal .theme-dark .kbdetails .panel::before {
+html body .portal.theme-dark .kbdetails .panel::before {
     content: '';
     position: absolute;
     inset: 0;
@@ -3687,31 +3728,84 @@ html body .portal .theme-dark .kbdetails .panel::before {
     pointer-events: none;
     z-index: 0;
 }
-html body .portal .theme-dark .kbdetails .panel .panelHeader,
-html body .portal .theme-dark .kbdetails .panel .panelContent {
+html body .portal.theme-dark .kbdetails .panel .panelHeader,
+html body .portal.theme-dark .kbdetails .panel .panelContent {
     position: relative;
     z-index: 1;
 }
 
-/* Leading `.aui-icon` — per-type tint matching the panel hue,
-   so the icon reads as a saturated accent against the tinted bg. */
+/* Leading icon — Confluence-style, absolute-positioned at wrapper
+   top-left with the body indented to clear it. HaloPSA doesn't load
+   the AUI icon-font or sprite sheet, so Confluence's native
+   `.aui-iconfont-*` classes render as empty spans. We inject per-type
+   Unicode glyphs via `::before`:
+     info    → ⓘ  (U+24D8, info-circle)
+     error   → ⊗  (U+2297, circled cross) — ADF "error" / legacy -warning class
+     warning → ⚠  (U+26A0, warning triangle) — real ADF warning on -note class
+     approve → ✓  (U+2713, checkmark) — ADF "success" / legacy -tip class
+   The icon sits at top:14px, left:18px (aligned with body text first
+   line). `z-index: 2` keeps it above the body's `z-index: 1` stacking
+   context (set for the dark-mode scrim). Family-B `.panel` has no
+   `.aui-icon` in its DOM — these panels rely on colour alone, matching
+   native Confluence where Note-panel / Warning-panel / Custom-panel
+   also don't show icons. Body's `padding-left: 46px` (18 + 18 + 10gap)
+   reserves space so text doesn't collide with the icon on multi-line
+   content. */
+html body .portal .kbdetails .confluence-information-macro {
+    position: relative;
+}
+html body .portal .kbdetails .confluence-information-macro .confluence-information-macro-icon {
+    display: block !important;
+    position: absolute !important;
+    top: 14px;
+    left: 18px;
+    width: 18px;
+    height: 18px;
+    font-size: 0;
+    line-height: 1;
+    text-align: center;
+    z-index: 2;
+    pointer-events: none;
+}
+html body .portal .kbdetails .confluence-information-macro .confluence-information-macro-icon::before {
+    font-size: 18px;
+    line-height: 1;
+    display: block;
+    font-family: 'Apple Color Emoji', 'Segoe UI Symbol', 'Noto Sans Symbols2', system-ui, sans-serif;
+    font-variant-emoji: text;
+}
+html body .portal .kbdetails .aui-iconfont-info::before         { content: "\24D8"; }
+html body .portal .kbdetails .aui-iconfont-error::before        { content: "\2297"; font-weight: 700; }
+html body .portal .kbdetails .aui-iconfont-warning::before      { content: "\26A0\FE0E"; }
+html body .portal .kbdetails .aui-iconfont-approve::before      { content: "\2713"; font-weight: 700; }
+
+/* Indent Family-A body content to clear the absolute-positioned icon.
+   Family-B `.panelContent` keeps its plain 18px left padding — it has
+   no icon. Override the shared body-padding rule above via source
+   order + higher specificity on the `[class*=...]` descendant. */
+html body .portal .kbdetails [class*="confluence-information-macro-"] > .confluence-information-macro-body {
+    padding-left: 46px !important;
+}
+
+/* Per-type icon tint — matches the panel's accent hue. Text colour on
+   a font-glyph (no bg) so it reads as a coloured icon against the
+   tinted body bg. */
 html body .portal .kbdetails .confluence-information-macro-information .confluence-information-macro-icon {
     color: var(--panel-info-icon) !important;
-    margin-right: 4px;
 }
 html body .portal .kbdetails .confluence-information-macro-note .confluence-information-macro-icon {
     color: var(--panel-note-icon) !important;
-    margin-right: 4px;
+}
+html body .portal .kbdetails .confluence-information-macro-note:has(.aui-iconfont-warning) .confluence-information-macro-icon {
+    color: var(--panel-warnyellow-icon) !important;
 }
 html body .portal .kbdetails .confluence-information-macro-warning .confluence-information-macro-icon,
 html body .portal .kbdetails .confluence-information-macro-error .confluence-information-macro-icon {
     color: var(--panel-warn-icon) !important;
-    margin-right: 4px;
 }
 html body .portal .kbdetails .confluence-information-macro-tip .confluence-information-macro-icon,
 html body .portal .kbdetails .confluence-information-macro-success .confluence-information-macro-icon {
     color: var(--panel-tip-icon) !important;
-    margin-right: 4px;
 }
 
 /* Code */

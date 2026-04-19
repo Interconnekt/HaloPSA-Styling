@@ -3461,13 +3461,39 @@ html body .portal .rc-steps-item-tail::after {
     height: 1px !important;
 }
 
-/* Vertical-label variant margin — rc-steps centres labels below
-   the icon; icon horizontal margin is `(trackWidth - iconWidth) / 2`
-   so the connector joins mid-icon cleanly. 40/2 = 20px → use
-   `margin: 0 32px` (rc-steps ships 36px default; 32 trims slightly
-   so the labels have enough horizontal room on 5-step ladders). */
-html body .portal .rc-steps-label-vertical .rc-steps-item-icon {
-    margin: 0 32px !important;
+/* Force below-the-icon label layout on ALL rc-steps instances.
+   HaloPSA ships the stepper component via different paths depending
+   on ticket workflow: Incident emits `.rc-steps-label-vertical` on
+   the container; Change Request omits it, so rc-steps falls back to
+   the default horizontal layout where labels sit BESIDE the icon
+   (ticket 176793 vs 176791 comparison Joel flagged). Overriding the
+   child layout without needing the variant class gives every
+   workflow the same stacked below-icon treatment and lets the
+   connector reach full-width between evenly-flexed items. */
+html body .portal .rc-steps.rc-steps-horizontal {
+    display: flex !important;
+    width: 100%;
+}
+html body .portal .rc-steps .rc-steps-item {
+    flex: 1 1 0 !important;
+    overflow: visible !important;
+    text-align: center;
+}
+html body .portal .rc-steps .rc-steps-item-container {
+    display: block !important;
+    text-align: center;
+}
+html body .portal .rc-steps .rc-steps-item-icon {
+    margin: 0 auto !important;
+    display: inline-flex !important;
+    float: none !important;
+}
+html body .portal .rc-steps .rc-steps-item-content {
+    display: block !important;
+    margin-left: 0 !important;
+    margin-top: 8px !important;
+    text-align: center;
+    width: 100%;
 }
 
 /* FINISH — completed: solid accent circle, white check glyph. */

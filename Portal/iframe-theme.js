@@ -56,15 +56,51 @@
 
     var MARKER = 'data-portal-font-injected';
 
+    /* Strip inline `font-family` declarations from every element in
+       the iframe document. Email HTML commonly inlines
+       `style="font-family: Arial !important"` at every cell/span,
+       and per CSS spec an `!important` inline declaration outranks an
+       `!important` stylesheet declaration — so our injected
+       `body * { font-family: Montserrat !important }` rule would
+       lose to those inlines on specificity. Stripping the inline
+       declaration lets our stylesheet rule win uncontested.
+
+       Also removes `face=""` from legacy `<font>` tags (still present
+       in older email templates) so the attribute doesn't force a
+       render-time font. */
+    function stripInlineFonts(doc) {
+        var styled = doc.querySelectorAll('[style]');
+        for (var i = 0; i < styled.length; i++) {
+            var el = styled[i];
+            var style = el.getAttribute('style') || '';
+            if (!/font/i.test(style)) continue;
+            // Remove `font-family: ...;` declarations (including !important)
+            var stripped = style.replace(/font-family\s*:[^;]*(;|$)/gi, '');
+            // Remove `font: ...;` shorthand which also sets font-family
+            stripped = stripped.replace(/(^|;)\s*font\s*:[^;]*(;|$)/gi, '$1');
+            if (stripped !== style) {
+                el.setAttribute('style', stripped.trim());
+            }
+        }
+        var fonts = doc.querySelectorAll('font[face]');
+        for (var j = 0; j < fonts.length; j++) {
+            fonts[j].removeAttribute('face');
+        }
+    }
+
     function inject(iframe) {
         try {
             var doc = iframe.contentDocument;
             if (!doc || !doc.head) return;
-            if (doc.querySelector('style[' + MARKER + ']')) return;
-            var style = doc.createElement('style');
-            style.setAttribute(MARKER, '1');
-            style.textContent = CSS;
-            doc.head.appendChild(style);
+            if (!doc.querySelector('style[' + MARKER + ']')) {
+                var style = doc.createElement('style');
+                style.setAttribute(MARKER, '1');
+                style.textContent = CSS;
+                doc.head.appendChild(style);
+            }
+            // Always re-strip on inject — email re-renders may bring
+            // the inline styles back on ticket navigation.
+            stripInlineFonts(doc);
         } catch (e) { /* cross-origin or detached — ignore */ }
     }
 

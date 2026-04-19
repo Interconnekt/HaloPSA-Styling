@@ -1016,6 +1016,33 @@ html body .portal .main-tile-item td div[style*="margin-right: 20px"] {
     margin-right: 0 !important;
 }
 
+/* Tile template column width — HaloPSA's default template sets
+   `<td style="width:135px; text-align: right;">` on row 1 col 2 (the
+   ID cell). Because `<table>` uses `table-layout: auto`, that inline
+   width locks col 2 to 135px across ALL rows, including the row 3
+   status pill. A longer status label (e.g. "Awaiting Supplier", or
+   the old "Completed / Resolved") then gets clipped by the TD's
+   `overflow: hidden`, rendering as "AWAITING SUPPLI…". Overriding
+   to `width: auto` lets the column size to its widest content (the
+   pill) while the ID cell still looks right because `text-align:
+   right` is independent. `min-width: 100px` ensures the column
+   doesn't collapse too narrow when the ticket is brand new and has
+   no status yet. */
+html body .portal .main-tile-item td[style*="width:135px"],
+html body .portal .main-tile-item td[style*="width: 135px"] {
+    width: auto !important;
+    min-width: 100px;
+}
+
+/* Unclip the td so pills aren't chopped by the cell's `overflow:
+   hidden; text-overflow: ellipsis`. The pill pill itself will still
+   sit inside the card content area because the outer card has its
+   own padding + overflow: visible. */
+html body .portal .main-tile-item td {
+    overflow: visible !important;
+    text-overflow: clip !important;
+}
+
 
 /* ─────────────────────────────────────────────────────────
    8 · Cards, panels, generic containers
@@ -4156,6 +4183,78 @@ html body .portal *::-webkit-scrollbar-track { background: transparent; }
 html body .portal * {
     scrollbar-width: thin;
     scrollbar-color: var(--portal-border) transparent;
+}
+
+/* Ticket-list scroll pane (.infinite-scroll-component on the Tile
+   view and List view) — auto-hide the scrollbar and pad a gutter
+   so cards don't sit flush against the thumb. The thumb starts
+   transparent and reveals on `:hover`/`:focus-within` of the
+   scroll container; works in Chrome via `::-webkit-scrollbar-thumb`
+   and in Firefox via `scrollbar-color: transparent`, with the
+   hover selector swapping to a visible thumb.
+   `padding-right: 12px` + `scrollbar-gutter: stable` reserves the
+   gutter space always so cards never shift horizontally when the
+   scrollbar appears/disappears. */
+html body .portal .infinite-scroll-component {
+    padding-right: 12px;
+    scrollbar-gutter: stable;
+    scrollbar-color: transparent transparent;
+    transition: scrollbar-color 180ms ease;
+}
+html body .portal .infinite-scroll-component::-webkit-scrollbar-thumb {
+    background: transparent;
+    transition: background 180ms ease;
+}
+html body .portal .infinite-scroll-component:hover,
+html body .portal .infinite-scroll-component:focus-within {
+    scrollbar-color: var(--portal-border) transparent;
+}
+html body .portal .infinite-scroll-component:hover::-webkit-scrollbar-thumb,
+html body .portal .infinite-scroll-component:focus-within::-webkit-scrollbar-thumb {
+    background: var(--portal-border);
+}
+html body .portal .infinite-scroll-component::-webkit-scrollbar-thumb:hover {
+    background: var(--portal-text-muted);
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   Empty state — "Select a Ticket to view"
+   ─────────────────────────────────────────────────────────
+   `.preview-noneselected.tickets` is the placeholder HaloPSA
+   renders in the right pane when no ticket is selected. Default
+   is a saturated-blue 128px `.ico` bg-image + mid-grey sans-serif
+   text floating in the middle of a huge pane — reads as a raw
+   stock asset, not a designed empty state. Restyle with portal
+   typography + a muted, tokenised bg-image treatment so it reads
+   as a deliberate "no selection yet" affordance. `filter:
+   grayscale(1) opacity(0.35)` desaturates the blue ico into a
+   neutral ghost mark, so it recedes against both light and dark
+   bgs. */
+html body .portal .preview-noneselected,
+html body .portal .preview-noneselected.tickets {
+    padding: 48px 20px !important;
+    margin: 60px auto 0 !important;
+    max-width: 420px;
+    text-align: center;
+    font-family: var(--ik-font-display) !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.005em;
+    color: var(--portal-text-muted) !important;
+    background-size: 72px !important;
+    background-position: center 0 !important;
+    /* Icon rendering above the text, driven by bg-image so the
+       existing HaloPSA url still resolves. Big top padding below
+       leaves room for the icon. */
+    padding-top: 110px !important;
+    filter: grayscale(1) opacity(0.45);
+    transition: opacity var(--ik-dur) var(--ik-ease);
+}
+/* Subtle hover lift on the whole block — signals the pane is
+   interactive (clicking a ticket on the left will populate it). */
+html body .portal .preview-noneselected:hover {
+    filter: grayscale(1) opacity(0.65);
 }
 
 /* ─────────────────────────────────────────────────────────

@@ -90,6 +90,22 @@
     --ik-gradient-line: linear-gradient(90deg, transparent, #4A74F0 30%, #D946EF 70%, transparent);
     --ik-dur: 180ms;
     --ik-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+    /* Confluence panel tokens — per-type bg + hairline border + icon
+       tint. Referenced by the `.confluence-information-macro-*` rules
+       in section 9. Auto-flipped in `.theme-dark`. */
+    --panel-info-bg:          #EAF2FD;
+    --panel-info-border:      rgba(43, 92, 230, 0.28);
+    --panel-info-icon:        #2B5CE6;
+    --panel-note-bg:          #F7EEFD;
+    --panel-note-border:      rgba(139, 58, 217, 0.28);
+    --panel-note-icon:        #8B3AD9;
+    --panel-warn-bg:          #FCEDEC;
+    --panel-warn-border:      rgba(220, 80, 50, 0.28);
+    --panel-warn-icon:        #DC5032;
+    --panel-tip-bg:           #E3FEF2;
+    --panel-tip-border:       rgba(12, 121, 125, 0.28);
+    --panel-tip-icon:         #0C797D;
 }
 
 /* Dark mode variable overrides */
@@ -126,6 +142,20 @@
     /* Blockquote (dark) */
     --portal-quote-border: var(--portal-accent);
     --portal-quote-bg: #3a3a4a;
+
+    /* Confluence panel tokens — dark-mode counterparts. */
+    --panel-info-bg:          rgba(74, 116, 240, 0.15);
+    --panel-info-border:      rgba(74, 116, 240, 0.40);
+    --panel-info-icon:        #4C9AFF;
+    --panel-note-bg:          rgba(168, 86, 239, 0.15);
+    --panel-note-border:      rgba(168, 86, 239, 0.40);
+    --panel-note-icon:        #B084F5;
+    --panel-warn-bg:          rgba(248, 113, 113, 0.12);
+    --panel-warn-border:      rgba(248, 113, 113, 0.38);
+    --panel-warn-icon:        #FF8A73;
+    --panel-tip-bg:           rgba(52, 211, 153, 0.12);
+    --panel-tip-border:       rgba(52, 211, 153, 0.38);
+    --panel-tip-icon:         #34D399;
 }
 
 
@@ -1843,29 +1873,50 @@ footer a svg {
     font-size: 1.5rem;
 }
 
-/* ── Panel outer wrappers: unified modern card (no coloured side border) ──
-   All Confluence info/note/warning/tip/error/success macros and generic
-   `.panel` render as one tonal surface card: hairline border, subtle
-   surface bg, rounded, NO saturated left stripe. The Confluence-shipped
-   `.aui-icon` at the start of each body communicates type (ⓘ ⚠ ✓), so
-   the left stripe was redundant and fought the portal's tonal chrome.
-   Tokens auto-flip via `:root` / `.theme-dark` variable blocks, so no
-   separate dark-mode body-bg overrides are required (see section 10).
+/* ── Confluence panels: per-type tinted card, no coloured left stripe ──
+   Geometry shared across types; bg + hairline border + icon tint come
+   from `--panel-{type}-*` tokens (section 1) which auto-flip via
+   `:root` / `.theme-dark`. Text stays on `--portal-text` so readability
+   is guaranteed in both modes.
    ── */
 .kbdetails .confluence-information-macro,
 .kbdetails .panel {
     border-radius: 12px !important;
     overflow: hidden !important;
-    border: 1px solid var(--portal-border) !important;
-    background: var(--portal-surface) !important;
     padding: 0 !important;
     margin: 15px 0;
 }
 
-/* Shared body rule — transparent bg so the outer surface token shows
-   through and handles both light + dark, readable `--portal-text` ink,
-   consistent padding. Catch-all `border: none` kills any Confluence
-   inline body borders. */
+/* Doubled class specificity — see rationale in self-service-portal-design.css
+   header comment: a stray (0,4,2)+!important rule elsewhere in HaloPSA's
+   stylesheet chain paints panel wrappers white. Doubling class names
+   bumps us to (0,4,0) → beats the competing rule without !important wars. */
+.kbdetails.kbdetails .confluence-information-macro-information.confluence-information-macro-information {
+    background: var(--panel-info-bg) !important;
+    border: 1px solid var(--panel-info-border) !important;
+}
+.kbdetails.kbdetails .confluence-information-macro-note.confluence-information-macro-note {
+    background: var(--panel-note-bg) !important;
+    border: 1px solid var(--panel-note-border) !important;
+}
+.kbdetails.kbdetails .confluence-information-macro-warning.confluence-information-macro-warning,
+.kbdetails.kbdetails .confluence-information-macro-error.confluence-information-macro-error {
+    background: var(--panel-warn-bg) !important;
+    border: 1px solid var(--panel-warn-border) !important;
+}
+.kbdetails.kbdetails .confluence-information-macro-tip.confluence-information-macro-tip,
+.kbdetails.kbdetails .confluence-information-macro-success.confluence-information-macro-success {
+    background: var(--panel-tip-bg) !important;
+    border: 1px solid var(--panel-tip-border) !important;
+}
+/* Generic `.panel` — neutral surface. */
+.kbdetails.kbdetails .panel.panel {
+    background: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+}
+
+/* Shared body — transparent bg so the wrapper tint shows, readable
+   token ink, consistent padding. */
 .kbdetails [class*="confluence-information-macro-"] > .confluence-information-macro-body,
 .kbdetails .panel .panelContent {
     background: transparent !important;
@@ -1874,10 +1925,23 @@ footer a svg {
     padding: 15px 25px !important;
 }
 
-/* Leading `.aui-icon` tint — a single accent colour for all panel
-   types, since the icon is now the sole differentiator. */
-.kbdetails .confluence-information-macro-icon {
-    color: var(--portal-accent) !important;
+/* Leading `.aui-icon` tint — per-type colour matching the panel hue. */
+.kbdetails .confluence-information-macro-information .confluence-information-macro-icon {
+    color: var(--panel-info-icon) !important;
+    margin-right: 4px;
+}
+.kbdetails .confluence-information-macro-note .confluence-information-macro-icon {
+    color: var(--panel-note-icon) !important;
+    margin-right: 4px;
+}
+.kbdetails .confluence-information-macro-warning .confluence-information-macro-icon,
+.kbdetails .confluence-information-macro-error .confluence-information-macro-icon {
+    color: var(--panel-warn-icon) !important;
+    margin-right: 4px;
+}
+.kbdetails .confluence-information-macro-tip .confluence-information-macro-icon,
+.kbdetails .confluence-information-macro-success .confluence-information-macro-icon {
+    color: var(--panel-tip-icon) !important;
     margin-right: 4px;
 }
 

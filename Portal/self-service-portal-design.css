@@ -128,6 +128,25 @@
     --portal-warn:            #C2410C;
     --portal-err:             #B91C1C;
 
+    /* Confluence panel tokens — per-type bg + hairline border + icon tint.
+       Used by the `.confluence-information-macro-*` rules below. Kept
+       separate from the semantic tokens above because these need to
+       read as a visibly tinted surface (not the full-saturation
+       foreground colour of --portal-ok / --portal-err). Auto-flipped
+       in `.theme-dark`. */
+    --panel-info-bg:          #EAF2FD;
+    --panel-info-border:      rgba(43, 92, 230, 0.28);
+    --panel-info-icon:        #2B5CE6;
+    --panel-note-bg:          #F7EEFD;
+    --panel-note-border:      rgba(139, 58, 217, 0.28);
+    --panel-note-icon:        #8B3AD9;
+    --panel-warn-bg:          #FCEDEC;
+    --panel-warn-border:      rgba(220, 80, 50, 0.28);
+    --panel-warn-icon:        #DC5032;
+    --panel-tip-bg:           #E3FEF2;
+    --panel-tip-border:       rgba(12, 121, 125, 0.28);
+    --panel-tip-icon:         #0C797D;
+
     /* Gradient system */
     --ik-gradient-brand: linear-gradient(135deg, #2B5CE6 0%, #8B3AD9 55%, #C026D3 100%);
     --ik-gradient-line:  linear-gradient(90deg, transparent, #2B5CE6 30%, #C026D3 70%, transparent);
@@ -208,6 +227,25 @@
     --portal-ok:              #34D399;
     --portal-warn:            #FB923C;
     --portal-err:             #F87171;
+
+    /* Confluence panel tokens — dark-mode counterparts.
+       Bgs drop to low-alpha tints against the dark canvas so the
+       panel still reads as its type hue without shouting.
+       Borders lift to moderate alpha so the hairline remains
+       visible on the deeper bg. Icons go to the brighter dark-mode
+       variants used elsewhere for the same hue family. */
+    --panel-info-bg:          rgba(74, 116, 240, 0.15);
+    --panel-info-border:      rgba(74, 116, 240, 0.40);
+    --panel-info-icon:        #4C9AFF;
+    --panel-note-bg:          rgba(168, 86, 239, 0.15);
+    --panel-note-border:      rgba(168, 86, 239, 0.40);
+    --panel-note-icon:        #B084F5;
+    --panel-warn-bg:          rgba(248, 113, 113, 0.12);
+    --panel-warn-border:      rgba(248, 113, 113, 0.38);
+    --panel-warn-icon:        #FF8A73;
+    --panel-tip-bg:           rgba(52, 211, 153, 0.12);
+    --panel-tip-border:       rgba(52, 211, 153, 0.38);
+    --panel-tip-icon:         #34D399;
 
     --ik-gradient-brand: linear-gradient(135deg, #4A74F0 0%, #A856EF 55%, #D946EF 100%);
     --ik-gradient-line:  linear-gradient(90deg, transparent, #4A74F0 30%, #D946EF 70%, transparent);
@@ -3471,29 +3509,71 @@ html body .portal .kbtags:hover {
     background: var(--portal-accent-soft) !important;
 }
 
-/* Confluence panels — modern unified card.
-   All info/note/warning/tip/error/success macros AND generic `.panel`
-   share one tonal surface card: hairline border, subtle bg, rounded,
-   NO coloured side-border. The Confluence-shipped `.aui-icon` at the
-   start of each panel body already communicates type (ⓘ ⚠ ✓), which
-   is all the differentiation we need; a saturated left stripe felt
-   dated and fought the rest of the portal's tonal chrome.
-   Backgrounds, borders and text colour use `--portal-*` tokens so
-   light/dark mode auto-flip via the `:root`/`.theme-dark` variable
-   blocks — no separate dark-mode overrides required. This also fixes
-   a prior dark-mode regression where a `.theme-dark .portal ...`
-   selector never matched (HaloPSA puts `.theme-dark` INSIDE the
-   `.portal` wrapper, not above it), leaving panels on their light
-   hardcoded bg with white body text → unreadable. */
+/* Confluence panels — per-type tinted card, no coloured left stripe.
+   Geometry is shared; bg + hairline border + icon tint come from
+   `--panel-{type}-*` tokens that auto-flip via `:root` / `.theme-dark`.
+   Replaces the earlier "everything one tonal surface" treatment which
+   dropped all type differentiation and the earlier "4px left stripe"
+   treatment which felt dated. Text stays on `--portal-text` so
+   readability is guaranteed in both modes (past bug: a hardcoded
+   light bg won over a `.theme-dark .portal` selector that never
+   matched because `.theme-dark` is INSIDE `.portal`, not above —
+   white text on light bg = unreadable. Token-based flip dodges that
+   entirely).
+
+   Style Profile note (per AGENTS.md §1): HaloPSA auto-scopes Style
+   Profile rules under `.kbdetails`, which can't reach `.theme-dark`
+   above. That's why the dark variant lives here in Custom CSS via
+   the token flip, not in a Style Profile rule. */
 html body .portal .kbdetails .confluence-information-macro,
 html body .portal .kbdetails .panel {
     border-radius: var(--portal-radius-sm) !important;
     overflow: hidden !important;
-    border: 1px solid var(--portal-border) !important;
-    background: var(--portal-surface) !important;
     padding: 0 !important;
     margin: 20px 0;
 }
+
+/* Per-type wrapper — bg + hairline border from tokens. `!important`
+   on background to beat Confluence's inline `style="background-color:"`
+   attributes that some exports still carry.
+
+   Doubled `.kbdetails.kbdetails` + doubled type class — specificity
+   bumped from (0,4,2) → (0,5,2). There's a stray Style Profile rule
+   at (0,4,2)+`!important` elsewhere in HaloPSA's stylesheet chain
+   that paints the WRAPPER white (confirmed via Chrome inspection;
+   the rule doesn't show up in programmatic `cssRules` iteration —
+   likely a cross-origin or platform-injected sheet). The doubled
+   selector beats it cleanly without needing an `!important` war.
+   Browsers collapse duplicate-class selectors at parse time, so
+   there's no meaningful cost. */
+html body .portal .kbdetails.kbdetails .confluence-information-macro-information.confluence-information-macro-information {
+    background: var(--panel-info-bg) !important;
+    border: 1px solid var(--panel-info-border) !important;
+}
+html body .portal .kbdetails.kbdetails .confluence-information-macro-note.confluence-information-macro-note {
+    background: var(--panel-note-bg) !important;
+    border: 1px solid var(--panel-note-border) !important;
+}
+html body .portal .kbdetails.kbdetails .confluence-information-macro-warning.confluence-information-macro-warning,
+html body .portal .kbdetails.kbdetails .confluence-information-macro-error.confluence-information-macro-error {
+    background: var(--panel-warn-bg) !important;
+    border: 1px solid var(--panel-warn-border) !important;
+}
+html body .portal .kbdetails.kbdetails .confluence-information-macro-tip.confluence-information-macro-tip,
+html body .portal .kbdetails.kbdetails .confluence-information-macro-success.confluence-information-macro-success {
+    background: var(--panel-tip-bg) !important;
+    border: 1px solid var(--panel-tip-border) !important;
+}
+/* Generic `.panel` (ADF Warning / Custom types use this wrapper)
+   gets the neutral surface treatment — their actual tint comes from
+   Confluence inline bg on `.panelContent`. */
+html body .portal .kbdetails.kbdetails .panel.panel {
+    background: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+}
+
+/* Body: transparent so the wrapper tint shows, portal text colour
+   (auto-flips), consistent padding + type scale. */
 html body .portal .kbdetails [class*="confluence-information-macro-"] > .confluence-information-macro-body,
 html body .portal .kbdetails .panel .panelContent {
     background: transparent !important;
@@ -3504,13 +3584,24 @@ html body .portal .kbdetails .panel .panelContent {
     line-height: 1.65 !important;
 }
 
-/* Confluence ships a leading `.aui-icon` inline that picks up a
-   brand colour per type. Keep the icon visible — it's our sole
-   differentiator now that the left stripe is gone — and tint it
-   with the same action blue used elsewhere in the portal so it
-   reads as a consistent "I'm a callout" affordance. */
-html body .portal .kbdetails .confluence-information-macro-icon {
-    color: var(--portal-accent) !important;
+/* Leading `.aui-icon` — per-type tint matching the panel hue,
+   so the icon reads as a saturated accent against the tinted bg. */
+html body .portal .kbdetails .confluence-information-macro-information .confluence-information-macro-icon {
+    color: var(--panel-info-icon) !important;
+    margin-right: 4px;
+}
+html body .portal .kbdetails .confluence-information-macro-note .confluence-information-macro-icon {
+    color: var(--panel-note-icon) !important;
+    margin-right: 4px;
+}
+html body .portal .kbdetails .confluence-information-macro-warning .confluence-information-macro-icon,
+html body .portal .kbdetails .confluence-information-macro-error .confluence-information-macro-icon {
+    color: var(--panel-warn-icon) !important;
+    margin-right: 4px;
+}
+html body .portal .kbdetails .confluence-information-macro-tip .confluence-information-macro-icon,
+html body .portal .kbdetails .confluence-information-macro-success .confluence-information-macro-icon {
+    color: var(--panel-tip-icon) !important;
     margin-right: 4px;
 }
 

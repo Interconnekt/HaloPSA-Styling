@@ -3790,12 +3790,11 @@ html body .portal .kbdetails.kbdetails .panel.panel[style*="#ebf9fe"] {
 }
 
 /* Body: transparent so the wrapper tint shows, portal text colour
-   (auto-flips), compact padding + type scale. `z-index: 1` on the
-   panel body lifts it above the dark-mode `::before` overlay.
-   Padding tightened from 16px/22px → 12px/18px after live-DOM
-   measurement showed the previous values left ~28px of phantom
-   whitespace on single-line panels (trailing `<p>` margin-bottom
-   was adding a second phantom gap — zeroed below). */
+   (auto-flips), compact padding + type scale. Padding tightened from
+   16px/22px → 12px/18px after live-DOM measurement showed the
+   previous values left ~28px of phantom whitespace on single-line
+   panels (trailing `<p>` margin-bottom was adding a second phantom
+   gap — zeroed below). */
 html body .portal .kbdetails [class*="confluence-information-macro-"] > .confluence-information-macro-body,
 html body .portal .kbdetails .panel .panelContent {
     background: transparent !important;
@@ -3804,8 +3803,6 @@ html body .portal .kbdetails .panel .panelContent {
     padding: 12px 18px !important;
     font-size: 15px !important;
     line-height: 1.65 !important;
-    position: relative;
-    z-index: 1;
 }
 
 /* Zero the trailing paragraph margin inside panel bodies. Confluence
@@ -3818,36 +3815,49 @@ html body .portal .kbdetails .panel .panelContent > p:last-child {
     margin-bottom: 0 !important;
 }
 
-/* Dark-mode: `.panel` elements carry their hue via Confluence's
-   INLINE bg (e.g. `#EAE6FF` purple), which reads as a jarring bright
-   light pill against our dark canvas. Overlay a 55% black scrim via
-   `::before` — absolutely positioned, `z-index: 0`, under the content
-   layer — to darken while preserving hue. The `.panelHeader` and
-   `.panelContent` both get `z-index: 1` so text sits above the scrim.
+/* Dark-mode bg repaint for Family-B `.panel`. Confluence sets a
+   light hex inline (e.g. `#EAE6FF` purple), which reads as a
+   jarring bright pill against the dark canvas AND — critically —
+   doesn't get darkened when the text colour flips to light via
+   `--portal-text`, leaving light-on-light text that's nearly
+   invisible. That's the "Note/Custom text visibility" bug Joel
+   kept reporting.
 
-   Selector note: HaloPSA puts `.portal` and `.theme-dark` on the SAME
-   `.app-container` element, so `.portal .theme-dark` (with space,
-   descendant combinator) never matches. Use `.portal.theme-dark`
-   (compound, no space) instead — that's why Note/Custom panels
-   previously rendered with their bright inline light-mode bg against
-   light text in dark mode. This bug affects several other dark-mode
-   rules in this file (priority pills, sort carets, lozenges) — flagged
-   in AGENTS.md for a sweep pass. */
-html body .portal.theme-dark .kbdetails .panel {
-    overflow: hidden;
+   Previous approach: overlay a 55% black scrim via `.panel::before`
+   and raise panel content to `z-index: 1`. In the live portal the
+   scrim visibly failed on Note and Custom panels — probably a
+   conflict with Confluence's inline bg repaint at higher specificity,
+   or the overflow clipping we applied to `.panel` at the base rule.
+   Direct bg repaint is both simpler and more reliable, and frees
+   up `::before` for the synthetic Family-B icon injection above.
+
+   Map each known Confluence hex to the matching dark-mode token
+   family so Family-B tracks Family-A's palette in both themes:
+     #EAE6FF → --panel-note-* (purple)
+     #FFFAE6 → --panel-warnyellow-* (yellow)
+     #E6FCFF / #EBF9FE → --panel-tip-* (teal)
+
+   Selector note: HaloPSA puts `.portal` and `.theme-dark` on the
+   SAME `.app-container` element, so `.portal .theme-dark` (with
+   space, descendant combinator) never matches. Use `.portal.theme-
+   dark` (compound) — same gotcha flagged elsewhere in this file
+   for pills/carets/lozenges. */
+html body .portal.theme-dark .kbdetails.kbdetails .panel.panel[style*="#EAE6FF"],
+html body .portal.theme-dark .kbdetails.kbdetails .panel.panel[style*="#eae6ff"] {
+    background-color: rgba(168, 86, 239, 0.15) !important;
+    border-color: rgba(168, 86, 239, 0.40) !important;
 }
-html body .portal.theme-dark .kbdetails .panel::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(10, 10, 10, 0.55);
-    pointer-events: none;
-    z-index: 0;
+html body .portal.theme-dark .kbdetails.kbdetails .panel.panel[style*="#FFFAE6"],
+html body .portal.theme-dark .kbdetails.kbdetails .panel.panel[style*="#fffae6"] {
+    background-color: rgba(240, 200, 8, 0.14) !important;
+    border-color: rgba(240, 200, 8, 0.45) !important;
 }
-html body .portal.theme-dark .kbdetails .panel .panelHeader,
-html body .portal.theme-dark .kbdetails .panel .panelContent {
-    position: relative;
-    z-index: 1;
+html body .portal.theme-dark .kbdetails.kbdetails .panel.panel[style*="#E6FCFF"],
+html body .portal.theme-dark .kbdetails.kbdetails .panel.panel[style*="#e6fcff"],
+html body .portal.theme-dark .kbdetails.kbdetails .panel.panel[style*="#EBF9FE"],
+html body .portal.theme-dark .kbdetails.kbdetails .panel.panel[style*="#ebf9fe"] {
+    background-color: rgba(52, 211, 153, 0.14) !important;
+    border-color: rgba(52, 211, 153, 0.40) !important;
 }
 
 /* Leading icon — Confluence-style, absolute-positioned at wrapper
@@ -3859,32 +3869,46 @@ html body .portal.theme-dark .kbdetails .panel .panelContent {
      error   → ⊗  (U+2297, circled cross) — ADF "error" / legacy -warning class
      warning → ⚠  (U+26A0, warning triangle) — real ADF warning on -note class
      approve → ✓  (U+2713, checkmark) — ADF "success" / legacy -tip class
-   The icon sits at top:14px, left:18px (aligned with body text first
-   line). `z-index: 2` keeps it above the body's `z-index: 1` stacking
-   context (set for the dark-mode scrim). Family-B `.panel` has no
-   `.aui-icon` in its DOM — these panels rely on colour alone, matching
-   native Confluence where Note-panel / Warning-panel / Custom-panel
-   also don't show icons. Body's `padding-left: 46px` (18 + 18 + 10gap)
-   reserves space so text doesn't collide with the icon on multi-line
-   content. */
+     note    → ✎  (U+270E, pencil) — ADF note (purple)
+   Family-B `.panel` panels don't carry an `.aui-icon` DOM element
+   — they're identified by their inline `style="background-color:"`
+   hex. Icons for those are synthesised via `::before` on the `.panel`
+   wrapper itself (further down). Body's `padding-left: 46px`
+   (18 + 18 + 10gap) reserves space in both families so text doesn't
+   collide with the icon on multi-line content. */
 html body .portal .kbdetails .confluence-information-macro {
     position: relative;
 }
+/* Icon container — 18×18 absolute box, flex-centred so every glyph
+   lands on the same axis regardless of its intrinsic height. Earlier
+   rule used `text-align: center` + `font-size: 0` + block `::before`,
+   which left different glyphs (⓵ vs ⊗ vs ⚠) at slightly different
+   y-positions because each Unicode code point has its own ascent
+   metrics. Flex-centring bypasses that: the container is the
+   reference frame and every glyph centres into it.
+
+   `top: 15px` lands the icon's vertical centre at ~y=24 — dead on
+   the visual centre of the first text line (body is padding 12px,
+   font-size 15px, line-height 1.65 → first line occupies y=17–32,
+   centre 24.5). The earlier `top: 14px` ran 1px high against that
+   baseline, most visible on the ✓ Success glyph which sits low in
+   its em box. */
 html body .portal .kbdetails .confluence-information-macro .confluence-information-macro-icon {
-    display: block !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
     position: absolute !important;
-    top: 14px;
+    top: 15px;
     left: 18px;
     width: 18px;
     height: 18px;
     font-size: 0;
     line-height: 1;
-    text-align: center;
     z-index: 2;
     pointer-events: none;
 }
 html body .portal .kbdetails .confluence-information-macro .confluence-information-macro-icon::before {
-    font-size: 18px;
+    font-size: 17px;
     line-height: 1;
     display: block;
     font-family: 'Apple Color Emoji', 'Segoe UI Symbol', 'Noto Sans Symbols2', system-ui, sans-serif;
@@ -3894,13 +3918,78 @@ html body .portal .kbdetails .aui-iconfont-info::before         { content: "\24D
 html body .portal .kbdetails .aui-iconfont-error::before        { content: "\2297"; font-weight: 700; }
 html body .portal .kbdetails .aui-iconfont-warning::before      { content: "\26A0\FE0E"; }
 html body .portal .kbdetails .aui-iconfont-approve::before      { content: "\2713"; font-weight: 700; }
+/* Note (purple / pencil) — Family-A Note panels carry the
+   `.aui-iconfont-note` class on their icon element but HaloPSA
+   doesn't load the AUI sprite sheet, so without this mapping the
+   icon rendered as an empty span. ✎ (U+270E, lower-right pencil)
+   reads as "edit/note" and stays monochrome with the `\FE0E` text
+   variation selector (stops macOS/iOS from upgrading to emoji). */
+html body .portal .kbdetails .aui-iconfont-note::before         { content: "\270E\FE0E"; }
 
-/* Indent Family-A body content to clear the absolute-positioned icon.
-   Family-B `.panelContent` keeps its plain 18px left padding — it has
-   no icon. Override the shared body-padding rule above via source
-   order + higher specificity on the `[class*=...]` descendant. */
-html body .portal .kbdetails [class*="confluence-information-macro-"] > .confluence-information-macro-body {
+/* Indent body content so text clears the absolute-positioned icon.
+   Applies to BOTH panel families now:
+     - Family-A `.confluence-information-macro-body` — always has an
+       icon element rendered by HaloPSA.
+     - Family-B `.panelContent` — icon synthesised via `.panel::before`
+       further down, so the same indent is needed.
+   Previously only Family-A got the indent; Family-B text started
+   flush left, which made the new synthetic icons overlap the first
+   word on single-line panels. */
+html body .portal .kbdetails [class*="confluence-information-macro-"] > .confluence-information-macro-body,
+html body .portal .kbdetails .panel .panelContent {
     padding-left: 46px !important;
+}
+
+/* Family-B synthetic icons — Confluence's `.panel` ships with no
+   icon DOM, just an inline background colour that identifies the
+   panel type. We match the known Confluence hex values and inject
+   a glyph via `::before` on the panel wrapper itself, positioned
+   identically to the Family-A icon container above so the visual
+   language stays unified.
+     Note (#EAE6FF) → ✎ pencil      (text icon colour: purple)
+     Warn (#FFFAE6) → ⚠ warning     (yellow)
+     Custom (#E6FCFF or #EBF9FE) → ✦ 4-point star (teal)
+
+   Per-type colour via the existing `--panel-*-icon` tokens so both
+   light and dark modes flip automatically without needing a second
+   override block. */
+html body .portal .kbdetails .panel[style*="#EAE6FF"]::before,
+html body .portal .kbdetails .panel[style*="#eae6ff"]::before,
+html body .portal .kbdetails .panel[style*="#FFFAE6"]::before,
+html body .portal .kbdetails .panel[style*="#fffae6"]::before,
+html body .portal .kbdetails .panel[style*="#E6FCFF"]::before,
+html body .portal .kbdetails .panel[style*="#e6fcff"]::before,
+html body .portal .kbdetails .panel[style*="#EBF9FE"]::before,
+html body .portal .kbdetails .panel[style*="#ebf9fe"]::before {
+    position: absolute;
+    top: 15px;
+    left: 18px;
+    width: 18px;
+    height: 18px;
+    font-size: 17px;
+    line-height: 18px;
+    text-align: center;
+    font-family: 'Apple Color Emoji', 'Segoe UI Symbol', 'Noto Sans Symbols2', system-ui, sans-serif;
+    font-variant-emoji: text;
+    pointer-events: none;
+    z-index: 2;
+}
+html body .portal .kbdetails .panel[style*="#EAE6FF"]::before,
+html body .portal .kbdetails .panel[style*="#eae6ff"]::before {
+    content: "\270E\FE0E";
+    color: var(--panel-note-icon);
+}
+html body .portal .kbdetails .panel[style*="#FFFAE6"]::before,
+html body .portal .kbdetails .panel[style*="#fffae6"]::before {
+    content: "\26A0\FE0E";
+    color: var(--panel-warnyellow-icon);
+}
+html body .portal .kbdetails .panel[style*="#E6FCFF"]::before,
+html body .portal .kbdetails .panel[style*="#e6fcff"]::before,
+html body .portal .kbdetails .panel[style*="#EBF9FE"]::before,
+html body .portal .kbdetails .panel[style*="#ebf9fe"]::before {
+    content: "\2726\FE0E";
+    color: var(--panel-tip-icon);
 }
 
 /* Per-type icon tint — matches the panel's accent hue. Text colour on

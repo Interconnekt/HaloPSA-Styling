@@ -154,6 +154,22 @@
     --panel-warnyellow-border: rgba(240, 200, 8, 0.45);
     --panel-warnyellow-icon:   #8A6D00;
 
+    /* Family-B `.panel` tokens — Confluence exports these panels with
+       inline `style="background-color: #HEX"` attributes. We'd like to
+       just let the inline bg paint through, but the Style Profile
+       sets `div.panelContent { color: #1a1d23 !important }` which
+       forces DARK text on body — readable in light mode, but our
+       Custom CSS flips body to light-on-dark via `var(--portal-text)`
+       in dark mode. Family-B panels need their OWN bg tokens that
+       flip in dark mode so light text stays readable. Keeping these
+       separate from Family-A tokens (not reusing `--panel-note-*`)
+       because Family-B has Confluence-specific hex values (#EAE6FF,
+       #E6FCFF) that some authors rely on matching exactly. */
+    --panel-b-note-bg:          #EAE6FF;
+    --panel-b-note-border:      #998DD9;
+    --panel-b-custom-bg:        #E6FCFF;
+    --panel-b-custom-border:    rgba(12, 121, 125, 0.35);
+
     /* Gradient system */
     --ik-gradient-brand: linear-gradient(135deg, #2B5CE6 0%, #8B3AD9 55%, #C026D3 100%);
     --ik-gradient-line:  linear-gradient(90deg, transparent, #2B5CE6 30%, #C026D3 70%, transparent);
@@ -256,6 +272,19 @@
     --panel-warnyellow-bg:     rgba(240, 200, 8, 0.14);
     --panel-warnyellow-border: rgba(240, 200, 8, 0.45);
     --panel-warnyellow-icon:   #F0C808;
+
+    /* Family-B panel dark-mode overrides — low-alpha tints that pair
+       with the dark canvas so light text (`var(--portal-text)`) stays
+       readable. Token-flip architecture means the rule that paints
+       Family-B bg doesn't need `.theme-dark` in its selector — it just
+       references `var(--panel-b-*-bg)` which resolves differently
+       per mode. This sidesteps the AGENTS.md gotcha about
+       `.portal.theme-dark` compound selectors failing when `.portal`
+       and `.theme-dark` live on different elements. */
+    --panel-b-note-bg:          rgba(168, 86, 239, 0.15);
+    --panel-b-note-border:      rgba(168, 86, 239, 0.40);
+    --panel-b-custom-bg:        rgba(52, 211, 153, 0.14);
+    --panel-b-custom-border:    rgba(52, 211, 153, 0.40);
 
     --ik-gradient-brand: linear-gradient(135deg, #4A74F0 0%, #A856EF 55%, #D946EF 100%);
     --ik-gradient-line:  linear-gradient(90deg, transparent, #4A74F0 30%, #D946EF 70%, transparent);
@@ -3809,28 +3838,38 @@ html body .portal .kbdetails .panel {
 
 /* Re-paint Confluence's common inline hex values at higher specificity.
    Case-both variants so mixed-case exports work (`#EAE6FF` vs `#eae6ff`).
-   Border uses Confluence's own matching darker hue. */
+   Uses `var(--panel-b-*)` tokens that flip in dark mode automatically
+   — no `.theme-dark` in the selector, so no risk of the selector
+   failing when `.theme-dark` and `.portal` live on different elements
+   (per AGENTS.md §1, `.theme-dark` is on `div.app-container` which is
+   NOT the `.portal` element). Previous approach used
+   `.portal.theme-dark` compound selector for dark-mode overrides;
+   that never matched, which is why Note and Custom panels kept
+   rendering their bright inline light-mode bg against light text in
+   dark mode — the exact visibility bug Joel kept reporting. */
 /* Note — purple */
 html body .portal .kbdetails.kbdetails .panel.panel[style*="#EAE6FF"],
 html body .portal .kbdetails.kbdetails .panel.panel[style*="#eae6ff"] {
-    background-color: #EAE6FF !important;
-    border: 1px solid #998DD9 !important;
+    background-color: var(--panel-b-note-bg) !important;
+    border: 1px solid var(--panel-b-note-border) !important;
 }
-/* Warning — yellow */
+/* Warning — yellow. Reuses Family-A `--panel-warnyellow-*` tokens
+   which already flip correctly (purple→yellow isn't a hue shift,
+   yellow stays yellow in both modes). */
 html body .portal .kbdetails.kbdetails .panel.panel[style*="#FFFAE6"],
 html body .portal .kbdetails.kbdetails .panel.panel[style*="#fffae6"],
 html body .portal .kbdetails.kbdetails .panel.panel[style*="#FDF7CD"],
 html body .portal .kbdetails.kbdetails .panel.panel[style*="#fdf7cd"] {
-    background-color: #FFFAE6 !important;
-    border: 1px solid #F0C808 !important;
+    background-color: var(--panel-warnyellow-bg) !important;
+    border: 1px solid var(--panel-warnyellow-border) !important;
 }
 /* Custom (common author choice) — cyan */
 html body .portal .kbdetails.kbdetails .panel.panel[style*="#E6FCFF"],
 html body .portal .kbdetails.kbdetails .panel.panel[style*="#e6fcff"],
 html body .portal .kbdetails.kbdetails .panel.panel[style*="#EBF9FE"],
 html body .portal .kbdetails.kbdetails .panel.panel[style*="#ebf9fe"] {
-    background-color: #E6FCFF !important;
-    border: 1px solid rgba(12, 121, 125, 0.35) !important;
+    background-color: var(--panel-b-custom-bg) !important;
+    border: 1px solid var(--panel-b-custom-border) !important;
 }
 
 /* Body: transparent so the wrapper tint shows, portal text colour
@@ -3859,50 +3898,15 @@ html body .portal .kbdetails .panel .panelContent > p:last-child {
     margin-bottom: 0 !important;
 }
 
-/* Dark-mode bg repaint for Family-B `.panel`. Confluence sets a
-   light hex inline (e.g. `#EAE6FF` purple), which reads as a
-   jarring bright pill against the dark canvas AND — critically —
-   doesn't get darkened when the text colour flips to light via
-   `--portal-text`, leaving light-on-light text that's nearly
-   invisible. That's the "Note/Custom text visibility" bug Joel
-   kept reporting.
-
-   Previous approach: overlay a 55% black scrim via `.panel::before`
-   and raise panel content to `z-index: 1`. In the live portal the
-   scrim visibly failed on Note and Custom panels — probably a
-   conflict with Confluence's inline bg repaint at higher specificity,
-   or the overflow clipping we applied to `.panel` at the base rule.
-   Direct bg repaint is both simpler and more reliable, and frees
-   up `::before` for the synthetic Family-B icon injection above.
-
-   Map each known Confluence hex to the matching dark-mode token
-   family so Family-B tracks Family-A's palette in both themes:
-     #EAE6FF → --panel-note-* (purple)
-     #FFFAE6 → --panel-warnyellow-* (yellow)
-     #E6FCFF / #EBF9FE → --panel-tip-* (teal)
-
-   Selector note: HaloPSA puts `.portal` and `.theme-dark` on the
-   SAME `.app-container` element, so `.portal .theme-dark` (with
-   space, descendant combinator) never matches. Use `.portal.theme-
-   dark` (compound) — same gotcha flagged elsewhere in this file
-   for pills/carets/lozenges. */
-html body .portal.theme-dark .kbdetails.kbdetails .panel.panel[style*="#EAE6FF"],
-html body .portal.theme-dark .kbdetails.kbdetails .panel.panel[style*="#eae6ff"] {
-    background-color: rgba(168, 86, 239, 0.15) !important;
-    border-color: rgba(168, 86, 239, 0.40) !important;
-}
-html body .portal.theme-dark .kbdetails.kbdetails .panel.panel[style*="#FFFAE6"],
-html body .portal.theme-dark .kbdetails.kbdetails .panel.panel[style*="#fffae6"] {
-    background-color: rgba(240, 200, 8, 0.14) !important;
-    border-color: rgba(240, 200, 8, 0.45) !important;
-}
-html body .portal.theme-dark .kbdetails.kbdetails .panel.panel[style*="#E6FCFF"],
-html body .portal.theme-dark .kbdetails.kbdetails .panel.panel[style*="#e6fcff"],
-html body .portal.theme-dark .kbdetails.kbdetails .panel.panel[style*="#EBF9FE"],
-html body .portal.theme-dark .kbdetails.kbdetails .panel.panel[style*="#ebf9fe"] {
-    background-color: rgba(52, 211, 153, 0.14) !important;
-    border-color: rgba(52, 211, 153, 0.40) !important;
-}
+/* Dark-mode bg for Family-B `.panel` is now handled by the token
+   cascade in the attribute-selector rules further up (the same block
+   that paints light-mode bg references `var(--panel-b-*-bg)` which
+   flips automatically). This block previously held duplicate dark-
+   mode-only overrides that never matched because the selector was
+   `.portal.theme-dark` (compound) — per AGENTS.md §1, `.theme-dark`
+   is on `div.app-container`, NOT the `.portal` element, so the
+   compound selector was unreachable. Keeping the comment as a
+   marker of the removed block for `git blame` readers. */
 
 /* Leading icon — Confluence-style, absolute-positioned at wrapper
    top-left with the body indented to clear it. HaloPSA doesn't load
@@ -3923,29 +3927,26 @@ html body .portal.theme-dark .kbdetails.kbdetails .panel.panel[style*="#ebf9fe"]
 html body .portal .kbdetails .confluence-information-macro {
     position: relative;
 }
-/* Icon container — 18×18 absolute box, flex-centred so every glyph
-   lands on the same axis regardless of its intrinsic height. Earlier
-   rule used `text-align: center` + `font-size: 0` + block `::before`,
-   which left different glyphs (⓵ vs ⊗ vs ⚠) at slightly different
-   y-positions because each Unicode code point has its own ascent
-   metrics. Flex-centring bypasses that: the container is the
-   reference frame and every glyph centres into it.
+/* Icon container — 20×20 absolute box, grid-centred for rock-solid
+   vertical+horizontal glyph placement regardless of Unicode code
+   point metrics. `display: grid; place-items: center` centres the
+   ::before flex item on both axes independent of its own ascent /
+   descent — flex-centring alone left ✎ and ✓ sitting lower than
+   ⓘ ⊗ ⚠ because those glyphs render low in their em box.
 
-   `top: 15px` lands the icon's vertical centre at ~y=24 — dead on
+   `top: 14px` lands the icon's vertical centre at ~y=24 — dead on
    the visual centre of the first text line (body is padding 12px,
    font-size 15px, line-height 1.65 → first line occupies y=17–32,
-   centre 24.5). The earlier `top: 14px` ran 1px high against that
-   baseline, most visible on the ✓ Success glyph which sits low in
-   its em box. */
+   centre 24.5, icon centre at top+10 = 14+10 = 24). Bumped container
+   from 18→20px so glyph breathing room isn't cropped at the edges. */
 html body .portal .kbdetails .confluence-information-macro .confluence-information-macro-icon {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
+    display: grid !important;
+    place-items: center;
     position: absolute !important;
-    top: 15px;
-    left: 18px;
-    width: 18px;
-    height: 18px;
+    top: 14px;
+    left: 16px;
+    width: 20px;
+    height: 20px;
     font-size: 0;
     line-height: 1;
     z-index: 2;
@@ -3954,21 +3955,24 @@ html body .portal .kbdetails .confluence-information-macro .confluence-informati
 html body .portal .kbdetails .confluence-information-macro .confluence-information-macro-icon::before {
     font-size: 17px;
     line-height: 1;
-    display: block;
     font-family: 'Apple Color Emoji', 'Segoe UI Symbol', 'Noto Sans Symbols2', system-ui, sans-serif;
     font-variant-emoji: text;
 }
 html body .portal .kbdetails .aui-iconfont-info::before         { content: "\24D8"; }
 html body .portal .kbdetails .aui-iconfont-error::before        { content: "\2297"; font-weight: 700; }
 html body .portal .kbdetails .aui-iconfont-warning::before      { content: "\26A0\FE0E"; }
-html body .portal .kbdetails .aui-iconfont-approve::before      { content: "\2713"; font-weight: 700; }
+/* ✓ Checkmark and ✎ pencil render with their visual mass below the
+   em-box centre, so grid-centring still leaves them 1px low relative
+   to the other glyphs. `margin-top: -1px` on just these two pulls
+   their visual centre back onto the axis of ⓘ / ⊗ / ⚠ / ✦. */
+html body .portal .kbdetails .aui-iconfont-approve::before      { content: "\2713"; font-weight: 700; margin-top: -1px; }
 /* Note (purple / pencil) — Family-A Note panels carry the
    `.aui-iconfont-note` class on their icon element but HaloPSA
    doesn't load the AUI sprite sheet, so without this mapping the
    icon rendered as an empty span. ✎ (U+270E, lower-right pencil)
    reads as "edit/note" and stays monochrome with the `\FE0E` text
    variation selector (stops macOS/iOS from upgrading to emoji). */
-html body .portal .kbdetails .aui-iconfont-note::before         { content: "\270E\FE0E"; }
+html body .portal .kbdetails .aui-iconfont-note::before         { content: "\270E\FE0E"; margin-top: -1px; }
 
 /* Indent body content so text clears the absolute-positioned icon.
    Applies to BOTH panel families now:
@@ -4656,6 +4660,16 @@ html body .portal .preview-noneselected:hover {
    CSS var so the styling still holds even if custom-property
    inheritance fails to cross the portal boundary. */
 
+/* Base popup chrome. Applied without `.portal` in the selector
+   because Semantic UI portal-mounts `.ui.popup` at the document
+   body level, OUTSIDE the `.portal` / `.app-container` ancestor
+   chain — a `.portal`-scoped rule never matches.
+
+   Hiding the Semantic arrow (`::before` rotated square with box-
+   shadow) instead of fighting its geometry: the default render
+   leaves a visible diamond outline where the triangle edges don't
+   perfectly tuck under the popup body, and the connection to the
+   anchor button is clear enough without a caret. */
 html body .ui.popup,
 html body .ui.popup.transition.visible {
     background: var(--portal-surface, #FFFFFF) !important;
@@ -4667,29 +4681,31 @@ html body .ui.popup.transition.visible {
     font-family: 'Montserrat', var(--ik-font-display), sans-serif !important;
     min-width: 200px;
 }
-html body .ui.popup::before {
-    background: var(--portal-surface, #FFFFFF) !important;
-    box-shadow: 1px 1px 0 0 var(--portal-border, rgba(15, 23, 42, 0.1)) !important;
+html body .ui.popup::before,
+html body .ui.popup::after {
+    display: none !important;
 }
 
-/* Dark-mode popup. `.theme-dark` may sit on `html` or `body` — both
-   cases covered so the compound selector lands regardless. Uses the
-   same surface/text tokens as the main portal chrome plus a heavier
-   shadow so the popup reads as "floating above the page" against
-   the darker bg. */
-html.theme-dark body .ui.popup,
-html body.theme-dark .ui.popup,
-html.theme-dark body .ui.popup.transition.visible,
-html body.theme-dark .ui.popup.transition.visible {
-    background: var(--portal-surface, #1F2125) !important;
-    color: var(--portal-text, #E5E7EB) !important;
-    border-color: var(--portal-border, rgba(255, 255, 255, 0.08)) !important;
+/* Dark-mode popup. `.theme-dark` sits on `div.app-container` per
+   AGENTS.md §1 — INSIDE `body`, while the popup mounts as a direct
+   child of `body` (outside `.app-container`). No descendant or
+   compound selector rooted at the popup can reach `.theme-dark`.
+   `body:has(.theme-dark)` checks the theme state via the ancestor's
+   :has() API — supported in all evergreen browsers and works whether
+   `.theme-dark` is on `html`, `body`, `.app-container`, or anywhere
+   else inside `body`.
+
+   Token note: can't use `var(--portal-surface)` here because the
+   popup lives OUTSIDE `.app-container.theme-dark`, so it inherits
+   the `:root` light-mode values for those custom properties — even
+   when this rule is active. Literal hex values for dark-mode
+   colours are the only reliable choice in this context. */
+html body:has(.theme-dark) .ui.popup,
+html body:has(.theme-dark) .ui.popup.transition.visible {
+    background: #1F2125 !important;
+    color: #E5E7EB !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55) !important;
-}
-html.theme-dark body .ui.popup::before,
-html body.theme-dark .ui.popup::before {
-    background: var(--portal-surface, #1F2125) !important;
-    box-shadow: 1px 1px 0 0 var(--portal-border, rgba(255, 255, 255, 0.08)) !important;
 }
 
 /* Popup heading — "Share". Semantic ships this as a heavy default
@@ -4712,17 +4728,12 @@ html body .ui.popup h4 {
     border: 0 !important;
     line-height: 1.4;
 }
-html.theme-dark body .ui.popup .header,
-html.theme-dark body .ui.popup h1,
-html.theme-dark body .ui.popup h2,
-html.theme-dark body .ui.popup h3,
-html.theme-dark body .ui.popup h4,
-html body.theme-dark .ui.popup .header,
-html body.theme-dark .ui.popup h1,
-html body.theme-dark .ui.popup h2,
-html body.theme-dark .ui.popup h3,
-html body.theme-dark .ui.popup h4 {
-    color: var(--portal-text-muted, #94A3B8) !important;
+html body:has(.theme-dark) .ui.popup .header,
+html body:has(.theme-dark) .ui.popup h1,
+html body:has(.theme-dark) .ui.popup h2,
+html body:has(.theme-dark) .ui.popup h3,
+html body:has(.theme-dark) .ui.popup h4 {
+    color: #94A3B8 !important;
 }
 
 /* Copy-link pill inside the share popup — pin to brand-action pill

@@ -3785,11 +3785,27 @@ html body .portal .kbdetails .kbmeta {
     color: var(--portal-text-muted) !important;
 }
 
-/* KB tags (`span.kbtags`) — JetBrains Mono uppercase pill, assigned-
-   blue palette (matches the status pill of the same name so tags read
-   as part of the existing colour language instead of a neutral grey
-   chip). Colour via `--pill-assigned-*` tokens so light/dark mode
-   flips come for free.
+/* KB tags (`span.kbtags`) — JetBrains Mono uppercase pill. Shape +
+   typography are shared; COLOUR cycles through a 5-hue palette
+   (blue → green → orange → red → purple) using status-pill tokens
+   so each article's tag row reads as distinct chips instead of a
+   wall of identical blue. The five tokens flip automatically between
+   light and dark mode via the `:root` / `.theme-dark` definitions
+   (pastel-bg + dark-ink in light; translucent-rgba-bg + light-ink in
+   dark), exactly matching the status pill pattern.
+
+   HaloPSA emits `<span class="kbtags">text</span>` with no per-tag
+   class or inline style to signal colour, so there's no deterministic
+   hook for "this tag is always green". We cycle via `:nth-of-type`
+   instead: the parent container holds only `.kbtags` spans (verified
+   across KB landing + article-detail), so positional counting works
+   cleanly and resets per article. Known limitation: the same tag text
+   ('cipp') may land on a different hue across articles. Upgrade path
+   when `iframe-theme.js` ships via the Cloudflare Worker (see
+   email-iframe-theming.md checklist): stamp `kbtag-{blue,green,
+   orange,red,purple}` classes from a hash of textContent, and replace
+   the `:nth-of-type` selectors below with stable `.kbtags.kbtag-*`
+   ones — the token mapping stays identical.
 
    `'JetBrains Mono'` is listed FIRST in the font stack (ahead of the
    var) so even if the custom-property cascade fails to resolve
@@ -3798,10 +3814,9 @@ html body .portal .kbdetails .kbmeta {
    name still wins and the user gets the intended font instead of
    falling back to the surrounding Montserrat.
 
-   Tightened geometry from 10px/4px 12px to 9px/3px 10px — Joel
-   flagged the chips as feeling slightly heavy against the list-card
-   density. Hover flips to the full accent family so interactions
-   stay consistent with every other chip in the portal. */
+   Hover flips to the full accent family so interactions stay
+   consistent with every other chip in the portal — the 5-hue palette
+   is a rest-state differentiation device; hover is uniform. */
 html body .portal span.kbtags,
 html body .portal .kbtags {
     display: inline-block !important;
@@ -3820,6 +3835,38 @@ html body .portal .kbtags {
     transition: border-color var(--ik-dur) var(--ik-ease),
                 color var(--ik-dur) var(--ik-ease),
                 background var(--ik-dur) var(--ik-ease);
+}
+/* Position 1 (5n+1) — blue (--pill-assigned-*); matches the base rule
+   above, repeated here so the full 5-cycle reads as one cohesive
+   block. */
+html body .portal span.kbtags:nth-of-type(5n+1),
+html body .portal .kbtags:nth-of-type(5n+1) {
+    background: var(--pill-assigned-bg) !important;
+    color: var(--pill-assigned-ink) !important;
+}
+/* Position 2 (5n+2) — green (--pill-progress-*) */
+html body .portal span.kbtags:nth-of-type(5n+2),
+html body .portal .kbtags:nth-of-type(5n+2) {
+    background: var(--pill-progress-bg) !important;
+    color: var(--pill-progress-ink) !important;
+}
+/* Position 3 (5n+3) — orange (--pill-action-required-*) */
+html body .portal span.kbtags:nth-of-type(5n+3),
+html body .portal .kbtags:nth-of-type(5n+3) {
+    background: var(--pill-action-required-bg) !important;
+    color: var(--pill-action-required-ink) !important;
+}
+/* Position 4 (5n+4) — red (--pill-rejected-*) */
+html body .portal span.kbtags:nth-of-type(5n+4),
+html body .portal .kbtags:nth-of-type(5n+4) {
+    background: var(--pill-rejected-bg) !important;
+    color: var(--pill-rejected-ink) !important;
+}
+/* Position 5 (5n+5, aka 5n) — purple (--pill-scheduled-*) */
+html body .portal span.kbtags:nth-of-type(5n+5),
+html body .portal .kbtags:nth-of-type(5n+5) {
+    background: var(--pill-scheduled-bg) !important;
+    color: var(--pill-scheduled-ink) !important;
 }
 html body .portal span.kbtags:hover,
 html body .portal .kbtags:hover {

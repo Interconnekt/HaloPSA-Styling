@@ -3744,16 +3744,23 @@ html body .portal .workflow-steps-wrap {
 
 /* Content-width guard — HaloPSA ships `.container` at max-width: 80%
    which bloats to ~1434px on a 1793px monitor. Cap at 1240px so the
-   ticket detail form and the split-view search bar feel proportionate. */
-html body .portal .container-max > .container {
+   ticket detail form and the split-view search bar feel proportionate.
+   The full ticket view wraps in `.container-max > .container`; the
+   split-view tickets page uses `.main > .container.ticket-list` with no
+   .container-max ancestor, so both paths need their own rule. */
+html body .portal .container-max > .container,
+html body .portal .main > .container {
     max-width: 1240px !important;
 }
 
-/* Split-view search bar — constrain width so it doesn't fill the
-   entire right half of a wide viewport. */
-html body .portal .searchandview .col-md-6.search .searchholder {
-    max-width: 400px !important;
-    margin-left: auto !important;
+/* Split-view pane alignment — HaloPSA's splitter defaults to ~30/70 but
+   the header row above it is 50/50 (col-md-6). Force the primary (list)
+   pane to 50% so the secondary (detail) pane starts at the same
+   left-edge as the search bar column, giving consistent horizontal
+   alignment between the search bar and all ticket-detail content. */
+html body .portal .portal-ticket-splitter > .layout-pane-primary {
+    width: 50% !important;
+    min-width: 0 !important;
 }
 
 

@@ -3666,6 +3666,98 @@ html body .portal .switches > button[style*="rgb(47, 53, 94)"] {
 
 
 /* ─────────────────────────────────────────────────────────
+   12b · Ticket detail — split-view panel, tabs, stages
+   ─────────────────────────────────────────────────────────
+
+   HaloPSA renders the ticket detail (both in the split-view secondary
+   pane and the full /ticket page) inside a `.subscreen` wrapper that
+   their chunk CSS hard-codes to rgb(64,64,64) in dark mode — the
+   "wrong grey" that makes the whole right panel look like a floating
+   block. Likewise the react-tabs panel gets the same hard-coded bg.
+   We override both to var(--portal-bg) so the panel is transparent
+   against the page background.
+
+   The tab bar uses `.tablist` / `.tabsheet` / `.tabsheet.tabselected`.
+   HaloPSA's default is an inline underline in a plain blue (#0f61a1);
+   we restyle to match our display-font + portal-action token system. */
+
+/* Panel background — kill HaloPSA's hardcoded rgb(64,64,64). */
+html body .portal .subscreen,
+html body .portal .mainscreen2 {
+    background-color: var(--portal-bg) !important;
+}
+html body .portal .tabcontent.react-tabs__tab-panel--selected,
+html body .portal .subscreen .tabcontent.react-tabs__tab-panel--selected {
+    background-color: transparent !important;
+}
+
+/* Tab bar — replace grey rule with portal border, flush left. */
+html body .portal .tablist {
+    border-bottom: 1px solid var(--portal-border-soft) !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 0 16px !important;
+    display: flex !important;
+    gap: 2px;
+    align-items: flex-end;
+    white-space: nowrap;
+}
+/* Individual tab item */
+html body .portal .tabsheet {
+    font-family: var(--ik-font-display) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    color: var(--portal-text-muted) !important;
+    padding: 8px 16px 10px !important;
+    margin: 0 !important;
+    bottom: 0 !important;
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    border-bottom: 2px solid transparent !important;
+    border-radius: var(--portal-radius-xs) var(--portal-radius-xs) 0 0 !important;
+    transition: color var(--ik-dur) var(--ik-ease),
+                background-color var(--ik-dur) var(--ik-ease),
+                border-color var(--ik-dur) var(--ik-ease) !important;
+}
+html body .portal .tabsheet:hover {
+    color: var(--portal-text) !important;
+    background: var(--portal-surface-hover) !important;
+    opacity: 1 !important;
+}
+html body .portal .tabsheet.tabselected {
+    color: var(--portal-action) !important;
+    font-weight: 600 !important;
+    border-bottom: 2px solid var(--portal-action) !important;
+    background: transparent !important;
+}
+
+/* Workflow stages wrapper — surface card so the step row reads as a
+   contained visual unit rather than floating glyphs on the bg. */
+html body .portal .workflow-steps-wrap {
+    background: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border-soft) !important;
+    border-radius: var(--portal-radius-sm) !important;
+    padding: 20px 24px !important;
+    margin-bottom: 16px !important;
+}
+
+/* Content-width guard — HaloPSA ships `.container` at max-width: 80%
+   which bloats to ~1434px on a 1793px monitor. Cap at 1240px so the
+   ticket detail form and the split-view search bar feel proportionate. */
+html body .portal .container-max > .container {
+    max-width: 1240px !important;
+}
+
+/* Split-view search bar — constrain width so it doesn't fill the
+   entire right half of a wide viewport. */
+html body .portal .searchandview .col-md-6.search .searchholder {
+    max-width: 400px !important;
+    margin-left: auto !important;
+}
+
+
+/* ─────────────────────────────────────────────────────────
    13 · KB article reading view
    ───────────────────────────────────────────────────────── */
 
@@ -4580,6 +4672,13 @@ html body .portal .article > div:first-child:has(> .articleRight) {
 /* ARTICLE chip styling removed — it's now `display: none` per the
    rule above. Kept this comment as a reference for why there's no
    per-chip style here. */
+
+/* KB sidebar wrapper — HaloPSA adds a large default top-margin
+   between the page-title H1 and the kblist block. Zero it out so
+   the search box sits close under the heading divider. */
+html body .portal .kblist {
+    margin-top: 0 !important;
+}
 
 /* Tree menu (left sidebar on KB pages) — slim down node size and
    align with our display font. HaloPSA ships these at Poppins 16px.

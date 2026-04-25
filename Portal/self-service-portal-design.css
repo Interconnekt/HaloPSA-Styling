@@ -3300,6 +3300,21 @@ html body .portal:has(.mandatory-hint) .details-form .details-group.card-panel {
     box-shadow: none !important;
 }
 
+/* Mobile — the 24/28px card padding above leaves narrow input areas
+   on phone-width screens (especially after the page-title gutter eats
+   another 24px each side). Drop the card padding to 12px and the
+   page-title gutter to 12px so inputs run nearly edge-to-edge and
+   stay tappable. */
+@media (max-width: 768px) {
+    html body .portal .page-title:has(.mandatory-hint) {
+        padding: 0 12px;
+    }
+    html body .portal:has(.mandatory-hint) .details-form.readeditform {
+        margin: 12px auto 24px !important;
+        padding: 16px 12px !important;
+    }
+}
+
 html body .portal .details-form label {
     font-family: var(--ik-font-mono) !important;
     font-size: 10.5px !important;

@@ -4850,6 +4850,26 @@ html body .portal footer a:hover {
 html body .portal footer.page-footer a[href*="usehalo.com"] { display: none !important; }
 html body .portal footer.page-footer .center-align > .row:has(a[href*="usehalo.com"]) { display: none !important; }
 
+/* Footer icon vertical alignment — `vertical-align: middle` from the
+   shipped portal CSS aligns to the line-box centre, but Montserrat's
+   x-height puts the icon visually high relative to the text cap. A
+   2px top padding on the SVG/img nudges it down so icon + label
+   read as horizontally aligned at a glance. */
+html body .portal footer a img,
+html body .portal footer a svg {
+    padding-top: 2px;
+}
+
+/* Page-bottom breathing room — the page content (`.main`) used to sit
+   directly above the footer with no gap, which made the footer feel
+   like it abruptly cut off the last card. Adding 40px of padding-
+   bottom shows through `--portal-bg` (the page bg) so there's a
+   short stretch of empty gray before the footer's dark navy starts.
+   Acts as a visual exhale at the end of every page. */
+html body .portal .main {
+    padding-bottom: 40px;
+}
+
 /* Strip the "https://" prefix from the website link in the footer.
    CSS can't edit DOM text, so we zero the original then inject the
    clean version via ::before. Scoped by href so only the site link

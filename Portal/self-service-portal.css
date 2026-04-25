@@ -1823,7 +1823,16 @@ html body .portal .rt-thead.-header {
 footer {
     background-color: var(--portal-surface);
     text-align: center;
-    padding: 5px;
+    padding: 20px 5px;
+}
+
+/* Materialize gives `.row` a 20px bottom margin. With the Halo
+   attribution row hidden (see §end), that trailing margin has no
+   sibling to collapse against and shows up as extra space below
+   the icon row — making the footer look top-loaded. Zero it so
+   the footer's own padding controls breathing room symmetrically. */
+footer .row {
+    margin-bottom: 0;
 }
 
 footer a {

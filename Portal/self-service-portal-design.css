@@ -3846,6 +3846,116 @@ html body .portal .portal-ticket-splitter .container-max {
     padding-right: 0 !important;
 }
 
+/* Inline-style overrides — HaloPSA bakes a chain of inline margins,
+   widths, and positions into the ticket-detail HTML that compound to
+   inset every block by 20-40px from the right pane edge. CSS can only
+   beat inline styles via attribute selectors + !important, scoped to
+   the splitter so we don't disturb the same patterns elsewhere.
+
+   Each rule kills one specific inline declaration:
+   - `<div style="margin: 25px 20px;">` wraps the workflow stepper
+   - `<div style="margin: 20px 15px;">` wraps the page-title block
+   - `.history-options-portal` toolbar with margin-right: 20px
+   - The toolbar's inner button cluster at width: 80%; left: 20px
+   - `.buttons-container` for the back/share float-right cluster
+   - `.col-md-12` Bootstrap column with default 15px each side
+   Together these claw back ~70-80px of right-edge inset so the
+   detail content lines up flush with the pane and the count row's
+   3-dots menu sitting above. */
+html body .portal .portal-ticket-splitter .col-md-12 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+html body .portal .portal-ticket-splitter [style*="margin: 25px 20px"],
+html body .portal .portal-ticket-splitter [style*="margin: 20px 15px"] {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+html body .portal .portal-ticket-splitter .history-options-portal[style*="margin-right"] {
+    margin-right: 0 !important;
+}
+html body .portal .portal-ticket-splitter .history-options-portal > div[style*="width: 80%"] {
+    width: 100% !important;
+    left: 0 !important;
+}
+html body .portal .portal-ticket-splitter .container-max > .buttons-container[style*="float: right"] {
+    margin-right: 0 !important;
+}
+
+/* Action-history card — date positioned at top-right corner.
+   Structure: `.action-history-item.wcontainer > div > .history-header
+   > .avatarholder + div > .detailsholder > div > .when + .who`. The
+   date (`.when`) lives inside the title block alongside `.who` (the
+   author name); HaloPSA's default flow renders them stacked
+   vertically. Lift `.when` out via absolute positioning so it sits
+   at the top-right corner of the card without touching its DOM
+   siblings. `position: relative` on `.action-history-item` anchors
+   the absolute child. */
+html body .portal .action-history-item.wcontainer {
+    position: relative;
+}
+html body .portal .action-history-item.wcontainer .detailsholder .when {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    font-family: var(--ik-font-display) !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    color: var(--portal-text-muted) !important;
+    letter-spacing: 0;
+    margin: 0 !important;
+}
+
+/* Tabs — HaloPSA's custom tab control uses `.tab-container` as the
+   list and `.tab` / `.tab.tabactive` as items. None of the prior
+   selectors (`.tabsheet`, `.react-tabs__tab`, `[role="tab"]`)
+   match this view, so the tabs were rendering with the default
+   dark rounded-pill bg. Reskin to the same flat-with-underline
+   family used for tabs elsewhere in the portal — transparent bg,
+   muted inactive, action-blue underline on active. */
+html body .portal .tab-container {
+    border-bottom: 1px solid var(--portal-border-soft) !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 0 16px !important;
+    display: flex !important;
+    gap: 2px;
+    align-items: flex-end;
+}
+html body .portal .tab-container > .tab {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border: 0 !important;
+    border-bottom: 2px solid transparent !important;
+    border-radius: var(--portal-radius-xs) var(--portal-radius-xs) 0 0 !important;
+    color: var(--portal-text-muted) !important;
+    padding: 8px 16px 10px !important;
+    margin: 0 !important;
+    font-family: var(--ik-font-display) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    cursor: pointer;
+    display: inline-flex !important;
+    align-items: center !important;
+    box-shadow: none !important;
+    transition: color var(--ik-dur) var(--ik-ease),
+                background-color var(--ik-dur) var(--ik-ease),
+                border-color var(--ik-dur) var(--ik-ease) !important;
+}
+html body .portal .tab-container > .tab:hover {
+    color: var(--portal-text) !important;
+    background: var(--portal-surface-hover) !important;
+    background-color: var(--portal-surface-hover) !important;
+}
+html body .portal .tab-container > .tab.tabactive {
+    color: var(--portal-action) !important;
+    font-weight: 600 !important;
+    border-bottom: 2px solid var(--portal-action) !important;
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
 /* Progress / Details tab bar — HaloPSA's React tabs library emits both
    the legacy `.tabsheet` / `.tabselected` class set (used by the rule
    above) AND the newer `.react-tabs__tab` / `.react-tabs__tab--selected`

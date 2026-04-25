@@ -950,7 +950,12 @@ html body .portal .main-tile-item {
     border: 1px solid var(--portal-border) !important;
     border-radius: var(--portal-radius-md) !important;
     margin: 8px 0 !important;
-    padding: 14px 18px !important;
+    /* Asymmetric vertical padding — the pill on row 3 has its own
+       implicit visual weight (uppercase, coloured bg) and sits closer
+       to the card's bottom edge than the user name does to the top.
+       Bumping bottom padding to 18px gives the pill the breathing
+       room it needs without expanding the whole card. */
+    padding: 14px 18px 18px !important;
     color: var(--portal-text) !important;
     transition: border-color var(--ik-dur) var(--ik-ease),
                 transform var(--ik-dur) var(--ik-ease),
@@ -3821,6 +3826,14 @@ html body .portal .portal-ticket-splitter > .layout-pane {
    child. Force every inner container to fill the pane width so
    detail content lines up flush with the search bar above.
 
+   Right-padding zeroed alongside the width unlock so the back/share
+   button cluster ends at the same x-coordinate as the count row's
+   `1-1 OF 1 / ⋯` 3-dots menu sitting above the splitter. Bootstrap's
+   default `padding: 0 15px` on `.container` would otherwise leave
+   the right-edge content inset 15px when the parent has no padding —
+   exactly the visual offset Joel flagged. Left padding stays 15px so
+   text content doesn't butt against the pane edge.
+
    Scoped to `.portal-ticket-splitter` so the existing 1240px cap on
    `.main > .container` (line 3752, intentional for the full-page
    ticket route) stays in effect everywhere outside the splitter. */
@@ -3830,6 +3843,7 @@ html body .portal .portal-ticket-splitter .container-large,
 html body .portal .portal-ticket-splitter .container-max {
     max-width: 100% !important;
     width: 100% !important;
+    padding-right: 0 !important;
 }
 
 /* Progress / Details tab bar — HaloPSA's React tabs library emits both
@@ -3874,6 +3888,65 @@ html body .portal ul.react-tabs__tab-list .react-tabs__tab--selected {
 }
 html body .portal .react-tabs__tab-list,
 html body .portal ul.react-tabs__tab-list {
+    border-bottom: 1px solid var(--portal-border-soft) !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 0 16px !important;
+    display: flex !important;
+    gap: 2px;
+    align-items: flex-end;
+    list-style: none !important;
+}
+
+/* ARIA-role-based tab fallback — when neither `.tabsheet` nor
+   `.react-tabs__tab` match (HaloPSA on the tile-view ticket detail
+   ships Progress/Details as plain rounded-pill buttons with no
+   library-specific class), every tab still carries `role="tab"` and
+   the active one carries `aria-selected="true"`. Targeting the role
+   attribute is the only structurally stable hook when the class set
+   varies between views. Combined specificity (html body .portal +
+   role attr) beats HaloPSA's own `.someclass[role="tab"]` styling.
+
+   Visual treatment matches the `.tabsheet` / `.react-tabs__tab` rules
+   above so all three families render identically — flat transparent
+   background, muted text inactive, action-blue underline active. */
+html body .portal [role="tab"] {
+    font-family: var(--ik-font-display) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    color: var(--portal-text-muted) !important;
+    padding: 8px 16px 10px !important;
+    margin: 0 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border: 0 !important;
+    border-bottom: 2px solid transparent !important;
+    border-radius: var(--portal-radius-xs) var(--portal-radius-xs) 0 0 !important;
+    box-shadow: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    cursor: pointer;
+    list-style: none !important;
+    transition: color var(--ik-dur) var(--ik-ease),
+                background-color var(--ik-dur) var(--ik-ease),
+                border-color var(--ik-dur) var(--ik-ease) !important;
+}
+html body .portal [role="tab"]:hover {
+    color: var(--portal-text) !important;
+    background: var(--portal-surface-hover) !important;
+    background-color: var(--portal-surface-hover) !important;
+}
+html body .portal [role="tab"][aria-selected="true"],
+html body .portal [role="tab"].active,
+html body .portal [role="tab"].selected {
+    color: var(--portal-action) !important;
+    font-weight: 600 !important;
+    border-bottom: 2px solid var(--portal-action) !important;
+    background: transparent !important;
+    background-color: transparent !important;
+}
+html body .portal [role="tablist"] {
     border-bottom: 1px solid var(--portal-border-soft) !important;
     background: transparent !important;
     padding: 0 !important;

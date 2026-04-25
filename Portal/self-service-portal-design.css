@@ -3744,13 +3744,27 @@ html body .portal .workflow-steps-wrap {
 
 /* Content-width guard — HaloPSA ships `.container` at max-width: 80%
    which bloats to ~1434px on a 1793px monitor. Cap at 1240px so the
-   ticket detail form and the split-view search bar feel proportionate.
-   The full ticket view wraps in `.container-max > .container`; the
-   split-view tickets page uses `.main > .container.ticket-list` with no
-   .container-max ancestor, so both paths need their own rule. */
+   ticket detail form (which wraps in `.container-max > .container`)
+   feels proportionate. The split-view tickets page sits at
+   `.main > .container.ticket-list` (no `.container-max` ancestor) and
+   gets its own wider rule below to match the KB page. */
 html body .portal .container-max > .container,
 html body .portal .main > .container {
     max-width: 1240px !important;
+}
+
+/* Ticket list views (Table / Tile / Kanban) — match the KB page's
+   `.container-large` (85% width / max-width) so the `My Tickets`
+   table doesn't get clipped on the right and the page left-edge
+   aligns with `/portal/kb`. Both `width` and `max-width` are set
+   because HaloPSA ships `.container` with `width: 80%` AND
+   `max-width: 80%` — overriding only max-width leaves the smaller
+   width in effect (max-width can only shrink, not grow). Higher
+   specificity than the 1240px cap above (extra `.ticket-list`
+   class), so this overrides even though both rules carry !important. */
+html body .portal .main > .container.ticket-list {
+    width: 85% !important;
+    max-width: 85% !important;
 }
 
 /* Split-view pane alignment — HaloPSA's splitter defaults to ~30/70 but

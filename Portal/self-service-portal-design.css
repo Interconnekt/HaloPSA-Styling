@@ -3799,6 +3799,188 @@ html body .portal .searchandview > .col-md-6.search {
     max-width: 70% !important;
 }
 
+/* Pane overflow guard — once the splitter is 30/70 the right (detail)
+   pane is wide enough that any HaloPSA child with `flex: 1` on a date
+   column or unbounded width can drift past the pane's right edge or,
+   worse, render to the left of its own pane and visually overlap the
+   list pane below the ticket card. `overflow-x: clip` keeps the
+   horizontal axis sealed without disabling vertical scroll inside the
+   pane. Applied to both panes so neither side bleeds. */
+html body .portal .portal-ticket-splitter > .layout-pane {
+    overflow-x: clip;
+}
+
+/* Action-history timeline (ticket Progress tab) — HaloPSA renders each
+   activity entry as `.action-history-item` containing two child blocks:
+   a leading datetime stamp and a trailing avatar + content card. The
+   default flex layout leaves the date column as `flex: 1`, which on a
+   70%-wide detail pane stretches the date ~600px away from the card and
+   leaves the date floating in the empty space below the list. Constrain
+   the date column to a fixed 140px right-aligned strip so it sits
+   directly next to the content card with a tight 16px gap. Scoped with
+   `:not(.tile-item)` so home-page Recent Activity tiles (which carry
+   `.tile-item` and have NO date sibling) keep their existing chrome.
+   Date cells in HaloPSA's emit are typically `<span>` or `<div>` wraps
+   without a stable class hook, so we target by structural position
+   (first non-image direct child) rather than name. */
+html body .portal .subscreen .action-history-item:not(.tile-item),
+html body .portal .mainscreen2 .action-history-item:not(.tile-item) {
+    display: flex !important;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 16px;
+    background: transparent !important;
+    border: 0 !important;
+    padding: 0 !important;
+    margin: 0 0 12px 0 !important;
+}
+
+/* Date column — fixed-width right-aligned strip, muted body type so
+   the eye reads card content first, timestamp second. Padding-top
+   nudges it down to align with the avatar/title baseline of the card
+   to its right. */
+html body .portal .subscreen .action-history-item:not(.tile-item) > :first-child,
+html body .portal .mainscreen2 .action-history-item:not(.tile-item) > :first-child {
+    flex: 0 0 140px;
+    text-align: right;
+    font-family: var(--ik-font-display) !important;
+    font-size: 12px !important;
+    color: var(--portal-text-muted) !important;
+    padding-top: 18px;
+    white-space: nowrap;
+}
+
+/* Content card — absorb remaining width, restore the surface chrome
+   that the parent rule above zeroed out so the card itself reads as
+   the bordered unit. */
+html body .portal .subscreen .action-history-item:not(.tile-item) > :nth-child(n+2),
+html body .portal .mainscreen2 .action-history-item:not(.tile-item) > :nth-child(n+2) {
+    flex: 1 1 auto;
+    min-width: 0;
+    background: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-md) !important;
+    padding: 14px 18px !important;
+}
+
+/* Progress / Details tab bar — HaloPSA's React tabs library emits both
+   the legacy `.tabsheet` / `.tabselected` class set (used by the rule
+   above) AND the newer `.react-tabs__tab` / `.react-tabs__tab--selected`
+   set on this view. Mirror the underline-accent styling onto the second
+   set so the active tab carries the action-blue rule regardless of
+   which DOM HaloPSA emits. Same tokens, same geometry, same hover
+   feedback — the user sees one consistent tab family. */
+html body .portal .react-tabs__tab,
+html body .portal ul.react-tabs__tab-list .react-tabs__tab {
+    font-family: var(--ik-font-display) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    color: var(--portal-text-muted) !important;
+    padding: 8px 16px 10px !important;
+    margin: 0 !important;
+    bottom: 0 !important;
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-bottom: 2px solid transparent !important;
+    border-radius: var(--portal-radius-xs) var(--portal-radius-xs) 0 0 !important;
+    list-style: none !important;
+    cursor: pointer;
+    transition: color var(--ik-dur) var(--ik-ease),
+                background-color var(--ik-dur) var(--ik-ease),
+                border-color var(--ik-dur) var(--ik-ease) !important;
+}
+html body .portal .react-tabs__tab:hover {
+    color: var(--portal-text) !important;
+    background: var(--portal-surface-hover) !important;
+}
+html body .portal .react-tabs__tab--selected,
+html body .portal ul.react-tabs__tab-list .react-tabs__tab--selected {
+    color: var(--portal-action) !important;
+    font-weight: 600 !important;
+    border-bottom: 2px solid var(--portal-action) !important;
+    background: transparent !important;
+}
+html body .portal .react-tabs__tab-list,
+html body .portal ul.react-tabs__tab-list {
+    border-bottom: 1px solid var(--portal-border-soft) !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 0 16px !important;
+    display: flex !important;
+    gap: 2px;
+    align-items: flex-end;
+    list-style: none !important;
+}
+
+/* My Tickets list view — full-height table card with bottom scrollbar.
+   HaloPSA's list mode renders `.container.ticket-list > .ReactTable`
+   (react-table v6: `.ReactTable > .rt-table > .rt-thead/.rt-tbody`)
+   sized to its content, so a list with one ticket leaves a ~530px
+   card floating over a tall empty page. Two changes make the view
+   read as a proper list workspace:
+
+   1. `.ReactTable` becomes a flex column with `min-height: calc(100vh
+      - 280px)` so it grows to fill the viewport (280px = navbar +
+      page H1 + filter row + count row + bottom padding). Card chrome
+      (surface bg + border + radius) is set here too rather than
+      inherited so the rounded corners survive the inner overflow.
+
+   2. `.rt-table` (the inner scroll surface) takes `flex: 1 1 auto` +
+      `overflow: auto` so X scroll lives at the bottom edge of the
+      card, not mid-card. With `position: sticky` on `.rt-thead.-header`
+      the column titles stay pinned while the body scrolls vertically.
+
+   Scoped to `.container.ticket-list` so this only affects the list
+   mode of My Tickets — Tile and Kanban views use `.main-tile-item`
+   and a different wrapper, and the search results page uses its own
+   `.searchscreen .results-table` rule above. */
+html body .portal .container.ticket-list .ReactTable {
+    display: flex !important;
+    flex-direction: column;
+    min-height: calc(100vh - 280px);
+    background: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-md) !important;
+    overflow: hidden;
+    box-shadow: none !important;
+}
+html body .portal .container.ticket-list .ReactTable > .rt-table {
+    flex: 1 1 auto !important;
+    min-height: 0;
+    overflow: auto !important;
+}
+html body .portal .container.ticket-list .ReactTable .rt-thead.-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--portal-surface) !important;
+}
+
+/* Progress toolbar — `.history-options-portal.buttons-container` holds
+   the collapse / sort icon buttons on the left and the Add Note /
+   Book / Time Entry pills on the right. The flex-wrap default leaves
+   a wide visual gap between the icon cluster and the pill cluster
+   because each child carries its own `margin: 1px 3px` (icons) or
+   pill margin. Set explicit gap and `justify-content: flex-start` so
+   the row reads as one tight toolbar. Drop the 17px padding-left
+   inherited from the `.history-options-portal` rule in
+   self-service-portal.css — that padding was tuned to indent the row
+   under the legacy table-view; in tile view it drifts the toolbar in
+   from the tab edge. */
+html body .portal .subscreen .history-options-portal.buttons-container,
+html body .portal .mainscreen2 .history-options-portal.buttons-container {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    padding-left: 0 !important;
+    margin-bottom: 16px;
+}
+
 
 /* ─────────────────────────────────────────────────────────
    13 · KB article reading view

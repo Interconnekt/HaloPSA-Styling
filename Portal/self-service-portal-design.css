@@ -4941,6 +4941,15 @@ html body .portal .Select__menu {
     border-radius: var(--portal-radius-md) !important;
     box-shadow: var(--portal-shadow-sm) !important;
     overflow: hidden;
+}
+
+/* Toolbar-search dropdown only — widen to 600px and right-anchor so
+   result titles fit without truncating. Scoped under
+   `.buttoncontainer.nav-search` so it doesn't bleed onto every other
+   react-select menu in the portal (e.g. the My Tickets "Open Tickets"
+   filter, which would otherwise inherit the 600px + right:0 and drift
+   off the trigger's left edge). */
+html body .portal .buttoncontainer.nav-search .Select__menu {
     width: 600px !important;
     right: 0 !important;
     left: auto !important;

@@ -3269,13 +3269,13 @@ html body .portal .page-title:has(.mandatory-hint) {
     max-width: 1040px !important;
     margin-left: auto !important;
     margin-right: auto !important;
-    padding: 0 36px;
+    padding: 0 24px;
 }
 
 html body .portal:has(.mandatory-hint) .details-form.readeditform {
     max-width: 1040px !important;
-    margin: 24px auto 40px !important;
-    padding: 36px 40px !important;
+    margin: 16px auto 32px !important;
+    padding: 24px 28px !important;
     background: var(--portal-surface) !important;
     border: 1px solid var(--portal-border) !important;
     border-radius: var(--portal-radius) !important;

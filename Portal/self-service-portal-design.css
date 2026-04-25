@@ -4100,7 +4100,12 @@ html body .portal [role="tablist"] {
 html body .portal .container.ticket-list .ReactTable {
     display: flex !important;
     flex-direction: column;
-    min-height: calc(100vh - 280px);
+    /* `calc(100vh - 320px)` leaves ~80px of bg between the table card
+       and the footer (40 from main's padding-bottom + 40 from this
+       extra subtractor), matching the natural breathing room on the
+       single-ticket detail page. Earlier `100vh - 280px` made the
+       table butt up against the footer with only 40px gap. */
+    min-height: calc(100vh - 320px);
     background: var(--portal-surface) !important;
     border: 1px solid var(--portal-border) !important;
     border-radius: var(--portal-radius-md) !important;

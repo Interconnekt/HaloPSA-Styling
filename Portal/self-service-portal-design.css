@@ -3863,20 +3863,28 @@ html body .portal .portal-ticket-splitter .container-max {
    detail content lines up flush with the pane and the count row's
    3-dots menu sitting above. */
 html body .portal .portal-ticket-splitter .col-md-12 {
-    padding-left: 0 !important;
+    padding-left: 20px !important;
     padding-right: 0 !important;
 }
+/* Asymmetric override — keep the inline LEFT margin (HaloPSA's
+   intended indent) but zero the right so content runs flush to the
+   pane's right edge while still having ~15-20px of left breathing
+   room. Targeting both `margin-right` and (separately) `margin-left`
+   would zero both; we only set `margin-right` here. */
 html body .portal .portal-ticket-splitter [style*="margin: 25px 20px"],
 html body .portal .portal-ticket-splitter [style*="margin: 20px 15px"] {
-    margin-left: 0 !important;
     margin-right: 0 !important;
 }
 html body .portal .portal-ticket-splitter .history-options-portal[style*="margin-right"] {
     margin-right: 0 !important;
 }
+/* Toolbar inner button cluster — keep its inline `left: 20px` for
+   left indent (matches the activity cards below), but stretch to
+   100% so it doesn't trail off at 80%. `width: calc(100% - 20px)`
+   accounts for the 20px left offset so the cluster's right edge
+   still lands at the pane's right edge. */
 html body .portal .portal-ticket-splitter .history-options-portal > div[style*="width: 80%"] {
-    width: 100% !important;
-    left: 0 !important;
+    width: calc(100% - 20px) !important;
 }
 html body .portal .portal-ticket-splitter .container-max > .buttons-container[style*="float: right"] {
     margin-right: 0 !important;

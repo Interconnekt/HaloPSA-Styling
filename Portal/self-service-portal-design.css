@@ -4973,9 +4973,17 @@ html body .portal .Select__option {
     transition: background-color var(--ik-dur) var(--ik-ease),
                 color var(--ik-dur) var(--ik-ease) !important;
 }
-html body .portal .Select__option--is-focused,
-html body .portal .Select__option:hover,
-html body .portal .Select__option--is-selected {
+/* Specificity note — HaloPSA ships
+   `.theme-dark .Select__option.Select__option--is-focused` at (0,0,3,0)
+   with `bg: rgb(102,102,102) !important`. To beat it we chain
+   `.Select__option.Select__option--is-focused` (two classes on the
+   same element), bringing our selector to (0,0,3,2) — three classes
+   + two elements. Same trick for `--is-selected` and the keyboard-
+   `:focus` pseudo. Hover doesn't need the chain because there's no
+   class-stacked theme-dark equivalent. */
+html body .portal .Select__option.Select__option--is-focused,
+html body .portal .Select__option.Select__option--is-selected,
+html body .portal .Select__option:hover {
     background: var(--portal-surface-hover) !important;
     background-color: var(--portal-surface-hover) !important;
     color: var(--portal-text) !important;
@@ -4984,10 +4992,10 @@ html body .portal .Select__option--is-selected {
    `.single-line-text.oneline` carry the link-blue at rest from the
    global anchor rule. On hover/focus we want them to inherit the
    parent option's contrast colour rather than render as link-blue
-   on the hover bg. */
-html body .portal .Select__option--is-focused .agent-dropdown-option,
-html body .portal .Select__option--is-focused .single-line-text,
-html body .portal .Select__option--is-focused .oneline,
+   on the hover bg. Same specificity bump as above. */
+html body .portal .Select__option.Select__option--is-focused .agent-dropdown-option,
+html body .portal .Select__option.Select__option--is-focused .single-line-text,
+html body .portal .Select__option.Select__option--is-focused .oneline,
 html body .portal .Select__option:hover .agent-dropdown-option,
 html body .portal .Select__option:hover .single-line-text,
 html body .portal .Select__option:hover .oneline {

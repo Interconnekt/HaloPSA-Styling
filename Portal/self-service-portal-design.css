@@ -4906,6 +4906,57 @@ html body .portal .page-title:has(> .listwidget-icon.fa-desktop) + div {
     letter-spacing: 0.005em;
 }
 
+/* Toolbar search dropdown — React-Select-powered autocomplete that
+   ships with a CSS-in-JS hash class painting the focused option at
+   `bg: #666; color: rgb(74, 116, 240)` (link-blue on medium grey).
+   On a dark theme that combination drops AA contrast and renders as
+   washed-out text inside a light bar. Reskin the menu chrome to
+   match the portal surface tokens, and force focused/hovered options
+   to white-on-surface-hover so the result text reads clearly.
+
+   Inner result text inherits the global link colour from
+   `.agent-dropdown-option` / `.single-line-text.oneline`, so we
+   override those nested elements too inside a focused option. */
+html body .portal .Select__menu {
+    background: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-md) !important;
+    box-shadow: var(--portal-shadow-sm) !important;
+    overflow: hidden;
+}
+html body .portal .Select__menu-list {
+    background: transparent !important;
+    padding: 4px 0 !important;
+}
+html body .portal .Select__option {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: var(--portal-text) !important;
+    cursor: pointer;
+    transition: background-color var(--ik-dur) var(--ik-ease),
+                color var(--ik-dur) var(--ik-ease) !important;
+}
+html body .portal .Select__option--is-focused,
+html body .portal .Select__option:hover,
+html body .portal .Select__option--is-selected {
+    background: var(--portal-surface-hover) !important;
+    background-color: var(--portal-surface-hover) !important;
+    color: var(--portal-text) !important;
+}
+/* Inner result text — `.agent-dropdown-option` and
+   `.single-line-text.oneline` carry the link-blue at rest from the
+   global anchor rule. On hover/focus we want them to inherit the
+   parent option's contrast colour rather than render as link-blue
+   on the hover bg. */
+html body .portal .Select__option--is-focused .agent-dropdown-option,
+html body .portal .Select__option--is-focused .single-line-text,
+html body .portal .Select__option--is-focused .oneline,
+html body .portal .Select__option:hover .agent-dropdown-option,
+html body .portal .Select__option:hover .single-line-text,
+html body .portal .Select__option:hover .oneline {
+    color: var(--portal-text) !important;
+}
+
 /* Strip the "https://" prefix from the website link in the footer.
    CSS can't edit DOM text, so we zero the original then inject the
    clean version via ::before. Scoped by href so only the site link

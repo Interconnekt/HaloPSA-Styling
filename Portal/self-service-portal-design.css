@@ -3810,57 +3810,26 @@ html body .portal .portal-ticket-splitter > .layout-pane {
     overflow-x: clip;
 }
 
-/* Action-history timeline (ticket Progress tab) — HaloPSA renders each
-   activity entry as `.action-history-item` containing two child blocks:
-   a leading datetime stamp and a trailing avatar + content card. The
-   default flex layout leaves the date column as `flex: 1`, which on a
-   70%-wide detail pane stretches the date ~600px away from the card and
-   leaves the date floating in the empty space below the list. Constrain
-   the date column to a fixed 140px right-aligned strip so it sits
-   directly next to the content card with a tight 16px gap. Scoped with
-   `:not(.tile-item)` so home-page Recent Activity tiles (which carry
-   `.tile-item` and have NO date sibling) keep their existing chrome.
-   Date cells in HaloPSA's emit are typically `<span>` or `<div>` wraps
-   without a stable class hook, so we target by structural position
-   (first non-image direct child) rather than name. */
-html body .portal .subscreen .action-history-item:not(.tile-item),
-html body .portal .mainscreen2 .action-history-item:not(.tile-item) {
-    display: flex !important;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 16px;
-    background: transparent !important;
-    border: 0 !important;
-    padding: 0 !important;
-    margin: 0 0 12px 0 !important;
-}
+/* Detail-pane content width — HaloPSA wraps the ticket detail inside
+   the splitter's right pane in a Bootstrap-flavoured container chain
+   (`.container`, `.container-fluid`, sometimes `.container-max`) that
+   carries its own max-width caps from Bootstrap defaults. Those caps
+   don't know about the pane's actual width, so the title row's
+   back/share button cluster and the workflow stepper card render
+   inset ~150px from the pane's right edge — the search bar above
+   doesn't suffer because it's a sibling of the splitter, not a
+   child. Force every inner container to fill the pane width so
+   detail content lines up flush with the search bar above.
 
-/* Date column — fixed-width right-aligned strip, muted body type so
-   the eye reads card content first, timestamp second. Padding-top
-   nudges it down to align with the avatar/title baseline of the card
-   to its right. */
-html body .portal .subscreen .action-history-item:not(.tile-item) > :first-child,
-html body .portal .mainscreen2 .action-history-item:not(.tile-item) > :first-child {
-    flex: 0 0 140px;
-    text-align: right;
-    font-family: var(--ik-font-display) !important;
-    font-size: 12px !important;
-    color: var(--portal-text-muted) !important;
-    padding-top: 18px;
-    white-space: nowrap;
-}
-
-/* Content card — absorb remaining width, restore the surface chrome
-   that the parent rule above zeroed out so the card itself reads as
-   the bordered unit. */
-html body .portal .subscreen .action-history-item:not(.tile-item) > :nth-child(n+2),
-html body .portal .mainscreen2 .action-history-item:not(.tile-item) > :nth-child(n+2) {
-    flex: 1 1 auto;
-    min-width: 0;
-    background: var(--portal-surface) !important;
-    border: 1px solid var(--portal-border) !important;
-    border-radius: var(--portal-radius-md) !important;
-    padding: 14px 18px !important;
+   Scoped to `.portal-ticket-splitter` so the existing 1240px cap on
+   `.main > .container` (line 3752, intentional for the full-page
+   ticket route) stays in effect everywhere outside the splitter. */
+html body .portal .portal-ticket-splitter .container,
+html body .portal .portal-ticket-splitter .container-fluid,
+html body .portal .portal-ticket-splitter .container-large,
+html body .portal .portal-ticket-splitter .container-max {
+    max-width: 100% !important;
+    width: 100% !important;
 }
 
 /* Progress / Details tab bar — HaloPSA's React tabs library emits both

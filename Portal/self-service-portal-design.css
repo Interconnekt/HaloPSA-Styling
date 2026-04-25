@@ -3767,22 +3767,20 @@ html body .portal .main > .container.ticket-list {
     max-width: 85% !important;
 }
 
-/* Split-view pane alignment — HaloPSA's splitter defaults to ~30/70 but
-   the header row above it is 50/50 (col-md-6). The splitter library
-   (react-splitter-layout) sets the non-primary pane to a fixed pixel
-   width via inline `style="width: 400px"` and lets the primary pane
-   fill the rest with `flex: 1 1 auto`. Which side is "primary" varies
-   by view: Table view treats the list as primary; Tile view treats
-   the detail as primary. So a rule scoped to `.layout-pane-primary`
-   works for one and is inert in the other. We instead force BOTH
-   panes to width: 50% — the primary's `flex-grow: 1` still lets it
-   absorb the 3px splitter gutter, so we end up with a clean ~50/50
-   that aligns with the col-md-6 search-bar header above. This also
-   makes the split scale proportionally on wider viewports (zoom-out
-   no longer leaves the right pane unbounded while the left stays
-   stuck at 400px). */
+/* Split-view pane ratio — HaloPSA's splitter defaults the non-primary
+   pane to a fixed inline `style="width: 400px"` (set by
+   react-splitter-layout) and lets the primary pane fill the rest with
+   `flex: 1 1 auto`. Which side is "primary" varies by view: Table
+   view treats the list as primary; Tile view treats the detail as
+   primary. A rule scoped to `.layout-pane-primary` therefore works in
+   one view and is inert in the other.
+   We set width: 30% on BOTH panes — the non-primary sticks at 30%
+   (flex-grow: 0), and the primary's `flex-grow: 1` absorbs the
+   leftover ~70% (and the 3px splitter gutter). Result: list/tile
+   pane 30%, detail pane 70%, scaling proportionally with the
+   container so wider viewports don't leave one pane unbounded. */
 html body .portal .portal-ticket-splitter > .layout-pane {
-    width: 50% !important;
+    width: 30% !important;
     min-width: 0 !important;
 }
 

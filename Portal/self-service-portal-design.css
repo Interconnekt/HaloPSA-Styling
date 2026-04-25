@@ -5300,6 +5300,81 @@ html body .portal .tree-menu input[type="text"] {
     color: var(--portal-text);
 }
 
+/* ──────────────────────────────────────────
+   Mobile / tablet polish (single-column viewport)
+   ────────────────────────────────────────── */
+
+/* KB landing page — stop the search pill + "Knowledge Base"
+   disclosure header from narrowing when the tree is collapsed. HaloPSA
+   sizes the tree-menu wrapper (and the disclosure `.sidebar` row inside
+   it) to its widest descendant, so collapsing the tree shrinks them to
+   the caret + label, and on mobile the search pill above shares the
+   same flex/grid column and shrinks with it. Pin the tree containers
+   (and the disclosure row) to the full available width so the layout
+   stays stable as the user toggles the tree. Scoped to `max-width:
+   900px` because at desktop widths the sidebar lives in a fixed
+   Bootstrap column and the issue doesn't surface. */
+@media (max-width: 900px) {
+    html body .portal .kblist,
+    html body .portal .tree-menu,
+    html body .portal .kblist > .sidebar,
+    html body .portal .tree-menu > .sidebar,
+    html body .portal .searchscreen,
+    html body .portal .searchscreen > form,
+    html body .portal .searchscreen .searchbox {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+    }
+}
+
+@media (max-width: 768px) {
+    /* My Tickets page — claw back the desktop 85% width inset so the
+       filter row and ticket cards sit at the same horizontal extent as
+       the .details-form card on the New Ticket page (which spans full
+       viewport on mobile). Without this the page reads as inset-on-
+       inset because Bootstrap's `.row` adds its own gutters on top of
+       the 85% container. 14px side padding leaves a hair of breathing
+       room from the viewport edge. */
+    html body .portal .main > .container.ticket-list {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+    }
+
+    /* My Tickets filter row — stack the "Open Tickets" dropdown above
+       the search bar so each gets full width. The desktop 30/70 split
+       (set to align the search bar with the ticket-detail splitter
+       pane below) collapses the dropdown to ~99px on a 390px viewport,
+       which truncates "Open Tickets" to "Op…" and wraps the caret onto
+       a second line. Resetting to col-12 on mobile lets the
+       `.Select__control` reach a comfortable readable width. */
+    html body .portal .searchandview > .col-md-6:not(.search),
+    html body .portal .searchandview > .col-md-6.search {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+    html body .portal .searchandview > .col-md-6:not(.search) {
+        margin-bottom: 8px;
+    }
+
+    /* New Ticket form card — drop the desktop 36px×40px internal
+       padding (set for the wide 1040px max-width centered card on
+       desktop) to a tighter 18px×14px on mobile so the inputs (width
+       100% inside the card) extend close to the card edges and don't
+       lose ~80px of horizontal real estate to padding on a narrow
+       viewport. The matching `.page-title` inset keeps the H1 left-
+       aligned with the form labels below. */
+    html body .portal:has(.mandatory-hint) .details-form.readeditform {
+        padding: 18px 14px !important;
+        margin: 16px auto 24px !important;
+    }
+    html body .portal .page-title:has(.mandatory-hint) {
+        padding: 0 14px !important;
+    }
+}
+
 
 /* ─────────────────────────────────────────────────────────
    15 · Scrollbars

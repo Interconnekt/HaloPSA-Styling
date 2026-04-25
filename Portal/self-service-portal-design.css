@@ -4165,7 +4165,7 @@ html body .portal .kbdetails {
        padding (rule below) and trim kbdetails's own top padding to
        4px so the title sits close to the card edge. */
     margin: 8px auto 24px;
-    padding: 4px 32px 20px;
+    padding: 4px 20px 20px;
     line-height: 1.7;
     color: var(--portal-text);
     font-size: 16px;
@@ -5277,9 +5277,17 @@ html body .portal .tree-menu .tree-node[style*="background-color: rgb(47"] {
 }
 
 /* KB sidebar search ("Filter articles..." input). HaloPSA ships
-   a chunky 2px-border input; re-skin to match pill chrome. */
+   a chunky 2px-border input; re-skin to match pill chrome.
+
+   `width: 100%` + `box-sizing: border-box` locks the closed input
+   to the same width as the open article-list column below it.
+   HaloPSA's default leaves the searchbox at intrinsic width
+   (~content-fit), so when the tree menu expands to fill the sidebar
+   the input visibly narrows next to the article rows. */
 html body .portal .kblist .searchbox,
 html body .portal .tree-menu .searchbox {
+    width: 100% !important;
+    box-sizing: border-box !important;
     background: var(--portal-surface-hover) !important;
     border: 1px solid var(--portal-border-soft) !important;
     border-radius: var(--portal-radius-sm) !important;

@@ -4870,6 +4870,42 @@ html body .portal .main {
     padding-bottom: 40px;
 }
 
+/* Home-page "My Assets" empty state — when the user has no assets,
+   HaloPSA renders the section as a `.page-title` block (heading +
+   icon) followed by a bare `<div>No Assets to show</div>` sibling
+   with no class of its own. Default styling leaves it as plain
+   muted text floating above 100px of margin-bottom, which reads as
+   broken/missing-section against the populated My Tickets column on
+   its left.
+
+   Wrap the empty-state div in the same card chrome as the home-page
+   ticket cards (surface bg, hairline border, radius, padding) and
+   center the text both horizontally and vertically with flexbox.
+   `min-height: 220px` gives the card visual weight comparable to a
+   single ticket row in the My Tickets column next to it.
+
+   Selector strategy: `:has(> .listwidget-icon.fa-desktop)` matches
+   the `.page-title` of the Assets section specifically (the
+   fa-desktop class differentiates it from `.fa-history` for Recent
+   Activity, `.fa-newspaper` for News, etc). The `+ div` then picks
+   up the bare empty-state sibling. No DOM stamping needed. */
+html body .portal .page-title:has(> .listwidget-icon.fa-desktop) + div {
+    background: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-md) !important;
+    padding: 24px !important;
+    min-height: 220px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--portal-text-muted) !important;
+    font-family: var(--ik-font-display) !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.005em;
+}
+
 /* Strip the "https://" prefix from the website link in the footer.
    CSS can't edit DOM text, so we zero the original then inject the
    clean version via ::before. Scoped by href so only the site link

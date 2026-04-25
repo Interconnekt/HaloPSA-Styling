@@ -3784,6 +3784,21 @@ html body .portal .portal-ticket-splitter > .layout-pane {
     min-width: 0 !important;
 }
 
+/* Search-row column alignment — HaloPSA renders the filter dropdown
+   and search bar in a Bootstrap `.searchandview .row` with two
+   `col-md-6` halves (50/50). Now that the splitter below is 30/70,
+   the search bar floats over the left (list) pane instead of sitting
+   above the right (detail) pane. Re-proportion the row to 30/70 so
+   the search bar's left edge lines up with the detail pane below. */
+html body .portal .searchandview > .col-md-6:not(.search) {
+    flex: 0 0 30% !important;
+    max-width: 30% !important;
+}
+html body .portal .searchandview > .col-md-6.search {
+    flex: 0 0 70% !important;
+    max-width: 70% !important;
+}
+
 
 /* ─────────────────────────────────────────────────────────
    13 · KB article reading view

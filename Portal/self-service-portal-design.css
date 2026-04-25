@@ -4921,14 +4921,13 @@ html body .portal .page-title:has(> .listwidget-icon.fa-desktop) + div {
 /* Toolbar search input — HaloPSA ships `.portal-nav-search` (also
    `.nhd-nav-search`) at 200px, which truncates result titles like
    "Leaving the Company? Steps to Separate F..." to "Leaving the C…"
-   in the dropdown. Bump the wrapper to 360px so the input itself has
-   room for typing, and the dropdown below (which inherits 100%
-   width from the wrapper by default) gets widened separately. */
+   in the dropdown. Match input + dropdown at 600px so the input has
+   room to type and the result titles fit without ellipsing. */
 html body .portal .portal-nav-search,
 html body .portal .nhd-nav-search,
 html body .portal .buttoncontainer.nav-search {
-    width: 360px !important;
-    max-width: 360px !important;
+    width: 600px !important;
+    max-width: 600px !important;
 }
 
 html body .portal .Select__menu {
@@ -4937,12 +4936,30 @@ html body .portal .Select__menu {
     border-radius: var(--portal-radius-md) !important;
     box-shadow: var(--portal-shadow-sm) !important;
     overflow: hidden;
-    /* Anchor to the input's right edge and grow leftward to 600px so
-       result titles fit without truncating. `right: 0; left: auto`
-       beats React-Select's default `left: 0` positioning. */
     width: 600px !important;
     right: 0 !important;
     left: auto !important;
+}
+
+/* Result row title — HaloPSA fixes `.single-line-text.oneline` at
+   360px with `overflow: hidden; text-overflow: ellipsis`, so even
+   with a 600px dropdown the title is clipped to 360px and 200+
+   pixels sit unused to the right of the ellipsis. Inside a
+   `.Select__option` we want the title to flex-grow to fill the row,
+   so override width to auto and add `flex: 1` so the bullet-list
+   metadata (Service / Article tag) takes only what it needs. */
+html body .portal .Select__option .agent-dropdown-option {
+    display: flex !important;
+    align-items: center;
+    gap: 12px;
+    width: 100% !important;
+}
+html body .portal .Select__option .single-line-text,
+html body .portal .Select__option .single-line-text.oneline {
+    width: auto !important;
+    max-width: none !important;
+    flex: 1 1 auto !important;
+    min-width: 0;
 }
 html body .portal .Select__menu-list {
     background: transparent !important;

@@ -4860,7 +4860,16 @@ html body .portal .web-announcement-img-enhanced {
 html body .portal footer {
     background: #0A0F1C !important;
     border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
-    padding: 20px 24px;
+    /* `padding-top: 40px` matches the visible bottom inset, which is
+       made up of 20px footer padding-bottom + 20px margin-bottom on
+       the inner `.row` (HaloPSA's default). The footer's own padding
+       was already 20/20 symmetric, but the row margin-bottom pushed
+       the visible content baseline down so the top read tight against
+       the border while the bottom had room to breathe. Bumping
+       padding-top to 40 makes the visible top inset = visible bottom
+       inset (40px each). Joel's review: applies across all views,
+       not scoped to mobile. */
+    padding: 40px 24px 20px;
     text-align: center;
     color: rgba(255, 255, 255, 0.72) !important;
 }

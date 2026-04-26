@@ -5787,23 +5787,74 @@ html body .portal .tree-menu input[type="text"] {
     }
 }
 
-/* Desktop KB article card — `.kbdetails > .article.nohover` is the
-   visual card (border + radius + bg from the generic `.article:not
-   (.search-result-item)` rule earlier in the file). The `.buttons-
-   container` child floats right; floats don't contribute to the
-   parent's height, which can leave the card's right rounded corner
-   visually obscured (the float overflows the card's content area
-   and the rounded corner sits behind it). `display: flow-root`
-   establishes a new block-formatting context so the float is
-   contained within the card's box and the right border-radius
-   renders cleanly at every viewport. Selector includes `.nohover`
-   to push specificity to (0,3,1) — beats the generic `.article:
-   not(.search-result-item)` rule (0,2,1) on cascade so we don't
-   need !important. Scoped outside the mobile @media block so it
-   applies at desktop widths too. */
+/* KB article card — `.kbdetails > .article.nohover` is the visual
+   card around the article body. Match the newticket form card
+   chrome (`.details-form.readeditform` at line 3337) for cross-
+   page consistency: same border-radius, same box-shadow, same
+   gradient-line ::before stripe at top. Joel's review: KB card
+   was showing the smaller --portal-radius-md and no shadow, and
+   was lifting on hover (which doesn't make sense for a reading
+   view — there's nothing to "click"). Override the generic `.
+   article:not(.search-result-item)` rule that wraps every KB
+   tile with a hover-lift card pattern.
+
+   `overflow: hidden + position: relative` matches the newticket
+   form's container model: the rounded corners clip the ::before
+   gradient stripe cleanly and contain the floated buttons-
+   container child (replaces the previous `display: flow-root` —
+   overflow: hidden achieves the same float-clearing goal AND
+   doubles as a safety clip against any content (wide images,
+   tables, code blocks) that could push past the card edge on
+   desktop, which Joel flagged: "the card goes off the page in
+   terms of what is visible".
+
+   Applies on all viewports per Joel's request. */
 html body .portal .kbdetails > .article.nohover {
-    display: flow-root !important;
-    overflow: visible !important;
+    background: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius) !important;
+    box-shadow: var(--portal-shadow) !important;
+    position: relative !important;
+    overflow: hidden !important;
+    transition: none !important;
+}
+/* Top-edge gradient stripe — matches the newticket form's pattern
+   (line 3348). Anchored to the article's top edge inside the
+   rounded corners. */
+html body .portal .kbdetails > .article.nohover::before {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 1px;
+    background: var(--ik-gradient-line);
+    opacity: 0.6;
+    z-index: 1;
+}
+/* Disable the generic `.article:hover` lift/accent — the reading
+   view isn't interactive, so hover should be a no-op. Re-state
+   the non-hover values so the cascade has explicit anchors and
+   the card doesn't visually shift on mouseover. */
+html body .portal .kbdetails > .article.nohover:hover {
+    background: var(--portal-surface) !important;
+    border-color: var(--portal-border) !important;
+    box-shadow: var(--portal-shadow) !important;
+    transform: none !important;
+}
+
+/* Desktop overflow safety for KB content — wide images, tables,
+   pre blocks, and iframes inside the article should never push
+   past the card's right edge. Previously scoped to the mobile
+   @media block only; promoted here so the same constraint applies
+   at desktop widths (Joel's "card goes off the page" review on
+   /kb?faqlist=1&id=19 at desktop). */
+html body .portal .kbdetails img,
+html body .portal .kbdetails pre,
+html body .portal .kbdetails iframe {
+    max-width: 100% !important;
+    height: auto;
+}
+html body .portal .kbdetails table {
+    max-width: 100% !important;
 }
 
 

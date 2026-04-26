@@ -5438,12 +5438,36 @@ html body .portal .tree-menu input[type="text"] {
         padding-right: 0 !important;
     }
 
-    /* Card panels (.details-group.card-panel) — drop internal padding
-       from 20px to 14px so the visible field labels/values use the
-       card's full width on a narrow viewport. */
-    html body .portal .main .details-group.card-panel {
-        padding-left: 14px !important;
-        padding-right: 14px !important;
+    /* Card panels (.details-group.card-panel) — Joel's review:
+       previous 14px padding read as "data hard against the card
+       border" on mobile. Bump to 20px so labels/values sit cleanly
+       inside the card chrome. The doubled selector beats HaloPSA's
+       runtime injection on cascade. */
+    html body .portal .main .details-group.card-panel.card-panel {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+    }
+
+    /* Profile avatar (`.nhd-nav-myprofile-image`) — HaloPSA defaults
+       to `padding: 10px 6px` (10 vertical, 6 horizontal). Joel's
+       review: keep 10px on all sides on mobile for a uniform circle
+       hit-area. */
+    html body .portal .nhd-nav-myprofile-image.nhd-nav-myprofile-image {
+        padding: 10px !important;
+    }
+
+    /* Filter row (`.searchandview`) — HaloPSA's `.row` ships with
+       `margin: 0 -15px` to claw back its parent col's gutter. With
+       the col-md-* gutter restored at mobile (15px), the negative
+       margin pulls .searchandview 15px past the col content edge on
+       both sides — which makes the "Open Tickets" dropdown and the
+       search bar render visibly WIDER than the ticket cards below
+       (Joel's "way too wide" feedback). Zero the negative margin so
+       the row stays within the col's content box, matching the
+       cards' horizontal extent. */
+    html body .portal .searchandview.searchandview {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
     }
 
     /* Back button on mobile — sit under the hamburger menu (which

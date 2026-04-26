@@ -5388,14 +5388,19 @@ html body .portal .tree-menu input[type="text"] {
        cascaded by the runtime — computed `padding-left` stayed at
        14px until the doubled selector landed. Pattern matches the
        same trick used on `.readeditform.readeditform.readeditform`
-       below. */
+       below.
+       Padding restored to 14px on BOTH sides (was briefly 0/14 in a
+       previous pass): with .page-title, .kbdetails, and .col-md-*
+       all zeroed inside, the container's own 14px gives the page a
+       balanced 14px viewport gutter on both edges instead of flush-
+       left + 14px-right asymmetry. */
     html body .portal .main .container.container,
     html body .portal .main .container-large.container-large,
     html body .portal .main .container-fluid.container-fluid,
     html body .portal .main .container-max.container-max {
         width: 100% !important;
         max-width: 100% !important;
-        padding-left: 0 !important;
+        padding-left: 14px !important;
         padding-right: 14px !important;
     }
 

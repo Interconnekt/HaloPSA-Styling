@@ -5465,6 +5465,24 @@ html body .portal .tree-menu input[type="text"] {
         padding-right: 14px !important;
     }
 
+    /* Ticket detail page (`/ticket?id=N`) — its container chain is
+       `.main > .container-max > .container`, so the rule above fires
+       on BOTH wrappers and stacks 14+14 = 28px of left/right gutter.
+       Other pages (KB, My Tickets, New Ticket) only have ONE of the
+       two container classes in the chain, so they get the intended
+       single 14px gutter. Joel's review of /ticket?…id=176791 on
+       mobile: page title and detail cards inset further than every
+       other page.
+       Fix: when `.container` is nested inside `.container-max`, zero
+       its padding so the outer 14px is the sole gutter. The TRIPLED
+       `.container` (specificity (0,5,1)) beats the doubled-class rule
+       above (0,4,1) without needing to reorder. Width/max-width
+       stay 100% via the rule above. */
+    html body .portal .main .container-max .container.container.container {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
     /* Bootstrap col padding — INTENTIONALLY left at the default 15px
        gutter at mobile. Joel's review: zeroing the col-md-* gutter
        made single-column layouts feel too tight against the container
@@ -5551,20 +5569,27 @@ html body .portal .tree-menu input[type="text"] {
         margin-bottom: 8px;
     }
 
-    /* New Ticket form card — drop the desktop 36px×40px internal
-       padding (set for the wide 1040px max-width centered card on
-       desktop) to a more compact 28px×22px on mobile. Keep enough
-       to read as a card with breathing room around the inputs (the
-       previous 24×16 still read as too tight — labels and inputs
-       sat almost flush with the card edge). The TRIPLED selector
-       `.readeditform.readeditform.readeditform` is required because
-       the doubled form was being out-cascaded by HaloPSA's React-
-       runtime injection at the same specificity; the third class
-       repetition pushes specificity (0,3,1) → (0,4,1) so this
-       padding rule wins regardless of injection order. Verified via
-       Chrome MCP at vw=412: computed padding 28px 22px applies. */
+    /* New Ticket form card — strip the desktop 36px×40px internal
+       padding entirely on mobile. Joel's review: the 28px×22px we
+       previously settled on still felt like wasted gutter on a 414px
+       viewport.
+       Why this is safe: every form field sits inside a
+       `.details-group.card-panel`, and the rule at line ~5498 gives
+       card-panel its own `padding: 20px` on mobile. So fields keep
+       their 20px breathing room regardless of what the OUTER form
+       does — the form-level padding is redundant horizontal space.
+       Top padding kept at 14px so the gradient stripe (::before at
+       top: 0, height: 1px) and the `.mandatory-hint` subheader (sits
+       above the first card-panel, outside the card-panel padding
+       rule) get a small breathing line; horizontal zeroed so each
+       card-panel reaches the form's edges and the fields gain ~44px
+       of usable width.
+       The TRIPLED selector `.readeditform.readeditform.readeditform`
+       is required because the doubled form was out-cascaded by
+       HaloPSA's React-runtime injection at the same specificity;
+       the third class repetition pushes (0,3,1) → (0,4,1). */
     html body .portal:has(.mandatory-hint) .details-form.readeditform.readeditform.readeditform {
-        padding: 28px 22px !important;
+        padding: 14px 0 !important;
         margin: 16px auto 24px !important;
     }
 
@@ -5784,6 +5809,36 @@ html body .portal .tree-menu input[type="text"] {
         margin-bottom: 6px !important;
         margin-left: 0 !important;
         width: 100% !important;
+    }
+}
+
+/* KB article column overflow fix — HaloPSA's React runtime injects
+   this inline style on the col-md-9 wrapping the article:
+       margin-left: 30%;  width: calc(75%);
+       padding: 16px;     border-left: 1px solid #555;
+   The arithmetic doesn't fit: 30% + 75% = 105% of the parent's
+   width, plus 32px of horizontal padding and 1px of left border on
+   top. The column overflows its parent by 5%+33px, and because
+   .container-large carries `overflow: hidden`, the card's right
+   edge (border, border-radius, gradient stripe) gets clipped off-
+   screen — Joel's "the card goes off the edge" review at full
+   desktop width.
+   Two changes in tandem:
+   1. width: 70% — so margin-left (30%) + width (70%) = 100%, the
+      column ends exactly at the parent's right edge.
+   2. box-sizing: border-box — so the 16px padding and 1px border-
+      left sit INSIDE the 70% box rather than stacking on top of
+      it (default content-box would re-overflow by 33px).
+   :has() + the kblist sibling restricts the rule to the KB index
+   route's article column so the same .col-md-9 class on other
+   pages stays untouched. Scoped to min-width: 769px so it doesn't
+   collide with the mobile reorder rule (line ~5601) that flips
+   col-md-9 to order: -1 in a vertical stack — at mobile both
+   columns want full width, not 70/30. */
+@media (min-width: 769px) {
+    html body .portal .container-large > div:has(> .col-md-9):has(> .kblist) > .col-md-9 {
+        width: 70% !important;
+        box-sizing: border-box !important;
     }
 }
 

@@ -5569,28 +5569,78 @@ html body .portal .tree-menu input[type="text"] {
         margin-bottom: 8px;
     }
 
-    /* New Ticket form card — strip the desktop 36px×40px internal
-       padding entirely on mobile. Joel's review: the 28px×22px we
-       previously settled on still felt like wasted gutter on a 414px
-       viewport.
-       Why this is safe: every form field sits inside a
-       `.details-group.card-panel`, and the rule at line ~5498 gives
-       card-panel its own `padding: 20px` on mobile. So fields keep
-       their 20px breathing room regardless of what the OUTER form
-       does — the form-level padding is redundant horizontal space.
-       Top padding kept at 14px so the gradient stripe (::before at
-       top: 0, height: 1px) and the `.mandatory-hint` subheader (sits
-       above the first card-panel, outside the card-panel padding
-       rule) get a small breathing line; horizontal zeroed so each
-       card-panel reaches the form's edges and the fields gain ~44px
-       of usable width.
+    /* Filter row width on mobile — Bootstrap's `.row` (.searchandview
+       inherits this) ships with `margin: 0 -15px` to claw back the
+       col gutter. On desktop that's intentional: the dropdown +
+       search reach the column-outer edge, matching content above.
+       On mobile we already zero the col gutters (rule earlier), so
+       the -15px margin just pushes the row 15px past each side of
+       the container content — making the filter row 30px WIDER than
+       the ticket cards below (which sit within container content).
+       Joel's review: dropdown/search and ticket cards should be the
+       same horizontal extent on mobile.
+       Fix: zero the row margin so the searchandview sits flush with
+       the container content edge, matching `.main-tile-item`'s
+       width. Doubled selector for spec, plus !important to beat
+       Bootstrap's row default. */
+    html body .portal .searchandview.searchandview {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    /* New Ticket form card — uniform 5px internal padding on mobile.
+       Joel's review: the previous 14px×0 still left visible inset
+       around inputs (the line ~5516 rule gives card-panel its own
+       20px sides on mobile, which compounded). Drop both layers to
+       near-zero so fields fill the card horizontally — see the
+       form's card-panel override directly below this rule.
+       Top padding 5px keeps the gradient stripe (::before at top: 0,
+       height: 1px) and the `.mandatory-hint` subheader from sitting
+       hard against the card border, but tighter than before so
+       vertical real estate isn't wasted either.
        The TRIPLED selector `.readeditform.readeditform.readeditform`
        is required because the doubled form was out-cascaded by
        HaloPSA's React-runtime injection at the same specificity;
        the third class repetition pushes (0,3,1) → (0,4,1). */
     html body .portal:has(.mandatory-hint) .details-form.readeditform.readeditform.readeditform {
-        padding: 14px 0 !important;
+        padding: 5px !important;
         margin: 16px auto 24px !important;
+    }
+    /* Form's card-panel mobile padding override — the generic
+       card-panel rule at line ~5516 gives 20px sides for ticket-
+       detail readability. Inside the New Ticket form there's nothing
+       to read in the side gutter (fields fill the row), so zero the
+       card-panel padding here so the form's own 5px is the sole
+       gutter and inputs reach edge-to-edge. Triple .card-panel
+       (specificity (0,7,2)) beats both line ~5516 (0,5,2) and the
+       desktop line ~3357 (0,6,2). */
+    html body .portal .main .details-form .details-group.card-panel.card-panel.card-panel {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    /* Form's row + nested col gutters — Bootstrap pairs `.row` with
+       `[class*=col-]` such that the row carries `margin: 0 -15px` and
+       each col carries `padding: 0 15px`. They cancel: net offset 0.
+       Without this override the form's inputs sat 5px (form) + 15px
+       (col) = 20px from the form border on mobile, despite the form
+       padding being just 5px.
+       Joel's review: "5px on this card so inputs are wider" — the
+       inner col gutter was the missing 15px. Zero BOTH halves of
+       the gutter pair (row margin AND col padding) so the cancel
+       still works at offset 0. Verified via Chrome MCP injection:
+       zeroing only the col padding pushed content 15px PAST the
+       form border (the row's -15px margin was unbalanced). With
+       both zeroed, inputs land exactly 5px from the form border.
+       Scoped to `.details-form` so the col-gutter convention
+       elsewhere on mobile (My Tickets filter row, KB tree-menu,
+       ticket detail cards) is untouched. */
+    html body .portal .details-form .row.row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    html body .portal .details-form [class*="col-"][class*="col-"] {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
     }
 
     /* Page-title block (H1 + optional subheading + mandatory-hint) —
@@ -5809,6 +5859,30 @@ html body .portal .tree-menu input[type="text"] {
         margin-bottom: 6px !important;
         margin-left: 0 !important;
         width: 100% !important;
+    }
+
+    /* Pagination on mobile — keep Previous / Page X of Y / Next on
+       one line. The default rule at line ~2782 sets flex-direction:
+       row but react-table's own CSS sets flex-wrap: wrap upstream
+       (verified via Chrome MCP: computed flex-wrap was `wrap` even
+       though our rule didn't set it), so at narrow widths the
+       Previous button breaks above the page counter and Next.
+       Force nowrap and squeeze the spacing budget so the trio fits
+       at 375-414px viewports.
+       The button-padding squeeze (22px → 12px sides) claws back
+       ~40px combined, the gap drop (16 → 8) claws back ~16px, and
+       the .-pagination padding drop (18 → 12) claws back ~12px. At
+       a 414px viewport that gives ~68px of breathing room over the
+       baseline content; at 375px it still fits with a few px to
+       spare. */
+    html body .portal .-pagination.-pagination {
+        flex-wrap: nowrap !important;
+        padding: 14px 12px !important;
+        gap: 8px !important;
+    }
+    html body .portal .-pagination .-btn,
+    html body .portal button.-btn {
+        padding: 0 12px !important;
     }
 }
 

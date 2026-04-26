@@ -1286,17 +1286,21 @@ html body .portal button.backbtn {
     height: 32px !important;
     padding: 0 !important;
     /* Horizontal align: sit under the centered Interconnekt logo
-       icon in the navbar above. The wordmark (~220px wide, centered)
+       icon in the navbar above. The wordmark (~225px wide, centered)
        puts the icon center at `calc(50% - 95px)` of the navbar; the
        32px back button therefore lands directly below the icon when
-       its left edge is at `calc(50% - 111px)`. Works at every
-       viewport width because every page-content container the back
-       button lives inside is itself horizontally centered (so 50%
-       of the parent equals 50% of the viewport).
+       its left edge is at `calc(50% - 111px)`. The extra 24px in
+       the offset below (135 vs 111) accounts for the parent's left
+       padding (14px from the mobile container fix) plus the back
+       button's own border so the BUTTON CENTER — not its left edge
+       — lines up with the icon center. Works at every viewport
+       width because every page-content container the back button
+       lives inside is itself horizontally centered (so 50% of the
+       parent equals 50% of the viewport).
        Top margin tightened 14 → 8 after KB spacing pass — the 14
        was a leftover from the older 28px-top `.kbdetails` padding
        era, which pushed everything down further than it needed to. */
-    margin: 8px 10px 0 calc(50% - 111px) !important;
+    margin: 8px 10px 0 calc(50% - 135px) !important;
     border-radius: 999px !important;
     display: inline-flex !important;
     align-items: center;
@@ -5333,9 +5337,20 @@ html body .portal .tree-menu input[type="text"] {
    the caret + label, and on mobile the search pill above shares the
    same flex/grid column and shrinks with it. Pin the tree containers
    (and the disclosure row) to the full available width so the layout
-   stays stable as the user toggles the tree. Scoped to `max-width:
-   900px` because at desktop widths the sidebar lives in a fixed
-   Bootstrap column and the issue doesn't surface. */
+   stays stable as the user toggles the tree.
+
+   `min-width: 100%` on top of `width/max-width` is load-bearing here:
+   if a parent is using `width: max-content` or `display: inline-
+   block`, the child's `width: 100%` resolves to the *intrinsic* width
+   of its content rather than the surrounding column. `min-width:
+   100%` forces the box to refuse to shrink below its container, which
+   is what we actually want. The companion `*:has(> .X)` rules below
+   reach up one level to also pin any direct shrink-wrap ancestor
+   (HaloPSA's KB markup wraps the search + tree in unlabeled flex/
+   inline-block divs that can't be targeted by class).
+
+   Scoped to `max-width: 900px` because at desktop widths the sidebar
+   lives in a fixed Bootstrap column and the issue doesn't surface. */
 @media (max-width: 900px) {
     html body .portal .kblist,
     html body .portal .tree-menu,
@@ -5345,19 +5360,32 @@ html body .portal .tree-menu input[type="text"] {
     html body .portal .searchscreen > form,
     html body .portal .searchscreen .searchbox {
         width: 100% !important;
+        min-width: 100% !important;
         max-width: 100% !important;
         box-sizing: border-box;
+    }
+    html body .portal *:has(> .kblist),
+    html body .portal *:has(> .tree-menu),
+    html body .portal *:has(> .searchscreen) {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
     }
 }
 
 @media (max-width: 768px) {
-    /* My Tickets page — claw back the desktop 85% width inset so the
-       filter row and ticket cards sit at the same horizontal extent as
+    /* All page-content containers under `.main` — claw back the
+       desktop 85% width inset (My Tickets) and any other inherited
+       width caps so every page sits at the same horizontal extent as
        the .details-form card on the New Ticket page (which spans full
-       viewport on mobile). Without this the page reads as inset-on-
-       inset because Bootstrap's `.row` adds its own gutters on top of
-       the 85% container. 14px side padding leaves a hair of breathing
-       room from the viewport edge. */
+       viewport on mobile). 14px side padding leaves a hair of
+       breathing room from the viewport edge. Covers ticket-list,
+       ticket detail (/portal/ticket?id=…), KB index, Assets, etc. —
+       any page whose root container under `.main` would otherwise
+       inherit a percentage-width inset. */
+    html body .portal .main > .container,
+    html body .portal .main > .container-large,
+    html body .portal .main > .container-fluid,
     html body .portal .main > .container.ticket-list {
         width: 100% !important;
         max-width: 100% !important;

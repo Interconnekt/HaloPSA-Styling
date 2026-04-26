@@ -1285,18 +1285,20 @@ html body .portal button.backbtn {
     width: 32px !important;
     height: 32px !important;
     padding: 0 !important;
-    /* Horizontal align: sit centered directly under the Interconnekt
-       logo icon in the navbar above. Verified via Chrome MCP at a
-       412px viewport: the wordmark image is 194px wide at x=75 (so
-       icon center ≈ 92px), and `calc(50% - 127px)` lands the back
-       button at x=75.5 with center=91.5 — within 0.5px of icon
-       center. Works at every viewport because the back button's
-       parent (`<main>`) spans the full viewport, so 50% of parent
-       equals 50% of viewport.
+    /* Horizontal align (desktop): sit centered directly under the
+       Interconnekt logo icon in the navbar above. Verified via
+       Chrome MCP at vw=1800: the wordmark image is 194px wide at
+       x=75 (so icon center ≈ 92px). `margin-left: 76px` lands the
+       32px back button with its center at x=92 — under the icon.
+       Works on desktop at every width because the logo image sits
+       at a fixed left offset (HaloPSA's navbar puts it at left, not
+       centered, on viewports ≥ ~768px).
+       Mobile override (under the hamburger menu) lives in the
+       @media (max-width: 768px) block at the bottom of this file.
        Top margin tightened 14 → 8 after KB spacing pass — the 14
        was a leftover from the older 28px-top `.kbdetails` padding
        era, which pushed everything down further than it needed to. */
-    margin: 8px 10px 0 calc(50% - 127px) !important;
+    margin: 8px 10px 0 76px !important;
     border-radius: 999px !important;
     display: inline-flex !important;
     align-items: center;
@@ -5405,9 +5407,13 @@ html body .portal .tree-menu input[type="text"] {
        and `padding: 0 15px` to claw back its parent col's gutter and
        re-add its own. Since we just zeroed the col gutter above,
        the compensator pattern is now adding 15px BACK on each side,
-       producing the visible inset. Zero both. */
-    html body .portal .main .details-form.colmd-compensator,
-    html body .portal .main .details-form {
+       producing the visible inset. Zero just the compensator — NOT
+       the generic `.details-form` rule. The generic form on the New
+       Ticket page (`.readeditform`) ships with its own intentional
+       desktop padding (40px) that the rule below tightens to 18×14
+       for mobile, and the previous version of this block clobbered
+       that with `padding: 0`, leaving the form looking padding-less. */
+    html body .portal .main .details-form.colmd-compensator {
         margin-left: 0 !important;
         margin-right: 0 !important;
         padding-left: 0 !important;
@@ -5420,6 +5426,16 @@ html body .portal .tree-menu input[type="text"] {
     html body .portal .main .details-group.card-panel {
         padding-left: 14px !important;
         padding-right: 14px !important;
+    }
+
+    /* Back button on mobile — sit under the hamburger menu (which
+       lives at viewport x=0, w=50, center=25), instead of under the
+       logo icon (the desktop position). `margin-left: 9px` lands
+       the 32px button with its center at x=25. Overrides the
+       desktop `margin-left: 76px` rule earlier in the file. */
+    html body .portal .backbtn,
+    html body .portal button.backbtn {
+        margin-left: 9px !important;
     }
 
     /* My Tickets filter row — stack the "Open Tickets" dropdown above
@@ -5440,12 +5456,15 @@ html body .portal .tree-menu input[type="text"] {
 
     /* New Ticket form card — drop the desktop 36px×40px internal
        padding (set for the wide 1040px max-width centered card on
-       desktop) to a tighter 18px×14px on mobile so the inputs (width
-       100% inside the card) extend close to the card edges and don't
-       lose ~80px of horizontal real estate to padding on a narrow
-       viewport. */
-    html body .portal:has(.mandatory-hint) .details-form.readeditform {
-        padding: 18px 14px !important;
+       desktop) to a more compact 24px×16px on mobile. Keep enough
+       to read as a card with breathing room around the inputs (the
+       previous 18×14 read as "no padding" because the field label
+       baseline ended up almost flush with the card edge). The doubled
+       selector `.readeditform.readeditform` raises specificity so the
+       earlier generic `.details-form { padding: 0 }` rule (now scoped
+       to `.colmd-compensator` only) cannot win on cascade. */
+    html body .portal:has(.mandatory-hint) .details-form.readeditform.readeditform {
+        padding: 24px 16px !important;
         margin: 16px auto 24px !important;
     }
 
@@ -5489,12 +5508,29 @@ html body .portal .tree-menu input[type="text"] {
     }
 
     /* `.kbdetails` (the article body wrapper) — strip its desktop
-       horizontal padding so the article text uses the full container
-       width. */
+       1100px max-width and 32px side padding, switch to full viewport
+       width with 14px side breathing room, and clip any overflowing
+       child (long URLs, wide tables/code blocks, oversized images)
+       so the article never bleeds past the viewport. `word-break` on
+       the H1 lets long article titles wrap mid-word instead of
+       pushing the content off-screen. */
     html body .portal .kbdetails {
         padding-left: 14px !important;
         padding-right: 14px !important;
         max-width: 100% !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box;
+    }
+    html body .portal .kbdetails h1 {
+        word-break: break-word !important;
+        overflow-wrap: anywhere !important;
+        max-width: 100% !important;
+    }
+    html body .portal .kbdetails img,
+    html body .portal .kbdetails table,
+    html body .portal .kbdetails pre {
+        max-width: 100% !important;
+        height: auto;
     }
 }
 

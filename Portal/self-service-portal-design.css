@@ -5543,35 +5543,125 @@ html body .portal .tree-menu input[type="text"] {
         overflow-x: hidden !important;
         box-sizing: border-box !important;
     }
-    html body .portal .kbdetails h1 {
+    /* H1 — desktop is 2.25rem (36px) which dominates the mobile card.
+       Drop to 1.5rem (24px) so titles read as a heading, not a
+       headline. `word-break` and `overflow-wrap: anywhere` together
+       guarantee that even the longest word fragment can't push the
+       content past the card's right edge. Doubled `.kbdetails.kbdetails`
+       for cascade priority over HaloPSA's runtime-injected H1 styles. */
+    html body .portal .kbdetails.kbdetails h1 {
+        font-size: 1.5rem !important;
+        line-height: 1.2 !important;
         word-break: break-word !important;
         overflow-wrap: anywhere !important;
         max-width: 100% !important;
     }
+
+    /* H2 (e.g. "Description") — desktop margin-top: 24px is excessive
+       inside a tight mobile card. Drop to 8px so headings sit close
+       to the meta line above. */
+    html body .portal .kbdetails.kbdetails h2 {
+        margin-top: 8px !important;
+        margin-bottom: 6px !important;
+        font-size: 1.125rem !important;
+    }
+
+    /* Card content padding — at mobile the desktop 15/18px padding
+       still wastes horizontal real estate AND adds vertical bulk
+       between the buttons row and the H1 (the "red box" gap Joel
+       flagged). Tighten to 14/16 — gives breathing room without
+       pushing content past the viewport edge. */
+    html body .portal .kbdetails > .article.nohover {
+        padding: 14px 16px !important;
+    }
+
+    /* Tighten the meta → Description gap (the second "red box" Joel
+       flagged) — `.kbmeta` and `.page-subtitle` ship with generous
+       margins and the `.content` body block ships with `margin-top:
+       8px`, which compound into ~50px of empty space. Halve. */
+    html body .portal .kbdetails.kbdetails .kbmeta,
+    html body .portal .kbdetails.kbdetails .page-subtitle {
+        margin: 4px 0 6px !important;
+    }
+    html body .portal .kbdetails.kbdetails > .article > .content {
+        margin-top: 4px !important;
+    }
+
+    /* Tables on mobile — `.confluenceTable` ships at 13–14px font
+       with `table-layout: auto`; combined with HaloPSA's `<col>`
+       width hints (often 1000px+) the table balloons to 1800px wide
+       and busts past the card. Force `table-layout: fixed` + zero
+       the col widths so columns share the card width evenly. Drop
+       font-size to 12.5px and compress cell padding. `word-break:
+       break-word` on cells lets long values like "Excel, Word,
+       PowerPoint, Visio (Windows only)" wrap rather than pushing
+       the table past the card. Doubled `.kbdetails.kbdetails` for
+       cascade priority over the inline `<col width="">` attribute. */
+    html body .portal .kbdetails.kbdetails table.confluenceTable,
+    html body .portal .kbdetails.kbdetails table {
+        width: 100% !important;
+        max-width: 100% !important;
+        table-layout: fixed !important;
+        font-size: 12.5px !important;
+    }
+    html body .portal .kbdetails.kbdetails table colgroup,
+    html body .portal .kbdetails.kbdetails table col {
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+    html body .portal .kbdetails.kbdetails table th,
+    html body .portal .kbdetails.kbdetails table td {
+        padding: 8px 10px !important;
+        word-break: break-word !important;
+        overflow-wrap: anywhere !important;
+        width: auto !important;
+        max-width: 50% !important;
+    }
+
+    /* Generic safety net for any wide child that might escape the
+       card (long URLs, embedded iframes, oversized images, code
+       blocks). `max-width: 100%` keeps each capped to its container,
+       `overflow-wrap: anywhere` lets long unbroken strings wrap. */
     html body .portal .kbdetails img,
-    html body .portal .kbdetails table,
-    html body .portal .kbdetails pre {
+    html body .portal .kbdetails pre,
+    html body .portal .kbdetails iframe {
         max-width: 100% !important;
         height: auto;
     }
+    html body .portal .kbdetails p,
+    html body .portal .kbdetails li,
+    html body .portal .kbdetails a {
+        overflow-wrap: anywhere !important;
+        word-break: break-word !important;
+    }
 
     /* `.buttons-container` (Generate PDF + share, top-right of the
-       article) ships with `float: right` from HaloPSA. At desktop
-       widths the float pulls a 178px-wide button strip cleanly into
-       the card's top-right corner. At mobile widths the H1 wraps
-       around the float, leaving a ~80px-wide text column on the LEFT
-       that forces every word in a long title to break mid-character
-       ("Exc / el / Dropdowns / Blocked"). Drop the float and stack
-       the buttons in a full-width row above the H1 so the title
-       gets the entire card width to wrap into. Verified via Chrome
-       MCP at vw=412: H1 now wraps word-by-word ("Excel - / Dropdowns
-       / Blocked -") instead of mid-character. */
-    html body .portal .kbdetails .buttons-container {
+       article) ships with `float: right` AND inline `style="margin-
+       right: 10px"` from HaloPSA. At desktop widths the float pulls
+       a 178px-wide button strip cleanly into the card's top-right
+       corner. At mobile widths the H1 wraps around the float,
+       leaving a ~80px-wide text column on the LEFT that forces every
+       word in a long title to break mid-character ("Exc / el /
+       Dropdowns / Blocked"). Drop the float and stack the buttons
+       in a full-width row above the H1 so the title gets the entire
+       card width to wrap into.
+       Doubled `.buttons-container.buttons-container` selector +
+       longhand margin properties (not the `margin` shorthand) are
+       both required to beat the inline `margin-right: 10px` style
+       AND the runtime-injected float at the same specificity.
+       Verified via Chrome MCP at vw=454: shorthand `margin: 0 0 6px
+       0 !important` left margin-bottom at 14px (runtime won); the
+       longhand form forces all four margin sides to 0/6 reliably. */
+    html body .portal .kbdetails.kbdetails .buttons-container.buttons-container {
         float: none !important;
         clear: both !important;
         display: flex !important;
         justify-content: flex-end !important;
-        margin: 0 0 14px 0 !important;
+        margin-top: 0 !important;
+        margin-right: 0 !important;
+        margin-bottom: 6px !important;
+        margin-left: 0 !important;
         width: 100% !important;
     }
 }

@@ -5456,18 +5456,21 @@ html body .portal .tree-menu input[type="text"] {
         padding: 10px !important;
     }
 
-    /* Filter row (`.searchandview`) — HaloPSA's `.row` ships with
-       `margin: 0 -15px` to claw back its parent col's gutter. With
-       the col-md-* gutter restored at mobile (15px), the negative
-       margin pulls .searchandview 15px past the col content edge on
-       both sides — which makes the "Open Tickets" dropdown and the
-       search bar render visibly WIDER than the ticket cards below
-       (Joel's "way too wide" feedback). Zero the negative margin so
-       the row stays within the col's content box, matching the
-       cards' horizontal extent. */
-    html body .portal .searchandview.searchandview {
-        margin-left: 0 !important;
-        margin-right: 0 !important;
+    /* Filter row (`.searchandview`) — Joel's later review (yellow-
+       box screenshots): the "Open Tickets" dropdown and search bar
+       should reach the same right-edge as the ticket cards below,
+       which extend to the container content edge. Bootstrap's row
+       (.searchandview) has `margin: 0 -15px` to push back to col-
+       outer edge — keep that — but the inner `.col-md-6` columns
+       inside the row also have 15px padding, leaving the dropdown
+       CONTROL 15px inset from the row edge (so it's narrower than
+       the card). Zero those inner col gutters at mobile so the
+       dropdown control sits flush with the row edge, matching the
+       card's horizontal extent. */
+    html body .portal .searchandview > .col-md-6,
+    html body .portal .searchandview > [class*="col-md-"] {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
     }
 
     /* Back button on mobile — sit under the hamburger menu (which

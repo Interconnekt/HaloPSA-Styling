@@ -1285,20 +1285,20 @@ html body .portal button.backbtn {
     width: 32px !important;
     height: 32px !important;
     padding: 0 !important;
-    /* Horizontal align (desktop): sit centered directly under the
-       Interconnekt logo icon in the navbar above. Verified via
-       Chrome MCP at vw=1800: the wordmark image is 194px wide at
-       x=75 (so icon center ≈ 92px). `margin-left: 76px` lands the
-       32px back button with its center at x=92 — under the icon.
-       Works on desktop at every width because the logo image sits
-       at a fixed left offset (HaloPSA's navbar puts it at left, not
-       centered, on viewports ≥ ~768px).
-       Mobile override (under the hamburger menu) lives in the
-       @media (max-width: 768px) block at the bottom of this file.
+    /* Horizontal align (desktop): the previous `margin-left: 76px`
+       placed the back button at viewport x=92 — which on the local
+       emulator pinned it under the swirl logo icon, but on Joel's
+       actual desktop layout the navbar's left chrome is narrower so
+       x=92 lands under the wordmark "i", not the icon. Pull it left
+       to a small content inset (20px = backbtn center at viewport
+       x=36) so it sits near the colored swirl regardless of the
+       exact navbar offset. Mobile override (under the hamburger
+       menu) lives in the @media (max-width: 768px) block at the
+       bottom of this file.
        Top margin tightened 14 → 8 after KB spacing pass — the 14
        was a leftover from the older 28px-top `.kbdetails` padding
        era, which pushed everything down further than it needed to. */
-    margin: 8px 10px 0 76px !important;
+    margin: 8px 10px 0 20px !important;
     border-radius: 999px !important;
     display: inline-flex !important;
     align-items: center;
@@ -5456,15 +5456,18 @@ html body .portal .tree-menu input[type="text"] {
 
     /* New Ticket form card — drop the desktop 36px×40px internal
        padding (set for the wide 1040px max-width centered card on
-       desktop) to a more compact 24px×16px on mobile. Keep enough
+       desktop) to a more compact 28px×22px on mobile. Keep enough
        to read as a card with breathing room around the inputs (the
-       previous 18×14 read as "no padding" because the field label
-       baseline ended up almost flush with the card edge). The doubled
-       selector `.readeditform.readeditform` raises specificity so the
-       earlier generic `.details-form { padding: 0 }` rule (now scoped
-       to `.colmd-compensator` only) cannot win on cascade. */
-    html body .portal:has(.mandatory-hint) .details-form.readeditform.readeditform {
-        padding: 24px 16px !important;
+       previous 24×16 still read as too tight — labels and inputs
+       sat almost flush with the card edge). The TRIPLED selector
+       `.readeditform.readeditform.readeditform` is required because
+       the doubled form was being out-cascaded by HaloPSA's React-
+       runtime injection at the same specificity; the third class
+       repetition pushes specificity (0,3,1) → (0,4,1) so this
+       padding rule wins regardless of injection order. Verified via
+       Chrome MCP at vw=412: computed padding 28px 22px applies. */
+    html body .portal:has(.mandatory-hint) .details-form.readeditform.readeditform.readeditform {
+        padding: 28px 22px !important;
         margin: 16px auto 24px !important;
     }
 
@@ -5532,6 +5535,45 @@ html body .portal .tree-menu input[type="text"] {
         max-width: 100% !important;
         height: auto;
     }
+
+    /* `.buttons-container` (Generate PDF + share, top-right of the
+       article) ships with `float: right` from HaloPSA. At desktop
+       widths the float pulls a 178px-wide button strip cleanly into
+       the card's top-right corner. At mobile widths the H1 wraps
+       around the float, leaving a ~80px-wide text column on the LEFT
+       that forces every word in a long title to break mid-character
+       ("Exc / el / Dropdowns / Blocked"). Drop the float and stack
+       the buttons in a full-width row above the H1 so the title
+       gets the entire card width to wrap into. Verified via Chrome
+       MCP at vw=412: H1 now wraps word-by-word ("Excel - / Dropdowns
+       / Blocked -") instead of mid-character. */
+    html body .portal .kbdetails .buttons-container {
+        float: none !important;
+        clear: both !important;
+        display: flex !important;
+        justify-content: flex-end !important;
+        margin: 0 0 14px 0 !important;
+        width: 100% !important;
+    }
+}
+
+/* Desktop KB article card — `.kbdetails > .article.nohover` is the
+   visual card (border + radius + bg from the generic `.article:not
+   (.search-result-item)` rule earlier in the file). The `.buttons-
+   container` child floats right; floats don't contribute to the
+   parent's height, which can leave the card's right rounded corner
+   visually obscured (the float overflows the card's content area
+   and the rounded corner sits behind it). `display: flow-root`
+   establishes a new block-formatting context so the float is
+   contained within the card's box and the right border-radius
+   renders cleanly at every viewport. Selector includes `.nohover`
+   to push specificity to (0,3,1) — beats the generic `.article:
+   not(.search-result-item)` rule (0,2,1) on cascade so we don't
+   need !important. Scoped outside the mobile @media block so it
+   applies at desktop widths too. */
+html body .portal .kbdetails > .article.nohover {
+    display: flow-root !important;
+    overflow: visible !important;
 }
 
 

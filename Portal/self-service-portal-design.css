@@ -2771,6 +2771,19 @@ html body .portal .Select__option:active {
     background: var(--portal-accent-soft) !important;
 }
 
+/* Pagination wrapper spacing — `.pagination-bottom` is the
+   react-table div that wraps `.-pagination`. When pagination sits
+   directly below a table (the asset selector inside the New Ticket
+   form, for instance) there's no margin between the last row /
+   "No rows found" message and the Previous/Next bar, so the two
+   read as one stuck-together block. 16px top-margin gives the
+   pagination its own visual chunk separate from the table content
+   above. Doesn't affect `.-pagination` rules below — applies one
+   level up at the wrapper. */
+html body .portal .pagination-bottom {
+    margin-top: 16px;
+}
+
 /* Pagination — react-table ships `.-pagination` as a flex container
    with three children (.-previous, .-center, .-next) each at `flex: 1`.
    Default `.-btn` sits at `width: 100%` inside, so Previous / Next
@@ -5588,22 +5601,52 @@ html body .portal .tree-menu input[type="text"] {
         margin-right: 0 !important;
     }
 
-    /* New Ticket form card — uniform 5px internal padding on mobile.
-       Joel's review: the previous 14px×0 still left visible inset
-       around inputs (the line ~5516 rule gives card-panel its own
-       20px sides on mobile, which compounded). Drop both layers to
-       near-zero so fields fill the card horizontally — see the
-       form's card-panel override directly below this rule.
-       Top padding 5px keeps the gradient stripe (::before at top: 0,
-       height: 1px) and the `.mandatory-hint` subheader from sitting
-       hard against the card border, but tighter than before so
-       vertical real estate isn't wasted either.
+    /* My Tickets list — strip the outer ReactTable card chrome on
+       mobile. The desktop rule at line ~4176 wraps the table in a
+       full card (border + radius + min-height: calc(100vh - 320px)
+       + overflow: hidden + .rt-table overflow: auto) so list mode
+       reads as a workspace card with internal scroll. At mobile,
+       each `.main-tile-item` row IS its own visible card — the
+       outer ReactTable chrome just nests cards-inside-cards AND
+       the inner `.rt-table { overflow: auto }` spawns a vertical
+       scrollbar on iOS/Android when the table content grows past
+       the min-height, eating ~7-12px of right-edge width. Joel's
+       review of /portal/tickets at mobile: tile cards read as
+       slightly narrower than the search/dropdown row above.
+       Fix: zero the outer chrome (border, bg, radius, min-height)
+       and switch `.rt-table` to overflow: visible so body scroll
+       handles long lists naturally — no scrollbar, no width loss,
+       tile-items sit flush at container content edge matching the
+       searchandview width above. */
+    html body .portal .container.ticket-list .ReactTable.main-table {
+        background: transparent !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        min-height: 0 !important;
+        overflow: visible !important;
+        box-shadow: none !important;
+    }
+    html body .portal .container.ticket-list .ReactTable.main-table > .rt-table {
+        overflow: visible !important;
+    }
+
+    /* New Ticket form card — uniform 10px internal padding on mobile.
+       Iterated from 14×0 → 5px → 10px per Joel's review: 5px sat
+       inputs flush enough that the form-card chrome read as
+       "missing"; 10px gives a small but legible breathing line
+       between the form border and the field edges while still
+       letting fields claim most of the card width.
+       Card-panel + row + col gutters all zeroed to 0 below so the
+       10px form padding is the SOLE inset between form border and
+       input — Bootstrap's row/col cancellation (margin: 0 -15px on
+       row, padding: 0 15px on cols) is preserved by zeroing both
+       halves; zeroing only one would push content past the form.
        The TRIPLED selector `.readeditform.readeditform.readeditform`
        is required because the doubled form was out-cascaded by
        HaloPSA's React-runtime injection at the same specificity;
        the third class repetition pushes (0,3,1) → (0,4,1). */
     html body .portal:has(.mandatory-hint) .details-form.readeditform.readeditform.readeditform {
-        padding: 5px !important;
+        padding: 10px !important;
         margin: 16px auto 24px !important;
     }
     /* Form's card-panel mobile padding override — the generic

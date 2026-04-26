@@ -5381,24 +5381,37 @@ html body .portal .tree-menu input[type="text"] {
        selector misses it and the 24px Bootstrap padding-default sticks.
        Covers ticket-list, ticket detail (/ticket?id=…), KB index,
        Assets, etc. */
-    html body .portal .main .container,
-    html body .portal .main .container-large,
-    html body .portal .main .container-fluid,
-    html body .portal .main .container-max {
+    /* Doubled class names (.container.container, etc.) push the
+       specificity from (0,3,1) → (0,4,1) so this rule beats HaloPSA's
+       React-runtime injected styles at the same selector. Verified
+       via Chrome MCP at vw=412: the single-class form was being out-
+       cascaded by the runtime — computed `padding-left` stayed at
+       14px until the doubled selector landed. Pattern matches the
+       same trick used on `.readeditform.readeditform.readeditform`
+       below. */
+    html body .portal .main .container.container,
+    html body .portal .main .container-large.container-large,
+    html body .portal .main .container-fluid.container-fluid,
+    html body .portal .main .container-max.container-max {
         width: 100% !important;
         max-width: 100% !important;
-        padding-left: 14px !important;
+        padding-left: 0 !important;
         padding-right: 14px !important;
     }
 
     /* Bootstrap col padding inside the page container — strip the
        default 15px gutter so single-column mobile layouts don't pile
-       inset-on-inset (container 14px + col 15px + form 15px + card
-       20px = 64px gone before content). Scoped to `.main .container`
-       so it doesn't reach into Bootstrap rows used elsewhere (e.g.
-       in the navbar). */
-    html body .portal .main .container .col-md-12,
-    html body .portal .main .container [class*="col-md-12"] {
+       inset-on-inset (container 0/14 + col 15 + form 15 + card 20
+       = 64px gone before content). Scoped to `.main` so it doesn't
+       reach into Bootstrap rows used elsewhere (e.g. in the navbar).
+       Extended from `col-md-12` only → all `col-md-*` variants
+       because the KB article view uses a `col-md-9` (with a sibling
+       `col-md-3` tree-menu) — the previous selector left a 15px
+       Bootstrap gutter on `col-md-9` that pushed `.kbdetails` inset
+       from the container's left edge. Doubled `[class*="col-md-"]`
+       attribute selector for specificity parity with the runtime
+       injection. */
+    html body .portal .main [class*="col-md-"][class*="col-md-"] {
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
@@ -5472,18 +5485,18 @@ html body .portal .tree-menu input[type="text"] {
     }
 
     /* Page-title block (H1 + optional subheading + mandatory-hint) —
-       force the same 14px horizontal inset as the form/card content
-       below it on every page (My Tickets, New Ticket, KB index,
-       Assets, etc.) so titles always left-align with the section
-       labels and inputs underneath. The desktop `:has(.mandatory-
-       hint)` rule pins New Ticket's title to `padding: 0 36px` for
-       the 1040px-wide centered form, but on a narrow viewport that
-       36px wastes horizontal real estate. `max-width: none` releases
-       the desktop 1040px cap so the title reaches the same horizontal
-       extent as the card below it on every viewport. */
-    html body .portal .page-title,
-    html body .portal .page-title:has(.mandatory-hint) {
-        padding-left: 14px !important;
+       per Joel's mobile review: page titles should sit FLUSH with
+       the viewport's left edge (no left inset). Right padding stays
+       at 14px to give a gutter against the viewport right edge.
+       The desktop `:has(.mandatory-hint)` rule pins New Ticket's
+       title to `padding: 0 36px` for the 1040px-wide centered form,
+       but on a narrow viewport that 36px wastes horizontal real
+       estate. `max-width: none` releases the desktop 1040px cap so
+       the title reaches the same horizontal extent as the card
+       below it on every viewport. */
+    html body .portal .page-title.page-title,
+    html body .portal .page-title.page-title:has(.mandatory-hint) {
+        padding-left: 0 !important;
         padding-right: 14px !important;
         max-width: none !important;
     }
@@ -5511,18 +5524,24 @@ html body .portal .tree-menu input[type="text"] {
     }
 
     /* `.kbdetails` (the article body wrapper) — strip its desktop
-       1100px max-width and 32px side padding, switch to full viewport
-       width with 14px side breathing room, and clip any overflowing
-       child (long URLs, wide tables/code blocks, oversized images)
-       so the article never bleeds past the viewport. `word-break` on
-       the H1 lets long article titles wrap mid-word instead of
-       pushing the content off-screen. */
-    html body .portal .kbdetails {
-        padding-left: 14px !important;
-        padding-right: 14px !important;
+       1100px max-width and 32px side padding, AND zero the mobile
+       padding entirely so the inner `.article` card sits flush with
+       the viewport at both edges. Per Joel's review: kbdetails was
+       still rendering "too wide" — the 14px left/right padding was
+       compounding with the column gutter and pushing the visible
+       card chrome past the right viewport edge. With padding: 0 on
+       both sides + width: 100% + box-sizing: border-box + overflow-
+       x: hidden, kbdetails strictly fills its column and clips any
+       overflowing child (long URLs, wide tables/code blocks, over-
+       sized images). `word-break` on the H1 lets long article titles
+       wrap mid-word instead of pushing the content off-screen. */
+    html body .portal .kbdetails.kbdetails {
+        width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
         max-width: 100% !important;
         overflow-x: hidden !important;
-        box-sizing: border-box;
+        box-sizing: border-box !important;
     }
     html body .portal .kbdetails h1 {
         word-break: break-word !important;

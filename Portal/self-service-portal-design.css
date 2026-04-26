@@ -1285,10 +1285,18 @@ html body .portal button.backbtn {
     width: 32px !important;
     height: 32px !important;
     padding: 0 !important;
-    /* Top margin tightened 14 → 8 after KB spacing pass — the 14
+    /* Horizontal align: sit under the centered Interconnekt logo
+       icon in the navbar above. The wordmark (~220px wide, centered)
+       puts the icon center at `calc(50% - 95px)` of the navbar; the
+       32px back button therefore lands directly below the icon when
+       its left edge is at `calc(50% - 111px)`. Works at every
+       viewport width because every page-content container the back
+       button lives inside is itself horizontally centered (so 50%
+       of the parent equals 50% of the viewport).
+       Top margin tightened 14 → 8 after KB spacing pass — the 14
        was a leftover from the older 28px-top `.kbdetails` padding
        era, which pushed everything down further than it needed to. */
-    margin: 8px 10px 0 20px !important;
+    margin: 8px 10px 0 calc(50% - 111px) !important;
     border-radius: 999px !important;
     display: inline-flex !important;
     align-items: center;
@@ -3473,6 +3481,20 @@ html body .portal .attachment-container.edit:hover {
     background: var(--portal-accent-soft) !important;
 }
 
+/* Attachments section — add breathing room above so the "ATTACHMENTS"
+   label clears HaloPSA's multi-page form pagination row ("Page X of Y
+   / Next") that sits directly above it. Without this, the label
+   visually overlaps the pagination because HaloPSA ships both with
+   zero vertical gap. Both selectors run because we don't know whether
+   HaloPSA wraps the label inside a `.details-group` or leaves it as a
+   sibling of `.attachment-container` — `:has` lets the rule attach to
+   whichever wrapper actually exists. */
+html body .portal .details-form label:has(+ .attachment-container),
+html body .portal .details-form .details-group:has(> .attachment-container),
+html body .portal .details-form .details-group:has(> label + .attachment-container) {
+    margin-top: 24px !important;
+}
+
 /* ─── Workflow stepper (rc-steps) ───────────────────────────
    Target treatment — match the reference mock:
      Completed (finish) → solid accent circle with white check
@@ -5364,14 +5386,25 @@ html body .portal .tree-menu input[type="text"] {
        desktop) to a tighter 18px×14px on mobile so the inputs (width
        100% inside the card) extend close to the card edges and don't
        lose ~80px of horizontal real estate to padding on a narrow
-       viewport. The matching `.page-title` inset keeps the H1 left-
-       aligned with the form labels below. */
+       viewport. */
     html body .portal:has(.mandatory-hint) .details-form.readeditform {
         padding: 18px 14px !important;
         margin: 16px auto 24px !important;
     }
+
+    /* Page-title block (H1 + optional subheading + mandatory-hint) —
+       force the same 14px horizontal inset as the form/card content
+       below it on every page (My Tickets, New Ticket, KB index,
+       Assets, etc.) so titles always left-align with the section
+       labels and inputs underneath. The desktop `:has(.mandatory-
+       hint)` rule pins New Ticket's title to `padding: 0 36px` for
+       the 1040px-wide centered form, but on a narrow viewport that
+       36px wastes horizontal real estate and visually misaligns the
+       H1 from the (now 14px-padded) card below. */
+    html body .portal .page-title,
     html body .portal .page-title:has(.mandatory-hint) {
-        padding: 0 14px !important;
+        padding-left: 14px !important;
+        padding-right: 14px !important;
     }
 }
 

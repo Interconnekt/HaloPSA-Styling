@@ -1285,22 +1285,18 @@ html body .portal button.backbtn {
     width: 32px !important;
     height: 32px !important;
     padding: 0 !important;
-    /* Horizontal align: sit under the centered Interconnekt logo
-       icon in the navbar above. The wordmark (~225px wide, centered)
-       puts the icon center at `calc(50% - 95px)` of the navbar; the
-       32px back button therefore lands directly below the icon when
-       its left edge is at `calc(50% - 111px)`. The extra 24px in
-       the offset below (135 vs 111) accounts for the parent's left
-       padding (14px from the mobile container fix) plus the back
-       button's own border so the BUTTON CENTER — not its left edge
-       — lines up with the icon center. Works at every viewport
-       width because every page-content container the back button
-       lives inside is itself horizontally centered (so 50% of the
-       parent equals 50% of the viewport).
+    /* Horizontal align: sit centered directly under the Interconnekt
+       logo icon in the navbar above. Verified via Chrome MCP at a
+       412px viewport: the wordmark image is 194px wide at x=75 (so
+       icon center ≈ 92px), and `calc(50% - 127px)` lands the back
+       button at x=75.5 with center=91.5 — within 0.5px of icon
+       center. Works at every viewport because the back button's
+       parent (`<main>`) spans the full viewport, so 50% of parent
+       equals 50% of viewport.
        Top margin tightened 14 → 8 after KB spacing pass — the 14
        was a leftover from the older 28px-top `.kbdetails` padding
        era, which pushed everything down further than it needed to. */
-    margin: 8px 10px 0 calc(50% - 135px) !important;
+    margin: 8px 10px 0 calc(50% - 127px) !important;
     border-radius: 999px !important;
     display: inline-flex !important;
     align-items: center;
@@ -5374,21 +5370,54 @@ html body .portal .tree-menu input[type="text"] {
 }
 
 @media (max-width: 768px) {
-    /* All page-content containers under `.main` — claw back the
-       desktop 85% width inset (My Tickets) and any other inherited
-       width caps so every page sits at the same horizontal extent as
-       the .details-form card on the New Ticket page (which spans full
-       viewport on mobile). 14px side padding leaves a hair of
-       breathing room from the viewport edge. Covers ticket-list,
-       ticket detail (/portal/ticket?id=…), KB index, Assets, etc. —
-       any page whose root container under `.main` would otherwise
-       inherit a percentage-width inset. */
-    html body .portal .main > .container,
-    html body .portal .main > .container-large,
-    html body .portal .main > .container-fluid,
-    html body .portal .main > .container.ticket-list {
+    /* All page-content containers — claw back the desktop 85% width
+       inset (My Tickets) and any other inherited width caps so every
+       page sits at the same horizontal extent. Use the descendant
+       combinator (` `) instead of the direct-child (`>`) one because
+       HaloPSA's actual DOM nests `.container` inside `.container-max`
+       (verified via Chrome MCP on the ticket-detail page) — a `>`
+       selector misses it and the 24px Bootstrap padding-default sticks.
+       Covers ticket-list, ticket detail (/ticket?id=…), KB index,
+       Assets, etc. */
+    html body .portal .main .container,
+    html body .portal .main .container-large,
+    html body .portal .main .container-fluid,
+    html body .portal .main .container-max {
         width: 100% !important;
         max-width: 100% !important;
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+    }
+
+    /* Bootstrap col padding inside the page container — strip the
+       default 15px gutter so single-column mobile layouts don't pile
+       inset-on-inset (container 14px + col 15px + form 15px + card
+       20px = 64px gone before content). Scoped to `.main .container`
+       so it doesn't reach into Bootstrap rows used elsewhere (e.g.
+       in the navbar). */
+    html body .portal .main .container .col-md-12,
+    html body .portal .main .container [class*="col-md-12"] {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    /* `.details-form.colmd-compensator` ships with `margin: 0 -15px`
+       and `padding: 0 15px` to claw back its parent col's gutter and
+       re-add its own. Since we just zeroed the col gutter above,
+       the compensator pattern is now adding 15px BACK on each side,
+       producing the visible inset. Zero both. */
+    html body .portal .main .details-form.colmd-compensator,
+    html body .portal .main .details-form {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    /* Card panels (.details-group.card-panel) — drop internal padding
+       from 20px to 14px so the visible field labels/values use the
+       card's full width on a narrow viewport. */
+    html body .portal .main .details-group.card-panel {
         padding-left: 14px !important;
         padding-right: 14px !important;
     }
@@ -5427,12 +5456,45 @@ html body .portal .tree-menu input[type="text"] {
        labels and inputs underneath. The desktop `:has(.mandatory-
        hint)` rule pins New Ticket's title to `padding: 0 36px` for
        the 1040px-wide centered form, but on a narrow viewport that
-       36px wastes horizontal real estate and visually misaligns the
-       H1 from the (now 14px-padded) card below. */
+       36px wastes horizontal real estate. `max-width: none` releases
+       the desktop 1040px cap so the title reaches the same horizontal
+       extent as the card below it on every viewport. */
     html body .portal .page-title,
     html body .portal .page-title:has(.mandatory-hint) {
         padding-left: 14px !important;
         padding-right: 14px !important;
+        max-width: none !important;
+    }
+
+    /* KB article view (`/kb?faqlist=1&id=N`) — the index renders the
+       tree-menu (col-md-3) and the article body (col-md-9) as side-
+       by-side Bootstrap columns. On mobile they stack vertically with
+       the tree FIRST, so a user navigating to a specific article has
+       to scroll past 700+px of tree before they can read it. Reorder
+       so the article (col-md-9) renders first via `order: -1`, and
+       cap the tree-menu height with internal scroll so it sits
+       beneath the article as a compact nav strip rather than a full-
+       screen wall of links. */
+    html body .portal .container-large > div:has(> .col-md-9):has(> .kblist) {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    html body .portal .container-large > div:has(> .kblist) > .col-md-9 {
+        order: -1 !important;
+    }
+    html body .portal .container-large > div:has(> .kblist) > .tree-menu.kblist {
+        max-height: 320px !important;
+        overflow-y: auto !important;
+        margin-top: 16px !important;
+    }
+
+    /* `.kbdetails` (the article body wrapper) — strip its desktop
+       horizontal padding so the article text uses the full container
+       width. */
+    html body .portal .kbdetails {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+        max-width: 100% !important;
     }
 }
 

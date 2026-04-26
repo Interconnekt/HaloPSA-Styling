@@ -5404,22 +5404,13 @@ html body .portal .tree-menu input[type="text"] {
         padding-right: 14px !important;
     }
 
-    /* Bootstrap col padding inside the page container — strip the
-       default 15px gutter so single-column mobile layouts don't pile
-       inset-on-inset (container 0/14 + col 15 + form 15 + card 20
-       = 64px gone before content). Scoped to `.main` so it doesn't
-       reach into Bootstrap rows used elsewhere (e.g. in the navbar).
-       Extended from `col-md-12` only → all `col-md-*` variants
-       because the KB article view uses a `col-md-9` (with a sibling
-       `col-md-3` tree-menu) — the previous selector left a 15px
-       Bootstrap gutter on `col-md-9` that pushed `.kbdetails` inset
-       from the container's left edge. Doubled `[class*="col-md-"]`
-       attribute selector for specificity parity with the runtime
-       injection. */
-    html body .portal .main [class*="col-md-"][class*="col-md-"] {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-    }
+    /* Bootstrap col padding — INTENTIONALLY left at the default 15px
+       gutter at mobile. Joel's review: zeroing the col-md-* gutter
+       made single-column layouts feel too tight against the container
+       edge. The 15px col gutter + the container's own 14px give a
+       balanced ~29px content inset that reads better than the flush-
+       left look. (Previously this rule zeroed all col-md-* padding;
+       removed per Joel's "that looks better" feedback.) */
 
     /* `.details-form.colmd-compensator` ships with `margin: 0 -15px`
        and `padding: 0 15px` to claw back its parent col's gutter and
@@ -5592,36 +5583,75 @@ html body .portal .tree-menu input[type="text"] {
         margin-top: 4px !important;
     }
 
-    /* Tables on mobile — `.confluenceTable` ships at 13–14px font
-       with `table-layout: auto`; combined with HaloPSA's `<col>`
-       width hints (often 1000px+) the table balloons to 1800px wide
-       and busts past the card. Force `table-layout: fixed` + zero
-       the col widths so columns share the card width evenly. Drop
-       font-size to 12.5px and compress cell padding. `word-break:
-       break-word` on cells lets long values like "Excel, Word,
-       PowerPoint, Visio (Windows only)" wrap rather than pushing
-       the table past the card. Doubled `.kbdetails.kbdetails` for
-       cascade priority over the inline `<col width="">` attribute. */
-    html body .portal .kbdetails.kbdetails table.confluenceTable,
-    html body .portal .kbdetails.kbdetails table {
+    /* Body text — desktop p is 16px / line-height 1.7 which dominates
+       the mobile reading column. Drop to 14px / 1.6 for a tighter
+       read. List items follow. */
+    html body .portal .kbdetails.kbdetails p,
+    html body .portal .kbdetails.kbdetails li {
+        font-size: 14px !important;
+        line-height: 1.6 !important;
+    }
+
+    /* Tables on mobile — switched from `table-layout: fixed` (forces
+       equal column width regardless of content) to `table-layout:
+       auto` (columns size to content). The fixed-layout pass made
+       2-column key/value tables waste half the width on a short
+       header like "Summary"; auto layout shrinks the header to ~50px
+       and gives the value cell ~370px on a 428px-wide card.
+       Doubled-class selector + `.confluenceTable` doubled for
+       specificity — the deployed v1 of this rule used
+       `.kbdetails.kbdetails table` with `table-layout: fixed
+       !important` and the new selector needs to outrank it on
+       cascade (the previously-pasted CSS sits later in the head
+       than any new injection, so specificity has to do the work). */
+    html body .portal .kbdetails.kbdetails table.confluenceTable.confluenceTable,
+    html body .portal .kbdetails.kbdetails table.table.table {
         width: 100% !important;
         max-width: 100% !important;
-        table-layout: fixed !important;
-        font-size: 12.5px !important;
+        table-layout: auto !important;
+        font-size: 11.5px !important;
     }
+
+    /* Cells — TH (`.confluenceTh`) and TD (`.confluenceTd`) targeted
+       by their Confluence-specific classes to bump specificity past
+       any previously-deployed `.kbdetails.kbdetails table th` rule.
+       `white-space: nowrap` on TH is the ONLY reliable way to get
+       table-layout: auto to give a short header like "Summary" its
+       natural ~80px width — `word-break: keep-all` is a no-op for
+       Latin scripts (CJK only), and `overflow-wrap: normal` alone
+       didn't stop the auto algorithm from collapsing the column.
+       With nowrap the TH dictates a min-content equal to the full
+       header text width, letting the TD take the remaining space.
+       Verified via Chrome MCP at vw=454: 2-col table now reads as
+       "Summary | <body content at 340px>" instead of "Su/m/ma/ry |
+       <body at 380px>". */
+    html body .portal .kbdetails.kbdetails table th.confluenceTh.confluenceTh,
+    html body .portal .kbdetails.kbdetails table th {
+        padding: 6px 8px !important;
+        white-space: nowrap !important;
+    }
+    html body .portal .kbdetails.kbdetails table td.confluenceTd.confluenceTd,
+    html body .portal .kbdetails.kbdetails table td {
+        padding: 6px 8px !important;
+        word-break: break-word !important;
+        overflow-wrap: anywhere !important;
+    }
+    /* Zero any HaloPSA `<col>` width hints so auto layout is free
+       to size columns by content. */
     html body .portal .kbdetails.kbdetails table colgroup,
     html body .portal .kbdetails.kbdetails table col {
         width: auto !important;
         min-width: 0 !important;
         max-width: 100% !important;
     }
-    html body .portal .kbdetails.kbdetails table th,
-    html body .portal .kbdetails.kbdetails table td {
-        padding: 8px 10px !important;
-        word-break: break-word !important;
-        overflow-wrap: anywhere !important;
-        width: auto !important;
-        max-width: 50% !important;
+    /* P inside table cells — keep at table's 11.5px (don't inherit
+       the mobile body 14px rule above) and tighten margins for a
+       compact table reading flow. */
+    html body .portal .kbdetails.kbdetails table td p,
+    html body .portal .kbdetails.kbdetails table td li {
+        font-size: inherit !important;
+        line-height: 1.45 !important;
+        margin: 0 0 6px !important;
     }
 
     /* Generic safety net for any wide child that might escape the
@@ -5634,8 +5664,6 @@ html body .portal .tree-menu input[type="text"] {
         max-width: 100% !important;
         height: auto;
     }
-    html body .portal .kbdetails p,
-    html body .portal .kbdetails li,
     html body .portal .kbdetails a {
         overflow-wrap: anywhere !important;
         word-break: break-word !important;

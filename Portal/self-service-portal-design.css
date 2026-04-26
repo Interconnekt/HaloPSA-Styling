@@ -1439,6 +1439,58 @@ html body .portal .buttons-container {
     gap: 6px;
 }
 
+/* KB article "Scroll to top" button — float it to the bottom-right of
+   the viewport so it stays visible while scrolling long articles. By
+   default HaloPSA renders it inline at the very bottom of the article,
+   below the last paragraph, which is invisible until the user has
+   already finished scrolling — defeating the purpose. Pull it out of
+   the document flow with `position: fixed`, anchor bottom-right, bump
+   to a 44px hit-area for accessible touch, and add a soft drop-shadow
+   so it reads as a floating action button against any content beneath
+   it (long articles can have wide images / dark code blocks where a
+   borderless ghost button would disappear).
+   Scope: `.kbdetails button[title="Scroll to top"]` — title-attribute
+   selector targets ONLY the back-to-top instance (HaloPSA reuses the
+   `.solidbutton.fabtn.noprint` class for Generate-PDF / Share too).
+   Applies on all viewports per Joel's request — not scoped to the
+   mobile @media block. */
+html body .portal .kbdetails button[title="Scroll to top"].solidbutton.fabtn {
+    position: fixed !important;
+    bottom: 24px !important;
+    right: 24px !important;
+    top: auto !important;
+    left: auto !important;
+    width: 44px !important;
+    height: 44px !important;
+    z-index: 1000 !important;
+    background: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: 999px !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4),
+                0 2px 6px rgba(0, 0, 0, 0.25) !important;
+    margin: 0 !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    color: var(--portal-text-secondary) !important;
+    transition: transform 180ms var(--ik-ease),
+                background-color 180ms var(--ik-ease),
+                border-color 180ms var(--ik-ease) !important;
+}
+html body .portal .kbdetails button[title="Scroll to top"].solidbutton.fabtn:hover {
+    background: var(--portal-accent-soft) !important;
+    border-color: var(--portal-accent) !important;
+    color: var(--portal-accent) !important;
+    transform: translateY(-2px) !important;
+}
+html body .portal .kbdetails button[title="Scroll to top"].solidbutton.fabtn svg,
+html body .portal .kbdetails button[title="Scroll to top"].solidbutton.fabtn i,
+html body .portal .kbdetails button[title="Scroll to top"].solidbutton.fabtn .fa {
+    color: inherit !important;
+    fill: currentColor !important;
+    font-size: 16px !important;
+}
+
 /* ─── Status pill shape ───────────────────────────────────
    Force full-pill geometry on every `.status-avatar` variant
    HaloPSA emits. Clean pill — no leading dot — labels carry

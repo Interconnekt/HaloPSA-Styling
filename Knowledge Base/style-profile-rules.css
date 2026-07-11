@@ -12,6 +12,19 @@
 
    Headings use inherited colours (no hardcoded values) so they
    adapt to both light and dark themes automatically.
+
+   2026 design-system lock: display headings use Bricolage Grotesque
+   (weight 700), body copy uses Figtree, code uses Spline Sans Mono.
+   Callouts (Confluence panels) repaint as SOLID TINT surfaces with NO
+   offset left border; the pre-2026 4px accent border is explicitly
+   retired system-wide (renders inconsistently in email/PDF exports
+   and reads as off-system next to the website's tinted-card callouts).
+   Style Profile can't express dark-mode overrides or per-icon colour
+   (see AGENTS.md gotcha #1 and the "Making Changes" section); those
+   live in the redundant Custom CSS layer (self-service-portal-design.css)
+   for the Self-Service Portal. This file stays light-mode-only, solid-
+   tint, ink-on-tint, matching what Style Profile CAN express in both
+   portals.
    ═══════════════════════════════════════════════════════════════════════ */
 
 
@@ -20,10 +33,10 @@
    ═══════════════════════════════════════ */
 margin-top: 35px;
 padding-bottom: 10px;
-font-family: 'Montserrat', sans-serif;
-font-weight: 800;
+font-family: 'Bricolage Grotesque', sans-serif;
+font-weight: 700;
 font-size: 30px;
-border-bottom: 1px solid #e2e5ea;
+border-bottom: 1px solid #e2e5ee;
 letter-spacing: -0.02em;
 
 
@@ -32,7 +45,7 @@ letter-spacing: -0.02em;
    ═══════════════════════════════════════ */
 margin-top: 30px;
 padding-bottom: 5px;
-font-family: 'Montserrat', sans-serif;
+font-family: 'Bricolage Grotesque', sans-serif;
 font-weight: 700;
 letter-spacing: -0.01em;
 
@@ -42,28 +55,28 @@ letter-spacing: -0.01em;
    ═══════════════════════════════════════ */
 margin-top: 40px;
 margin-bottom: 10px;
-font-family: 'Montserrat', sans-serif;
-font-weight: 600;
+font-family: 'Bricolage Grotesque', sans-serif;
+font-weight: 700;
 
 
 /* ═══════════════════════════════════════
    Precedence: 20 | Selector: p
    ═══════════════════════════════════════ */
-font-family: 'Montserrat', sans-serif;
+font-family: 'Figtree', sans-serif;
 line-height: 1.8;
 
 
 /* ═══════════════════════════════════════
    Precedence: 20 | Selector: article-details
    ═══════════════════════════════════════ */
-font-family: 'Montserrat', sans-serif;
+font-family: 'Figtree', sans-serif;
 line-height: 1.8;
 
 
 /* ═══════════════════════════════════════
    Precedence: 20 | Selector: a
    ═══════════════════════════════════════ */
-color: #4088D4;
+color: #3761E2;
 text-decoration-thickness: 1px;
 text-underline-offset: 3px;
 transition: color 0.2s ease;
@@ -72,7 +85,7 @@ transition: color 0.2s ease;
 /* ═══════════════════════════════════════
    Precedence: 20 | Selector: li
    ═══════════════════════════════════════ */
-font-family: 'Montserrat', sans-serif;
+font-family: 'Figtree', sans-serif;
 line-height: 1.8;
 margin-bottom: 6px;
 
@@ -92,13 +105,16 @@ margin: 12px 0;
 
 
 /* ═══════════════════════════════════════════════════════════════════════
-   CODE & PREFORMATTED TEXT
+   CODE & PREFORMATTED TEXT: font swapped to Spline Sans Mono; the
+   Catppuccin-inspired colour scheme is intentionally NOT brand-tied
+   (code blocks stay a dark island regardless of article theme, see
+   AGENTS.md gotcha #8), so those colours are unchanged by the re-palette.
    ═══════════════════════════════════════════════════════════════════════ */
 
 /* ═══════════════════════════════════════
    Precedence: 20 | Selector: code
    ═══════════════════════════════════════ */
-font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+font-family: 'Spline Sans Mono', Consolas, 'Liberation Mono', Menlo, monospace;
 font-size: 0.875em;
 background: #f1f3f5;
 color: #d6336c;
@@ -110,7 +126,7 @@ word-break: break-word;
 /* ═══════════════════════════════════════
    Precedence: 20 | Selector: pre
    ═══════════════════════════════════════ */
-font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+font-family: 'Spline Sans Mono', Consolas, 'Liberation Mono', Menlo, monospace;
 font-size: 0.875em;
 line-height: 1.6;
 background: #1e1e2e;
@@ -141,12 +157,12 @@ font-size: inherit;
 /* ═══════════════════════════════════════
    Precedence: 20 | Selector: blockquote
    ═══════════════════════════════════════ */
-border-left: 4px solid #4088D4;
-background: #f8f9fc;
+border-left: 4px solid #3761E2;
+background: #f5f7fb;
 margin: 16px 0;
 padding: 12px 20px;
 border-radius: 0 8px 8px 0;
-color: #5f6672;
+color: #585f76;
 font-style: italic;
 
 
@@ -160,7 +176,7 @@ margin: 0;
    Precedence: 20 | Selector: hr
    ═══════════════════════════════════════ */
 border: none;
-border-top: 1px solid #e2e5ea;
+border-top: 1px solid #e2e5ee;
 margin: 32px 0;
 
 
@@ -175,18 +191,18 @@ margin: 32px 0;
    numbered cells get the same styling. Explicit dark text colour
    ensures readability in Agent Portal dark mode (light bg persists).
    !important on all properties to beat HaloPSA built-in dark rules. */
-background-color: #f5f6f8 !important;
-color: #1a1d23 !important;
+background-color: #f5f7fb !important;
+color: #161922 !important;
 font-weight: 600 !important;
-font-family: 'Montserrat', sans-serif !important;
+font-family: 'Figtree', sans-serif !important;
 padding: 12px 16px !important;
-border: 1px solid #e2e5ea !important;
+border: 1px solid #e2e5ee !important;
 
 
 /* ═══════════════════════════════════════
    Precedence: 50 | Selector: .confluenceTable
    ═══════════════════════════════════════ */
-border: 1px solid #e2e5ea;
+border: 1px solid #e2e5ee;
 width: 100%;
 border-collapse: collapse;
 
@@ -195,11 +211,15 @@ border-collapse: collapse;
    Precedence: 50 | Selector: .confluenceTable td
    ═══════════════════════════════════════ */
 padding: 12px 16px;
-border: 1px solid #e2e5ea;
+border: 1px solid #e2e5ee;
 
 
 /* ═══════════════════════════════════════════════════════════════════════
    STATUS MACROS — Coloured pill badges (Confluence lozenge styles)
+   2026 mapping: complete=blue, success=true green (NOT jade/teal;
+   jade/teal is the Security brand accent only), current=amber,
+   error=red, progress=violet, same bucket system as the portal's
+   status pills (see website-portal-mapping.md §7).
    ═══════════════════════════════════════════════════════════════════════ */
 
 /* ═══════════════════════════════════════
@@ -218,43 +238,46 @@ letter-spacing: 0.02em;
 /* ═══════════════════════════════════════
    Precedence: 25 | Selector: .status-macro.aui-lozenge-complete
    ═══════════════════════════════════════ */
-background-color: #deebff !important;
-color: #0747a6 !important;
+background-color: #e7ecfc !important;
+color: #192c66 !important;
 
 
 /* ═══════════════════════════════════════
    Precedence: 25 | Selector: .status-macro.aui-lozenge-success
    ═══════════════════════════════════════ */
-background-color: #e3fcef !important;
-color: #006644 !important;
+background-color: #e3f0e8 !important;
+color: #093a1b !important;
 
 
 /* ═══════════════════════════════════════
    Precedence: 25 | Selector: .status-macro.aui-lozenge-current
    ═══════════════════════════════════════ */
-background-color: #fff0b3 !important;
-color: #974f0c !important;
+background-color: #f8e8e2 !important;
+color: #882e08 !important;
 
 
 /* ═══════════════════════════════════════
    Precedence: 25 | Selector: .status-macro.aui-lozenge-error
    ═══════════════════════════════════════ */
-background-color: #ffebe6 !important;
-color: #bf2600 !important;
+background-color: #f7e4e4 !important;
+color: #9d1818 !important;
 
 
 /* ═══════════════════════════════════════
    Precedence: 25 | Selector: .status-macro.aui-lozenge-progress
    ═══════════════════════════════════════ */
-background-color: #eae6ff !important;
-color: #403294 !important;
+background-color: #eee8fa !important;
+color: #321e60 !important;
 
 
 /* ═══════════════════════════════════════════════════════════════════════
-   CONFLUENCE PANELS — Outer wrappers
-   border-radius + overflow clipping + border-left accent on outer wrapper.
-   border: none kills Confluence's inline border, then per-type rules re-add
-   just the left accent. padding: 0 ensures only the body has padding.
+   CONFLUENCE PANELS - Outer wrappers
+   2026 lock: SOLID TINT callouts, NO offset left border. border-radius +
+   overflow clipping on the outer wrapper; border: none kills Confluence's
+   inline border AND is the full extent of what these per-type rules do
+   now (the 4px border-left accent is retired; the solid-tint body fill
+   below, painted at Precedence 30, is the only colour signal). padding: 0
+   ensures only the body has padding.
    ═══════════════════════════════════════════════════════════════════════ */
 
 /* ═══════════════════════════════════════
@@ -271,14 +294,12 @@ margin: 15px 0;
    Precedence: 28 | Selector: .confluence-information-macro-information
    ═══════════════════════════════════════ */
 border: none !important;
-border-left: 4px solid #2684ff !important;
 
 
 /* ═══════════════════════════════════════
    Precedence: 28 | Selector: .confluence-information-macro-note
    ═══════════════════════════════════════ */
 border: none !important;
-border-left: 4px solid #6554c0 !important;
 
 
 /* ═══════════════════════════════════════
@@ -287,14 +308,12 @@ border-left: 4px solid #6554c0 !important;
    NOTE: Despite the class name, this renders ADF "error" panels (red).
    Legacy Confluence mapped error→warning CSS class. */
 border: none !important;
-border-left: 4px solid #de350b !important;
 
 
 /* ═══════════════════════════════════════
    Precedence: 28 | Selector: .confluence-information-macro-tip
    ═══════════════════════════════════════ */
 border: none !important;
-border-left: 4px solid #00875a !important;
 
 
 /* ═══════════════════════════════════════
@@ -302,7 +321,6 @@ border-left: 4px solid #00875a !important;
    ═══════════════════════════════════════
    Some HaloPSA versions export ADF "error" with this class instead. */
 border: none !important;
-border-left: 4px solid #de350b !important;
 
 
 /* ═══════════════════════════════════════
@@ -310,7 +328,6 @@ border-left: 4px solid #de350b !important;
    ═══════════════════════════════════════
    ADF "success" panel — may use this class instead of tip. */
 border: none !important;
-border-left: 4px solid #00875a !important;
 
 
 /* ═══════════════════════════════════════
@@ -324,14 +341,18 @@ margin: 15px 0;
 
 
 /* ═══════════════════════════════════════════════════════════════════════
-   CONFLUENCE PANELS — Per-type body colours
+   CONFLUENCE PANELS - Per-type body colours (the solid tint IS the
+   callout; role-coloured heading/icon painting lives in the Custom CSS
+   layer for the Self-Service Portal; Style Profile's one-selector-per-
+   rule constraint and Agent Portal's lack of Custom CSS mean this layer
+   stays to tint + ink, see AGENTS.md's Layer 1 vs Layer 2 table).
    ═══════════════════════════════════════════════════════════════════════ */
 
 /* ═══════════════════════════════════════
    Precedence: 30 | Selector: .confluence-information-macro-information .confluence-information-macro-body
    ═══════════════════════════════════════ */
-background: #eaf2fd !important;
-color: #1a1d23 !important;
+background: #f1f4fd !important;
+color: #161922 !important;
 padding: 15px 25px !important;
 border: none !important;
 
@@ -339,8 +360,8 @@ border: none !important;
 /* ═══════════════════════════════════════
    Precedence: 30 | Selector: .confluence-information-macro-note .confluence-information-macro-body
    ═══════════════════════════════════════ */
-background: #f7eefd !important;
-color: #1a1d23 !important;
+background: #f5f2fc !important;
+color: #161922 !important;
 padding: 15px 25px !important;
 border: none !important;
 
@@ -349,8 +370,8 @@ border: none !important;
    Precedence: 30 | Selector: .confluence-information-macro-warning .confluence-information-macro-body
    ═══════════════════════════════════════
    Renders ADF "error" panels (red). See outer wrapper comment. */
-background: #fcedec !important;
-color: #1a1d23 !important;
+background: #faefef !important;
+color: #161922 !important;
 padding: 15px 25px !important;
 border: none !important;
 
@@ -358,8 +379,8 @@ border: none !important;
 /* ═══════════════════════════════════════
    Precedence: 30 | Selector: .confluence-information-macro-tip .confluence-information-macro-body
    ═══════════════════════════════════════ */
-background: #e3fef2 !important;
-color: #1a1d23 !important;
+background: #eff6f1 !important;
+color: #161922 !important;
 padding: 15px 25px !important;
 border: none !important;
 
@@ -368,8 +389,8 @@ border: none !important;
    Precedence: 30 | Selector: .confluence-information-macro-error .confluence-information-macro-body
    ═══════════════════════════════════════
    Fallback if HaloPSA uses -error class instead of -warning for error panels. */
-background: #fcedec !important;
-color: #1a1d23 !important;
+background: #faefef !important;
+color: #161922 !important;
 padding: 15px 25px !important;
 border: none !important;
 
@@ -378,8 +399,8 @@ border: none !important;
    Precedence: 30 | Selector: .confluence-information-macro-success .confluence-information-macro-body
    ═══════════════════════════════════════
    Fallback if HaloPSA uses -success class instead of -tip. */
-background: #e3fef2 !important;
-color: #1a1d23 !important;
+background: #eff6f1 !important;
+color: #161922 !important;
 padding: 15px 25px !important;
 border: none !important;
 
@@ -394,7 +415,7 @@ border: none !important;
 /* ═══════════════════════════════════════
    Precedence: 30 | Selector: div.panelContent
    ═══════════════════════════════════════ */
-color: #1a1d23 !important;
+color: #161922 !important;
 padding: 15px 25px !important;
 border: none !important;
 
@@ -416,7 +437,7 @@ padding-bottom: 15px;
 max-width: 100%;
 height: auto;
 border-radius: 10px;
-border: 2px solid #e2e5ea;
+border: 2px solid #e2e5ee;
 display: block;
 margin: 20px auto;
 

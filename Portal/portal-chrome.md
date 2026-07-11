@@ -31,16 +31,25 @@ GitHub Pages serves the org-owned repo at `interconnekt.github.io` (not a commit
 
 ## Portal Chrome Design Tokens
 
-CSS variables live at the top of `self-service-portal.css`:
+CSS variables live at the top of `self-service-portal-design.css` (the
+live file; see AGENTS.md. `self-service-portal.css` is the legacy
+fallback and does not contain the active token set).
 
-- `--portal-action: #5084ee` — primary blue (buttons, links, focus ring)
-- `--portal-action-hover` — darker blue on hover
-- `--portal-action-shadow` — 4px drop shadow under action buttons
-- `--portal-surface` — card/button base surface
-- `--portal-border` — 1px hairline border (rgba alpha, adapts to theme)
-- `--portal-text`, `--portal-text-muted`, `--portal-heading`
+2026 design-system lock: full reference in `website-portal-mapping.md`
+§1 and §2; summary here:
+
+- `--portal-action: #3761E2`: primary blue, Insight role (buttons, links, focus ring)
+- `--portal-action-hover: #2F52C0`: darker blue on hover
+- `--portal-action-shadow`: drop shadow under action buttons, `rgba()` of the accent
+- `--portal-violet: #6F43D6`: third brand triad member, Advisory/AI/People role (new token)
+- `--portal-highlight: #0284C7`: jade/teal, Security BRAND role only (delight moments, live dots, gradient first stop). NOT the success semantic; `--portal-ok` is an independent true green (`#15803D` light / `#34D399` dark), unchanged by the 2026 re-palette
+- `--portal-accent-2: #C026D3`: pink, reserved for the get-in-touch CTA + highlighter accent ONLY, not a general second brand colour
+- `--portal-on-accent: #FFFFFF` (light) / `#161922` (dark): text colour for use on top of a solid brand-colour fill; flips to dark ink in dark mode because the brightened dark-mode brand hues don't carry white text at readable contrast (new token)
+- `--portal-surface`: card/button base surface (`#FFFFFF` light / `#161A25` dark)
+- `--portal-border`: 1px hairline border (`#E2E5EE` light / `rgba(255,255,255,.072)` dark, adapts to theme)
+- `--portal-text`, `--portal-text-muted`, `--portal-heading`: ink `#161922` / faint `#8E93A4` (light); `#ECEEF4` / `rgba(236,238,244,.4)` (dark)
 - `--portal-table-header-bg`
-- `--portal-radius` — card/button corner radius
+- `--portal-radius`: card/button corner radius. Deliberately stays at the pre-existing tighter portal scale (16/12/10/8px) rather than adopting the website's 2026 20/26/34px radius bump; see `website-portal-mapping.md` §4
 
 `.theme-dark` overrides these for dark mode. `html body .portal` is the standard specificity prefix to beat later-loaded HaloPSA rules.
 
@@ -51,10 +60,10 @@ CSS variables live at the top of `self-service-portal.css`:
 ### Home page — ticket cards
 - `.tile-widget-bar` — 6px leading stripe with `14px 0 0 14px` radius. Width matters: 6px is "Option A" — fatter than HaloPSA's default so status colour reads clearly without a pseudo-element offset trick.
 - `.sla-perc-bar` — pill-rounded 999px countdown bar, 18px tall, `overflow: hidden` clips the fill to the pill shape.
-- `.sla-perc-bar > div[style*="rgb(...)"]` — per-state retint. We preserve HaloPSA's green/amber/red state *semantics* via attribute selectors rather than flattening to one colour:
-  - `rgb(255, 46, 0)` (red) → `#d05a52`
-  - `rgb(255, 191, 0)` (amber) → `#e0a84a`
-  - `rgb(0, 190, 0)` and green variants → `#4fa37a`
+- `.sla-perc-bar > div[style*="rgb(...)"]`: per-state retint via a two-stop `linear-gradient(90deg, …)`. We preserve HaloPSA's green/amber/red state *semantics* via attribute selectors rather than flattening to one colour. 2026 lock: red/amber move to the new semantic tokens; green stays true green (`--portal-ok`); jade/teal is brand-only and is NOT used here:
+  - `rgb(255, 46, 0)` (red) → `linear-gradient(90deg, #B91C1C, #F87171)`
+  - `rgb(255, 191, 0)` (amber) → `linear-gradient(90deg, #C2410C, #FB923C)`
+  - `rgb(0, 190, 0)` and green variants → `linear-gradient(90deg, #15803D, #34D399)` (unchanged hue family, updated shade)
 
 ### Tickets list
 - `.page-counts` — "1-15 of 23" counter, 13px/500 muted
@@ -86,11 +95,11 @@ HaloPSA renders email bodies inside `<iframe class="halo-html-renderer">`, a **s
 
 ### What the injected CSS sets
 
-- Font: `'Montserrat', 'Poppins', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif !important`
-- Link colour: `#3598db` (matches `Interconnekt/Email-Templates` `_base/base-template.html`)
+- Font: `'Figtree', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important` (2026 lock body font; was Montserrat/Poppins)
+- Link colour: `#3761E2` (2026 lock role blue: Insight role, links/primary buttons/focus. Was the legacy operational blue `#3598db`, which matched `Interconnekt/Email-Templates` `_base/base-template.html` at the time; that template repo has not been updated to the 2026 palette as part of this change, so the two are now intentionally out of sync until Email-Templates catches up)
 - Hover: underline on hover only
 
-The blue `#3598db` is chosen to work on both white email bodies (light-mode readability) and the dark portal surface, so we don't have to detect host theme.
+`#3761E2` reads at 5.29:1 against white; email bodies stay white regardless of portal theme, so a single literal value works for both light and dark portal surfaces without detecting host theme.
 
 ### How to load it
 
@@ -110,7 +119,7 @@ Body text colour — HaloPSA re-paints the iframe content when theme switches. O
 - **Stale CDN**: GitHub Pages caches. Hard-refresh (`Cmd+Shift+R`) or bump a cachebuster query param if you don't see changes.
 - **Org namespace**: repo is under `Interconnekt/`, so Pages URL is `interconnekt.github.io/HaloPSA-Styling/...` — not `joelkino.github.io/...`.
 - **Inline styles win**: HaloPSA paints SLA state colours via inline `style="background-color: rgb(...)"`. You *must* use `[style*="rgb(...)"]` attribute selectors with `!important` to override.
-- **Font-family inheritance**: HaloPSA's Style Profile body root is now Montserrat. Most per-element `font-family` declarations are redundant — removed in commit `811c15f`. Only keep overrides for elements HaloPSA paints in a non-Montserrat font (react-kanban, react-table, a specific Poppins heading).
+- **Font-family inheritance**: HaloPSA's Style Profile body root is now Figtree (2026 lock; was Montserrat). Most per-element `font-family` declarations are redundant, removed in commit `811c15f`. Only keep overrides for elements HaloPSA paints in a non-Figtree font (react-kanban, react-table, a specific Poppins heading).
 
 ---
 
@@ -135,6 +144,7 @@ HaloPSA renders every top-nav button with `class="nhd-nav-btn undefined"` — in
 
 ## Related
 
-- Root `README.md` — KB article styling, Style Profile setup, panel colour mapping
-- `dark-mode-test-checklist.md` — KB content dark-mode coverage
-- `Interconnekt/Email-Templates` — the blue `#3598db` source of truth for link colour
+- Root `README.md`: KB article styling, Style Profile setup, panel colour mapping
+- `dark-mode-test-checklist.md`: KB content dark-mode coverage
+- `website-portal-mapping.md`: full 2026 token reference (source of truth for the current `#3761E2` link colour)
+- `Interconnekt/Email-Templates`: still on the legacy `#3598db` blue at time of writing; not part of this change, see the Email Iframe Theming section above

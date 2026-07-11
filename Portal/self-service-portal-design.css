@@ -5,13 +5,22 @@
    Drop-in replacement for self-service-portal.css. Loaded via @import in
    Configuration → Self Service Portal → Custom CSS.
 
-   Design DNA pulled from the Interconnekt website rebuild:
-   • Montserrat 300 display weight + Instrument Serif italic emphasis
-   • JetBrains Mono eyebrows with leading em-dash (S/01 — …)
-   • Dark-first palette (#0A0F1C / #121929 / #1F2740), Bootstrap-style
-     cool-grey light mode (#F8F9FA / #E9ECEF / #CED4DA — Gray 1–4)
-   • #4A74F0 primary → #D946EF accent gradient line
-   • Tighter radii (10–16px), hairline borders, editorial rhythm
+   Design DNA pulled from the Interconnekt 2026 website refresh (locked
+   2026-07-11):
+   • Bricolage Grotesque display headings (weight 700) + Newsreader
+     italic accent-word emphasis + Figtree body text
+   • Spline Sans Mono eyebrows with a leading em-dash glyph
+   • Light-first cool-neutral grounds: bg #F1F3F7 → panel #F5F7FB →
+     card #FFFFFF → card2 #F0F2F7. Dark grounds: #0C0E16 → #10131C →
+     #161A25 → #1B2030
+   • Jade/teal → blue → violet brand triad (#0284C7 → #3761E2 → #6F43D6
+     light, #3FC6A6 → #6E90FF → #A47BFF dark); jade/teal is the
+     Security BRAND accent only, NOT the success semantic (success is
+     a separate true green, --portal-ok, #15803D / #34D399); pink
+     (#C026D3 / #EC72CF) reserved for the get-in-touch CTA + highlighter
+     accent only
+   • Tighter radii (10-16px) than the website's 20/26/34 scale,
+     a deliberate portal density choice, see website-portal-mapping.md §4
    • Ops-card texture — mono rows, pulsing status dot, delta chips
 
    Sections
@@ -37,122 +46,161 @@
    1 · Tokens
    ───────────────────────────────────────────────────────── */
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Figtree:wght@400;500;600;700&family=Newsreader:ital@1&family=Spline+Sans+Mono:wght@400;500&display=swap');
 
 :root {
     /* Typography */
-    --ik-font-display: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
-    --ik-font-serif:   'Instrument Serif', Georgia, 'Times New Roman', serif;
-    --ik-font-mono:    'JetBrains Mono', ui-monospace, Consolas, Menlo, monospace;
+    --ik-font-display: 'Bricolage Grotesque', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --ik-font-body:    'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --ik-font-serif:   'Newsreader', Georgia, 'Times New Roman', serif;
+    --ik-font-mono:    'Spline Sans Mono', ui-monospace, Consolas, Menlo, monospace;
 
     /* ── LIGHT mode palette ──
-       Bootstrap-style grey ramp aligned with the Interconnekt.com.au
-       rebuild. Gray 1 (#F8F9FA) → Gray 9 (#212529). Replaces the earlier
-       warm cream beige with something cooler and more neutral, so the
-       portal sits visually alongside the marketing site without a
-       palette jump. Shadows now tint off Gray 9 (33,37,41) instead of
-       the old navy (14,20,36). */
-    --portal-bg:              #F8F9FA;   /* Gray 1 */
-    --portal-bg-subtle:       #F1F3F5;   /* between Gray 1 & 2 */
-    --portal-surface:         #FFFFFF;
-    --portal-surface-hover:   #F1F3F5;   /* bg-subtle */
-    --portal-surface-active:  #E9ECEF;   /* Gray 2 */
+       2026 design-system lock: cool-neutral grounds aligned with the
+       Interconnekt.com.au rebuild. bg → panel → card → card2 is a
+       four-step lift, replacing the old Bootstrap grey ramp. Shadows
+       now tint off the new ink (22,25,34) instead of the old Gray 9
+       (33,37,41). */
+    --portal-bg:              #F1F3F7;   /* website --bg */
+    --portal-bg-subtle:       #F5F7FB;   /* website --panel */
+    --portal-surface:         #FFFFFF;   /* website --card */
+    --portal-surface-hover:   #F5F7FB;   /* == bg-subtle */
+    --portal-surface-active:  #F0F2F7;   /* website --card2 */
 
-    --portal-text:            #212529;   /* Gray 9 */
-    --portal-text-secondary:  #495057;   /* Gray 7 */
-    --portal-text-muted:      #6C757D;   /* Gray 6 */
-    --portal-heading:         #212529;   /* Gray 9 */
+    --portal-text:            #161922;   /* website --ink */
+    --portal-text-secondary:  #585F76;   /* website --muted */
+    --portal-text-muted:      #8E93A4;   /* website --faint */
+    --portal-heading:         #161922;   /* website --ink */
 
-    /* Brand — primary blue, same as website --primary */
-    --portal-accent:          #2B5CE6;
-    --portal-accent-hover:    #1E49C9;
-    --portal-accent-subtle:   rgba(43, 92, 230, 0.08);
-    --portal-accent-soft:     #DBE7FE;              /* website --primary-subtle */
-    --portal-accent-2:        #C026D3;              /* gradient end / plum */
-    --portal-accent-2-hover:  #A21CAF;
-    --portal-accent-2-subtle: #F5E0FA;
+    /* Brand: primary blue (Insight role: links, primary buttons,
+       focus), same as website --primary */
+    --portal-accent:          #3761E2;
+    --portal-accent-hover:    #2F52C0;
+    --portal-accent-subtle:   rgba(55, 97, 226, 0.08);
+    --portal-accent-soft:     #E7ECFC;              /* website --primary-subtle */
+    --portal-accent-2:        #C026D3;              /* website --accent: pink, get-in-touch CTA + highlighter only */
+    --portal-accent-2-hover:  #A320B3;
+    --portal-accent-2-subtle: #F7E5FA;
 
-    /* Highlight — emerald. Third brand colour alongside blue + plum,
-       used for delight moments (featured pills, live dots, alt icon
-       chips). Distinct from --portal-ok which handles semantic success. */
-    --portal-highlight:        #10B981;
-    --portal-highlight-hover:  #059669;
-    --portal-highlight-subtle: #D1FAE5;
+    /* Violet: Advisory / AI / People role. Third member of the brand
+       triad alongside blue (Insight) and jade/teal (Security). New
+       token: the pre-2026 palette only had a two-colour brand system
+       (blue + plum); the 2026 site adds violet as its own hue (website
+       `cat-violet`), so the portal gets a matching dedicated token. */
+    --portal-violet:          #6F43D6;
+    --portal-violet-hover:    #5E39B6;
+    --portal-violet-subtle:   #EEE8FA;
 
-    /* Section tints — cool + warm for page rhythm. Used for alternating
-       tinted panels (e.g. highlighted announcements, featured KB
-       categories) to break up long pages without going to full colour. */
-    --portal-tint-cool:       #D6E4FB;
-    --portal-tint-warm:       #FBE3CD;
-    --portal-band-bg:         #CED4DA;              /* Gray 4 — carousels/strips */
+    /* Highlight: jade/teal. Third brand colour alongside blue +
+       violet: the Security BRAND accent (delight moments, live dots,
+       alt icon chips), NOT the semantic-success hue. Success is a
+       separate true green, see --portal-ok below. Replaces the
+       pre-2026 emerald as the brand's third hue; the emerald's old
+       success DUTY moved to --portal-ok, which kept its original
+       green value rather than adopting this jade. */
+    --portal-highlight:        #0284C7;
+    --portal-highlight-hover:  #0270A9;
+    --portal-highlight-subtle: #E1F0F8;
+
+    /* Text colour to use ON TOP of a solid brand-colour fill (buttons,
+       filled badges). White works in light mode (all four brand hues
+       are dark/saturated enough). See the dark-mode block below for
+       why this flips. */
+    --portal-on-accent:       #FFFFFF;
+
+    /* Section tints: cool (blue) + warm (pink) for page rhythm. Used
+       for alternating tinted panels (e.g. highlighted announcements,
+       featured KB categories) to break up long pages without going to
+       full colour. */
+    --portal-tint-cool:       #E7ECFC;
+    --portal-tint-warm:       #F7E5FA;
+    --portal-band-bg:         #E2E5EE;              /* == hairline; carousels/strips */
 
     /* Action (buttons, H1, stepper active) */
-    --portal-action:          #2B5CE6;
-    --portal-action-hover:    #1E49C9;
-    --portal-action-shadow:   rgba(43, 92, 230, 0.22);
+    --portal-action:          #3761E2;
+    --portal-action-hover:    #2F52C0;
+    --portal-action-shadow:   rgba(55, 97, 226, 0.22);
 
     /* Borders & shadows */
-    --portal-border:          #CED4DA;   /* Gray 4 */
-    --portal-border-soft:     #DEE2E6;   /* Gray 3 */
-    --portal-border-light:    #DEE2E6;   /* Gray 3 */
-    --portal-shadow-sm:       0 1px 2px rgba(33, 37, 41, 0.04);
-    --portal-shadow:          0 4px 12px -2px rgba(33, 37, 41, 0.06), 0 2px 4px -2px rgba(33, 37, 41, 0.04);
-    --portal-shadow-hover:    0 16px 40px -12px rgba(33, 37, 41, 0.14), 0 4px 12px -2px rgba(33, 37, 41, 0.06);
+    --portal-border:          #E2E5EE;   /* website hairline */
+    --portal-border-soft:     #ECEEF4;   /* hairline blended toward panel */
+    --portal-border-light:    #ECEEF4;
+    --portal-shadow-sm:       0 1px 2px rgba(22, 25, 34, 0.04);
+    --portal-shadow:          0 4px 12px -2px rgba(22, 25, 34, 0.06), 0 2px 4px -2px rgba(22, 25, 34, 0.04);
+    --portal-shadow-hover:    0 16px 40px -12px rgba(22, 25, 34, 0.14), 0 4px 12px -2px rgba(22, 25, 34, 0.06);
 
     /* Table */
-    --portal-table-header-bg: rgba(33, 37, 41, 0.035);
-    --portal-table-border:    rgba(33, 37, 41, 0.08);
-    --portal-table-row-hover: rgba(33, 37, 41, 0.025);
+    --portal-table-header-bg: rgba(22, 25, 34, 0.035);
+    --portal-table-border:    rgba(22, 25, 34, 0.08);
+    --portal-table-row-hover: rgba(22, 25, 34, 0.025);
 
-    /* Radii — ALL edited down from HaloPSA's 25px pill language.
-       `--portal-radius` = the "big" one (cards, hero search); mid
-       matches our ticket/KB card language; sm is inputs/chips. */
+    /* Radii: deliberately tighter than the website's 20/26/34 scale,
+       a portal density choice (see website-portal-mapping.md §4), so
+       these do NOT track the website's radius refresh. `--portal-radius`
+       = the "big" one (cards, hero search); mid matches our ticket/KB
+       card language; sm is inputs/chips. Pills stay literal 999px. */
     --portal-radius:          16px;
     --portal-radius-md:       12px;
     --portal-radius-sm:       10px;
     --portal-radius-xs:       8px;
 
-    /* Code */
-    --portal-code-bg:         #F1F3F5;   /* bg-subtle */
+    /* Code: deliberately theme-independent (dark island regardless of
+       portal mode, see AGENTS.md gotcha #8, Catppuccin-inspired). Text
+       colour matches --portal-err. */
+    --portal-code-bg:         #F5F7FB;   /* bg-subtle */
     --portal-code-text:       #B91C1C;
-    --portal-pre-bg:          #0A0F1C;   /* dark-mode bg — intentional */
-    --portal-pre-text:        #EAEBEF;
-    --portal-pre-border:      #1F2740;
+    --portal-pre-bg:          #0C0E16;   /* dark-mode bg, intentional */
+    --portal-pre-text:        #ECEEF4;
+    --portal-pre-border:      #1B2030;
 
     /* Blockquote */
     --portal-quote-border:    var(--portal-accent);
-    --portal-quote-bg:        #F1F3F5;   /* bg-subtle */
+    --portal-quote-bg:        #F5F7FB;   /* bg-subtle */
 
-    /* Semantic */
+    /* Semantic: red = error/blocked/overdue, amber = warning/pending/
+       review, unchanged by the 2026 re-palette (already independent
+       of the brand triad). --portal-ok is a true green, DELIBERATELY
+       DISTINCT from --portal-highlight's jade/teal: jade/teal is the
+       Security BRAND accent only (gradient first stop, featured
+       moments, live dots via --portal-highlight); the success
+       SEMANTIC (approved/paid/complete/active) is this independent
+       green. Don't collapse the two; an earlier pass briefly aliased
+       --portal-ok to jade and it was reverted. */
     --portal-ok:              #15803D;
     --portal-warn:            #C2410C;
     --portal-err:             #B91C1C;
 
-    /* Confluence panel tokens — per-type bg + hairline border + icon tint.
-       Used by the `.confluence-information-macro-*` rules below. Kept
-       separate from the semantic tokens above because these need to
-       read as a visibly tinted surface (not the full-saturation
+    /* Confluence panel tokens: per-type bg + hairline border + icon
+       tint. Used by the `.confluence-information-macro-*` rules below.
+       Kept separate from the semantic tokens above because these need
+       to read as a visibly tinted surface (not the full-saturation
        foreground colour of --portal-ok / --portal-err). Auto-flipped
-       in `.theme-dark`. */
-    --panel-info-bg:          #EAF2FD;
-    --panel-info-border:      rgba(43, 92, 230, 0.28);
-    --panel-info-icon:        #2B5CE6;
-    --panel-note-bg:          #F7EEFD;
-    --panel-note-border:      rgba(139, 58, 217, 0.28);
-    --panel-note-icon:        #8B3AD9;
-    --panel-warn-bg:          #FCEDEC;
-    --panel-warn-border:      rgba(220, 80, 50, 0.28);
-    --panel-warn-icon:        #DC5032;
-    --panel-tip-bg:           #E3FEF2;
-    --panel-tip-border:       rgba(12, 121, 125, 0.28);
-    --panel-tip-icon:         #0C797D;
-    /* Yellow warning — used when HaloPSA's ADF import stamps a real
-       Warning panel as `.confluence-information-macro-note` (purple
+       in `.theme-dark`.
+       2026 mapping: info=blue, note=violet, warn=red (the "-warning"
+       class is legacy-named but renders ADF *error* panels, see
+       AGENTS.md gotcha #4), tip=true green (success, see the
+       --portal-ok comment above: jade/teal is the Security BRAND
+       accent only, NOT the success semantic), warnyellow=amber
+       (genuine warning, disambiguated via :has(.aui-iconfont-warning)). */
+    --panel-info-bg:          #F1F4FD;
+    --panel-info-border:      rgba(55, 97, 226, 0.28);
+    --panel-info-icon:        #3761E2;
+    --panel-note-bg:          #F5F2FC;
+    --panel-note-border:      rgba(111, 67, 214, 0.28);
+    --panel-note-icon:        #6F43D6;
+    --panel-warn-bg:          #FAEFEF;
+    --panel-warn-border:      rgba(185, 28, 28, 0.28);
+    --panel-warn-icon:        #B91C1C;
+    --panel-tip-bg:           #EFF6F1;
+    --panel-tip-border:       rgba(21, 128, 61, 0.28);
+    --panel-tip-icon:         #15803D;
+    /* Yellow warning: used when HaloPSA's ADF import stamps a real
+       Warning panel as `.confluence-information-macro-note` (violet
        class) but leaves the `aui-iconfont-warning` glyph inside. We
        disambiguate via `:has(.aui-iconfont-warning)` further down. */
-    --panel-warnyellow-bg:     #FFFAE6;
-    --panel-warnyellow-border: rgba(240, 200, 8, 0.45);
-    --panel-warnyellow-icon:   #8A6D00;
+    --panel-warnyellow-bg:     #FBF2EE;
+    --panel-warnyellow-border: rgba(194, 65, 12, 0.45);
+    --panel-warnyellow-icon:   #C2410C;
 
     /* Family-B `.panel` tokens — Confluence exports these panels with
        inline `style="background-color: #HEX"` attributes. We'd like to
@@ -161,18 +209,20 @@
        forces DARK text on body — readable in light mode, but our
        Custom CSS flips body to light-on-dark via `var(--portal-text)`
        in dark mode. Family-B panels need their OWN bg tokens that
-       flip in dark mode so light text stays readable. Keeping these
-       separate from Family-A tokens (not reusing `--panel-note-*`)
-       because Family-B has Confluence-specific hex values (#EAE6FF,
-       #E6FCFF) that some authors rely on matching exactly. */
+       flip in dark mode so light text stays readable. LIGHT values
+       stay pinned to Confluence's own default export hex (#EAE6FF,
+       #E6FCFF); that's what Confluence emits, not a brand token, so
+       it doesn't move with the re-palette. Only the dark-mode flip
+       (below) changes, to the new violet/jade families. */
     --panel-b-note-bg:          #EAE6FF;
     --panel-b-note-border:      #998DD9;
     --panel-b-custom-bg:        #E6FCFF;
-    --panel-b-custom-border:    rgba(12, 121, 125, 0.35);
+    --panel-b-custom-border:    rgba(2, 132, 199, 0.35);
 
-    /* Gradient system */
-    --ik-gradient-brand: linear-gradient(135deg, #2B5CE6 0%, #8B3AD9 55%, #C026D3 100%);
-    --ik-gradient-line:  linear-gradient(90deg, transparent, #2B5CE6 30%, #C026D3 70%, transparent);
+    /* Gradient system: ONE brand gradient, reserved for featured/hero
+       moments only. */
+    --ik-gradient-brand: linear-gradient(115deg, #0284C7 0%, #3761E2 52%, #6F43D6 100%);
+    --ik-gradient-line:  linear-gradient(90deg, transparent, #0284C7 30%, #6F43D6 70%, transparent);
 
     /* Motion */
     --ik-ease:           cubic-bezier(0.22, 1, 0.36, 1);
@@ -185,52 +235,64 @@
 }
 
 /* ── DARK mode token flip ──
-   Neutral charcoal ramp, not the website's navy #0A0F1C. User brief
-   called for "dark grey in dark mode" — the navy reads as too
-   saturated against HaloPSA's native chrome (react-select dropdowns,
-   Semantic UI popups, froala toolbar) which expect a neutral bg.
-   Cool-tinted greys (hue ~220, very low saturation) keep a subtle
-   relationship with the website's navy palette without shouting blue.
-   Steps ≈ Zinc-950 → Zinc-800 so surfaces lift cleanly from bg. */
+   2026 lock dark grounds (#0C0E16 → #10131C → #161A25 → #1B2030),
+   replacing the earlier neutral charcoal ramp. Still a deliberate step
+   away from a saturated navy: HaloPSA's native chrome (react-select
+   dropdowns, Semantic UI popups, froala toolbar) reads best against a
+   calm near-black rather than a loud blue-black, and the 2026 dark
+   grounds are exactly that: very low chroma. */
 .theme-dark {
-    --portal-bg:              #161719;   /* neutral very-dark grey */
-    --portal-bg-subtle:       #1B1D20;
-    --portal-surface:         #1F2125;   /* one step up from bg */
-    --portal-surface-hover:   #262930;
-    --portal-surface-active:  #2E3138;
+    --portal-bg:              #0C0E16;
+    --portal-bg-subtle:       #10131C;
+    --portal-surface:         #161A25;   /* one step up from bg */
+    --portal-surface-hover:   #10131C;
+    --portal-surface-active:  #1B2030;
 
-    --portal-text:            #EAEBEF;
-    --portal-text-secondary:  #A4AAB7;
-    --portal-text-muted:      #7A8090;
-    --portal-heading:         #EAEBEF;
+    --portal-text:            #ECEEF4;
+    --portal-text-secondary:  rgba(236, 238, 244, 0.62);
+    --portal-text-muted:      rgba(236, 238, 244, 0.4);
+    --portal-heading:         #ECEEF4;
 
-    --portal-accent:          #4A74F0;
-    --portal-accent-hover:    #6B8DF3;
-    --portal-accent-subtle:   rgba(74, 116, 240, 0.14);
-    --portal-accent-soft:     rgba(74, 116, 240, 0.18);  /* website --primary-subtle */
-    --portal-accent-2:        #D946EF;
-    --portal-accent-2-hover:  #E879F9;
-    --portal-accent-2-subtle: rgba(217, 70, 239, 0.16);
+    --portal-accent:          #6E90FF;
+    --portal-accent-hover:    #84A1FF;
+    --portal-accent-subtle:   rgba(110, 144, 255, 0.14);
+    --portal-accent-soft:     rgba(110, 144, 255, 0.18);  /* website --primary-subtle */
+    --portal-accent-2:        #EC72CF;
+    --portal-accent-2-hover:  #EF87D6;
+    --portal-accent-2-subtle: rgba(236, 114, 207, 0.16);
 
-    /* Highlight — brighter green for dark mode contrast */
-    --portal-highlight:        #4ADE80;
-    --portal-highlight-hover:  #86EFAC;
-    --portal-highlight-subtle: rgba(74, 222, 128, 0.16);
+    --portal-violet:          #A47BFF;
+    --portal-violet-hover:    #B28FFF;
+    --portal-violet-subtle:   rgba(164, 123, 255, 0.16);
 
-    /* Dark tints — cooler deep blue + warmer plum-tinted deep */
-    --portal-tint-cool:       #182133;
-    --portal-tint-warm:       #241A25;
-    --portal-band-bg:         #1B1D22;
+    /* Highlight: brighter jade/teal for dark-mode contrast. Security
+       brand accent only, see the light-mode token block comment. */
+    --portal-highlight:        #3FC6A6;
+    --portal-highlight-hover:  #5CCFB3;
+    --portal-highlight-subtle: rgba(63, 198, 166, 0.16);
 
-    --portal-action:          #4A74F0;
-    --portal-action-hover:    #6B8DF3;
-    --portal-action-shadow:   rgba(74, 116, 240, 0.30);
+    /* Text on a solid brand-colour fill flips to dark ink in dark
+       mode; the brightened dark-mode brand hues don't carry white
+       text at readable contrast (verified: white-on-#6E90FF measures
+       2.96:1, dark-ink-on-#6E90FF measures 5.93:1; same pattern holds
+       for violet/jade/pink). See website-portal-mapping.md. */
+    --portal-on-accent:       #161922;
 
-    /* Borders tuned against the new grey ramp — slightly lifted so
-       hairlines remain visible on both bg and surface. */
-    --portal-border:          #343741;
-    --portal-border-soft:     #26282F;
-    --portal-border-light:    #26282F;
+    /* Dark tints: blue-tinted cool + pink-tinted warm, blended into
+       the new dark bg rather than the old flat navy/plum. */
+    --portal-tint-cool:       #1E2540;
+    --portal-tint-warm:       #342037;
+    --portal-band-bg:         rgba(255, 255, 255, 0.072);   /* == hairline */
+
+    --portal-action:          #6E90FF;
+    --portal-action-hover:    #84A1FF;
+    --portal-action-shadow:   rgba(110, 144, 255, 0.30);
+
+    /* Hairline from the 2026 lock: translucent white rather than an
+       opaque lifted grey. */
+    --portal-border:          rgba(255, 255, 255, 0.072);
+    --portal-border-soft:     rgba(255, 255, 255, 0.045);
+    --portal-border-light:    rgba(255, 255, 255, 0.045);
     --portal-shadow-sm:       0 1px 2px rgba(0, 0, 0, 0.35);
     --portal-shadow:          0 6px 20px -4px rgba(0, 0, 0, 0.45), 0 2px 6px -2px rgba(0, 0, 0, 0.25);
     --portal-shadow-hover:    0 24px 60px -20px rgba(0, 0, 0, 0.55), 0 8px 20px -6px rgba(0, 0, 0, 0.3);
@@ -239,39 +301,41 @@
     --portal-table-border:    rgba(255, 255, 255, 0.08);
     --portal-table-row-hover: rgba(255, 255, 255, 0.03);
 
-    --portal-code-bg:         #262930;
+    --portal-code-bg:         #1B2030;
     --portal-code-text:       #F08CA1;
-    --portal-pre-bg:          #0F1012;
-    --portal-pre-text:        #EAEBEF;
-    --portal-pre-border:      #343741;
+    --portal-pre-bg:          #08090E;
+    --portal-pre-text:        #ECEEF4;
+    --portal-pre-border:      rgba(255, 255, 255, 0.072);
 
-    --portal-quote-bg:        #1F2125;
+    --portal-quote-bg:        #161A25;
 
+    /* True green (success), distinct from --portal-highlight's jade;
+       see the light-mode token block comment. */
     --portal-ok:              #34D399;
     --portal-warn:            #FB923C;
     --portal-err:             #F87171;
 
-    /* Confluence panel tokens — dark-mode counterparts.
-       Bgs drop to low-alpha tints against the dark canvas so the
-       panel still reads as its type hue without shouting.
-       Borders lift to moderate alpha so the hairline remains
-       visible on the deeper bg. Icons go to the brighter dark-mode
-       variants used elsewhere for the same hue family. */
-    --panel-info-bg:          rgba(74, 116, 240, 0.15);
-    --panel-info-border:      rgba(74, 116, 240, 0.40);
-    --panel-info-icon:        #4C9AFF;
-    --panel-note-bg:          rgba(168, 86, 239, 0.15);
-    --panel-note-border:      rgba(168, 86, 239, 0.40);
-    --panel-note-icon:        #B084F5;
-    --panel-warn-bg:          rgba(248, 113, 113, 0.12);
-    --panel-warn-border:      rgba(248, 113, 113, 0.38);
-    --panel-warn-icon:        #FF8A73;
-    --panel-tip-bg:           rgba(52, 211, 153, 0.12);
-    --panel-tip-border:       rgba(52, 211, 153, 0.38);
+    /* Confluence panel tokens: dark-mode counterparts. Bgs drop to
+       low-alpha tints against the dark canvas so the panel still
+       reads as its type hue without shouting. Borders lift to
+       moderate alpha so the hairline remains visible on the deeper
+       bg. Icons go to the brighter dark-mode variants used elsewhere
+       for the same hue family. */
+    --panel-info-bg:          rgba(110, 144, 255, 0.15);
+    --panel-info-border:      rgba(110, 144, 255, 0.40);
+    --panel-info-icon:        #6E90FF;
+    --panel-note-bg:          rgba(164, 123, 255, 0.15);
+    --panel-note-border:      rgba(164, 123, 255, 0.40);
+    --panel-note-icon:        #A47BFF;
+    --panel-warn-bg:          rgba(248, 113, 113, 0.15);
+    --panel-warn-border:      rgba(248, 113, 113, 0.40);
+    --panel-warn-icon:        #F87171;
+    --panel-tip-bg:           rgba(52, 211, 153, 0.15);
+    --panel-tip-border:       rgba(52, 211, 153, 0.40);
     --panel-tip-icon:         #34D399;
-    --panel-warnyellow-bg:     rgba(240, 200, 8, 0.14);
-    --panel-warnyellow-border: rgba(240, 200, 8, 0.45);
-    --panel-warnyellow-icon:   #F0C808;
+    --panel-warnyellow-bg:     rgba(251, 146, 60, 0.15);
+    --panel-warnyellow-border: rgba(251, 146, 60, 0.45);
+    --panel-warnyellow-icon:   #FB923C;
 
     /* Family-B panel dark-mode overrides — low-alpha tints that pair
        with the dark canvas so light text (`var(--portal-text)`) stays
@@ -281,13 +345,13 @@
        per mode. This sidesteps the AGENTS.md gotcha about
        `.portal.theme-dark` compound selectors failing when `.portal`
        and `.theme-dark` live on different elements. */
-    --panel-b-note-bg:          rgba(168, 86, 239, 0.15);
-    --panel-b-note-border:      rgba(168, 86, 239, 0.40);
-    --panel-b-custom-bg:        rgba(52, 211, 153, 0.14);
-    --panel-b-custom-border:    rgba(52, 211, 153, 0.40);
+    --panel-b-note-bg:          rgba(164, 123, 255, 0.15);
+    --panel-b-note-border:      rgba(164, 123, 255, 0.40);
+    --panel-b-custom-bg:        rgba(63, 198, 166, 0.14);
+    --panel-b-custom-border:    rgba(63, 198, 166, 0.40);
 
-    --ik-gradient-brand: linear-gradient(135deg, #4A74F0 0%, #A856EF 55%, #D946EF 100%);
-    --ik-gradient-line:  linear-gradient(90deg, transparent, #4A74F0 30%, #D946EF 70%, transparent);
+    --ik-gradient-brand: linear-gradient(115deg, #3FC6A6 0%, #6E90FF 52%, #A47BFF 100%);
+    --ik-gradient-line:  linear-gradient(90deg, transparent, #3FC6A6 30%, #A47BFF 70%, transparent);
 
     color-scheme: dark;
 }
@@ -298,7 +362,7 @@
    ───────────────────────────────────────────────────────── */
 
 html, body {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 16px;
     line-height: 1.6;
     color: var(--portal-text);
@@ -320,7 +384,7 @@ html body .theme-dark.page-portal-background {
     background: var(--portal-bg) !important;
 }
 
-::selection { background: var(--portal-accent); color: #fff; }
+::selection { background: var(--portal-accent); color: var(--portal-on-accent); }
 
 /* Soft radial glow behind the page — same trick as the website hero.
    Pinned to the portal wrapper so it doesn't leak into fixed UI. */
@@ -339,8 +403,10 @@ html body .portal::before {
 }
 html body .portal > * { position: relative; z-index: 1; }
 
-/* Heading ladder — Montserrat 300 for display-scale, 500 for
-   section labels. Italic comes from <em> / Instrument Serif. */
+/* Heading ladder: Bricolage Grotesque 700 for every level (the 2026
+   lock specifies weight 700 for display headings; the size ladder
+   below still carries the visual hierarchy). Italic comes from
+   <em> / Newsreader. */
 html body .portal h1,
 html body .portal h2,
 html body .portal h3,
@@ -353,12 +419,12 @@ html body .portal h6 {
     line-height: 1.15;
 }
 
-html body .portal h1 { font-size: 1.625rem; font-weight: 400; margin-bottom: 14px; }
-html body .portal h2 { font-size: 1.375rem; font-weight: 500; margin-bottom: 12px; }
-html body .portal h3 { font-size: 1.125rem; font-weight: 500; margin-bottom: 10px; }
-html body .portal h4 { font-size: 1rem;     font-weight: 500; margin-bottom: 10px; }
-html body .portal h5 { font-size: 0.9375rem;font-weight: 500; margin-bottom: 8px;  }
-html body .portal h6 { font-size: 0.875rem; font-weight: 500; margin-bottom: 8px;  }
+html body .portal h1 { font-size: 1.625rem; font-weight: 700; margin-bottom: 14px; }
+html body .portal h2 { font-size: 1.375rem; font-weight: 700; margin-bottom: 12px; }
+html body .portal h3 { font-size: 1.125rem; font-weight: 700; margin-bottom: 10px; }
+html body .portal h4 { font-size: 1rem;     font-weight: 700; margin-bottom: 10px; }
+html body .portal h5 { font-size: 0.9375rem;font-weight: 700; margin-bottom: 8px;  }
+html body .portal h6 { font-size: 0.875rem; font-weight: 700; margin-bottom: 8px;  }
 
 html body .portal h1 em,
 html body .portal h2 em,
@@ -378,11 +444,19 @@ html body .portal li {
     font-weight: 400;
 }
 
-/* Font sweep — every HaloPSA subtree picks up Montserrat, except
-   icons and code blocks (left monospace via their explicit stacks). */
+/* Font sweep: every HaloPSA subtree picks up Figtree (body font),
+   except headings (h1-h6 keep the Bricolage Grotesque display font
+   set by their own rule above), icons, and code blocks (left
+   monospace via their explicit stacks).
+
+   The h1-h6 exclusion matters: this selector's specificity (seven
+   tag-level plus four class-level terms from the :not() chain) is
+   HIGHER than the plain "html body .portal h1" heading rule's, so
+   without excluding headings here, this sweep would silently win
+   the cascade and flatten every heading back to the body font. */
 input, textarea, select, button, optgroup { font-family: inherit; }
-html body .portal *:not(i):not(svg):not(.fa):not(code):not(pre):not(pre *):not(.ik-mono):not(.ik-serif) {
-    font-family: var(--ik-font-display), 'Poppins', sans-serif !important;
+html body .portal *:not(i):not(svg):not(.fa):not(code):not(pre):not(pre *):not(.ik-mono):not(.ik-serif):not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
+    font-family: var(--ik-font-body), sans-serif !important;
 }
 
 /* Utility classes the Custom JS can stamp onto HaloPSA elements if
@@ -420,7 +494,7 @@ html body .portal .page-subtitle::before {
     opacity: 0.5;
 }
 
-/* H1 page title — use Montserrat 400 display + coloured headings.
+/* H1 page title: Bricolage Grotesque 700 display + coloured headings.
    Keep HaloPSA's `.profile-full-name` variant covered too. */
 html body .portal .page-title h1,
 html body .portal h1.profile-full-name,
@@ -428,7 +502,7 @@ html body .portal h1.profile-full-name.oneline,
 html body .portal .details-form .details-group-header.title {
     font-family: var(--ik-font-display) !important;
     font-size: 1.75rem !important;
-    font-weight: 300 !important;
+    font-weight: 700 !important;
     letter-spacing: -0.02em !important;
     color: var(--portal-heading) !important;
     line-height: 1.1 !important;
@@ -483,10 +557,13 @@ html body .portal .page-title h1 em::after {
 html body .portal header,
 html body .portal .header,
 html body .portal .portal-header {
-    /* Navy brand bar in BOTH modes — the logo is white-on-navy so
+    /* Dark brand bar in BOTH modes: the logo is white-on-dark so
        flipping the bar to a light surface would leave the logo
-       stranded on a pale background. Keep it dark in light mode too. */
-    background-color: #0A0F1C !important;
+       stranded on a pale background. Keep it dark in light mode too.
+       Uses the 2026 dark-mode bg token value directly (not var(),
+       since this rule intentionally applies regardless of the
+       portal's own light/dark toggle). */
+    background-color: #0C0E16 !important;
     color: #fff;
     border-bottom: 1px solid rgba(255,255,255,0.06);
     position: relative;
@@ -502,23 +579,23 @@ html body .portal .portal-header::after {
     opacity: 0.5;
 }
 
-/* Nav container — navy in both light and dark modes so the
-   white-on-navy logo always sits on its correct background.
+/* Nav container: dark in both light and dark modes so the
+   white-on-dark logo always sits on its correct background.
    HaloPSA ships `.nhd-nav` as `#2F355E` (purple-navy); we deepen
-   to match the website's `#0A0F1C` dark-mode bg and add a 1px
+   to match the website's `#0C0E16` dark-mode bg and add a 1px
    hairline underline. */
 html body .portal .nhd-nav {
-    background: #0A0F1C !important;
+    background: #0C0E16 !important;
     border-bottom: 1px solid rgba(255,255,255,0.06) !important;
     box-shadow: 0 1px 0 rgba(0,0,0,0.3) !important;
 }
 
 
-/* Nav buttons — Montserrat 13px 500, relaxed tracking. */
+/* Nav buttons: Figtree 13px 500, relaxed tracking. */
 html body .portal .nhd-nav,
 html body .portal .nhd-nav button.nhd-nav-btn,
 html body .portal .nhd-nav .buttoncontainer {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     letter-spacing: 0.02em;
@@ -546,7 +623,7 @@ html body .portal .nhd-nav-rightAlign button:not(.active):not(.highlight):hover 
     box-shadow: none !important;
 }
 
-/* Navbar search — flatten, restore pill on focus, Montserrat.
+/* Navbar search: flatten, restore pill on focus, Figtree.
    Header is 60px tall; the control sits at y=10-48 inside, leaving a
    12px gap between the control's bottom and the header's bottom edge.
    When the results `.Select__menu` opens we push it down by that 12px
@@ -560,7 +637,7 @@ html body .portal .buttoncontainer.nav-search .Select__input,
 html body .portal .buttoncontainer.nav-search .Select__input input,
 html body .portal .buttoncontainer.nav-search .Select__placeholder,
 html body .portal .buttoncontainer.nav-search .Select__single-value {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     letter-spacing: 0.02em !important;
@@ -648,7 +725,7 @@ html body .portal div.app-notice[style*="position: absolute"] {
     border: 1px solid color-mix(in srgb, var(--portal-warn, #d97706) 55%, var(--portal-border)) !important;
     border-radius: 999px !important;
     box-shadow: 0 10px 24px rgba(0,0,0,0.18) !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     letter-spacing: 0.01em !important;
@@ -685,7 +762,7 @@ html body .portal .search-title,
 html body .portal .searchscreen .search-title {
     font-family: var(--ik-font-display) !important;
     font-size: clamp(2rem, 3.5vw, 3rem) !important;
-    font-weight: 300 !important;
+    font-weight: 700 !important;
     letter-spacing: -0.02em !important;
     color: var(--portal-heading) !important;
     margin: 0 0 28px !important;
@@ -735,7 +812,7 @@ html body .portal .searchscreen .searchbox:focus-within {
     box-shadow: 0 0 0 4px var(--portal-accent-subtle), var(--portal-shadow-hover) !important;
 }
 html body .portal .searchscreen .searchbox input[type=text] {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 16px !important;
     border-radius: 14px !important;
     padding: 14px 22px;
@@ -887,7 +964,7 @@ html body .portal .dashbtn .card-footer {
    7 · Home columns — Top Articles, Recent Activity
    ─────────────────────────────────────────────────────────
    Each is a stack of `.tile-widget` rows. Reframe as thin
-   hairline list cards with mono meta + Montserrat titles. */
+   hairline list cards with mono meta + Bricolage Grotesque titles. */
 
 /* `.tile-widget` is the list-item card on home-page Top Articles /
    Recent Tickets. Card surface is the hairline-bordered shell. */
@@ -925,7 +1002,7 @@ html body .portal .tile-item .tile-widget-bar {
 html body .portal .col-xl-6 > h3,
 html body .portal .col-xl-6 > h2 {
     font-family: var(--ik-font-display) !important;
-    font-weight: 300 !important;
+    font-weight: 700 !important;
     font-size: 1.5rem !important;
     letter-spacing: -0.02em !important;
     margin-bottom: 20px !important;
@@ -1004,7 +1081,7 @@ html body .portal .main-tile-item tr {
 }
 html body .portal .main-tile-item td {
     padding: 2px 0 !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     color: inherit;
     line-height: 1.5;
     vertical-align: middle;
@@ -1035,7 +1112,7 @@ html body .portal .main-tile-item tr:not(:first-child) td span {
    `.status-avatar.fortile.small` with inline bg + `max-width: 90px`
    which truncates longer labels like "COMPLETED / RESOLVED" into
    "COMPLETED / RESOL…". Drop the max-width so the pill grows to fit
-   its label, normalise typography into the same Montserrat pill
+   its label, normalise typography into the same Figtree pill
    family used elsewhere. The bg colour comes from the existing
    status-pill mapping system (title-based JS stamper + rgb()
    fallbacks), so no per-status colour rules needed here. */
@@ -1044,7 +1121,7 @@ html body .portal .main-tile-item .status-avatar.fortile.small {
     max-width: none !important;
     width: auto !important;
     padding: 4px 12px !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 10.5px !important;
     font-weight: 600 !important;
     letter-spacing: 0.06em !important;
@@ -1151,11 +1228,11 @@ html body .portal .ui.popup .ui.button,
 html body .portal .solidbutton:not(.menubtn):not(.fabtn),
 html body .portal button.-btn:hover:not([disabled]) {
     background-color: var(--portal-action) !important;
-    color: #fff !important;
+    color: var(--portal-on-accent) !important;
     border-radius: 999px !important;
     border: 1px solid transparent !important;
     box-shadow: none !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     letter-spacing: -0.005em !important;
@@ -1171,7 +1248,7 @@ html body .portal button.-btn:hover:not([disabled]) {
     position: relative;
     isolation: isolate;
 }
-/* Icons inside primary buttons — inherit the white label colour
+/* Icons inside primary buttons: inherit the on-accent label colour
    instead of FA's global #555 grey. */
 html body .portal .nhd-button.curve i,
 html body .portal .nhd-button.curve .fa,
@@ -1231,7 +1308,7 @@ html body .portal .listwidget button.nhd-button.curve {
     align-items: center !important;
     justify-content: center !important;
     gap: 6px;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     letter-spacing: -0.005em !important;
@@ -1368,7 +1445,7 @@ html body .portal .solidbutton.fabtn.noprint {
        context; everywhere else, the 14px still earns its keep. */
     margin: 14px 0 0 0 !important;
     padding: 0 !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     cursor: pointer;
@@ -1502,7 +1579,7 @@ html body .portal .status-avatar.smallest,
 html body .portal .status-avatar.fortile {
     border-radius: 999px !important;
     padding: 3px 12px !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-weight: 600 !important;
     font-size: 10.5px !important;
     letter-spacing: 0.06em;
@@ -1544,11 +1621,25 @@ html body .portal .status-avatar.fortile::before {
 /* ═════════════════════════════════════════════════════════
    Status pill COLOUR SYSTEM — Interconnekt / HaloPSA mapping
    ─────────────────────────────────────────────────────────
-   Every named workflow status gets a pastel tint + dark ink
-   pair in light mode, and a translucent tint + light ink
-   pair in dark mode. Hues are seeded from the ops-config
-   palette; bgs are desaturated + lightened so pills sit flat
-   on a card without clashing with body copy.
+   2026 design-system lock: every named workflow status is bucketed
+   onto ONE of six semantic hues (soft same-hue tint bg + darker
+   same-hue text in light mode; translucent tint + light ink in dark
+   mode) instead of the pre-2026 23-hue rainbow:
+     green  → Active / Paid / Approved / Complete (true green, NOT
+              jade/teal. Jade/teal is reserved for the Security BRAND
+              accent only: gradient first stop, featured moments,
+              --portal-highlight. Success is this separate green.)
+     blue   → In progress
+     violet → Scheduled (+ the Quote Raised/Scoped pre-sales family,
+              kept distinct from core ticket workflow blue)
+     amber  → Pending / In review / Awaiting (the largest bucket;
+              most "waiting on someone" workflow states collapse here)
+     red    → Overdue / Blocked / Failed / Rejected
+     grey   → Draft / Not started / Closed / terminal "system" states
+
+   This trades the old rainbow's at-a-glance per-status distinctiveness
+   for a disciplined, memorable palette; see website-portal-mapping.md
+   §7 for the full per-status bucket table and the rationale.
 
    Implementation: paint via `background-image: linear-gradient(
    var(--bg), var(--bg))` so the wash sits ON TOP of HaloPSA's
@@ -1560,108 +1651,93 @@ html body .portal .status-avatar.fortile::before {
    the matching `.s-*` class. Inline-rgb attribute selectors
    below act as a FALLBACK for pills that get the DOM before
    the JS runs, or for a status name JS doesn't know yet.
-
-   Near-black statuses (#000000 / #343A40) all share one
-   neutral "system" slate — With CAB, Open Order, Open Item,
-   Invoiced are all workflow-plumbing labels that don't need
-   their own hue. Closed Order / Closed Item share a darker
-   neutral to read as "terminal".
    ═════════════════════════════════════════════════════════ */
 
 :root {
-    /* New — signal yellow */
-    --pill-new-bg:               #FFF7C2; --pill-new-ink:               #6B5A00;
-    /* In Progress — emerald green. Spec originally seeded this from
-       the same teal as Triage Handoff, but for end-user-facing surfaces
-       we lift it to a brighter active-work green. Emerald (not lime) so
-       it's visually distinct from `--pill-approved` which sits at lime
-       #E2F3CC/#2E5200 — the two greens need to read differently since
-       "in progress" and "approved" are semantically orthogonal. */
-    --pill-progress-bg:          #D1FAE5; --pill-progress-ink:          #065F46;
-    /* Completed / Resolved — muted forest green. The resolved pill
-       should read as "done" (green cue) while staying visually quieter
-       than `--pill-progress` (emerald, active-work green) so finished
-       tickets don't compete for attention in a list of active ones.
-       Darker ink + softer bg = pull-back not a shout. */
-    --pill-resolved-bg:          #DCE8DE; --pill-resolved-ink:          #1F4A33;
-    /* Agent - Triage Handoff — keeps the deep teal that In Progress
-       used to share. The workflow meaning (ticket sitting in the triage
-       queue waiting for engineering handoff) is distinct enough from
-       generic In Progress that the teal differentiation helps an agent
-       scan the queue. */
-    --pill-triage-handoff-bg:    #CCEAEB; --pill-triage-handoff-ink:    #08474A;
-    /* Action Required — warm peach */
-    --pill-action-required-bg:   #FFE3D4; --pill-action-required-ink:   #7A3A1C;
-    /* Awaiting User — pink (high-visibility cue: this status flags
-       tickets that need the customer's attention, so we lift it out of
-       the neutral grey family it shared with Awaiting Supplier and
-       paint it in a brighter pink that catches the eye in a long row
-       of mostly-grey waiting chips) */
-    --pill-awaiting-user-bg:     #FCE4EC; --pill-awaiting-user-ink:     #9B1C4D;
-    /* Awaiting Supplier — graphite */
-    --pill-awaiting-supplier-bg: #E4E4E7; --pill-awaiting-supplier-ink: #2E2E35;
-    /* Closed — slate */
-    --pill-closed-bg:            #DEE2E6; --pill-closed-ink:            #343A40;
-    /* System neutral — the #000000 statuses (With CAB, Open
-       Order, Open Item, Invoiced) all share this "workflow
-       plumbing" slate */
-    --pill-system-bg:            #E9ECEF; --pill-system-ink:            #212529;
-    /* Closed-state system neutral — Closed Order / Closed Item */
-    --pill-system-closed-bg:     #DEE2E6; --pill-system-closed-ink:     #495057;
-    /* Awaiting Approval / Customer Review — magenta */
-    --pill-approval-bg:          #FCE4FD; --pill-approval-ink:          #6B126E;
-    /* Approved — fresh green */
-    --pill-approved-bg:          #E2F3CC; --pill-approved-ink:          #2E5200;
-    /* Rejected — brick red */
-    --pill-rejected-bg:          #FAD8D2; --pill-rejected-ink:          #7A1C0C;
-    /* Action Completed — cyan teal */
-    --pill-action-completed-bg:  #D1EEEE; --pill-action-completed-ink:  #0E5F5F;
-    /* On Hold — dusty rose */
-    --pill-on-hold-bg:           #EADADA; --pill-on-hold-ink:           #4A2A2A;
-    /* Updated — vermillion */
-    --pill-updated-bg:           #FBDAD4; --pill-updated-ink:           #7A1E10;
-    /* Scheduled — indigo */
-    --pill-scheduled-bg:         #E2DBFF; --pill-scheduled-ink:         #30237A;
-    /* Qualified — sky blue */
-    --pill-qualified-bg:         #CEEAF7; --pill-qualified-ink:         #004F74;
-    /* Awaiting Change Review / Billing Review — orange */
-    --pill-review-bg:            #FFE4C2; --pill-review-ink:            #7A4400;
-    --pill-dispatch-review-bg:   #FADDC4; --pill-dispatch-review-ink:   #6B3600;
-    /* Quote Raised / Scoped — powder blue */
-    --pill-quote-raised-bg:      #DBF2FF; --pill-quote-raised-ink:      #0E5A7F;
-    /* Quote Sent — brand navy */
-    --pill-quote-sent-bg:        #D5D7E5; --pill-quote-sent-ink:        #2F355E;
-    /* Assigned — bright blue */
-    --pill-assigned-bg:          #D8E5FB; --pill-assigned-ink:          #15347A;
+    /* New: bucketed amber, an un-triaged ticket is functionally
+       "awaiting first response". */
+    --pill-new-bg:               #F8E8E2; --pill-new-ink:               #882E08;
+    /* In Progress: blue (the 2026 lock's canonical "active work" hue). */
+    --pill-progress-bg:          #E7ECFC; --pill-progress-ink:          #192C66;
+    /* Completed / Resolved: true green (Complete = green per the
+       2026 lock; jade/teal is brand-only, not a status hue). */
+    --pill-resolved-bg:          #E3F0E8; --pill-resolved-ink:          #093A1B;
+    /* Agent - Triage Handoff: amber, ticket is sitting in a queue
+       waiting for engineering pickup, i.e. an "awaiting" state. */
+    --pill-triage-handoff-bg:    #F8E8E2; --pill-triage-handoff-ink:    #882E08;
+    /* Action Required: amber (textbook "awaiting" state). */
+    --pill-action-required-bg:   #F8E8E2; --pill-action-required-ink:   #882E08;
+    /* Awaiting User: amber. */
+    --pill-awaiting-user-bg:     #F8E8E2; --pill-awaiting-user-ink:     #882E08;
+    /* Awaiting Supplier: amber. */
+    --pill-awaiting-supplier-bg: #F8E8E2; --pill-awaiting-supplier-ink: #882E08;
+    /* Closed: grey (terminal, de-emphasised). */
+    --pill-closed-bg:            #F0F2F7; --pill-closed-ink:            #585F76;
+    /* System neutral: With CAB / Open Order / Open Item / Invoiced
+       stay grouped under one "workflow plumbing" grey, same as the
+       pre-2026 file (they intentionally don't carry their own hue). */
+    --pill-system-bg:            #F0F2F7; --pill-system-ink:            #585F76;
+    /* Closed-state system neutral: Closed Order / Closed Item. */
+    --pill-system-closed-bg:     #F0F2F7; --pill-system-closed-ink:     #585F76;
+    /* Awaiting Approval / Customer Review: amber. */
+    --pill-approval-bg:          #F8E8E2; --pill-approval-ink:          #882E08;
+    /* Approved: true green. */
+    --pill-approved-bg:          #E3F0E8; --pill-approved-ink:          #093A1B;
+    /* Rejected: red (Failed per the 2026 lock). */
+    --pill-rejected-bg:          #F7E4E4; --pill-rejected-ink:          #9D1818;
+    /* Action Completed: true green. */
+    --pill-action-completed-bg:  #E3F0E8; --pill-action-completed-ink:  #093A1B;
+    /* On Hold: amber, a paused/administrative wait, not a failure,
+       so it sits in the "awaiting" bucket rather than red. */
+    --pill-on-hold-bg:           #F8E8E2; --pill-on-hold-ink:           #882E08;
+    /* Updated: amber, new information landed and needs a look, i.e.
+       "in review". */
+    --pill-updated-bg:           #F8E8E2; --pill-updated-ink:           #882E08;
+    /* Scheduled: violet (explicit in the 2026 lock). */
+    --pill-scheduled-bg:         #EEE8FA; --pill-scheduled-ink:         #321E60;
+    /* Qualified: true green (a positive milestone, same family as Approved). */
+    --pill-qualified-bg:         #E3F0E8; --pill-qualified-ink:         #093A1B;
+    /* Awaiting Change Review / Billing Review: amber ("review"). */
+    --pill-review-bg:            #F8E8E2; --pill-review-ink:            #882E08;
+    --pill-dispatch-review-bg:   #F8E8E2; --pill-dispatch-review-ink:   #882E08;
+    /* Quote Raised / Scoped: violet, pre-sales/scoping work, kept in
+       a distinct hue from core ticket-workflow blue so a quote-family
+       item doesn't read as "just another in-progress ticket". */
+    --pill-quote-raised-bg:      #EEE8FA; --pill-quote-raised-ink:      #321E60;
+    /* Quote Sent: amber, the ball is in the customer's court, an
+       "awaiting" state. */
+    --pill-quote-sent-bg:        #F8E8E2; --pill-quote-sent-ink:        #882E08;
+    /* Assigned: blue (work has started). */
+    --pill-assigned-bg:          #E7ECFC; --pill-assigned-ink:          #192C66;
 }
 
 .theme-dark {
-    --pill-new-bg:               rgba(252,220,0,0.18);    --pill-new-ink:               #F3D565;
-    /* In Progress — emerald (green) in dark mode */
-    --pill-progress-bg:          rgba(16,185,129,0.20);   --pill-progress-ink:          #6EE7B7;
-    /* Resolved — muted dark-mode forest */
-    --pill-resolved-bg:          rgba(75, 140, 105, 0.18);  --pill-resolved-ink:          #8FC7A5;
-    /* Triage Handoff — retains teal */
-    --pill-triage-handoff-bg:    rgba(20,184,166,0.20);   --pill-triage-handoff-ink:    #5EEAD4;
-    --pill-action-required-bg:   rgba(255,174,136,0.20);  --pill-action-required-ink:   #FFC9AE;
-    --pill-awaiting-user-bg:     rgba(244,114,182,0.20);  --pill-awaiting-user-ink:     #F9A8D4;
-    --pill-awaiting-supplier-bg: rgba(113,113,122,0.26);  --pill-awaiting-supplier-ink: #D4D4D8;
-    --pill-closed-bg:            rgba(255,255,255,0.08);  --pill-closed-ink:            #ADB5BD;
-    --pill-system-bg:            rgba(255,255,255,0.10);  --pill-system-ink:            #CED4DA;
-    --pill-system-closed-bg:     rgba(255,255,255,0.06);  --pill-system-closed-ink:     #ADB5BD;
-    --pill-approval-bg:          rgba(250,40,255,0.18);   --pill-approval-ink:          #F0ABFC;
-    --pill-approved-bg:          rgba(163,230,53,0.20);   --pill-approved-ink:          #BEF264;
-    --pill-rejected-bg:          rgba(248,113,113,0.20);  --pill-rejected-ink:          #FCA5A5;
-    --pill-action-completed-bg:  rgba(34,211,238,0.18);   --pill-action-completed-ink:  #67E8F9;
-    --pill-on-hold-bg:           rgba(180,130,130,0.20);  --pill-on-hold-ink:           #D6A9A9;
-    --pill-updated-bg:           rgba(244,78,59,0.18);    --pill-updated-ink:           #FCA5A5;
-    --pill-scheduled-bg:         rgba(123,100,255,0.20);  --pill-scheduled-ink:         #C4B5FD;
-    --pill-qualified-bg:         rgba(0,156,224,0.20);    --pill-qualified-ink:         #7DD3FC;
-    --pill-review-bg:            rgba(254,146,0,0.20);    --pill-review-ink:            #FDBA74;
-    --pill-dispatch-review-bg:   rgba(226,115,0,0.20);    --pill-dispatch-review-ink:   #FDBA74;
-    --pill-quote-raised-bg:      rgba(115,216,255,0.20);  --pill-quote-raised-ink:      #BAE6FD;
-    --pill-quote-sent-bg:        rgba(100,116,180,0.22);  --pill-quote-sent-ink:        #A5B4FC;
-    --pill-assigned-bg:          rgba(60,134,247,0.20);   --pill-assigned-ink:          #93C5FD;
+    --pill-new-bg:               rgba(251,146,60,0.18);   --pill-new-ink:               #FCA259;
+    /* In Progress: blue in dark mode */
+    --pill-progress-bg:          rgba(110,144,255,0.18);  --pill-progress-ink:          #8EA8FF;
+    /* Resolved: true green */
+    --pill-resolved-bg:          rgba(52,211,153,0.18);   --pill-resolved-ink:          #61DDAF;
+    /* Triage Handoff: amber */
+    --pill-triage-handoff-bg:    rgba(251,146,60,0.18);   --pill-triage-handoff-ink:    #FCA259;
+    --pill-action-required-bg:   rgba(251,146,60,0.18);   --pill-action-required-ink:   #FCA259;
+    --pill-awaiting-user-bg:     rgba(251,146,60,0.18);   --pill-awaiting-user-ink:     #FCA259;
+    --pill-awaiting-supplier-bg: rgba(251,146,60,0.18);   --pill-awaiting-supplier-ink: #FCA259;
+    --pill-closed-bg:            rgba(255,255,255,0.08);  --pill-closed-ink:            rgba(236,238,244,0.4);
+    --pill-system-bg:            rgba(255,255,255,0.08);  --pill-system-ink:            rgba(236,238,244,0.4);
+    --pill-system-closed-bg:     rgba(255,255,255,0.08);  --pill-system-closed-ink:     rgba(236,238,244,0.4);
+    --pill-approval-bg:          rgba(251,146,60,0.18);   --pill-approval-ink:          #FCA259;
+    --pill-approved-bg:          rgba(52,211,153,0.18);   --pill-approved-ink:          #61DDAF;
+    --pill-rejected-bg:          rgba(248,113,113,0.18);  --pill-rejected-ink:          #F97F7F;
+    --pill-action-completed-bg:  rgba(52,211,153,0.18);   --pill-action-completed-ink:  #61DDAF;
+    --pill-on-hold-bg:           rgba(251,146,60,0.18);   --pill-on-hold-ink:           #FCA259;
+    --pill-updated-bg:           rgba(251,146,60,0.18);   --pill-updated-ink:           #FCA259;
+    --pill-scheduled-bg:         rgba(164,123,255,0.18);  --pill-scheduled-ink:         #B898FF;
+    --pill-qualified-bg:         rgba(52,211,153,0.18);   --pill-qualified-ink:         #61DDAF;
+    --pill-review-bg:            rgba(251,146,60,0.18);   --pill-review-ink:            #FCA259;
+    --pill-dispatch-review-bg:   rgba(251,146,60,0.18);   --pill-dispatch-review-ink:   #FCA259;
+    --pill-quote-raised-bg:      rgba(164,123,255,0.18);  --pill-quote-raised-ink:      #B898FF;
+    --pill-quote-sent-bg:        rgba(251,146,60,0.18);   --pill-quote-sent-ink:        #FCA259;
+    --pill-assigned-bg:          rgba(110,144,255,0.18);  --pill-assigned-ink:          #8EA8FF;
 }
 
 /* ─── Named-status class rules ─────────────────────────────
@@ -2005,7 +2081,7 @@ html body .portal .status-avatar.s-neutral {
 }
 
 /* Last-resort fallback — any HaloPSA inline bg we didn't map
-   renders as an outlined Montserrat pill so a mystery chip
+   renders as an outlined Figtree pill so a mystery chip
    doesn't shout with a raw HaloPSA hue. Excludes known rgbs AND
    known `title` values — the title-based path means a tenant can
    customise their hex codes without the chip falling through here. */
@@ -2018,7 +2094,7 @@ html body .portal .status-avatar[style*="background-color"]:not([title="New"]):n
 }
 
 /* Unified status-avatar typography — every mapped colour variant
-   above sets bg/ink only; this single rule forces Montserrat +
+   above sets bg/ink only; this single rule forces Figtree +
    matching tracking across ALL status chips so they read as one
    family regardless of HaloPSA's inline colour. */
 html body .portal .status-avatar.fortable,
@@ -2026,7 +2102,7 @@ html body .portal .status-avatar.small,
 html body .portal .status-avatar.bitsmall,
 html body .portal .status-avatar.smallest,
 html body .portal .status-avatar.fortile {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-weight: 600 !important;
     font-size: 10.5px !important;
     letter-spacing: 0.06em !important;
@@ -2088,7 +2164,7 @@ html body .portal .oneline:has(> .priority-block) {
     background: var(--p-bg, var(--portal-surface-active)) !important;
     border: 0 !important;
     border-radius: 999px !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 11px !important;
     font-weight: 600 !important;
     letter-spacing: 0.06em;
@@ -2114,56 +2190,58 @@ html body .portal .oneline > .priority-block {
 
 /* Per-priority token triplets — primary path is the JS-stamped `.p-*`
    class, fallback is the inline-rgb attribute selector. Both stamp the
-   same `--p-bg / --p-ink / --p-dot` triplet onto `.oneline`. */
+   same `--p-bg / --p-ink / --p-dot` triplet onto `.oneline`.
 
-/* Low — sky blue (distinct from --portal-accent-soft which is reused
-   as the selected-filter-row background — using accent-soft here made
-   the Low pill disappear onto a selected row). `rgb(104, 188, 0)` is
-   this tenant's HaloPSA-default Low swatch (lime green). */
+   2026 lock: Low=true green/neutral (NOT jade/teal; jade/teal is the
+   Security brand accent only), Medium=amber, High=red-leaning (a
+   distinct blend between amber and red so it doesn't collide with
+   Critical), Critical=red. */
+
+/* Low: true green. `rgb(104, 188, 0)` is this tenant's HaloPSA-default
+   Low swatch (lime green). */
 html body .portal .oneline.p-low,
 html body .portal .oneline:has(> .priority-block[style*="rgb(0, 98, 177)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(0, 123, 255)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(108, 117, 125)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(40, 167, 69)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(104, 188, 0)"]) {
-    --p-bg: #E0F2FE;
-    --p-ink: #075985;
-    --p-dot: #0EA5E9;
+    --p-bg: #E3F0E8;
+    --p-ink: #093A1B;
+    --p-dot: #15803D;
 }
-/* Medium — true yellow/amber. Pushed toward yellow so it can't be
-   confused with High's orange at glance distance. */
+/* Medium: amber. */
 html body .portal .oneline.p-medium,
 html body .portal .oneline:has(> .priority-block[style*="rgb(164, 221, 0)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(252, 220, 0)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(255, 193, 7)"]) {
-    --p-bg: #FEF3C7;
-    --p-ink: #713F12;
-    --p-dot: #D97706;
+    --p-bg: #F8E8E2;
+    --p-ink: #882E08;
+    --p-dot: #C2410C;
 }
-/* High — saturated orange. Clearly one hue step warmer than Medium.
-   `rgb(254, 146, 0)` is a HaloPSA variant seen on older records
-   (1-digit off the more common 251/158 default). */
+/* High: red-leaning. A blend between amber and red so it reads as
+   "warmer than Medium, one step short of Critical" rather than
+   colliding with either. `rgb(254, 146, 0)` is a HaloPSA variant seen
+   on older records (1-digit off the more common 251/158 default). */
 html body .portal .oneline.p-high,
 html body .portal .oneline:has(> .priority-block[style*="rgb(251, 158, 0)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(255, 152, 0)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(255, 87, 34)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(254, 146, 0)"]) {
-    --p-bg: #FFE3CC;
-    --p-ink: #7C2D12;
-    --p-dot: #EA580C;
+    --p-bg: #F7E6E3;
+    --p-ink: #8E220F;
+    --p-dot: #BE2E14;
 }
-/* Critical — red. Stronger than the previous pale coral so it can't
-   be mistaken for grey even on a selected-row wash. `rgb(244, 78, 59)`
-   is the HaloPSA-default vermillion this tenant ships. */
+/* Critical: red. `rgb(244, 78, 59)` is the HaloPSA-default vermillion
+   this tenant ships. */
 html body .portal .oneline.p-critical,
 html body .portal .oneline:has(> .priority-block[style*="rgb(220, 53, 69)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(255, 0, 0)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(255, 46, 0)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(183, 28, 28)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(244, 78, 59)"]) {
-    --p-bg: #FECACA;
-    --p-ink: #7F1D1D;
-    --p-dot: #DC2626;
+    --p-bg: #F7E4E4;
+    --p-ink: #9D1818;
+    --p-dot: #B91C1C;
 }
 
 /* Dark-mode tints — translucent washes + light ink, matching the
@@ -2174,26 +2252,26 @@ html body .portal .oneline:has(> .priority-block[style*="rgb(244, 78, 59)"]) {
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(108, 117, 125)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(40, 167, 69)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(104, 188, 0)"]) {
-    --p-bg: rgba(14, 165, 233, 0.20);
-    --p-ink: #7DD3FC;
-    --p-dot: #38BDF8;
+    --p-bg: rgba(52, 211, 153, 0.18);
+    --p-ink: #61DDAF;
+    --p-dot: #34D399;
 }
 .theme-dark .portal .oneline.p-medium,
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(164, 221, 0)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(252, 220, 0)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 193, 7)"]) {
-    --p-bg: rgba(217, 119, 6, 0.22);
-    --p-ink: #FCD34D;
-    --p-dot: #F59E0B;
+    --p-bg: rgba(251, 146, 60, 0.18);
+    --p-ink: #FCA259;
+    --p-dot: #FB923C;
 }
 .theme-dark .portal .oneline.p-high,
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(251, 158, 0)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 152, 0)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 87, 34)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(254, 146, 0)"]) {
-    --p-bg: rgba(234, 88, 12, 0.24);
-    --p-ink: #FDBA74;
-    --p-dot: #F97316;
+    --p-bg: rgba(250, 130, 86, 0.20);
+    --p-ink: #FA8C64;
+    --p-dot: #FA8256;
 }
 .theme-dark .portal .oneline.p-critical,
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(220, 53, 69)"]),
@@ -2201,9 +2279,9 @@ html body .portal .oneline:has(> .priority-block[style*="rgb(244, 78, 59)"]) {
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 46, 0)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(183, 28, 28)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(244, 78, 59)"]) {
-    --p-bg: rgba(220, 38, 38, 0.24);
-    --p-ink: #FCA5A5;
-    --p-dot: #EF4444;
+    --p-bg: rgba(248, 113, 113, 0.18);
+    --p-ink: #F97F7F;
+    --p-dot: #F87171;
 }
 
 /* Respect users with reduced-motion preferences — drop the pulse, keep
@@ -2220,7 +2298,7 @@ html body .portal .priority-avatar,
 html body .portal .priority-chip {
     border-radius: 999px !important;
     padding: 2px 10px !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 10.5px !important;
     font-weight: 600 !important;
     letter-spacing: 0.06em !important;
@@ -2265,26 +2343,29 @@ html body .portal .sla-perc-bar > div {
     max-width: 100% !important;
     box-sizing: border-box;
 }
+/* Retint per-state, 2026 lock: red = overdue/breached, amber =
+   warning, true green = healthy (matches --portal-ok; jade/teal is
+   the Security brand accent only, not used for status semantics). */
 html body .portal .sla-perc-bar > div[style*="rgb(255, 46, 0)"],
 html body .portal .sla-perc-bar > div[style*="rgb(220, 53, 69)"] {
-    background-image: linear-gradient(90deg, #DC2626, #F87171) !important;
+    background-image: linear-gradient(90deg, #B91C1C, #F87171) !important;
 }
 html body .portal .sla-perc-bar > div[style*="rgb(255, 191, 0)"],
 html body .portal .sla-perc-bar > div[style*="rgb(255, 152, 0)"] {
-    background-image: linear-gradient(90deg, #F59E0B, #FBBF24) !important;
+    background-image: linear-gradient(90deg, #C2410C, #FB923C) !important;
 }
 html body .portal .sla-perc-bar > div[style*="rgb(0, 190, 0)"],
 html body .portal .sla-perc-bar > div[style*="rgb(40, 167, 69)"],
 html body .portal .sla-perc-bar > div[style*="rgb(34, 139, 34)"] {
-    background-image: linear-gradient(90deg, #059669, #34D399) !important;
+    background-image: linear-gradient(90deg, #15803D, #34D399) !important;
 }
 
 /* Centred percentage/time-left text inside the bar. HaloPSA renders
-   `.bar-text` at 13px Poppins black. Tighten to 11px Montserrat 500
+   `.bar-text` at 13px Poppins black. Tighten to 11px Figtree 500
    white so it sits legibly on coloured fills without overflowing
    the 18px bar. */
 html body .portal .bar-text {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 10.5px !important;
     font-weight: 500 !important;
     letter-spacing: 0.02em !important;
@@ -2308,9 +2389,15 @@ html body .portal .rt-td .sla-perc-bar {
    text ships with no class hook to target, so `iframe-theme.js`
    wraps it in a `<span data-on-hold-indicator>` — this rule paints
    that span as a pill matching the `.status-avatar.s-awaiting-user`
-   shape (uppercase 700 Montserrat, 999px radius, letter-spaced)
+   shape (uppercase 700 Figtree, 999px radius, letter-spaced)
    but in a red palette that pairs with the SLA-overdue countdown
-   colour (`#DC2626` family) from `.sla-perc-bar` above.
+   colour (`--portal-err` family) from `.sla-perc-bar` above. This is
+   a deliberate exception to the status-pill bucket mapping: the
+   generic "On Hold" status pill elsewhere is amber (a paused wait,
+   not a failure), but THIS element replaces the SLA countdown bar
+   itself on home-page tiles: "the clock isn't running" reads closer
+   to the overdue/blocked semantic than a plain awaiting-state, so it
+   stays in the red family.
 
    `\23F8` (U+23F8, pause) as a `::before` glyph. `font-variant-emoji:
    text` forces monochrome rendering — without it macOS/iOS Safari
@@ -2326,9 +2413,9 @@ html body .portal [data-on-hold-indicator] {
     align-items: center;
     gap: 6px;
     padding: 5px 12px 5px 11px !important;
-    background-color: #FEE2E2 !important;
-    color: #991B1B !important;
-    font-family: 'Montserrat', var(--ik-font-display) !important;
+    background-color: #F7E4E4 !important;
+    color: #9D1818 !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 10.5px !important;
     font-weight: 700 !important;
     letter-spacing: 0.06em !important;
@@ -2345,8 +2432,8 @@ html body .portal [data-on-hold-indicator]::before {
     font-variant-emoji: text;
 }
 html body .portal.theme-dark [data-on-hold-indicator] {
-    background-color: rgba(239, 68, 68, 0.20) !important;
-    color: #FCA5A5 !important;
+    background-color: rgba(248, 113, 113, 0.20) !important;
+    color: #F97F7F !important;
 }
 
 
@@ -2356,19 +2443,16 @@ html body .portal.theme-dark [data-on-hold-indicator] {
 
 html body .portal .rt-td,
 html body .portal .rt-th {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 13px !important;
     color: var(--portal-text);
 }
 /* Header row typography — scoped to `.-header` only so the filter
    row below (`.-filters`) keeps its input chrome untouched.
 
-   Montserrat 700 (not mono) so the header reads as part of the
-   Interconnekt display-type family, matching card titles / section
-   headings elsewhere in the portal. `Montserrat` is listed first
-   explicitly (not just via the var) so any page that fails to pick
-   up the custom property still lands on the correct family instead
-   of system-ui.
+   Bricolage Grotesque 700 (not mono) so the header reads as part of
+   the Interconnekt display-type family, matching card titles /
+   section headings elsewhere in the portal.
 
    Vertical alignment: react-table v6 nests the header label inside
    `.rt-resizable-header-content`, and HaloPSA adds a further
@@ -2382,7 +2466,7 @@ html body .portal .rt-th {
    intrinsic height, which is what was pushing the funnel to the top
    of the cell). */
 html body .portal .rt-thead.-header .rt-th {
-    font-family: 'Montserrat', var(--ik-font-display) !important;
+    font-family: var(--ik-font-display) !important;
     font-size: 11.5px !important;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -2441,7 +2525,7 @@ html body .portal .ReactTable.main-table .rt-thead.-header {
 }
 html body .portal .ReactTable.main-table .rt-thead.-header .rt-th {
     color: var(--portal-text-muted) !important;
-    font-family: 'Montserrat', var(--ik-font-display) !important;
+    font-family: var(--ik-font-display) !important;
     font-size: 11.5px !important;
     font-weight: 700 !important;
     letter-spacing: 0.08em !important;
@@ -2529,7 +2613,7 @@ html body .portal .rt-thead.-filters input:not([type="checkbox"]):not([type="rad
 html body .portal .details-form .rt-thead.-filters input:not([type="checkbox"]):not([type="radio"]) {
     height: 30px !important;
     min-height: 30px !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 12.5px !important;
     padding: 0 10px !important;
     width: 100% !important;
@@ -2674,7 +2758,7 @@ html body .portal .Select__input,
 html body .portal .Select__input input,
 html body .portal .Select__menu,
 html body .portal .Select__option {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 13px !important;
 }
 
@@ -2826,7 +2910,7 @@ html body .portal .-pagination .-pageJump {
     margin: 0 !important;
 }
 html body .portal .-pagination .-totalPages {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 13px !important;
     color: var(--portal-text-secondary) !important;
 }
@@ -2843,7 +2927,7 @@ html body .portal button.-btn {
     width: auto !important;
     height: 36px !important;
     padding: 0 22px !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-weight: 500 !important;
     font-size: 13px !important;
     line-height: 1 !important;
@@ -2929,7 +3013,7 @@ html body .portal .react-kanban-card {
     transition: transform var(--ik-dur) var(--ik-ease),
                 border-color var(--ik-dur) var(--ik-ease),
                 box-shadow var(--ik-dur) var(--ik-ease);
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
 }
 html body .portal .react-kanban-card:hover {
     transform: translateY(-1px);
@@ -2968,7 +3052,7 @@ html body .portal .board-card-content {
     padding: 12px 14px !important;
     margin: 0 0 8px !important;
     box-shadow: var(--portal-shadow-sm) !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     color: var(--portal-text) !important;
     transition: border-color var(--ik-dur) var(--ik-ease),
                 transform var(--ik-dur) var(--ik-ease),
@@ -3029,7 +3113,7 @@ html body .portal .board-card-content .board-card-details:empty {
 html body .portal .react-calendar-timeline {
     background: transparent !important;
     color: var(--portal-text) !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     border: 1px solid var(--portal-border) !important;
     border-radius: var(--portal-radius-md) !important;
     overflow: hidden;
@@ -3062,7 +3146,7 @@ html body .portal .react-calendar-timeline .rct-sidebar-right {
     background: var(--portal-surface) !important;
     border-right: 1px solid var(--portal-border) !important;
     color: var(--portal-text) !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 13px !important;
 }
 html body .portal .react-calendar-timeline .rct-sidebar .rct-sidebar-header {
@@ -3125,9 +3209,9 @@ html body .portal .react-calendar-timeline .rct-items .rct-item {
     background: var(--portal-accent) !important;
     background-color: var(--portal-accent) !important;
     border: 1px solid var(--portal-accent-hover, var(--portal-accent)) !important;
-    color: #fff !important;
+    color: var(--portal-on-accent) !important;
     border-radius: var(--portal-radius-xs) !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 12px !important;
     font-weight: 500 !important;
     transition: transform var(--ik-dur) var(--ik-ease),
@@ -3231,7 +3315,7 @@ html body .portal .entity-selection .pill {
     border: 1px solid var(--portal-border) !important;
     border-radius: 999px !important;
     padding: 8px 18px !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     letter-spacing: -0.005em;
@@ -3247,7 +3331,7 @@ html body .portal .entity-selection .pill:hover {
 }
 html body .portal .entity-selection .pill.active {
     background: var(--portal-accent) !important;
-    color: #fff !important;
+    color: var(--portal-on-accent) !important;
     border-color: var(--portal-accent) !important;
     font-weight: 600 !important;
 }
@@ -3321,7 +3405,7 @@ html body .portal .search-result-item .articleInfo .summary {
     padding: 0 !important;
 }
 html body .portal .search-result-item .articleInfo .desc-large {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 13px !important;
     line-height: 1.55 !important;
     color: var(--portal-text-secondary) !important;
@@ -3395,7 +3479,7 @@ html body .portal .details-form textarea {
     background-color: var(--portal-bg) !important;
     color: var(--portal-text) !important;
     padding: 0 14px !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 14px !important;
     transition: border-color var(--ik-dur) var(--ik-ease),
                 box-shadow var(--ik-dur) var(--ik-ease),
@@ -3500,7 +3584,7 @@ html body .portal .fr-box .fr-element,
 html body .portal .fr-box .fr-view {
     color: var(--portal-text) !important;
     background: transparent !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     line-height: 1.6;
 }
 html body .portal .fr-placeholder { color: var(--portal-text-muted) !important; }
@@ -3517,7 +3601,7 @@ html body .portal .mandatory-hint {
     font-size: 11px !important;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #F87171 !important;
+    color: var(--portal-err) !important;
     font-style: normal !important;
     opacity: 0.9;
 }
@@ -3526,13 +3610,19 @@ html body .portal .mandatory-hint::first-letter {
 }
 
 /* Asterisks appearing next to each required field label — HaloPSA
-   renders them as `<h999 class="asterisk"> *</h999>`. Colour them
-   the same pink-red so the required signal reads consistently
-   across hint + per-field marker. */
+   renders them as `<h999 class="asterisk"> *</h999>`. Colour them the
+   same semantic red so the required signal reads consistently across
+   hint + per-field marker.
+   Token, not a literal: the pre-2026 file hardcoded one red for both
+   themes (`#F87171`, the dark-mode shade), which measures only
+   2.77:1 against a light-mode white card, well under the 4.5:1 body-
+   text floor. `var(--portal-err)` resolves to the correct per-mode
+   shade (6.47:1 on light-mode white, unchanged 2026-lock contrast on
+   dark-mode card) instead. */
 html body .portal .details-form label .asterisk,
 html body .portal .asterisk,
 html body .portal h999.asterisk {
-    color: #F87171 !important;
+    color: var(--portal-err) !important;
     font-weight: 700 !important;
 }
 
@@ -3590,7 +3680,7 @@ html body .portal .rc-steps-item-icon {
     height: 40px !important;
     line-height: 38px !important;   /* visual centre for 1px border */
     border-radius: 999px !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 14px !important;
     font-weight: 600 !important;
     text-align: center !important;
@@ -3601,7 +3691,7 @@ html body .portal .rc-steps-item-icon {
 }
 /* rc-steps uses a span inside — ensure the digit / check centres. */
 html body .portal .rc-steps-item-icon .rc-steps-icon {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 14px !important;
     font-weight: 600 !important;
     line-height: 1 !important;
@@ -3670,17 +3760,17 @@ html body .portal .rc-steps .rc-steps-item-content {
 html body .portal .rc-steps-item-finish .rc-steps-item-icon {
     background: var(--portal-action) !important;
     border: 1px solid var(--portal-action) !important;
-    color: #fff !important;
+    color: var(--portal-on-accent) !important;
 }
 html body .portal .rc-steps-item-finish .rc-steps-item-icon .rc-steps-icon {
-    color: #fff !important;
+    color: var(--portal-on-accent) !important;
 }
 /* rc-steps renders the check via CSS content on `.rc-steps-icon`
    when state is finish. Make sure it inherits ink. */
 html body .portal .rc-steps-item-finish .rc-steps-item-icon svg,
 html body .portal .rc-steps-item-finish .rc-steps-item-icon i,
 html body .portal .rc-steps-item-finish .rc-steps-item-icon .anticon {
-    color: #fff !important;
+    color: var(--portal-on-accent) !important;
     fill: currentColor !important;
 }
 /* Tail after a finish step — painted accent so completed section
@@ -3694,11 +3784,11 @@ html body .portal .rc-steps-item-finish .rc-steps-item-tail::after {
 html body .portal .rc-steps-item-process .rc-steps-item-icon {
     background: var(--portal-action) !important;
     border: 1px solid var(--portal-action) !important;
-    color: #fff !important;
+    color: var(--portal-on-accent) !important;
     box-shadow: 0 0 0 4px var(--portal-accent-subtle);
 }
 html body .portal .rc-steps-item-process .rc-steps-item-icon .rc-steps-icon {
-    color: #fff !important;
+    color: var(--portal-on-accent) !important;
 }
 
 /* WAIT — future: pale surface circle, muted number, no coloured border. */
@@ -3711,8 +3801,8 @@ html body .portal .rc-steps-item-wait .rc-steps-item-icon .rc-steps-icon {
     color: var(--portal-text-muted) !important;
 }
 
-/* Titles — Montserrat (NOT mono) so the label reads as content,
-   not eyebrow metadata. Per-state colour below. */
+/* Titles: Bricolage Grotesque (NOT mono) so the label reads as
+   content, not eyebrow metadata. Per-state colour below. */
 html body .portal .rc-steps-item-title {
     font-family: var(--ik-font-display) !important;
     font-size: 12px !important;
@@ -3745,7 +3835,7 @@ html body .portal .switches > button {
     border: 0 !important;
     border-radius: calc(var(--portal-radius-sm) - 4px) !important;
     padding: 6px 14px !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-weight: 500 !important;
     font-size: 13px !important;
     background: transparent !important;
@@ -3755,7 +3845,7 @@ html body .portal .switches > button {
 }
 html body .portal .switches > button[style*="rgb(47, 53, 94)"] {
     background: var(--portal-action) !important;
-    color: #fff !important;
+    color: var(--portal-on-accent) !important;
 }
 
 
@@ -3798,7 +3888,7 @@ html body .portal .tablist {
 }
 /* Individual tab item */
 html body .portal .tabsheet {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     color: var(--portal-text-muted) !important;
@@ -3995,7 +4085,7 @@ html body .portal .action-history-item.wcontainer .detailsholder .when {
     position: absolute;
     top: 14px;
     right: 18px;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 12px !important;
     font-weight: 400 !important;
     color: var(--portal-text-muted) !important;
@@ -4029,7 +4119,7 @@ html body .portal .tab-container > .tab {
     color: var(--portal-text-muted) !important;
     padding: 8px 16px 10px !important;
     margin: 0 !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     cursor: pointer;
@@ -4062,7 +4152,7 @@ html body .portal .tab-container > .tab.tabactive {
    feedback — the user sees one consistent tab family. */
 html body .portal .react-tabs__tab,
 html body .portal ul.react-tabs__tab-list .react-tabs__tab {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     color: var(--portal-text-muted) !important;
@@ -4118,7 +4208,7 @@ html body .portal ul.react-tabs__tab-list {
    above so all three families render identically — flat transparent
    background, muted text inactive, action-blue underline active. */
 html body .portal [role="tab"] {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     color: var(--portal-text-muted) !important;
@@ -4241,7 +4331,7 @@ html body .portal .mainscreen2 .history-options-portal.buttons-container {
    ───────────────────────────────────────────────────────── */
 
 html body .portal .kbdetails {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     /* Wider than the old 760px reading measure — KB articles carry
        tables + screenshots that need room. Still bounded for
        comfortable long-form reading on ultrawide displays. */
@@ -4287,7 +4377,7 @@ html body .portal .kbdetails > .article {
 html body .portal .kbdetails h1 {
     font-family: var(--ik-font-display) !important;
     font-size: 2.25rem !important;
-    font-weight: 300 !important;
+    font-weight: 700 !important;
     letter-spacing: -0.02em !important;
     line-height: 1.1;
     margin: 0 0 4px !important;
@@ -4356,7 +4446,7 @@ html body .portal .kbdetails .kbmeta {
     color: var(--portal-text-muted) !important;
 }
 
-/* KB tags (`span.kbtags`) — JetBrains Mono uppercase pill. Shape +
+/* KB tags (`span.kbtags`): Spline Sans Mono uppercase pill. Shape +
    typography are shared; COLOUR cycles through a 5-hue palette
    (blue → green → orange → red → purple) using status-pill tokens
    so each article's tag row reads as distinct chips instead of a
@@ -4378,12 +4468,12 @@ html body .portal .kbdetails .kbmeta {
    the `:nth-of-type` selectors below with stable `.kbtags.kbtag-*`
    ones — the token mapping stays identical.
 
-   `'JetBrains Mono'` is listed FIRST in the font stack (ahead of the
+   `'Spline Sans Mono'` is listed FIRST in the font stack (ahead of the
    var) so even if the custom-property cascade fails to resolve
    `--ik-font-mono` (e.g. on legacy deploys or in Style-Profile-
    injected contexts where vars don't inherit cleanly), the literal
    name still wins and the user gets the intended font instead of
-   falling back to the surrounding Montserrat.
+   falling back to the surrounding Figtree.
 
    Hover flips to the full accent family so interactions stay
    consistent with every other chip in the portal — the 5-hue palette
@@ -4393,7 +4483,7 @@ html body .portal .kbtags {
     display: inline-block !important;
     background: var(--pill-assigned-bg) !important;
     color: var(--pill-assigned-ink) !important;
-    font-family: 'JetBrains Mono', var(--ik-font-mono), ui-monospace, Consolas, Menlo, monospace !important;
+    font-family: 'Spline Sans Mono', var(--ik-font-mono), ui-monospace, Consolas, Menlo, monospace !important;
     font-size: 9px !important;
     font-weight: 500 !important;
     letter-spacing: 0.1em !important;
@@ -4835,7 +4925,7 @@ html body .portal .kbdetails .confluenceTable th,
 html body .portal .kbdetails .confluenceTable td {
     border: 1px solid var(--portal-table-border) !important;
     padding: 10px 14px !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 14px !important;
     vertical-align: top;
     color: var(--portal-text);
@@ -4847,7 +4937,7 @@ html body .portal .kbdetails .confluenceTable td {
    mono label floating in a bigger cell" feel. */
 html body .portal .kbdetails .confluenceTable th {
     background: var(--portal-table-header-bg) !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 14px !important;
     font-weight: 600 !important;
     color: var(--portal-heading) !important;
@@ -4865,7 +4955,7 @@ html body .portal .kbdetails .confluenceTable tr:nth-child(even) { background: t
 html body .portal .kbdetails .status-macro.aui-lozenge {
     display: inline-block !important;
     padding: 4px 10px !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-weight: 600 !important;
     font-size: 10.5px !important;
     line-height: 1.5 !important;
@@ -4873,17 +4963,17 @@ html body .portal .kbdetails .status-macro.aui-lozenge {
     text-transform: uppercase !important;
     letter-spacing: 0.06em !important;
 }
-html body .portal .kbdetails .status-macro.aui-lozenge-complete { background: #DBEAFE !important; color: #1E3A8A !important; }
-html body .portal .kbdetails .status-macro.aui-lozenge-success  { background: #D1FAE5 !important; color: #064E3B !important; }
-html body .portal .kbdetails .status-macro.aui-lozenge-current  { background: #FEF3C7 !important; color: #78350F !important; }
-html body .portal .kbdetails .status-macro.aui-lozenge-error    { background: #FEE2E2 !important; color: #7F1D1D !important; }
-html body .portal .kbdetails .status-macro.aui-lozenge-progress { background: #EDE9FE !important; color: #4C1D95 !important; }
+html body .portal .kbdetails .status-macro.aui-lozenge-complete { background: #E7ECFC !important; color: #192C66 !important; }
+html body .portal .kbdetails .status-macro.aui-lozenge-success  { background: #E3F0E8 !important; color: #093A1B !important; }
+html body .portal .kbdetails .status-macro.aui-lozenge-current  { background: #F8E8E2 !important; color: #882E08 !important; }
+html body .portal .kbdetails .status-macro.aui-lozenge-error    { background: #F7E4E4 !important; color: #9D1818 !important; }
+html body .portal .kbdetails .status-macro.aui-lozenge-progress { background: #EEE8FA !important; color: #321E60 !important; }
 
-html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-complete { background: rgba(74,116,240,0.15) !important; color: #9AB5F7 !important; }
-html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-success  { background: rgba(52,211,153,0.15) !important; color: #86EFAC !important; }
-html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-current  { background: rgba(251,146,60,0.15) !important; color: #FDBA74 !important; }
-html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-error    { background: rgba(248,113,113,0.15) !important; color: #FCA5A5 !important; }
-html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-progress { background: rgba(217,70,239,0.15) !important; color: #E9A0EF !important; }
+html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-complete { background: rgba(110,144,255,0.15) !important; color: #8EA8FF !important; }
+html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-success  { background: rgba(52,211,153,0.15) !important; color: #61DDAF !important; }
+html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-current  { background: rgba(251,146,60,0.15) !important; color: #FCA259 !important; }
+html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-error    { background: rgba(248,113,113,0.15) !important; color: #F97F7F !important; }
+html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-progress { background: rgba(164,123,255,0.15) !important; color: #B898FF !important; }
 
 
 /* ─────────────────────────────────────────────────────────
@@ -4902,7 +4992,7 @@ html body .portal #text-scroll-container {
     background: var(--portal-surface-hover);
     border: 0;
     padding: 12px 16px;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-weight: 500;
     font-size: 13.5px;
     color: var(--portal-text);
@@ -4912,7 +5002,7 @@ html body .portal .web-announcement-img-enhanced {
     background: var(--portal-accent);
     border: 0;
     padding: 12px;
-    color: #fff;
+    color: var(--portal-on-accent);
 }
 
 /* Footer — hardcoded dark navy in both themes (same pattern + same hex
@@ -4923,7 +5013,7 @@ html body .portal .web-announcement-img-enhanced {
    flip to light semi-transparent white (mirroring the nav-button resting
    tone) so contrast remains AA against the navy bg in both modes. */
 html body .portal footer {
-    background: #0A0F1C !important;
+    background: #0C0E16 !important;
     border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
     /* `padding-top: 40px` matches the visible bottom inset, which is
        made up of 20px footer padding-bottom + 20px margin-bottom on
@@ -4940,7 +5030,7 @@ html body .portal footer {
 }
 html body .portal footer a {
     color: rgba(255, 255, 255, 0.82) !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 12px !important;
     font-weight: 400 !important;
     letter-spacing: normal !important;
@@ -4954,7 +5044,7 @@ html body .portal footer.page-footer a[href*="usehalo.com"] { display: none !imp
 html body .portal footer.page-footer .center-align > .row:has(a[href*="usehalo.com"]) { display: none !important; }
 
 /* Footer icon vertical alignment — `vertical-align: middle` from the
-   shipped portal CSS aligns to the line-box centre, but Montserrat's
+   shipped portal CSS aligns to the line-box centre, but Figtree's
    x-height puts the icon visually high relative to the text cap. A
    2px top padding on the SVG/img nudges it down so icon + label
    read as horizontally aligned at a glance. */
@@ -5003,7 +5093,7 @@ html body .portal .page-title:has(> .listwidget-icon.fa-desktop) + div {
     justify-content: center;
     text-align: center;
     color: var(--portal-text-muted) !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 14px !important;
     font-weight: 500 !important;
     letter-spacing: 0.005em;
@@ -5125,7 +5215,7 @@ html body .portal footer.page-footer .box1 a[href^="https://interconnekt"] > div
     content: "interconnekt.com.au";
     font-size: 12px;
     font-weight: 400;
-    font-family: var(--ik-font-display);
+    font-family: var(--ik-font-body);
     color: rgba(255, 255, 255, 0.82);
     text-transform: none;
     letter-spacing: normal;
@@ -6097,7 +6187,7 @@ html body .portal .preview-noneselected.tickets {
     margin: 60px auto 0 !important;
     max-width: 420px;
     text-align: center;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 15px !important;
     font-weight: 500 !important;
     letter-spacing: 0.005em;
@@ -6163,7 +6253,7 @@ html body .portal .preview-noneselected:hover {
    chrome in dark mode. The selectors below deliberately drop the
    `.portal` ancestor and instead rely on `.ui.popup` + `.theme-dark`
    (which HaloPSA stamps on `html` or `body` depending on the
-   viewport). Fallback values (`#1F2125`, `#E5E7EB`, etc.) follow the
+   viewport). Fallback values (`#161A25`, `#ECEEF4`, etc.) follow the
    CSS var so the styling still holds even if custom-property
    inheritance fails to cross the portal boundary. */
 
@@ -6180,12 +6270,12 @@ html body .portal .preview-noneselected:hover {
 html body .ui.popup,
 html body .ui.popup.transition.visible {
     background: var(--portal-surface, #FFFFFF) !important;
-    color: var(--portal-text, #0F172A) !important;
+    color: var(--portal-text, #161922) !important;
     border: 1px solid var(--portal-border, rgba(15, 23, 42, 0.1)) !important;
     border-radius: 12px !important;
     box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18) !important;
     padding: 16px 18px !important;
-    font-family: 'Montserrat', var(--ik-font-display), sans-serif !important;
+    font-family: var(--ik-font-body) !important;
     min-width: 200px;
 }
 html body .ui.popup::before,
@@ -6209,8 +6299,8 @@ html body .ui.popup::after {
    colours are the only reliable choice in this context. */
 html body:has(.theme-dark) .ui.popup,
 html body:has(.theme-dark) .ui.popup.transition.visible {
-    background: #1F2125 !important;
-    color: #E5E7EB !important;
+    background: #161A25 !important;
+    color: #ECEEF4 !important;
     border-color: rgba(255, 255, 255, 0.08) !important;
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55) !important;
 }
@@ -6224,12 +6314,12 @@ html body .ui.popup h1,
 html body .ui.popup h2,
 html body .ui.popup h3,
 html body .ui.popup h4 {
-    font-family: 'JetBrains Mono', var(--ik-font-mono), ui-monospace, monospace !important;
+    font-family: 'Spline Sans Mono', var(--ik-font-mono), ui-monospace, monospace !important;
     font-size: 10.5px !important;
     font-weight: 500 !important;
     letter-spacing: 0.12em !important;
     text-transform: uppercase !important;
-    color: var(--portal-text-muted, #64748B) !important;
+    color: var(--portal-text-muted, #8E93A4) !important;
     margin: 0 0 10px 0 !important;
     padding: 0 !important;
     border: 0 !important;
@@ -6240,7 +6330,7 @@ html body:has(.theme-dark) .ui.popup h1,
 html body:has(.theme-dark) .ui.popup h2,
 html body:has(.theme-dark) .ui.popup h3,
 html body:has(.theme-dark) .ui.popup h4 {
-    color: #94A3B8 !important;
+    color: rgba(236, 238, 244, 0.62) !important;
 }
 
 /* Copy-link pill inside the share popup — pin to brand-action pill
@@ -6255,12 +6345,12 @@ html body .ui.popup button {
     width: 100% !important;
     height: 36px !important;
     padding: 0 16px !important;
-    background-color: var(--portal-action, #2563EB) !important;
+    background-color: var(--portal-action, #3761E2) !important;
     background-image: none !important;
     color: #FFFFFF !important;
     border: 0 !important;
     border-radius: 999px !important;
-    font-family: 'Montserrat', var(--ik-font-display), sans-serif !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     display: inline-flex !important;
@@ -6274,7 +6364,7 @@ html body .ui.popup button {
 }
 html body .ui.popup .ui.button:hover,
 html body .ui.popup button:hover {
-    background-color: var(--portal-action-hover, #1D4ED8) !important;
+    background-color: var(--portal-action-hover, #2F52C0) !important;
     transform: translateY(-1px);
 }
 html body .ui.popup .ui.button i,
@@ -6394,7 +6484,7 @@ html body .portal .app-nav-menu {
     border-left: 1px solid var(--portal-border) !important;
     box-shadow: var(--portal-shadow-hover) !important;
     padding: 24px !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
 }
 
 /* Mobile primary-nav drawer (`.app-nav-menu`) — same surface treatment
@@ -6418,7 +6508,7 @@ html body .portal .app-nav-menu > a {
     display: block !important;
     padding: 12px 14px !important;
     margin: 2px 0 !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 14px !important;
     font-weight: 500 !important;
     letter-spacing: -0.005em;
@@ -6467,7 +6557,7 @@ html body .portal .ui.sidebar > div:first-child > span,
 html body .portal .ui.sidebar > div:first-child > div {
     font-family: var(--ik-font-display) !important;
     font-size: 1.25rem !important;
-    font-weight: 300 !important;
+    font-weight: 700 !important;
     letter-spacing: -0.02em !important;
     color: var(--portal-heading) !important;
     margin-bottom: 20px !important;
@@ -6542,7 +6632,7 @@ html body .portal .ui.sidebar img.rounded-circle {
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 16px !important;
     font-weight: 600 !important;
     letter-spacing: 0;
@@ -6557,7 +6647,7 @@ html body .portal .ui.sidebar .username,
 html body .portal .ui.sidebar .user-name,
 html body .portal .ui.sidebar .email,
 html body .portal .ui.sidebar .user-email {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     color: var(--portal-text) !important;
 }
 html body .portal .sidemenu .email,
@@ -6583,7 +6673,7 @@ html body .portal .ui.sidebar ul li a {
     display: block !important;
     padding: 12px 14px !important;
     margin: 2px -14px !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 14px !important;
     font-weight: 500 !important;
     letter-spacing: -0.005em;
@@ -6656,7 +6746,7 @@ html body .portal .menu.transition.visible > a {
     border-radius: var(--portal-radius-xs) !important;
     background: transparent !important;
     color: var(--portal-text) !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ik-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     border: 0 !important;

@@ -41,15 +41,21 @@
 
     var CSS = [
         'html, body, body * {',
-        '    font-family: \'Montserrat\', \'Poppins\', \'Segoe UI\', -apple-system, BlinkMacSystemFont, sans-serif !important;',
+        '    font-family: \'Figtree\', system-ui, -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif !important;',
         '}',
-        /* Matches Interconnekt/Email-Templates _base/base-template.html */
+        /* 2026 design-system lock: role blue (Insight role: links,
+           primary buttons, focus). Intentionally diverges from
+           Interconnekt/Email-Templates' _base/base-template.html,
+           which still ships the legacy operational blue (#3598db) at
+           time of writing; that template is a separate repo/deploy
+           and out of scope here. Revisit if/when Email-Templates
+           adopts the same 2026 palette, so the two stay in sync. */
         'a, a:visited {',
-        '    color: #3598db !important;',
+        '    color: #3761E2 !important;',
         '    text-decoration: none;',
         '}',
         'a:hover {',
-        '    color: #3598db !important;',
+        '    color: #3761E2 !important;',
         '    text-decoration: underline;',
         '}'
     ].join('\n');
@@ -60,8 +66,8 @@
        the iframe document. Email HTML commonly inlines
        `style="font-family: Arial !important"` at every cell/span,
        and per CSS spec an `!important` inline declaration outranks an
-       `!important` stylesheet declaration — so our injected
-       `body * { font-family: Montserrat !important }` rule would
+       `!important` stylesheet declaration, so our injected
+       `body * { font-family: Figtree !important }` rule would
        lose to those inlines on specificity. Stripping the inline
        declaration lets our stylesheet rule win uncontested.
 

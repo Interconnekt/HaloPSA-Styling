@@ -271,7 +271,7 @@ color: #321e60 !important;
 
 
 /* ═══════════════════════════════════════════════════════════════════════
-   CONFLUENCE PANELS — Outer wrappers
+   CONFLUENCE PANELS - Outer wrappers
    2026 lock: SOLID TINT callouts, NO offset left border. border-radius +
    overflow clipping on the outer wrapper; border: none kills Confluence's
    inline border AND is the full extent of what these per-type rules do
@@ -341,7 +341,7 @@ margin: 15px 0;
 
 
 /* ═══════════════════════════════════════════════════════════════════════
-   CONFLUENCE PANELS — Per-type body colours (the solid tint IS the
+   CONFLUENCE PANELS - Per-type body colours (the solid tint IS the
    callout; role-coloured heading/icon painting lives in the Custom CSS
    layer for the Self-Service Portal; Style Profile's one-selector-per-
    rule constraint and Agent Portal's lack of Custom CSS mean this layer

@@ -2959,6 +2959,209 @@ html body .portal .-pagination input {
     color: var(--portal-text) !important;
 }
 
+/* ─── My Invoices billing table (/invoices) ──
+   The invoices page renders the same react-table v6 list component
+   as My Tickets (.container.ticket-list > .ReactTable.main-table)
+   with no invoice-specific class anywhere in its ancestor chain.
+   Scope hook: the Stripe payment controls (Pay All button
+   #input-field-for-stripePayAll, payment-method select
+   #input-field-for-stripePaymentMethod) exist only on this page,
+   inside the same .ticket-list container, so :has() on either id
+   isolates every rule below from the tickets list and any other
+   ReactTable instance. Both ids are listed so the scope survives
+   one of the two controls being absent.
+
+   Stock layout: 13 columns totalling 1730px, stamped inline per
+   cell (flex-basis + width + max-width) plus min-width: 1730px on
+   .rt-thead/.rt-tbody, which overflows the ~1470px card and pushes
+   the Pay button (column 13) past the right edge.
+
+   Column map (nth-child): 1 ID, 2 TYPE, 3 ORDER NUMBER,
+   4 INVOICE DATE, 5 AGREEMENT, 6 VALUE, 7 TOTAL TAX, 8 TOTAL,
+   9 DUE, 10 DATE SENT, 11 PAYMENT STATUS, 12 INVOICE REFERENCE,
+   13 Pay button (blank header).
+
+   Changes, per Joel's review of the live page:
+   1. TYPE (always "Invoice") and ORDER NUMBER (rarely populated)
+      are hidden.
+   2. ID pinned to 110px; invoice refs are a fixed ~10 characters.
+   3. Money columns (VALUE / TOTAL TAX / TOTAL / DUE) pinned to
+      105px, right-aligned, tabular figures.
+   4. AGREEMENT and INVOICE REFERENCE become the flexible columns
+      that absorb leftover card width; they hold the only
+      variable-length text.
+   5. The Pay column sticks to the right card edge, so the button
+      stays visible if a narrow window still forces a horizontal
+      scroll. After the resize the table fits scroll-free at
+      typical desktop widths, so the sticky is inert there.
+
+   Every width/flex rule needs !important to beat the inline
+   styles. `.rt-tr >` reaches header (.rt-th) and body (.rt-td)
+   cells with parallel selectors so both stay in lockstep; it also
+   covers the .-filters row if HaloPSA ever enables one here. */
+
+/* Natural width = sum of visible columns, not the stock 1730px. */
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-thead,
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tbody {
+    min-width: 0 !important;
+}
+/* Row boxes must span the full content width when the table still
+   overflows (very narrow windows). With min-width freed above, a
+   flex row would otherwise shrink to the scrollport width while
+   its cells overflow it, which cuts row borders and hover short
+   mid-scroll AND breaks the sticky Pay cell below (sticky insets
+   resolve against the containing block, the row). max-content
+   spans all cells when overflowing; the 100% floor keeps rows
+   filling the card when content fits, so the flexible columns
+   still grow. */
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr,
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr-group {
+    width: max-content !important;
+    min-width: 100% !important;
+}
+/* HaloPSA gives .rt-tbody `overflow: hidden auto`, which makes the
+   tbody itself a scroll container. position: sticky resolves its
+   insets against the NEAREST scroll container, so the Pay cell
+   would pin to the tbody (which never scrolls horizontally) and
+   drift out of view with the content. overflow: visible leaves
+   .rt-table as the only scroller, which sticky then tracks
+   correctly. Vertical scrolling still works: .rt-table has
+   overflow: auto (see the list workspace rule in section 12/13
+   area) and the sticky .rt-thead handles the pinned header. */
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tbody {
+    overflow: visible !important;
+}
+
+/* TYPE (2) and ORDER NUMBER (3), hidden. */
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(2),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(2),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(3),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(3) {
+    display: none !important;
+}
+
+/* ID, 110px. */
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(1),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(1) {
+    flex: 0 0 110px !important;
+    width: 110px !important;
+    max-width: 110px !important;
+}
+
+/* INVOICE DATE, 125px. */
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(4),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(4) {
+    flex: 0 0 125px !important;
+    width: 125px !important;
+    max-width: 125px !important;
+}
+
+/* Money columns (VALUE / TOTAL TAX / TOTAL / DUE), 105px. */
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(6),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(6),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(7),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(7),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(8),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(8),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(9),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(9) {
+    flex: 0 0 105px !important;
+    width: 105px !important;
+    max-width: 105px !important;
+}
+
+/* DATE SENT, 140px. */
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(10),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(10) {
+    flex: 0 0 140px !important;
+    width: 140px !important;
+    max-width: 140px !important;
+}
+
+/* PAYMENT STATUS, 150px. */
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(11),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(11) {
+    flex: 0 0 150px !important;
+    width: 150px !important;
+    max-width: 150px !important;
+}
+
+/* Pay button column, 100px. */
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(13),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(13) {
+    flex: 0 0 100px !important;
+    width: 100px !important;
+    max-width: 100px !important;
+}
+
+/* AGREEMENT, flexible: grows into leftover width, shrinks to
+   110px minimum on narrow windows. */
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(5),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(5) {
+    flex: 1 1 140px !important;
+    width: auto !important;
+    min-width: 110px !important;
+    max-width: none !important;
+}
+
+/* INVOICE REFERENCE, flexible: double growth weight, it carries
+   the longest text ("Microsoft Subscriptions" etc). */
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(12),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(12) {
+    flex: 2 1 180px !important;
+    width: auto !important;
+    min-width: 140px !important;
+    max-width: none !important;
+}
+
+/* Money cells right-aligned with tabular figures so amounts line
+   up digit-for-digit down the column. .rt-td is a flex row (base
+   rule above), so alignment is justify-content, not text-align. */
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(6),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(7),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(8),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(9) {
+    justify-content: flex-end !important;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+/* Matching header alignment. The label lives inside
+   .rt-resizable-header-content (width: 100% flex wrapper, see the
+   header typography rule earlier in this section), so the wrapper
+   is what needs flex-end. */
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-thead.-header .rt-th:nth-child(6) .rt-resizable-header-content,
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-thead.-header .rt-th:nth-child(7) .rt-resizable-header-content,
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-thead.-header .rt-th:nth-child(8) .rt-resizable-header-content,
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-thead.-header .rt-th:nth-child(9) .rt-resizable-header-content {
+    justify-content: flex-end !important;
+    text-align: right !important;
+}
+
+/* Sticky Pay column. Inert while the table fits (the normal case
+   after the resize above); on narrower windows the cell pins to
+   the card's right edge and the other columns scroll under it,
+   so the opaque backing below is required. */
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:last-child,
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:last-child {
+    position: sticky !important;
+    right: 0;
+    z-index: 1;
+}
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tbody .rt-td:last-child {
+    background: var(--portal-surface) !important;
+    transition: background-color var(--ik-dur) var(--ik-ease);
+}
+/* Keep the sticky cell in step with the row hover tint. */
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tbody .rt-tr-group:hover .rt-td:last-child {
+    background: var(--portal-surface-hover) !important;
+}
+/* Header cell: --portal-table-header-bg is translucent in both
+   modes, so composite it over the opaque surface; a bare token
+   here would let scrolling header text show through. */
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-thead.-header .rt-th:last-child {
+    background: linear-gradient(var(--portal-table-header-bg), var(--portal-table-header-bg)), var(--portal-surface) !important;
+}
+
 
 /* ─────────────────────────────────────────────────────────
    11 · Kanban board (react-kanban)

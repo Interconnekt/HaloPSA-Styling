@@ -3,9 +3,48 @@
 <head>
     <meta charset="utf-8">
     <title>$KBTITLE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet" type="text/css">
+    <!--
+        KB Article PDF template, Interconnekt report design system.
+
+        Visual language ported from the interconnekt-report skill
+        (scripts/components.py): ink #141824 panels with radial brand
+        glows, the tri gradient (jade > blue > violet), Bricolage
+        Grotesque display type, Figtree body, Spline Sans Mono
+        kickers and labels, Newsreader italic accents, Figtree pills.
+
+        Renderer notes: HaloPSA's PDF engine is Chromium-class (the
+        footer takes {page} of {total-pages} tokens), so gradients,
+        counters, ::marker and :has() are available. Every modern
+        selector is written to degrade cleanly: if :has() is not
+        supported the empty-section hiding simply does not happen,
+        which matches today's behaviour.
+    -->
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Newsreader:ital,wght@1,500&family=Spline+Sans+Mono:wght@400;600&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet" type="text/css">
     <style type="text/css">
-        /* Fallback @font-face if <link> fails in wkhtmltopdf */
+        /* Fallback @font-face if the <link> fails at render time.
+           Bricolage and Spline Sans Mono are variable fonts: one file
+           carries the whole weight range. */
+        @font-face {
+            font-family: 'Bricolage Grotesque';
+            font-weight: 700 800;
+            src: url('https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9H6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiawA1XphjhQYg.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Spline Sans Mono';
+            font-weight: 400 600;
+            src: url('https://fonts.gstatic.com/s/splinesansmono/v13/R70BjzAei_CDNLfgZxrW6wrZOF2WX5KZmE-Z-lw.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Newsreader';
+            font-style: italic;
+            font-weight: 500;
+            src: url('https://fonts.gstatic.com/s/newsreader/v26/cY9kfjOCX1hbuyalUrK439vogqC9yFZCYg7oRZaLP4obnf7fTXglsMwaT9ZHFjSShVCjzSY.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Figtree';
+            font-weight: 600;
+            src: url('https://fonts.gstatic.com/s/figtree/v9/_Xmz-HUzqDCFdgfMsYiV_F7wfS-Bs_ehR25ZyEA25WTzZO8.woff2') format('woff2');
+        }
         @font-face {
             font-family: 'Figtree';
             font-weight: 400;
@@ -13,453 +52,532 @@
         }
         @font-face {
             font-family: 'Figtree';
-            font-weight: 600;
-            src: url('https://fonts.gstatic.com/s/figtree/v9/_Xmz-HUzqDCFdgfMsYiV_F7wfS-Bs_ehR25ZyEA.woff2') format('woff2');
-        }
-        @font-face {
-            font-family: 'Figtree';
             font-weight: 700;
             src: url('https://fonts.gstatic.com/s/figtree/v9/_Xmz-HUzqDCFdgfMsYiV_F7wfS-Bs_eYR25ZyEA.woff2') format('woff2');
         }
-        @font-face {
-            font-family: 'Figtree';
-            font-weight: 800;
-            src: url('https://fonts.gstatic.com/s/figtree/v9/_Xmz-HUzqDCFdgfMsYiV_F7wfS-Bs_f_R25ZyEA25WTzZO8.woff2') format('woff2');
-        }
-        @font-face {
-            font-family: 'Bricolage Grotesque';
-            font-weight: 400;
-            src: url('https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvRvi-Molsg.woff2') format('woff2');
-        }
-        @font-face {
-            font-family: 'Bricolage Grotesque';
-            font-weight: 600;
-            src: url('https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvcXl-Molsg.woff2') format('woff2');
-        }
-        @font-face {
-            font-family: 'Bricolage Grotesque';
-            font-weight: 700;
-            src: url('https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvfzl-Molsg.woff2') format('woff2');
-        }
-        @font-face {
-            font-family: 'Bricolage Grotesque';
-            font-weight: 800;
-            src: url('https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9H6as8bTXq_nANBjzKo3IeZx8z6up5BeSl9D4dj_x9PpZBMnuECoAsyJBOm_OJ2iCwA1XphjhQYg.woff2') format('woff2');
-        }
 
         /* ── Page setup ──
-           Top/bottom margins larger to clear header/footer.
-           Left/right match Word Narrow (12.7mm). */
+           The air between header and article is set by the spacer in
+           header.html, not here: Halo starts body content where the
+           header's height ends, so this margin is a floor rather
+           than the control. 20mm matches the header's total height
+           (51px band and rule + 22px spacer) so neither fights the
+           other. Bottom clears the ink footer band. Sides match Word
+           Narrow (12.7mm). */
         @page {
             size: A4;
-            margin: 22mm 12.7mm 30mm 12.7mm;
+            margin: 20mm 12.7mm 26mm 12.7mm;
         }
 
-        /* ── Base: !important overrides Confluence inline font styles ── */
+        /* ── Base ──
+           The universal Figtree force (with !important) overrides
+           Confluence inline font styles carried in article HTML.
+           Display, mono and serif elements re-override later: an
+           element selector beats * at equal importance. */
         *, *::before, *::after {
             font-family: Figtree, Arial, sans-serif !important;
             box-sizing: border-box;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
         }
 
         body {
             font-family: Figtree, Arial, sans-serif !important;
-            font-size: 13px;
-            line-height: 1.7;
-            color: #34495e;
+            font-size: 11px;
+            line-height: 1.68;
+            color: #33384a;
             margin: 0;
-            padding: 20px 0 0 0;
+            padding: 8px 0 0 0;
+            counter-reset: kbsec;
         }
 
-        /* ── Headings ── */
-        h1 {
-            font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif !important;
-            font-size: 28px;
+        /* ══ Cover masthead ══
+           The masthead reads light now. The ink is carried by the
+           running header band, so a second dark panel directly under
+           it would stack two heavy blocks on page one and leave the
+           reader nowhere to land. Same brand radial glows as the
+           report cover, dropped to a wash over a near white ground,
+           with the tri gradient rule under the title doing the
+           closing work the dark panel used to do.
+
+           Article provenance (author, created, last edited, next
+           review, article ID) is deliberately absent: it is editorial
+           housekeeping, not information for the reader holding the
+           printout. Halo still carries all of it on the article
+           record, and the running header still stamps the ID on
+           every page. */
+        .hero {
+            background:
+                radial-gradient(88% 130% at 93% 4%, rgba(111, 67, 214, 0.10), transparent 62%),
+                radial-gradient(72% 115% at 3% 100%, rgba(2, 132, 199, 0.10), transparent 60%),
+                #F7F9FD;
+            border: 1px solid #E4E7F0;
+            border-radius: 18px;
+            padding: 26px 30px 24px 30px;
+            page-break-inside: avoid;
+        }
+
+        .hero .eyebrow {
+            display: inline-block;
+            font-family: 'Spline Sans Mono', ui-monospace, monospace !important;
+            font-size: 8.5px;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #3355D8;
+            background: #ffffff;
+            border: 1px solid #C9D6F0;
+            border-radius: 999px;
+            padding: 6px 14px;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 {
+            font-family: 'Bricolage Grotesque', Figtree, sans-serif !important;
+            font-size: 30px;
             font-weight: 800;
-            color: #30355b;
-            margin: 0 0 6px 0;
+            letter-spacing: -0.03em;
+            line-height: 1.08;
+            color: #141824;
+            margin: 0;
+        }
+
+        /* Tri gradient rule closing the masthead: the same mark that
+           sits under every authored h2 further down the article, so
+           page one opens in the article's own language. */
+        .hero .hero-rule {
+            width: 62px;
+            height: 4px;
+            border-radius: 2px;
+            margin-top: 18px;
+            background: linear-gradient(115deg, #0F7CBE, #3F51CE 52%, #7440D2);
+        }
+
+        /* Caption line under the hero: tags left, engagement right. */
+        .hero-caption {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0 0 0;
+        }
+        .hero-caption td {
+            font-family: 'Spline Sans Mono', ui-monospace, monospace !important;
+            font-size: 7.5px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #8E93A4;
+            padding: 0 2px;
+        }
+        .hero-caption td span {
+            font-family: 'Spline Sans Mono', ui-monospace, monospace !important;
+        }
+        .hero-caption .hc-right { text-align: right; }
+        .hero-caption td:has(.tl-val:empty) { visibility: hidden; }
+
+        /* ══ Template sections (Description / Resolution / Memo) ══
+           Report opener: violet display number beside a display
+           title. Numbering is a CSS counter so a hidden empty section
+           renumbers the ones that remain. */
+        .kb-section {
+            counter-increment: kbsec;
+            margin-top: 26px;
+        }
+        .kb-section:has(> .kb-body:empty) { display: none; }
+
+        .kb-open {
+            margin: 0 0 10px 0;
+        }
+        .kb-open .snum {
+            font-family: 'Bricolage Grotesque', Figtree, sans-serif !important;
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: #7B47DE;
+            padding-right: 11px;
+        }
+        .kb-open .snum::before {
+            content: counter(kbsec, decimal-leading-zero);
+        }
+        .kb-open .kb-h {
+            font-family: 'Bricolage Grotesque', Figtree, sans-serif !important;
+            font-size: 21px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: #141824;
+        }
+
+        .kb-body {
+            font-size: 11px;
+            line-height: 1.68;
+        }
+
+        /* ══ Article content ══ */
+
+        /* Headings authored inside the article. h2 carries a short
+           tri-gradient rule under it, the editorial section mark. */
+        .kb-body h1,
+        .kb-body h2 {
+            font-family: 'Bricolage Grotesque', Figtree, sans-serif !important;
+            font-size: 18px;
+            font-weight: 800;
             letter-spacing: -0.02em;
             line-height: 1.2;
+            color: #141824;
+            margin: 26px 0 12px 0;
+            padding-bottom: 10px;
+            position: relative;
+            page-break-after: avoid;
+        }
+        .kb-body h1::after,
+        .kb-body h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 44px;
+            height: 3px;
+            border-radius: 2px;
+            background: linear-gradient(115deg, #0F7CBE, #3F51CE 52%, #7440D2);
         }
 
-        h2 {
-            font-family: Figtree, Arial, sans-serif !important;
-            font-size: 18px;
+        .kb-body h3 {
+            font-family: 'Bricolage Grotesque', Figtree, sans-serif !important;
+            font-size: 13.5px;
             font-weight: 700;
-            color: #30355b;
-            margin: 30px 0 8px 0;
-            padding-bottom: 6px;
-            border-bottom: 2px solid #3355D8;
             letter-spacing: -0.01em;
+            color: #141824;
+            margin: 18px 0 6px 0;
+            page-break-after: avoid;
         }
 
-        h3 {
-            font-family: Figtree, Arial, sans-serif !important;
-            font-size: 15px;
-            font-weight: 600;
-            color: #30355b;
-            margin: 24px 0 6px 0;
+        .kb-body h4 {
+            font-family: 'Bricolage Grotesque', Figtree, sans-serif !important;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #141824;
+            margin: 14px 0 4px 0;
+            page-break-after: avoid;
         }
 
-        h4 {
-            font-family: Figtree, Arial, sans-serif !important;
-            font-size: 13px;
-            font-weight: 600;
-            color: #34495e;
-            margin: 20px 0 4px 0;
-        }
-
-        /* ── Paragraphs & lists ── */
         p {
-            font-family: Figtree, Arial, sans-serif !important;
-            margin: 8px 0;
+            margin: 7px 0;
         }
 
-        li {
-            font-family: Figtree, Arial, sans-serif !important;
-            margin-bottom: 4px;
+        strong, b { color: #141824; }
+
+        /* Inline emphasis and image captions take the Newsreader
+           italic accent voice from the report system. */
+        em, i {
+            font-family: 'Newsreader', Georgia, serif !important;
+            font-style: italic;
+            font-weight: 500;
+            font-size: 1.09em;
         }
 
+        /* Lists: the number or bullet sits flush with the left
+           margin in body text colour, and the text block indents
+           clear of it, wrapped lines included. Built with counters
+           so the marker column is fully controlled. */
         ul, ol {
-            padding-left: 24px;
-            margin: 8px 0;
+            list-style: none;
+            padding-left: 0;
+            margin: 7px 0;
+        }
+        ol { counter-reset: kbitem; }
+        li {
+            position: relative;
+            padding-left: 26px;
+            margin-bottom: 5px;
+        }
+        ol > li { counter-increment: kbitem; }
+        ol > li::before {
+            content: counter(kbitem) ".";
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-weight: 600;
+            color: #33384a;
+        }
+        ul > li::before {
+            content: '\2022';
+            position: absolute;
+            left: 2px;
+            top: 0;
+            font-weight: 700;
+            color: #33384a;
         }
 
-        /* ── Links ── */
         a {
             color: #3355D8;
             text-decoration: none;
-            font-family: Figtree, Arial, sans-serif !important;
         }
 
-        /* ── Divider ── */
         hr {
             border: none;
-            border-top: 1px solid #e0e0e0;
+            border-top: 1px solid #E4E7F0;
             margin: 20px 0;
         }
 
-        /* ── Meta table (front page, Style A shaded label) ── */
-        .meta-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-            margin-top: 12px;
-            font-family: Figtree, Arial, sans-serif !important;
-            border-top: 1px solid #e0e0e0;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .meta-table th {
-            background-color: #F4F4F5;
-            color: #30355b;
-            font-weight: 700;
-            text-align: left;
-            padding: 8px 14px;
-            border-bottom: 1px solid #e0e0e0;
-            font-family: Figtree, Arial, sans-serif !important;
-        }
-
-        .meta-table td {
-            padding: 8px 14px;
-            border-bottom: 1px solid #e0e0e0;
-            vertical-align: top;
-            color: #34495e;
-            font-family: Figtree, Arial, sans-serif !important;
-        }
-
-        /* ── Stats bar ── */
-        .stats-bar {
-            font-size: 10px;
-            color: #34495e;
-            margin: 10px 0 0 0;
-            font-family: Figtree, Arial, sans-serif !important;
-        }
-
-        .stats-bar strong {
-            color: #30355b;
-        }
-
-        .stats-bar span {
-            margin-right: 16px;
-        }
-
-        /* ── Tags ── */
-        .tags {
-            font-size: 10px;
-            color: #34495e;
-            margin: 6px 0 0 0;
-            font-family: Figtree, Arial, sans-serif !important;
-        }
-
-        /* ── Content sections ── */
-        .section {
-            page-break-inside: avoid;
-            margin-top: 10px;
-        }
-
-        .section-header {
-            font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif !important;
-            font-size: 16px;
-            font-weight: 700;
-            color: #30355b;
-            margin: 24px 0 12px 0;
-            padding: 10px 16px;
-            background-color: #E4EAFC;
-            border-radius: 6px;
-        }
-
-        .section-body {
-            font-size: 13px;
-            line-height: 1.7;
-            font-family: Figtree, Arial, sans-serif !important;
-        }
-
-        /* Deep override: catches Confluence inline style="font-family:..." on any element */
-        .section-body *,
-        .section-body span,
-        .section-body div,
-        .section-body p,
-        .section-body li,
-        .section-body td,
-        .section-body th,
-        .section-body a,
-        .section-body strong,
-        .section-body em,
-        .section-body b,
-        .section-body i {
-            font-family: Figtree, Arial, sans-serif !important;
-        }
-
-        /* ── Tables (Confluence content) ── */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 12px 0;
-            font-size: 13px;
-            font-family: Figtree, Arial, sans-serif !important;
-        }
-
-        th {
-            background-color: #F4F4F5;
-            color: #30355b;
-            font-weight: 700;
-            text-align: left;
-            padding: 8px 14px;
-            border-bottom: 1px solid #e0e0e0;
-            font-family: Figtree, Arial, sans-serif !important;
-        }
-
-        td {
-            padding: 8px 14px;
-            border-bottom: 1px solid #e0e0e0;
-            vertical-align: top;
-            color: #34495e;
-            font-family: Figtree, Arial, sans-serif !important;
-        }
-
-        tr {
-            page-break-inside: avoid;
-        }
-
-        tbody tr:nth-child(even) {
-            background-color: #F4F4F5;
-        }
-
-        /* ── Confluence panels ── */
-        .confluence-information-macro {
-            border-radius: 8px;
-            overflow: hidden;
-            margin: 12px 0;
-            page-break-inside: avoid;
-        }
-
-        .confluence-information-macro-body {
-            font-family: Figtree, Arial, sans-serif !important;
-        }
-
-        .confluence-information-macro-information {
-            border-left: 4px solid #2684ff;
-        }
-
-        .confluence-information-macro-information .confluence-information-macro-body {
-            background: #deebff;
-            padding: 10px 16px;
-            color: #34495e;
-        }
-
-        .confluence-information-macro-note {
-            border-left: 4px solid #6554c0;
-        }
-
-        .confluence-information-macro-note .confluence-information-macro-body {
-            background: #eae6ff;
-            padding: 10px 16px;
-            color: #34495e;
-        }
-
-        .confluence-information-macro-warning,
-        .confluence-information-macro-error {
-            border-left: 4px solid #de350b;
-        }
-
-        .confluence-information-macro-warning .confluence-information-macro-body,
-        .confluence-information-macro-error .confluence-information-macro-body {
-            background: #ffebe6;
-            padding: 10px 16px;
-            color: #34495e;
-        }
-
-        .confluence-information-macro-tip,
-        .confluence-information-macro-success {
-            border-left: 4px solid #00875a;
-        }
-
-        .confluence-information-macro-tip .confluence-information-macro-body,
-        .confluence-information-macro-success .confluence-information-macro-body {
-            background: #e3fcef;
-            padding: 10px 16px;
-            color: #34495e;
-        }
-
-        /* Generic panel */
-        .panel {
-            border-radius: 8px;
-            overflow: hidden;
-            margin: 12px 0;
-            page-break-inside: avoid;
-        }
-
-        .panelContent {
-            padding: 10px 16px;
-            font-family: Figtree, Arial, sans-serif !important;
-        }
-
-        /* ── Status macros ── */
-        .status-macro {
-            display: inline-block;
-            padding: 4px 14px;
-            font-weight: 700;
-            font-size: 11px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-family: Figtree, Arial, sans-serif !important;
-        }
-
-        .aui-lozenge-complete  { background: #deebff; color: #0747a6; }
-        .aui-lozenge-success   { background: #e3fcef; color: #006644; }
-        .aui-lozenge-current   { background: #fff3e0; color: #e65100; }
-        .aui-lozenge-error     { background: #ffebe6; color: #bf2600; }
-        .aui-lozenge-progress  { background: #eae6ff; color: #403294; }
-
-        /* ── Code ── */
+        /* ── Inline code chips ── */
         code {
-            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-            font-size: 0.9em;
-            background: #F4F4F5;
-            color: #d6336c;
-            padding: 1px 5px;
-            border-radius: 3px;
+            font-family: 'Spline Sans Mono', Consolas, monospace !important;
+            font-size: 0.92em;
+            background: #F4F6FB;
+            border: 1px solid #E4E7F0;
+            color: #7B47DE;
+            padding: 1px 6px;
+            border-radius: 5px;
+            white-space: nowrap;
         }
 
+        /* ── Code blocks: ink panel ── */
         pre {
-            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-            font-size: 10px;
-            line-height: 1.5;
-            background: #1e1e2e;
-            color: #cdd6f4;
-            border: 1px solid #313244;
-            border-radius: 6px;
-            padding: 12px 16px;
+            font-family: 'Spline Sans Mono', Consolas, monospace !important;
+            font-size: 9.5px;
+            line-height: 1.55;
+            background: #141824;
+            color: #cdd3e6;
+            border-radius: 12px;
+            padding: 14px 16px;
             margin: 12px 0;
             white-space: pre-wrap;
             word-wrap: break-word;
             page-break-inside: avoid;
         }
-
         pre code {
+            font-family: 'Spline Sans Mono', Consolas, monospace !important;
             background: transparent;
+            border: none;
             color: inherit;
             padding: 0;
             border-radius: 0;
             font-size: inherit;
-            font-family: inherit;
+            white-space: pre-wrap;
         }
 
-        /* ── Blockquotes ── */
+        /* ── Blockquote: the report pull-quote ── */
         blockquote {
-            border-left: 4px solid #3355D8;
-            background: #F4F4F5;
-            margin: 12px 0;
-            padding: 10px 16px;
-            border-radius: 0 6px 6px 0;
-            color: #34495e;
+            border-left: 3px solid transparent;
+            border-image: linear-gradient(180deg, #0F7CBE, #3F51CE 52%, #7440D2) 1;
+            margin: 14px 0;
+            padding: 4px 0 4px 18px;
+            page-break-inside: avoid;
+        }
+        blockquote, blockquote p {
+            font-family: 'Newsreader', Georgia, serif !important;
             font-style: italic;
-            font-family: Figtree, Arial, sans-serif !important;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 1.45;
+            color: #141824;
+        }
+        blockquote p { margin: 0; }
+
+        /* ── Tables: light blue header, mono labels, banded rows ──
+           Both halves of the header contract are forced. Article HTML
+           routinely carries a cell highlight colour inline on header
+           cells, and an inline background beats a plain author rule,
+           so forcing only the text colour gave a dark fill with dark
+           text on it: the solid black bar seen in earlier renders. An
+           author !important outranks a non-important inline style, so
+           the pair below holds the fill light and the ink dark
+           whatever the article brings with it. thead td is matched
+           too because Confluence and Halo both emit header rows as
+           td inside thead. */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border: 1px solid #E4E7F0;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 12px 0;
+            font-size: 10px;
+        }
+        /* Layout tables of the template itself opt back out. */
+        .hero-caption {
+            border: none;
+            border-radius: 0;
+            overflow: visible;
         }
 
-        blockquote p {
-            margin: 0;
-            font-family: Figtree, Arial, sans-serif !important;
+        th,
+        thead td {
+            background: #E7EEFA !important;
+            font-family: 'Spline Sans Mono', ui-monospace, monospace !important;
+            font-size: 8.5px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-align: left;
+            padding: 10px 13px;
+            border-top: none;
+            border-bottom: 1px solid #C9D6F0;
         }
+        th, th *, thead td, thead td * { color: #141824 !important; }
+        /* A nested span must not reintroduce a fill behind the label,
+           but a status lozenge in a header cell keeps its pill. */
+        th *:not(.status-macro),
+        thead td *:not(.status-macro) { background: transparent !important; }
+        /* Repeat the header row when a table runs over a page break. */
+        thead { display: table-header-group; }
+
+        td {
+            font-size: 10px;
+            line-height: 1.5;
+            color: #33384a;
+            padding: 10px 13px;
+            border-top: 1px solid #E4E7F0;
+            vertical-align: top;
+        }
+        tbody tr:first-child td { border-top: none; }
+        thead + tbody tr:first-child td { border-top: none; }
+        tr + tr td { border-top: 1px solid #E4E7F0; }
+        tbody tr:nth-child(even) td { background: #F7F9FD; }
+        td strong, td b { color: #141824; }
+        tr { page-break-inside: avoid; }
+
+        /* ── Confluence panels as report callouts ──
+           Tinted fill, tinted hairline border, 14px radius, and an
+           auto mono kicker stamped per type via ::before. */
+        .confluence-information-macro {
+            border-radius: 14px;
+            padding: 13px 17px 11px 17px;
+            margin: 12px 0;
+            page-break-inside: avoid;
+        }
+        .confluence-information-macro::before {
+            display: block;
+            font-family: 'Spline Sans Mono', ui-monospace, monospace !important;
+            font-size: 8px;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .confluence-information-macro .confluence-information-macro-body,
+        .confluence-information-macro .confluence-information-macro-body p {
+            background: transparent;
+            padding: 0;
+            font-size: 10.5px;
+            line-height: 1.6;
+            color: #33384a;
+        }
+        .confluence-information-macro .confluence-information-macro-body p {
+            margin: 4px 0;
+        }
+
+        .confluence-information-macro-information {
+            background: #eef2fd;
+            border: 1px solid #c9d4f4;
+        }
+        .confluence-information-macro-information::before {
+            content: 'Info';
+            color: #3355D8;
+        }
+
+        .confluence-information-macro-note {
+            background: #f1edfb;
+            border: 1px solid #d9cdf2;
+        }
+        .confluence-information-macro-note::before {
+            content: 'Note';
+            color: #7B47DE;
+        }
+
+        .confluence-information-macro-tip,
+        .confluence-information-macro-success {
+            background: #e9f6ef;
+            border: 1px solid #c4e5d2;
+        }
+        .confluence-information-macro-tip::before,
+        .confluence-information-macro-success::before {
+            content: 'Tip';
+            color: #15803D;
+        }
+
+        .confluence-information-macro-warning,
+        .confluence-information-macro-error {
+            background: #fbeeec;
+            border: 1px solid #f0cfc9;
+        }
+        .confluence-information-macro-warning::before,
+        .confluence-information-macro-error::before {
+            content: 'Important';
+            color: #C0392B;
+        }
+
+        /* Generic panel: keep the inline Confluence fill, add the
+           system geometry. */
+        .panel {
+            border-radius: 14px;
+            overflow: hidden;
+            margin: 12px 0;
+            page-break-inside: avoid;
+        }
+        .panelContent {
+            padding: 12px 17px;
+            font-size: 10.5px;
+        }
+
+        /* ── Status lozenges as Figtree pills ── */
+        .status-macro {
+            display: inline-block;
+            font-family: 'Figtree', sans-serif !important;
+            font-size: 7.5px;
+            font-weight: 600;
+            padding: 4px 11px;
+            border-radius: 999px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .aui-lozenge-success   { background: #dcfce7; color: #166534; }
+        .aui-lozenge-complete  { background: #dbeafe; color: #1d4ed8; }
+        .aui-lozenge-current   { background: #fef3c7; color: #92620a; }
+        .aui-lozenge-error     { background: #fee2e2; color: #b42318; }
+        .aui-lozenge-progress  { background: #ede9fe; color: #5b21b6; }
 
         /* ── Images ── */
         img {
             max-width: 100%;
             height: auto;
-            border-radius: 6px;
-            margin: 10px 0;
+            border-radius: 10px;
+            border: 1px solid #E4E7F0;
+            margin: 10px 0 4px 0;
         }
     </style>
 </head>
 <body>
 
-    <!-- ── Title Block ── -->
-    <div>
+    <!-- ── Cover masthead ── -->
+    <div class="hero">
+        <div class="eyebrow">Knowledge Base &nbsp;&bull;&nbsp; Article $KBID</div>
         <h1>$KBTITLE</h1>
-
-        <table class="meta-table">
-            <tr>
-                <th>Created</th>
-                <td>$KBCREATEDBY &bull; $KBDATECREATED</td>
-                <th>Last Edited</th>
-                <td>$KBEDITEDBY &bull; $KBDATEEDITED</td>
-            </tr>
-            <tr>
-                <th>Next Review</th>
-                <td>$KBNEXTREVIEWDATE</td>
-                <th>Article ID</th>
-                <td>$KBID</td>
-            </tr>
-        </table>
-
-        <div class="stats-bar">
-            <span><strong>Views:</strong> $KBVIEWCOUNT</span>
-            <span><strong>Helpful:</strong> $KBUSEFULCOUNT</span>
-            <span><strong>Unhelpful:</strong> $KBNOTUSEFULCOUNT</span>
-        </div>
-
-        <div class="tags"><strong>Tags:</strong> $KBTAGS</div>
+        <div class="hero-rule"></div>
     </div>
-
-    <hr>
+    <table class="hero-caption">
+        <tr>
+            <td>Tags &nbsp;&middot;&nbsp; <span class="tl-val">$KBTAGS</span></td>
+            <td class="hc-right">Views $KBVIEWCOUNT &nbsp;&middot;&nbsp; Helpful $KBUSEFULCOUNT</td>
+        </tr>
+    </table>
 
     <!-- ── Description ── -->
-    <div class="section">
-        <div class="section-header">Description</div>
-        <div class="section-body">$KBDESCRIPTION</div>
+    <div class="kb-section">
+        <div class="kb-open"><span class="snum"></span><span class="kb-h">Description</span></div>
+        <div class="kb-body">$KBDESCRIPTION</div>
     </div>
 
     <!-- ── Resolution ── -->
-    <div class="section">
-        <div class="section-header">Resolution</div>
-        <div class="section-body">$KBRESOLUTION</div>
+    <div class="kb-section">
+        <div class="kb-open"><span class="snum"></span><span class="kb-h">Resolution</span></div>
+        <div class="kb-body">$KBRESOLUTION</div>
     </div>
 
     <!-- ── Internal Memo ── -->
-    <div class="section">
-        <div class="section-header">Internal Memo</div>
-        <div class="section-body">$KBINTERNALMEMO</div>
+    <div class="kb-section">
+        <div class="kb-open"><span class="snum"></span><span class="kb-h">Internal Memo</span></div>
+        <div class="kb-body">$KBINTERNALMEMO</div>
     </div>
 
 </body>

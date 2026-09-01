@@ -1,0 +1,740 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Mockup: Accessing the Aryza-Hosted Azure Virtual Desktop</title>
+    <!--
+        KB Article PDF template, Interconnekt report design system.
+
+        Visual language ported from the interconnekt-report skill
+        (scripts/components.py): ink #141824 panels with radial brand
+        glows, the tri gradient (jade > blue > violet), Bricolage
+        Grotesque display type, Figtree body, Spline Sans Mono
+        kickers and labels, Newsreader italic accents, Figtree pills.
+
+        Renderer notes: HaloPSA's PDF engine is Chromium-class (the
+        footer takes {page} of {total-pages} tokens), so gradients,
+        counters, ::marker and :has() are available. Every modern
+        selector is written to degrade cleanly: if :has() is not
+        supported the empty-section hiding simply does not happen,
+        which matches today's behaviour.
+    -->
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Newsreader:ital,wght@1,500&family=Spline+Sans+Mono:wght@400;600&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        /* Fallback @font-face if the <link> fails at render time.
+           Bricolage and Spline Sans Mono are variable fonts: one file
+           carries the whole weight range. */
+        @font-face {
+            font-family: 'Bricolage Grotesque';
+            font-weight: 700 800;
+            src: url('https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9H6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiawA1XphjhQYg.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Spline Sans Mono';
+            font-weight: 400 600;
+            src: url('https://fonts.gstatic.com/s/splinesansmono/v13/R70BjzAei_CDNLfgZxrW6wrZOF2WX5KZmE-Z-lw.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Newsreader';
+            font-style: italic;
+            font-weight: 500;
+            src: url('https://fonts.gstatic.com/s/newsreader/v26/cY9kfjOCX1hbuyalUrK439vogqC9yFZCYg7oRZaLP4obnf7fTXglsMwaT9ZHFjSShVCjzSY.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Figtree';
+            font-weight: 600;
+            src: url('https://fonts.gstatic.com/s/figtree/v9/_Xmz-HUzqDCFdgfMsYiV_F7wfS-Bs_ehR25ZyEA25WTzZO8.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Figtree';
+            font-weight: 400;
+            src: url('https://fonts.gstatic.com/s/figtree/v9/_Xmz-HUzqDCFdgfMsYiV_F7wfS-Bs_d_QG5ZyEA.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Figtree';
+            font-weight: 700;
+            src: url('https://fonts.gstatic.com/s/figtree/v9/_Xmz-HUzqDCFdgfMsYiV_F7wfS-Bs_eYR25ZyEA.woff2') format('woff2');
+        }
+
+        /* ── Page setup ──
+           Top clears the 47px ink header band and its gradient rule
+           (12.4mm) with a hairline of air above the content; bottom
+           clears the ink footer band, whose box is unchanged so it
+           still lands flush with the page edge. Sides match Word
+           Narrow (12.7mm). */
+        @page {
+            size: A4;
+            margin: 15mm 12.7mm 26mm 12.7mm;
+        }
+
+        /* ── Base ──
+           The universal Figtree force (with !important) overrides
+           Confluence inline font styles carried in article HTML.
+           Display, mono and serif elements re-override later: an
+           element selector beats * at equal importance. */
+        *, *::before, *::after {
+            font-family: Figtree, Arial, sans-serif !important;
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        body {
+            font-family: Figtree, Arial, sans-serif !important;
+            font-size: 11px;
+            line-height: 1.68;
+            color: #33384a;
+            margin: 0;
+            padding: 8px 0 0 0;
+            counter-reset: kbsec;
+        }
+
+        /* ══ Cover masthead ══
+           The masthead reads light now. The ink is carried by the
+           running header band, so a second dark panel directly under
+           it would stack two heavy blocks on page one and leave the
+           reader nowhere to land. Same brand radial glows as the
+           report cover, dropped to a wash over a near white ground,
+           with the tri gradient rule under the title doing the
+           closing work the dark panel used to do.
+
+           Article provenance (author, created, last edited, next
+           review, article ID) is deliberately absent: it is editorial
+           housekeeping, not information for the reader holding the
+           printout. Halo still carries all of it on the article
+           record, and the running header still stamps the ID on
+           every page. */
+        .hero {
+            background:
+                radial-gradient(88% 130% at 93% 4%, rgba(111, 67, 214, 0.10), transparent 62%),
+                radial-gradient(72% 115% at 3% 100%, rgba(2, 132, 199, 0.10), transparent 60%),
+                #F7F9FD;
+            border: 1px solid #E4E7F0;
+            border-radius: 18px;
+            padding: 26px 30px 24px 30px;
+            page-break-inside: avoid;
+        }
+
+        .hero .eyebrow {
+            display: inline-block;
+            font-family: 'Spline Sans Mono', ui-monospace, monospace !important;
+            font-size: 8.5px;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #3355D8;
+            background: #ffffff;
+            border: 1px solid #C9D6F0;
+            border-radius: 999px;
+            padding: 6px 14px;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 {
+            font-family: 'Bricolage Grotesque', Figtree, sans-serif !important;
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.08;
+            color: #141824;
+            margin: 0;
+        }
+
+        /* Tri gradient rule closing the masthead: the same mark that
+           sits under every authored h2 further down the article, so
+           page one opens in the article's own language. */
+        .hero .hero-rule {
+            width: 62px;
+            height: 4px;
+            border-radius: 2px;
+            margin-top: 18px;
+            background: linear-gradient(115deg, #0F7CBE, #3F51CE 52%, #7440D2);
+        }
+
+        /* Caption line under the hero: tags left, engagement right. */
+        .hero-caption {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0 0 0;
+        }
+        .hero-caption td {
+            font-family: 'Spline Sans Mono', ui-monospace, monospace !important;
+            font-size: 7.5px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #8E93A4;
+            padding: 0 2px;
+        }
+        .hero-caption td span {
+            font-family: 'Spline Sans Mono', ui-monospace, monospace !important;
+        }
+        .hero-caption .hc-right { text-align: right; }
+        .hero-caption td:has(.tl-val:empty) { visibility: hidden; }
+
+        /* ══ Template sections (Description / Resolution / Memo) ══
+           Report opener: violet display number beside a display
+           title. Numbering is a CSS counter so a hidden empty section
+           renumbers the ones that remain. */
+        .kb-section {
+            counter-increment: kbsec;
+            margin-top: 26px;
+        }
+        .kb-section:has(> .kb-body:empty) { display: none; }
+
+        .kb-open {
+            margin: 0 0 10px 0;
+        }
+        .kb-open .snum {
+            font-family: 'Bricolage Grotesque', Figtree, sans-serif !important;
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: #7B47DE;
+            padding-right: 11px;
+        }
+        .kb-open .snum::before {
+            content: counter(kbsec, decimal-leading-zero);
+        }
+        .kb-open .kb-h {
+            font-family: 'Bricolage Grotesque', Figtree, sans-serif !important;
+            font-size: 21px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: #141824;
+        }
+
+        .kb-body {
+            font-size: 11px;
+            line-height: 1.68;
+        }
+
+        /* ══ Article content ══ */
+
+        /* Headings authored inside the article. h2 carries a short
+           tri-gradient rule under it, the editorial section mark. */
+        .kb-body h1,
+        .kb-body h2 {
+            font-family: 'Bricolage Grotesque', Figtree, sans-serif !important;
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            color: #141824;
+            margin: 26px 0 12px 0;
+            padding-bottom: 10px;
+            position: relative;
+            page-break-after: avoid;
+        }
+        .kb-body h1::after,
+        .kb-body h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 44px;
+            height: 3px;
+            border-radius: 2px;
+            background: linear-gradient(115deg, #0F7CBE, #3F51CE 52%, #7440D2);
+        }
+
+        .kb-body h3 {
+            font-family: 'Bricolage Grotesque', Figtree, sans-serif !important;
+            font-size: 13.5px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            color: #141824;
+            margin: 18px 0 6px 0;
+            page-break-after: avoid;
+        }
+
+        .kb-body h4 {
+            font-family: 'Bricolage Grotesque', Figtree, sans-serif !important;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #141824;
+            margin: 14px 0 4px 0;
+            page-break-after: avoid;
+        }
+
+        p {
+            margin: 7px 0;
+        }
+
+        strong, b { color: #141824; }
+
+        /* Inline emphasis and image captions take the Newsreader
+           italic accent voice from the report system. */
+        em, i {
+            font-family: 'Newsreader', Georgia, serif !important;
+            font-style: italic;
+            font-weight: 500;
+            font-size: 1.09em;
+        }
+
+        /* Lists: the number or bullet sits flush with the left
+           margin in body text colour, and the text block indents
+           clear of it, wrapped lines included. Built with counters
+           so the marker column is fully controlled. */
+        ul, ol {
+            list-style: none;
+            padding-left: 0;
+            margin: 7px 0;
+        }
+        ol { counter-reset: kbitem; }
+        li {
+            position: relative;
+            padding-left: 26px;
+            margin-bottom: 5px;
+        }
+        ol > li { counter-increment: kbitem; }
+        ol > li::before {
+            content: counter(kbitem) ".";
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-weight: 600;
+            color: #33384a;
+        }
+        ul > li::before {
+            content: '\2022';
+            position: absolute;
+            left: 2px;
+            top: 0;
+            font-weight: 700;
+            color: #33384a;
+        }
+
+        a {
+            color: #3355D8;
+            text-decoration: none;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #E4E7F0;
+            margin: 20px 0;
+        }
+
+        /* ── Inline code chips ── */
+        code {
+            font-family: 'Spline Sans Mono', Consolas, monospace !important;
+            font-size: 0.92em;
+            background: #F4F6FB;
+            border: 1px solid #E4E7F0;
+            color: #7B47DE;
+            padding: 1px 6px;
+            border-radius: 5px;
+            white-space: nowrap;
+        }
+
+        /* ── Code blocks: ink panel ── */
+        pre {
+            font-family: 'Spline Sans Mono', Consolas, monospace !important;
+            font-size: 9.5px;
+            line-height: 1.55;
+            background: #141824;
+            color: #cdd3e6;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin: 12px 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            page-break-inside: avoid;
+        }
+        pre code {
+            font-family: 'Spline Sans Mono', Consolas, monospace !important;
+            background: transparent;
+            border: none;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+            font-size: inherit;
+            white-space: pre-wrap;
+        }
+
+        /* ── Blockquote: the report pull-quote ── */
+        blockquote {
+            border-left: 3px solid transparent;
+            border-image: linear-gradient(180deg, #0F7CBE, #3F51CE 52%, #7440D2) 1;
+            margin: 14px 0;
+            padding: 4px 0 4px 18px;
+            page-break-inside: avoid;
+        }
+        blockquote, blockquote p {
+            font-family: 'Newsreader', Georgia, serif !important;
+            font-style: italic;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 1.45;
+            color: #141824;
+        }
+        blockquote p { margin: 0; }
+
+        /* ── Tables: light blue header, mono labels, banded rows ──
+           Both halves of the header contract are forced. Article HTML
+           routinely carries a cell highlight colour inline on header
+           cells, and an inline background beats a plain author rule,
+           so forcing only the text colour gave a dark fill with dark
+           text on it: the solid black bar seen in earlier renders. An
+           author !important outranks a non-important inline style, so
+           the pair below holds the fill light and the ink dark
+           whatever the article brings with it. thead td is matched
+           too because Confluence and Halo both emit header rows as
+           td inside thead. */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border: 1px solid #E4E7F0;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 12px 0;
+            font-size: 10px;
+        }
+        /* Layout tables of the template itself opt back out. */
+        .hero-caption {
+            border: none;
+            border-radius: 0;
+            overflow: visible;
+        }
+
+        th,
+        thead td {
+            background: #E7EEFA !important;
+            font-family: 'Spline Sans Mono', ui-monospace, monospace !important;
+            font-size: 8.5px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-align: left;
+            padding: 10px 13px;
+            border-top: none;
+            border-bottom: 1px solid #C9D6F0;
+        }
+        th, th *, thead td, thead td * { color: #141824 !important; }
+        /* A nested span must not reintroduce a fill behind the label,
+           but a status lozenge in a header cell keeps its pill. */
+        th *:not(.status-macro),
+        thead td *:not(.status-macro) { background: transparent !important; }
+        /* Repeat the header row when a table runs over a page break. */
+        thead { display: table-header-group; }
+
+        td {
+            font-size: 10px;
+            line-height: 1.5;
+            color: #33384a;
+            padding: 10px 13px;
+            border-top: 1px solid #E4E7F0;
+            vertical-align: top;
+        }
+        tbody tr:first-child td { border-top: none; }
+        thead + tbody tr:first-child td { border-top: none; }
+        tr + tr td { border-top: 1px solid #E4E7F0; }
+        tbody tr:nth-child(even) td { background: #F7F9FD; }
+        td strong, td b { color: #141824; }
+        tr { page-break-inside: avoid; }
+
+        /* ── Confluence panels as report callouts ──
+           Tinted fill, tinted hairline border, 14px radius, and an
+           auto mono kicker stamped per type via ::before. */
+        .confluence-information-macro {
+            border-radius: 14px;
+            padding: 13px 17px 11px 17px;
+            margin: 12px 0;
+            page-break-inside: avoid;
+        }
+        .confluence-information-macro::before {
+            display: block;
+            font-family: 'Spline Sans Mono', ui-monospace, monospace !important;
+            font-size: 8px;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .confluence-information-macro .confluence-information-macro-body,
+        .confluence-information-macro .confluence-information-macro-body p {
+            background: transparent;
+            padding: 0;
+            font-size: 10.5px;
+            line-height: 1.6;
+            color: #33384a;
+        }
+        .confluence-information-macro .confluence-information-macro-body p {
+            margin: 4px 0;
+        }
+
+        .confluence-information-macro-information {
+            background: #eef2fd;
+            border: 1px solid #c9d4f4;
+        }
+        .confluence-information-macro-information::before {
+            content: 'Info';
+            color: #3355D8;
+        }
+
+        .confluence-information-macro-note {
+            background: #f1edfb;
+            border: 1px solid #d9cdf2;
+        }
+        .confluence-information-macro-note::before {
+            content: 'Note';
+            color: #7B47DE;
+        }
+
+        .confluence-information-macro-tip,
+        .confluence-information-macro-success {
+            background: #e9f6ef;
+            border: 1px solid #c4e5d2;
+        }
+        .confluence-information-macro-tip::before,
+        .confluence-information-macro-success::before {
+            content: 'Tip';
+            color: #15803D;
+        }
+
+        .confluence-information-macro-warning,
+        .confluence-information-macro-error {
+            background: #fbeeec;
+            border: 1px solid #f0cfc9;
+        }
+        .confluence-information-macro-warning::before,
+        .confluence-information-macro-error::before {
+            content: 'Important';
+            color: #C0392B;
+        }
+
+        /* Generic panel: keep the inline Confluence fill, add the
+           system geometry. */
+        .panel {
+            border-radius: 14px;
+            overflow: hidden;
+            margin: 12px 0;
+            page-break-inside: avoid;
+        }
+        .panelContent {
+            padding: 12px 17px;
+            font-size: 10.5px;
+        }
+
+        /* ── Status lozenges as Figtree pills ── */
+        .status-macro {
+            display: inline-block;
+            font-family: 'Figtree', sans-serif !important;
+            font-size: 7.5px;
+            font-weight: 600;
+            padding: 4px 11px;
+            border-radius: 999px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .aui-lozenge-success   { background: #dcfce7; color: #166534; }
+        .aui-lozenge-complete  { background: #dbeafe; color: #1d4ed8; }
+        .aui-lozenge-current   { background: #fef3c7; color: #92620a; }
+        .aui-lozenge-error     { background: #fee2e2; color: #b42318; }
+        .aui-lozenge-progress  { background: #ede9fe; color: #5b21b6; }
+
+        /* ── Images ── */
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            border: 1px solid #E4E7F0;
+            margin: 10px 0 4px 0;
+        }
+    </style>
+</head>
+<body>
+    <style>
+        /* Mockup-only print chrome: page-1 header preview drawn into
+           the top margin band with an absolutely positioned block.
+           The real repeating chrome comes from header.html and
+           footer.html in HaloPSA; this is a look-dev aid only. */
+        /* Print harness ground: the article renders on paper, so the
+           preview pins white rather than inheriting the viewer's
+           theme. The 20mm top margin reproduces @page's top margin,
+           giving the absolutely positioned header band a real edge to
+           hang from instead of the viewport. */
+        html { background: #ffffff; }
+        body {
+            position: relative;
+            background: #ffffff;
+            width: 184.6mm;              /* A4 less two 12.7mm margins */
+            margin: 20mm auto 0 auto;    /* 20mm reproduces @page top */
+        }
+        /* Header band, mirroring header.html: 10px + 24px logo +
+           10px + a 3px gradient rule = 47px, hung in the 15mm top
+           margin. The wordmark stands in for $ORLOGOSRC, which only
+           Halo can resolve. */
+        .pv-head {
+            position: absolute;
+            top: -20mm; left: -12.7mm; right: -12.7mm;
+            font-family: 'Spline Sans Mono', Menlo, monospace !important;
+        }
+        .pv-head .band { background: #141824; padding: 8px 12.7mm; }
+        /* The reversed logo, inlined so the harness shows the real
+           mark at the real size rather than a type stand-in. Halo
+           substitutes $ORLOGOSRC for this same art at render time. */
+        .pv-head .logo-mark {
+            height: 32px; width: 192px;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAA0CAYAAAAwjwU3AAAnhklEQVR4nO19CZwdR3nnv6q73/3mkDQjW+cgCcue8S0jgZO1RyHGsGACxFIwgd2QzcICS0iA5cxiscRAICFAgIAXh2uDjYVj4iP4gGhEkG+BZVuyLY9snZY0I839rj6q9lf9vhrVtN6beW9mJNnS+36/np73Xnd1ddVX//qu+oqhGkkJ7N4NDAyUP196KcNG8O62HqY+9mzuFpk1g6I5PYz03qPgAYflZpDMz0W82AQuLAzvAp74LmNv+DpihQE4dgIWBgE/iaANcEc915X+CBwOWHYczMlg/1OAB4bWTthtnZAb10Ooc7od2N2jnhw+vkENatAZSKwqUKVSQHs7Q0+Phf5+mW65MGgCkMnnwIoM+VQa+685h59z89Y5MT/eluejCxJedml2cNkrYqXUYjB5FhNsLiSamEAKEjGFS0xAAgiYQJFLjLHCoYEY8gdizcueE0HwlLCsbXf8b+xc+2HIUYVqDJhThN2zAUFHN2RHN9CzoQFaDWrQmUgTR/6ttwKdnUBXVwhU6XiTbxVdOENFxIvZeY5dutAS/GJI1sUlXw7BF3LJ2ySC5iQWIJtfANsDmFCQBIDO4WdRPjN57OCqAgzgwy8gmWqFnW2Bl1c/sp0ANkngtts/g19c+lnI+ItAfAHsTsBvp+puaABXgxp0hgLWpk1ALgfk85azsjNI+gwtBwdapSv/iAlcyyV/FY+lmpgVBxMMzBdgnoQQJSRzc5Ed6lBSkwQkmGQalBgE2Pj/GqgEpDqDzizwpOy/S6baf49ZiWabW4AdA0QA+C56AXzbk/jHJJDvLOMcdgNit1JNG6DVoAadYYClwKpMdorH/fwVr+GLftbzGYB/yEo1tShwQtEFAhkwwQUPgYgzQLKYl2XNA+cp6YkpRArBjIApBChTqqL/MeGzKowBg4/CgkCifY2ECL8UjDFm2bCsGOAVcEgwfLpF4J+EAPZw2HNH4c8dBW68saEiNqhBZwIx3CqB1G4gvdtuLgg/U5TnwOJ38GzLSozmwHzpQYIzaXGmICSUnji44JAQaBnqRKyQKYtQBljVC1hsrBfIPYdEWze4k4RU3zOmUFCAIeAWHDsOuAXcWyrgOodhsP0oHCgbPWYPtNRzJzSQ0llPMpl1OBXPb1CDTua4qKdsjk4A+Q4rm0/7SZ91CZs9zhLJlXJkuCQDoUpyAGaZ6qMCGMkCOH4WjpuBDJU0NjMHHo8p+QyBOxICmj6kAJcCTuBBuDm4ThxXxxN4mqVw3mhLCFbOiwBWvWfiS8+Q1JucaqQ41c9vUINO5rioqWyOLrDkwmeCRCqXAQvuY4l4UhYLrgTixxdAHxWQMIGY21w2rIfoMkNSRfAYhJ8bl8DCso+duZSIuXm43MJ85uM3pRQuPdwE7yDgxLJA9wY5W0ivIfOkU6QOx80+DWrQKSR5AvmypjHHlTcwLgdh572/501NC1AslQDEUBXutCTFYPmpuvFWKuEMEEz7EKU+fAEehxSekqog1YXmaxwDrljgwmMcCQhskQmsnDcXXjwLWxnhMQ3QUo1vdIB6o9CBaf52ooGjljo0qEEnkyrw/qzxZYWyVbl8qjHHWwqenzo6vFKC/ZkcHVVaWQWwOh6VynYsZUKK/hAe6lEKlFRwgx/amSSCUDBTKioH5za4HYdlJ5iKGbW4xTlYQtUxgLKqE0CpguTxoOUIDx63kbAYftEUR0bG4e8GeGcbpks2nT8G4AiABwE0V22AE0NK9Vb0jwBGAfxt5PsGNehkk+b9DIBf09i4NjJmpkshQAFYCuApAPsA/M5kPM/jgYBvWe9mmaySbPzQkDRpvY99Zvp5ZWEokBKeKkMKMG6BW3FYThp2LAPHSZeD2ZmNIiwckhZ2CGCLBO4VMvgF5NjTdiLDLDthyUAEEYAKpa5xgbH8mxOU4MYSWOT7uCkmgHWdYE1xYJ1yJEyf5gNoBXDOKQSKDgApAIvpc8Oe1aBTTWqwn0tjQx2zScr8dB6ABQSMVckGD03ob0SppDxyyvVHVE0hVJ5AhVBSBR8okOIq+kCBk23DUm8liqGHbz8TchfAnkGAnZxhF+LY50gcdgMMDZeQs/OAU5Joyh+FtBIImksXy6L/I27b50OEEtkEwFBVC21bumostGn5dhzr0zncKHrxy8UrYGF7KNnVS7rUUMIkwDhVQFGks1LPG9SglwoV6Ky0ptkkJY64NPYmHbs246JDSmuldF0FRQZgaWLjf5X8JyB9F4I5jmM5zUmeKAHSl6Ocs20WxEPc5g9zhz15Fsee4QEUS0IiDwa7BJR8IDcP6B8CxgQwGAdf16t8mCp2fTNG+IrHeXPTW0TJ3ckQU2BFQVpEpFOGRnk6hzpmOWL+IyKHX/KNwL51tMSoPtdr6D4AsAXAEgD7DeA42cQj5wY16KVAmh9neyJntZZtS8mXsXjcQcENKqlA5bgGplQy0cslVqRa7bMCC75f2pWIjdyTYk33yDns4SP7ZD+KDO1Mwp/DMMaAi0YZ7wH46Nlg2YOQZ22H3NgFievLiueiqyH2LQIWj+wDb16FI6VBZ0mxaZeUscesGFarUIawTlqqIpDS9Spb/mD5xRCfrhAM84cvxuGH1oF1boTcUV+jBVTkzXREm6H8zwyN39EYk3rKqyVepZ7yphNLM1n5M63PVGVNt8xa33O2+/Zkl3+yeaEWmuk7R++3IcV8FU4uoSIZcAwZyotskJDAQSYCnk5bby9k0Nwvbw9izjcWXbei55G782KABRjJWdhxkPFVZ8PKHYTsHoDYcD3kkY0Qrc9DeIMAd4HeRcCiRcD+DQCuB/Z/VokxDA8pS9sPBnDNC8uCLckC0ocxGjafiERnmOrgMRRhCkxtB2nhYqWwcXjdevDeq2tXC1VnUcNIEiTLwqRae210ZAVvSc3trg9dhvFMGJ4XywBO/RxFZWlzIgWTdKzpzTE5UV8Uru6sJ0C1QvnRsqeqTz0xPEENjM8nKXeCBbSW95ztvj3Z5U+TF8bb6UQEK1d5Z90viqdDC1KkPfT/UeEpvM9msBPjqlPkPeMS6LUh1qLVet1Tsb7l25LrN60Vm4+U0jh4Uwn55Sk7sRl46HoErXGI0R0QSxJAzzKguwfoUapZTS8vMfi8WswMuXpDEmmJZq6bUktV5v/muaz9SfUYX6KleQTo7wJbvA/47fQa1jd1dB1xHwEXvby7XtJAKCLP1OqoLjOM3ie9vqotq0LddICvX0P9TIAMB0MNg9ksX9YwWLQXqer11cisT6StbCpPt9lUpOtc9T1PRN9WmehmWr4sO7dq7ivQs6Z6ng4pmJIXaqVIPSrVwfxOecT1DWMR3jeJ2YIJt5IrLCaBXQ7ktWNZfs1dMe+CH8fXPvCu0o4jLcUYx5Lg7vUQne+Hj3VARw+w+xpg8M0MKs1C3dQN7PgsWLwf8pFepM9rwuJlZwHJeLjG+ng8jUhaIX6JsGUKavlO27mQcWWBqo80DC4gD+EIypgnKzCcarILASRqGIiCylIu2xx9pwedfuYiAK+g79Q1OjjjLADnU3hFtMO3KSOoUTddpiKVCagLwDIA86ie6rdhss2pbnreuD5kqikGs1l+nOrcSoZSVedtkXaCcb2Kfzmbrld1qTYaONkNH4/O+sbzNZir57/SqIfuizyAfgB7ATwH4KhRxnHvWaFv1fmiOvp2lJ41oW8nmehA5adqKF9S+fvofFz5mqq0laK5QLie5RX0f4zacJDKfZbOItpG06UKPKM8fxcbk/MW+pyhdlth8MQqGi9NGkCpHJWY72nbkvIogqCs/9E9jgCet4E359LB2384x7Z+NXb39ku9HeJILL5ga7z0sDuMznXN2PEtAN+aufioRmf/BrDmLZDZDF4xXML8bXsgzz0bvDkDBARapodwXIErx5hafikM/NrrjQKX7YB8UHVBfWRTR/4XAF+gTlxO3zGjsRWA3EEMUA8dUMklAPwfAgwtEqvy3w/gk5Hr1bOupqMSqXpsN2ZSn75TcWSvo/CMahQQGP8YwDdpNjtuIEQGmyr/EgB/AeAKCr3QtMf4bA6WNwF4B4DV5MioELh3HKkZtp08UhrQLSqzBcB7ALzNAJXJSDH5wwD+mY6gyoDXYNJJfav6vR5Sq8M2U98+U2HQ6/IVz9xFz6mHDlEM1OcAPDHJBKM/qLa6HMBHyuIA5kxStpogHgPwfQA3mW2EaZDxznqdrxrevwRwAX3/R3S+nybTCbcD+FqVolVc5OW2kGw/C0Mayh5C1RIjXGJNkMTVd1hwHvAw8qpAjhRzGCgUgrX/tgRffbJ5gvNuptTWBnT1gL/YCuF7uDAVA1wPwVMHYJ87H5jbfAy0NI3/yyBVyKkI8Hx8DXpHfgVs+DJkt+qm+ki3tJ7Bq3kIv0WMJ4hRXWLIalMSJ0lpIYA/BnAdgdAvjE5VDDlEkoFF16do8B6O2LBYpH4a9D4E4KvGc9UM+jTVMUdM2Ep1VzEvl9HxQUDJydhqDmaDtEj/vwB8yfi+RPWO0SDV1/oElrfQYNEk6F0KVdpKkuS2L/K7fr5qt38gKcEEyheo3fLUFhmS5pbTYHkDHQrI3wngyQrvqdv0G3RfvX27gOqnjtcDuDcy6HX5XyWwklR+qYby2+kZ19LxhwD+pUpf6Xb8fGQC7KM+Okh841A7Lifp5nfp+ACV/4LR7jWTUZcYtd1SAvKl9Fw1kf4H1V0Fiq4k3kzQ+GDEUzmD5wOaqFSaKdgeD/bGBOuH5bQxKSQTkg3EYnjtbyxkb/b44GU5yBH/yv6zepsuGL545A+eXMa2d/ZJ1OmCm5SUnNAOsD6AtWK1qrUjIVVQ1zOHgHNFBLQm2rKEFQcPfGxyf4ugNA/2JVfD71EsMz2KGrz1/4IGgJJiQFLYX1FjT9axnGY4NbP8NYA0gJ+SujZAZSsp59uGSnQnSSd3koSSrDDj+YZU+KcGWO2gmfg+Kr/S+72SBu9HCMCU3+NVpIqZjKoH3Z8aYKUY/7PEeEcNsZ0bzPUwMaminwP4JwLEfmLkqfQNLwKAClS/Tt+NELBsJECuFqum1OhLqe7vJBX+NyR5PBpxcATUR+oa0Lt+so6+VYB/A4HlRgKCfgOMApqAVH1A/f3BGstX7fkHAP6G/r+FQGZvRM3UfXW9AVYPUb1+Re0WJZsA9L8B+J8kQT9C6tqBKcB0KrBS4+TfacyoyfO1JNXrSfp1VH6JJtAnqD7vBnBPhOfH7bzclpZ6kadZLAZLQhyygN/PxbHgPhfFFQHPF3Neiz1/zuXijX+RdbLYuG67U4rHsal7Zu5K41XR3w/09EAIK3yD1azchVwZ3tMWsLMPGBpV+ZUp4n3iomgm/RDIfiJyQNt2yLNDgZ6dqOUJqiEV6SRiLnVAtaNEM9tXCXz0YFJqIKiTAipHDz4ROZcqlAtDmtFi9L+R7eoWAwwtw/OpZy2lkn6GBm8//aZUJhiDWBvXVV2/TL89Qcx8CzF0keqi7XEg4F1Kz3kfgP9MAP0CSYxTtVcUrF5tgNXj9H6fpv+1hBJ9R0b2OtVH76LBMUS/307gYb7nTPv264aqkyVJRb+DpjQ9FyR1oIZ2KJFUeiOBVkADXqnlUY+aT2qX8sGDVLzXkAo6UqGdtJr/BEnnrycpValpP0AdVAGsLicVro0kydURsNLvrvndnMS8CjzvavDiPIxaZ7+C7YBLCNe2sXKfhPUrF/lMCQmWsrNsDhw/sYG3ZzqbCme7I83N9u6OHmzYoNtm+tTRAQVYbMn5EMm5aLckLlCAxWUZsNSR5EDvYZUM9TjQEpyHcVg7XQ/3e3lgMIEgrYbgiSFZISI+6l6vdHC6XtlHtOynBhEiA8eqIuVVcuFrD9wHaLApAFlv1E3LoXo9p+k55DS7bzMGVydJIqB66Lpca9hAPkCMpA3nZr0DkiD0wP0ygZdjDJCp2ikaxAKSLEAD9/fJaRA3gElUeEfdTxZdez+payDV4xPGe1aieJ19G6fJ4m6676pI35rvA8OWV2ubJEhK+ind93t01hOFfsaH6byNJBX9rErtpIOGLCr/fprEQNJQt+FgqoUcApY3ECBnyOmxitQ5E6wQ4ffxBdWRoOnj+IIXfQ9WgHvV0hwXwloobczr9VBECQ7iWJxawRjnPi8mGMbitzpBEofP2uXv6djM2/quxExJ7XXR3Q0r2wx4Hi6zLWSYQGBJFXZfNrSHo0cCe/qAwNNLusMjsK0QwG4aWgD0czjb1wEbN86qdFWNZJWYlkqHuRJSMQbISJ02pCh97WTPM6/Rnf9WOn+HdH89y4XXlZMgHjuIBElHzFCtQMbs6LspAzvI9vNruqcYqY8uWDksQAtklcoMY5DoNqjlsOj6VcbzbyAVNE6gGUzxjhqsdfaRe0i6AgFzLCIZzqRvgwp9m50k9EKXX2t7aNXoPjovNjzJ3JCEFVgo+ns6a4/gce1UoY0UfZckbpMXahlMGoyuI+C2SaK6jGxS42AVeXat/D5+LS9aDC8WBx/krvt8Ph7nC11LxJ4vwT07wOL4CnDuwGOBnfeLXqKU7vLs4J8tZqNz+/VsjmzDY7OVOE8CdoCrlASlVNMwMIQkLJWZVG25ky+Vl/UoEJNBmA/ecfMYdRi+F9jA1u/M+hqnmik6aKowhyIdcJE1FnrWhLARrxZI99c2NTUgoQdP5NnH1ZNIz3AP0LnLUFF1fbU39AnznkjZut3X0vleQwUTU7VPhbbS76cH4DAB63h8ToV7jnvHCEBrNUm/05rIs6pSDfVFhb7N6ttnoXzdFwfonCG3v1n/VWQeKBgqbdgvlepaoXyL2lnZ+UCqP6aId9NSkkfqv/I6gySsNaSKajvr+PPqifGKtgcvZpJ2a9tCJdHcnksl0VpE4O0dRdu8hUhbzXBlOYGDsOAM5Ete0s28I+3N+XgTc4NXBl2haDtt0Nog0d8e2q8ClYuGKVFUqYNkvwoPLfsLIMGBI8NAyQ1VQ98pC9Y/5Db6E2OwuzdCHrwGL3UyY5+mu1ZQ36fBql97UTSDmTmFKh0R0vfOM1bi64uykcFSrS5LjHAAZZCfydIYPUiU7UOrOIfqMQJHSJf3CA1Ks2x2Avp2PLfTLJNvlG+qUybAqPi6fbXygkG6HXbR+Sxj8qpG2tHySfKegxxF3QRS457S2Yqe5+juFsHcuch47Ed+IQ/LC2zeB8xLL4IfbmtzLNseuLQHhovCzme/6PPiG4fzxTBFcenobmzqHt/IomY6+1mgvxt8STdkLIMuSxkN/RCowqwPppSljtBQEgCjo2G1HK8IcA/fCIphC4kO5R87M3Kg65dU3iLtth4zDKq1HtqWorw4WoWIV3lWYYq6aBUXRpjDdMBFe+2YId1plbWcjLv+Ptb1OEShEKBUKbNNp4L5ZIQXDhkhIjPhhbhhp61GJQIrFUah6P8BeHPEETCr6xQ5+vrEyAUreW97dhskNnkxmzWPzPHjdhq+DNTWNce2GGRgypM3NuzBG7P+pWSVlh9Br+ce3W3v7ujAhjqzfRb3AqvuhGUr9AHe6FihOuhFgcoEL4cBo3kElhWqhrcFBTxz5GnYvb0QZiTjaU66oVW8EcgjqL11+lzLoUFIc5TppauVmDEjg8o9HKnndKjJiLnSEsN0OV+HXegBbbbdbLm7TxVJOutA4X4DTPxp8IKW3MY9cxVIX9NtgNW3ySNrSl6zvqjaDl1vPT28lJ0jUPL+YcwSazPzlFOIQ7ByHr3QKVdeD63OXMjAj42lY0Vn9G7/ut92+fZl/p72Dt7WV/P6rhDc7r8f2LIVwflrAO7gbUrtU+pgmGV03FJIWUfVZ0YKsQ/ullRuHPydMsK3tUEODJyRG6uquBxQGMEXjPVmtZIOXXgLfT5KYKM9jPWQzs5aNNaDTYf0s1NGGMDgdMHFWB6jmUOrhNoGVDPPvkRJ0lmr8hdRHF5yGu/GKaYMRuBspah33ZYqlgxk93qfUca43XK2yVbb0ncAfm5kCJkxcftYKdieOG9pl8ixILDKSDoeRUCqoeQqBXzRzeSzK+Vtr7/Zneuu79wOFswr27Muq2HLrWefBa66Clw6EEESnSzAGqHUwbJDsJz3ChPBiv73bRt2qYD7hcSDsaCsKaa1MnJmUcKwH2lX/Uzoq1Fxvg6KRbyCMyUdU1VtIWy9xCJl1bJM6OXIC+dRQPNMSXsaK5G2a6kIf0XhdgqGB/eEpauxsXYtOtRGqkzY+4XvP2n7X8ai9PfxWylEEywNGNqOpVxz4dlCbHCs4LXEs+sSo8OfcOKlLy4M4qH7cmrQkti7F9i5E9bchRBjRay37TCswZNMBblTHndMBCv6zLgACkXcoFRJTScplOGlRsJQmW6eRo5tHZJQpKVCmwwb0nRnejMuaCZkhoLMZqpqfppIVlEKDPvh7TUu3q7EC2MUbPqoqdpFyDJsi6+moFMVx7dDh9XMRsaHSjTO4Ff2dPg7mkbw359s/4FbKn0CyaZzJfPVzoRWWbKSBmhRb9uwjxwtiia76Qvu3KFtfUHw83Yr5ZSy8DZtkFhbRUXr7AS2bAG7ZBW83JhyCeI61SwqooFF1UFDylIzN3dg+x7uh4XN8Vj9651OMyoYM9zHZ6E8Lc5Ph9NUlLQip4Lhvh7Sg6xkSENafmazUG46Ut+X+0zHIryg4p8+dYJ5QRjBwe8i1V0Fzf4nCu0IBZcTAVrhbNOzdi26N3fg/XdeaJ+dH0LmUOazLKnye0CGW98oqYpAyjwrjJG2xPBRH4VB5/axeG7F0fSo52Zh5/qAW9dVBvi42ihiHXgsBtg2ropZOAdBGCw6IZwhanhnAFd2Lovhem4oHWeodGXadpqNZRc6srxeD5EO1pwu6XWLScM+NBMaNexN2qBfN1UIlWgzgltPhzTUjM4q7g2Go6JeL2E9vCAMCUstGVLUQetFO8lxE5oIZnt7ugmdtaOtx3++8yd8JHXglpGg+EjMStiCSbXmuOwp1JsJatAqS1vch+97Q5l4cSh+X3bxcDI3lPPz/bD628rGdZPU566u8nKcbAbq5j8LA5IkpOkRVIasyGcvprbMCPDTljgeDHKw4/EzWroyY6PmGDmvpnMoBptuW0aDGvXyl+mCgfbolcjwa7rsx+OKpmnIT1P+LNDaxtOBGJ11W82bppdwOryQpMj2K0hibaeF75eTdOzMNmiNM9TaHob+9G6g50ouuQvfxsd8A5iiElYIWrTxYNkIX/D8oaZXPLcte09uTOJQ0Qv628E75cQKK2P7ihXg6RR8EWApB94qPCP2KhrOUP5fcpWmy4WMM3ySB+FyHqHsXqe5dDVVT+80XPQTtgSrNbJ8isjtWkgYaumRSEBrXQVWiHRXy4FAWRT0jirTqaQub6XRTmrx9OlEzxoOmLkniRfCOEwKFF5DIRUZWvf4JuP3qTZdNZfpTMrzE2fA3R1oa+v0l4912n7S2lwQhZ8knaQlGLyyalgBvDRo2XCGcgU3GG6+oii8HzOVBXADsG4D2L03lSWr7m6JYhG4805lq5KwJT4Vt+HwcuwVqwJWSrryVYxW2nG/fIF7uLf/IJyW+yHUwunTlMz0LpOBxBM0s1k0q50KFUdLREcpUZC5REfOcIZV6UlAEfQq88C4wbeWMiukC9brIMaM5Ugvd+O7oPNvDAlLLdM5Wbyg1b+naPH7LmrvO2ltqY54Z5P0mwlYkzqOJrzQhp61SKXbsbkbwpcMBY6PDvuFkmRcwU85SUIUtML/yxsUwpGxI4N5zxtpva65vfC1rve5YuN68If2g+/bPowmOYzBQdhNKeGVCv7FNsN7AjeUnuzoUpzyZ6kCRYWQcFqtof3vWPOF6+enfTy2FX4yzAF/2klX0eR8bVUGvk7lq6K2dep6nanhuO2+6zlmKBHdbaz2X0Eqxrgto47nB0YuLZW+BZSAb8LzaixLZxFQ6uB76btNZByeqd3upUCCzluNJVbrzcF/EnhBq3/7CSw1eKo0NX9JfDBhi/sIFQ0Hi1IrYV5rHsch8J4OIPMshNdnO3uHrf0sgb9KOKGxSGHYRFtWqBqWwxxCSUvVIwan72jeLwy0/PmozP3Nc4nBoLj9oFiM/bHe/uaYl8v7MbiIM+e7KiyBQwquMjNMkKpUkiuBmMWQL0IsSo9izSsPfvDJA9cU/csW2j3dkO/RbHx6kUaAXiMIMEtNHTWiaqlBLzi9mtzLmnnqNb47M5iRA4NBRwikVHZQUH3qcQjodCg2ZZ9QyfpAebU+amR+MNtBr8s0cz5p47GO3P+REd2uU9acDiTpXVW73Ebf6YSFOlPFyeAFrf4N0zpNlRZZ0Vco04aZ2sisu15apke08jSC+s6J9OXxlVJSS3Yn8OvRPu9zv42xfW7pb0uZwuOOlXR8CV+JQ1qqKh9GjBYvg5bS4o4MFfxMqvVjnefI739x47P2w/ub3MVNh12opFVu/w+4768SvvQssAnrBkNju9pezOYYGi56SzJ77YuXH/nJoNf8s988N2L39fX5m7sVR58S6YqdpNlS5X4H2SK+VMWIqgfi/zUC935MA1svsanX2Krd2PXqcJIYq4+ykYLA8x4KZNTBpF4d9dBt8XlatKzd6N8kydPMf6VXj5k5n7Tx+AJSLd9qDKAtVRb2vlxF9sB4tzGa3O4iu5I7Q16oR9LW6l9Auct0ho1P0dIdvXDGivCNRxIiKMnla40EfmZfsor64nu3MnR3vIAN3T1WMXaRn1kg3+OlxCOFw9LyXSaFiswygSrMiF/OVcUcIDOfsWwr7NFSyW8pzvmv3/vERd13Pure+Niz6L9oqftuhtRrSoVdKi+Dw+0mcDsLzmOQjIdRoSIoYP+efcF5y484qy9c0b9w+ZL3lnbsRXd3t9i9e/eJVgWjW26ZpHMTKYaYrmFG3+dP8uxfklitbAL/g+w391CAqM5d9FNyZXuUK34LLc+4m4JA1SCtNZWhII/Pw7QhAa/QDmKKpS9a7P8K2ZzeT1LfDjLCPhbZXWayejxAqq5eFvI6ygW1msp9J3mn/oMcD0eM/F5pCoPoIsbXyfR0zrCPVAmONfNOyRPAO+b3M+WdIFKGMCaMPyHeWEwpku+gPGaDdbxDknhwfEONqXghwgf6nvWUxeF9pI43U86swOAx/R5KIn87xXTdQzawR6lvbZqUf17VwNXdsRuXFjr9g+e0OqkD/qMj7d6XFq9IfezwkaJbyMmY6wFClEFLVc+KA+kMQ7KJwY7pN5L2kaGin043Lb32cuuGpW0uHt0+Ao7hIJngFocL6e1H4KmwVAbfFxgZzAHBMK743Tm4sOt3UBLWOwcPDw3PL/Q7o7btdZw4S7tGwaSxTi+KjNwIPJzu0g69hKW1goSrDdiCvCw/pJnqIjpMeoQAK0YDfDUlYLuQ7lFHvfQtAhbbsCk0R9qFTcKs0shM+mtayX8Bub11Ir5a6CsEWDrf0jBJC58mwFpAzK2OWugJyqevZ3yzrpq4kUpnpn3bVKFvubHeb6osCNXIobPOuGqST/12G+UR+ybtG/BmI4NCPfTRCoDVElkGxKrwgQYkSf3VT9lM3062zauNFN56x/kHCOC+ThPOWw2pWHuMqwOWMsA/tkrimhvh/+vbOAqO/Hjglt7cOj9xbsItBn4AS4XBK7sWsxksB2AWyeRKLVRR6kyCW7DHCq6wPRasWhFgyXzJd+zm1u59RQyN+Ag8CRF4UODV0urjslVprFi+zJ3fvjTWP+R/rm9M3NfR1eJsfXKZtwrP46N/p0N8Zp30rPEMgcFTkWygIOngDhrEB+ucLc0Efr+m2VBHJ0dnS07lX0UD9XW0V2KTwSQDETH8UQI1dc+VxKw6QeBUpDePeDDSFjoZ32rDAyhqWN7BaanQzVT/NVT/9im25tL10CqgVvE0iN9A6x31O55PcVXNBggUqG12E+j9O0l4MIzsZnvr/5W39Wekhr84zb49QFLfESOS3ozcv53Adu80yz9M5oKcsU9hJdC6h9r7jWpTdQrq1BPOVBRQeyr+N/tblf2vJD0/H/mtEmiZKZivp7q/hSaFD9F35jM5TSh3EsAqr/dCAumM9upOqltJSPR0Q3kN7bOO+H7K9dbEWPwhT7gSXO2vJVkITFo5pVVk5fV/ZTALP497FBkSCQVuPgpuEaOFAoquC8YEEgkb2UwajpN2uZWKDYwW7rKbYtcMuhZXO0K/6U2Qd911YlTByHZP9WY7KK8imiRupdbyK2y8iTq8WLO1TGmyOk76vpNs5jkb9dDMXylzQMrIVOFVyd01oT6Rtj7hfXuiy2cT32embT/bvFCJN02zQ631njo6TMVPXfoYcHABnAX9vjfQ5t+QTSQ+NVIqKrGovFDZAKbws4r0jH4f7oQ6bpQPk2DZDpQEVgY0yVAKpGtb8VjRyz+56JLUJYcPiODoMOfbt0NsDIX5E2e7ijCGFmdFhd11tSg+PlPXEmRXoXxFQY2dretj/jB+b43X10IT3onK1e7omt93FupTqR5R4NLXVQN0/Vwz53rVup/ovj0FvMMiG3XUS5X6oO76V4iFq3h/hXqHX5tFaZloSlKq4aqtYLf/oZADC33YnngqZie6Sn4xkLy8OPoYQB0DK30oXNTXjEtc6jp5TCoDg5tIJGNFt7A3LpIX8zYxOGcxt/r7EahtwE5GzFWlGbcC01X9fabl13L9ZPfO1hKIKkBY8ZmT0UzrU+P7VarQcRfWCbI13fNS5R05i0thZoMXqtVnOvxb0xNN1bB9wPOTvvcq20o+4omS0vLUemQ2QQVEZbCaKHERuJV/C8Gq4Bb2MCnWuDx+OG/bdlsbfLUr9Pr1L1dvc4NOJE3G4CcqH1ODTi3VFBymYhhU7NOux+BbRcd5pLf3UU+U/jqTTHC1bEfFX00AI/WZh7kVjkla4XfHgZWQgJdKh2D1OJzkxSWrDFZKl1WSVQOsGlSVL2d3TWSDXgZUV8++aZXEXVvVPQyff/vjsq3tnIeT8eTqvFvwwOCISVRA8zNYODf6zLKcRDKGXKFw81/ekPzjj75TyMwKPm54Ow2X3jSoQQ2aAdWJCBKvXrQRH37NOus59nAwb8EFZ0PiGcdONrlB0ZOMOROM7xFjvEoTLyEDlVU0lUwiVyrkJWN/zj3nJivPMP8QVylpVJaHBlg1qEENOo7qFmFUUr5UG5Buh30o7/pDvn8Jk+yheDwZK3pFV62sCfeS0GpiOZpBqrxZlu1YsZiFXLGg3G/f853gU+kh71DbgRZr3a0Q2zdC7tgIrD+9U8Y0qEENmiZNCxlU+mMi+7mi6/tCrkSAn6aT8fN9oVZJl1MqM65Qqhy64AaA6xX2CobbPO5/R7LYs8wvoeXoc87KC5Z58+a3omtdw1jaoAY1qDpNW5RRoKVCifcAdtug78chUYoFfwLGrhVMvhISccGQBxd7wPBoIPkv0x2JB/xDrucHDIPcCbcxz4y+KLKjB/HeGy+bblUa1KAGnSE0I91LBZW29QFt/bByLX6Qb/Gxcx/H126JsQ0b4GRLJdeWQaga8rSNFm5hsWvZmyMBfw3jeoMa1CDUQP8fQ2SMxQsjuYUAAAAASUVORK5CYII=');
+            background-repeat: no-repeat;
+            background-position: left center;
+            background-size: contain;
+        }
+        .pv-head .tri { height: 3px; background: linear-gradient(115deg, #0F7CBE, #3F51CE 52%, #7440D2); }
+        .pv-head table, .pv-foot table { width: 100%; border-collapse: collapse; border: none; border-radius: 0; overflow: visible; margin: 0; }
+        .pv-head td {
+            font-family: 'Spline Sans Mono', Menlo, monospace !important;
+            font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase;
+            color: #AEB5C9; border: none; background: none; padding: 0;
+            height: 32px; vertical-align: middle;
+        }
+        .pv-head td.r, .pv-foot td.r { text-align: right; }
+        /* Footer band, mirroring footer.html. Placed in flow at the
+           end of the document rather than per page: this harness is
+           one long page, so it shows the band's look, not its
+           repetition. */
+        .pv-foot {
+            background: #141824;
+            margin: 26mm -12.7mm 0 -12.7mm;
+            padding: 14px 12.7mm;
+        }
+        .pv-foot td {
+            font-family: 'Spline Sans Mono', Menlo, monospace !important;
+            font-size: 9px; letter-spacing: 0.08em;
+            color: #AEB5C9; border: none; background: none; padding: 0;
+        }
+        .pv-foot td.c { text-align: center; }
+        .pv-foot td.r { color: #ffffff; font-weight: 600; }
+    </style>
+    <div class="pv-head">
+        <div class="band"><table><tr>
+            <td><div class="logo-mark"></div></td>
+            <td class="r">Knowledge Base &nbsp;&bull;&nbsp; Article 35</td>
+        </tr></table></div>
+        <div class="tri"></div>
+        <div style="height: 22px; line-height: 22px; font-size: 1px;">&nbsp;</div>
+    </div>
+
+
+    <!-- ── Cover masthead ── -->
+    <div class="hero">
+        <div class="eyebrow">Knowledge Base &nbsp;&bull;&nbsp; Article 35</div>
+        <h1>Accessing the Aryza-Hosted Azure Virtual Desktop</h1>
+        <div class="hero-rule"></div>
+    </div>
+    <table class="hero-caption">
+        <tr>
+            <td>Tags &nbsp;&middot;&nbsp; <span class="tl-val">ida, aryza</span></td>
+            <td class="hc-right">Views 1 &nbsp;&middot;&nbsp; Helpful 0</td>
+        </tr>
+    </table>
+
+    <!-- ── Description ── -->
+    <div class="kb-section">
+        <div class="kb-open"><span class="snum"></span><span class="kb-h">Description</span></div>
+        <div class="kb-body">
+<table>
+    <thead><tr><th style="width:130px;">Field</th><th>Details</th></tr></thead>
+    <tbody>
+        <tr><td>Client</td><td>IDA</td></tr>
+        <tr><td>Category</td><td>Remote Access, Aryza Azure Virtual Desktop environment</td></tr>
+    </tbody>
+</table>
+
+<div class="confluence-information-macro confluence-information-macro-information">
+    <div class="confluence-information-macro-body">
+        <p><strong>Who this is for.</strong> IDA staff who have been invited as a <strong>guest user</strong> into the Aryza-hosted Microsoft Entra ID tenant and need to reach the <strong>IDA Desktop</strong> virtual desktop using their existing <code>@ida.com.au</code> account.</p>
+    </div>
+</div>
+
+<h2>1. How this works</h2>
+<p>Your everyday IDA account lives in <strong>IDA's own Microsoft tenant</strong>. The virtual desktop you need to access Aryza is hosted by <strong>Aryza</strong> in a <strong>separate Microsoft tenant</strong>. That second tenant is also named <strong>IDA</strong>, so the only reliable way to tell the two apart is by its domain: <code>idainvestment.onmicrosoft.com</code>.</p>
+<p>Aryza has invited your IDA account into that tenant as a <strong>guest</strong>, which means you sign in with your existing <code>@ida.com.au</code> account. There is no second username or password to remember.</p>
+
+<div class="confluence-information-macro confluence-information-macro-note">
+    <div class="confluence-information-macro-body">
+        <p>Accepting the invitation does <strong>not</strong> give Aryza access to your IDA mailbox, files or data. It only allows your IDA account to sign in to ARMnet.</p>
+    </div>
+</div>
+
+<p>Because your account now belongs to two organisations, the Windows App has to be told <strong>which organisation to look in</strong>. By default it opens your home IDA tenant, which has no virtual desktops published, so you will see a "no resources" message until you switch across to the Aryza-hosted tenant. Switching organisation is the single most important step in this guide.</p>
+
+<h2>2. Accepting your guest invitation</h2>
+
+<div class="confluence-information-macro confluence-information-macro-warning">
+    <div class="confluence-information-macro-body">
+        <p>Nothing else in this guide will work until the invitation is accepted. You only do this once.</p>
+    </div>
+</div>
+
+<h3>Step 1: Open the invitation email and accept it</h3>
+<ol>
+    <li>In your IDA mailbox, find the email titled <strong>"IDA invited you to access applications within their organization"</strong>, sent by <strong>Microsoft Invitations on behalf of IDA</strong> (<code>MSSecurity-noreply@microsoft.com</code>) and copied to your Aryza contact.</li>
+    <li>Outlook flags it as external. This is expected, as Microsoft sends the invitation on Aryza's behalf.</li>
+    <li>Check the body of the email shows <strong>Organization: IDA</strong> and <strong>Domain: idainvestment.onmicrosoft.com</strong>.</li>
+    <li>Click <strong>Accept invitation</strong>.</li>
+</ol>
+
+<img src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='560'%3E%3Crect width='1200' height='560' fill='%23e8ebf2'/%3E%3Crect x='24' y='24' width='1152' height='512' rx='10' fill='%23f6f8fc' stroke='%23d5dae6'/%3E%3Ctext x='600' y='292' text-anchor='middle' font-family='sans-serif' font-size='30' fill='%238E93A4'%3EScreenshot placeholder%3C/text%3E%3C/svg%3E" alt="Invitation email">
+<p style="text-align:center;"><em>The invitation email. Confirm the organisation and domain, then click Accept invitation.</em></p>
+
+<h3>Step 2: Review the permissions and accept</h3>
+<ol>
+    <li>Sign in with your <code>@ida.com.au</code> account if you are prompted.</li>
+    <li>Microsoft shows <strong>Permissions requested by: IDA</strong>, listing what the organisation is allowed to do: receive your profile data, collect and log your activity, and use that profile and activity data.</li>
+    <li>Check the domain reads <code>idainvestment.onmicrosoft.com</code>, then click <strong>Accept</strong>.</li>
+</ol>
+
+<div class="confluence-information-macro confluence-information-macro-tip">
+    <div class="confluence-information-macro-body">
+        <p><strong>This is normal and does not mean anything is broken.</strong> The web client has opened your home IDA tenant, which has no virtual desktops published. The Aryza desktop lives in the other tenant, so the next three steps switch you across.</p>
+    </div>
+</div>
+
+<blockquote><p>Switching organisation is the single most important step in this guide.</p></blockquote>
+
+<h2>3. Connecting from a terminal</h2>
+<p>For administrators, the session host can also be checked from PowerShell:</p>
+<pre><code>Get-AzWvdSessionHost -ResourceGroupName "rg-armnet-prod" `
+    -HostPoolName "hp-ida-desktop" | Select-Object Name, Status</code></pre>
+
+<h2>5. Troubleshooting</h2>
+<table>
+    <!-- Inline cell highlight as Confluence/Halo emit it: the guard for the black-bar bug. -->
+    <thead><tr><th style="width:34%; background-color:#172b4d;">Symptom</th><th style="background-color:#172b4d;">What to do</th></tr></thead>
+    <tbody>
+        <tr><td><strong>"Your system administrator hasn't set up any resources"</strong></td><td><span class="status-macro aui-lozenge-success">Expected</span> You are in your home IDA tenant. Follow Steps 6 to 8 and switch to the Aryza-hosted tenant.</td></tr>
+        <tr><td><strong>No second organisation appears in the Organizations panel</strong></td><td><span class="status-macro aui-lozenge-complete">Self-fix</span> Your guest invitation has not been accepted yet. Go back to section 2 and complete Steps 1 and 2, then sign out and back in.</td></tr>
+        <tr><td><strong>IDA Desktop is missing after switching organisation</strong></td><td><span class="status-macro aui-lozenge-current">Support</span> You are in the right tenant but the desktop has not been assigned to you. Contact the Aryza service desk and ask to be added to the IDA ARMnet application group.</td></tr>
+        <tr><td><strong>Sign-in loops or fails repeatedly</strong></td><td><span class="status-macro aui-lozenge-complete">Self-fix</span> Try an InPrivate / Incognito browser window, or clear cookies for microsoft.com. Cached credentials from another Microsoft account are the usual cause.</td></tr>
+    </tbody>
+</table>
+
+<h3>Still stuck?</h3>
+<p>Log a ticket with <a href="mailto:support@interconnekt.com.au">support@interconnekt.com.au</a> if you cannot sign in with your ida.com.au account at all, or with the <strong>Aryza service desk</strong> if you can sign in and switch organisation but the IDA Desktop resource is missing. Include a screenshot of what you see and the email address you signed in with.</p>
+</div>
+    </div>
+
+    <!-- ── Resolution ── -->
+    <div class="kb-section">
+        <div class="kb-open"><span class="snum"></span><span class="kb-h">Resolution</span></div>
+        <div class="kb-body"></div>
+    </div>
+
+    <!-- ── Internal Memo ── -->
+    <div class="kb-section">
+        <div class="kb-open"><span class="snum"></span><span class="kb-h">Internal Memo</span></div>
+        <div class="kb-body"></div>
+    </div>
+
+    <div class="pv-foot"><table><tr>
+        <td>interconnekt.com.au</td>
+        <td class="c">1300 852 842</td>
+        <td class="r">Page 1 of 12</td>
+    </tr></table></div>
+
+</body>
+</html>

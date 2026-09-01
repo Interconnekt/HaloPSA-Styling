@@ -1079,6 +1079,78 @@ html body .portal .inlinetile > .main-tile-item {
     margin: 10px !important;
 }
 
+/* Service catalogue tile internals
+   ---------------------------------------------------------
+   HaloPSA nests `.svcatalog-item` inside the card and gives it its
+   own `padding: 20px`, on top of the card's `14px 18px 18px`. The
+   two stack, so every tile carried 34 to 38px of inset before any
+   content, and the stock 100px artwork pushed the card to 279px tall
+   for a title and two lines of copy. Zero the inner padding, since
+   the card already supplies it, and bring the artwork down to 64px:
+   these are category signposts, not illustrations, and the tile
+   should read as a compact row of choices rather than four posters. */
+html body .portal .svcatalog-item {
+    padding: 0 !important;
+    /* HaloPSA hardcodes `height: 245px` here. With the artwork and
+       padding reduced the content stops around 130px, so the rest was
+       dead space inside every card. */
+    height: auto !important;
+}
+
+/* `.svcatalog-item-price` is an empty div on a service catalogue with
+   no prices, and HaloPSA gives it a 1px near-black top border plus
+   5px of margin and padding. The result is a hard black rule under
+   every tile title, dividing a heading from its own description and
+   separating nothing. Hide it when it has no content; when a
+   catalogue does carry prices the rule stays, softened to the
+   portal's own hairline rather than near-black. */
+html body .portal .svcatalog-item-price:empty {
+    display: none !important;
+}
+html body .portal .svcatalog-item-price {
+    border-top-color: var(--portal-border) !important;
+    font-size: 12.5px;
+    color: var(--portal-text-secondary) !important;
+}
+html body .portal .svcatalog-item-pic {
+    height: 64px !important;
+    margin-bottom: 14px;
+}
+html body .portal .svcatalog-item-pic img {
+    max-height: 64px;
+    width: auto;
+}
+/* The description sat 20px below the title, which on a two line
+   title opened a gap wider than the title itself. */
+html body .portal .svcatalog-item-detail {
+    margin-top: 8px !important;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--portal-text-secondary) !important;
+}
+html body .portal .svcatalog-item-name {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: var(--portal-heading) !important;
+}
+
+/* Service request form masthead (/service)
+   ---------------------------------------------------------
+   The same catalogue artwork is reused at 248px square as the page
+   masthead, where it towers over the "User Onboarding" heading
+   beside it and pushes the form itself below the fold. At 110px it
+   sits inline with the heading block, which is the relationship the
+   layout was reaching for. */
+html body .portal .service-pic,
+html body .portal .service-img {
+    height: 110px !important;
+    width: 110px !important;
+    max-height: 110px !important;
+}
+html body .portal .service-img {
+    object-fit: contain;
+}
+
 /* On-hold state — HaloPSA ships `.main-tile-item.hold` with a
    native rule that paints EVERY descendant (user name, id, type,
    date, summary, status pill) in a bright blue (rgb(0, 165, 255)),
@@ -2532,10 +2604,17 @@ html body .portal .rt-thead.-header .rt-th .column-header {
     line-height: 1;
 }
 
+/* Row density. HaloPSA pages both the ticket list and the invoice
+   list at 15 rows, so a full page is all a reader ever gets. At the
+   previous 14px vertical padding a row ran 59 to 66px and the 15th
+   sat well below the fold, which turned every page into a scroll.
+   9px brings a row to about 48px and puts the whole page on one
+   screen at a typical laptop height, without crowding the status
+   pills, which carry their own padding. */
 html body .portal .rt-td {
     display: flex !important;
     align-items: center;
-    padding: 14px 16px !important;
+    padding: 9px 16px !important;
 }
 html body .portal .rt-tr {
     border-bottom: 1px solid var(--portal-border-soft) !important;
@@ -3040,15 +3119,17 @@ html body .portal .-pagination input {
    what keeps the columns in one vertical line. Arithmetic, matching
    the per-column rules below:
 
-     ID 110 + Invoice Date 125 + Agreement 110 (its min)
-     + 4 money columns at 105 = 420 + Date Sent 140
-     + Payment Status 150 + Invoice Reference 140 (its min)
-     + Pay 100                                        = 1295
+     ID 180 + Invoice Date 120 + Agreement 120
+     + 4 money columns at 90 = 360 + Date Sent 120
+     + Payment Status 200 + Invoice Reference 170
+     + Pay 160                                        = 1430
 
-   Keep this in step if any column width below changes. */
+   These are react-table's own inline widths, read off the live
+   header, not values we set. If HaloPSA changes them, re-read and
+   update this floor. */
 html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-thead,
 html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tbody {
-    min-width: 1295px !important;
+    min-width: 1430px !important;
 }
 /* Row boxes take their width from the tbody, never from their own
    content.
@@ -3100,86 +3181,32 @@ html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #inp
     overflow: visible !important;
 }
 
+/* Column widths are HaloPSA's own, deliberately.
+
+   This block used to pin every column with
+   `flex/width/max-width: Npx !important`, which beat the inline
+   styles react-table writes and so froze the resize handles: Joel
+   could grab a column edge and nothing moved. The handles were
+   never hidden, the widths simply could not change.
+
+   react-table's stock widths for the eleven columns left after TYPE
+   and ORDER NUMBER are hidden come to 1430px, inside the roughly
+   1474px card, so the table fits with no horizontal scroll and the
+   `flex: N 0 auto` bases share the leftover proportionally. Dropping
+   the pinning therefore costs nothing in layout and gives the
+   resizers back.
+
+   The alignment fix does NOT depend on these: it lives in the
+   `min-width` on `.rt-thead`/`.rt-tbody` plus `width: 100%` on the
+   rows, which is what keeps the header and every row on one grid.
+   Money-column alignment, the hidden columns and the sticky Pay
+   cell all stay too. */
 /* TYPE (2) and ORDER NUMBER (3), hidden. */
 html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(2),
 html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(2),
 html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(3),
 html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(3) {
     display: none !important;
-}
-
-/* ID, 110px. */
-html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(1),
-html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(1) {
-    flex: 0 0 110px !important;
-    width: 110px !important;
-    max-width: 110px !important;
-}
-
-/* INVOICE DATE, 125px. */
-html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(4),
-html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(4) {
-    flex: 0 0 125px !important;
-    width: 125px !important;
-    max-width: 125px !important;
-}
-
-/* Money columns (VALUE / TOTAL TAX / TOTAL / DUE), 105px. */
-html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(6),
-html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(6),
-html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(7),
-html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(7),
-html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(8),
-html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(8),
-html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(9),
-html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(9) {
-    flex: 0 0 105px !important;
-    width: 105px !important;
-    max-width: 105px !important;
-}
-
-/* DATE SENT, 140px. */
-html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(10),
-html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(10) {
-    flex: 0 0 140px !important;
-    width: 140px !important;
-    max-width: 140px !important;
-}
-
-/* PAYMENT STATUS, 150px. */
-html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(11),
-html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(11) {
-    flex: 0 0 150px !important;
-    width: 150px !important;
-    max-width: 150px !important;
-}
-
-/* Pay button column, 100px. */
-html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(13),
-html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(13) {
-    flex: 0 0 100px !important;
-    width: 100px !important;
-    max-width: 100px !important;
-}
-
-/* AGREEMENT, flexible: grows into leftover width, shrinks to
-   110px minimum on narrow windows. */
-html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(5),
-html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(5) {
-    flex: 1 1 140px !important;
-    width: auto !important;
-    min-width: 110px !important;
-    max-width: none !important;
-}
-
-/* INVOICE REFERENCE, flexible: double growth weight, it carries
-   the longest text ("Microsoft Subscriptions" etc). */
-html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(12),
-html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(12) {
-    flex: 2 1 180px !important;
-    width: auto !important;
-    min-width: 140px !important;
-    max-width: none !important;
 }
 
 /* Money cells right-aligned with tabular figures so amounts line
@@ -3888,6 +3915,19 @@ html body .portal .details-form .DateInput {
     border: 0 !important;
     border-radius: 0 !important;
     padding: 0 !important;
+}
+/* Wrapper heights. HaloPSA ships
+   `.details-form.readeditform .DateInput { height: 30px }`, and the
+   blockify rules above never touched height, so all three wrappers
+   stayed 30px tall around a 42px input. The input overflowed its
+   parent, and on the "date and time" row the flex centring lined the
+   30px wrapper up against the 148px time field, leaving the visible
+   date box sitting 6px lower than the time box. Give the wrappers
+   the control's own height so the row is one line again. */
+html body .portal .details-form .SingleDatePicker,
+html body .portal .details-form .SingleDatePickerInput,
+html body .portal .details-form .DateInput {
+    height: 42px !important;
 }
 html body .portal .details-form .DateInput_input {
     width: 100% !important;

@@ -13,8 +13,8 @@
    • Light-first cool-neutral grounds: bg #F1F3F7 → panel #F5F7FB →
      card #FFFFFF → card2 #F0F2F7. Dark grounds: #0C0E16 → #10131C →
      #161A25 → #1B2030
-   • Jade/teal → blue → violet brand triad (#0284C7 → #3761E2 → #6F43D6
-     light, #3FC6A6 → #6E90FF → #A47BFF dark); jade/teal is the
+   • Cyan → blue → violet brand triad (#0284C7 → #3355D8 → #6F43D6
+     light, #0284C7 → #7E9CFF → #A47BFF dark); cyan is the
      Security BRAND accent only, NOT the success semantic (success is
      a separate true green, --portal-ok, #15803D / #34D399); pink
      (#C026D3 / #EC72CF) reserved for the get-in-touch CTA + highlighter
@@ -74,16 +74,16 @@
 
     /* Brand: primary blue (Insight role: links, primary buttons,
        focus), same as website --primary */
-    --portal-accent:          #3761E2;
-    --portal-accent-hover:    #2F52C0;
-    --portal-accent-subtle:   rgba(55, 97, 226, 0.08);
-    --portal-accent-soft:     #E7ECFC;              /* website --primary-subtle */
+    --portal-accent:          #3355D8;
+    --portal-accent-hover:    #2C4AC0;
+    --portal-accent-subtle:   rgba(51, 85, 216, 0.08);
+    --portal-accent-soft:     #E4EAFC;              /* website --primary-subtle */
     --portal-accent-2:        #C026D3;              /* website --accent: pink, get-in-touch CTA + highlighter only */
     --portal-accent-2-hover:  #A320B3;
     --portal-accent-2-subtle: #F7E5FA;
 
     /* Violet: Advisory / AI / People role. Third member of the brand
-       triad alongside blue (Insight) and jade/teal (Security). New
+       triad alongside blue (Insight) and cyan (Security). New
        token: the pre-2026 palette only had a two-colour brand system
        (blue + plum); the 2026 site adds violet as its own hue (website
        `cat-violet`), so the portal gets a matching dedicated token. */
@@ -91,16 +91,16 @@
     --portal-violet-hover:    #5E39B6;
     --portal-violet-subtle:   #EEE8FA;
 
-    /* Highlight: jade/teal. Third brand colour alongside blue +
+    /* Highlight: cyan. Third brand colour alongside blue +
        violet: the Security BRAND accent (delight moments, live dots,
        alt icon chips), NOT the semantic-success hue. Success is a
        separate true green, see --portal-ok below. Replaces the
        pre-2026 emerald as the brand's third hue; the emerald's old
        success DUTY moved to --portal-ok, which kept its original
-       green value rather than adopting this jade. */
+       green value rather than adopting this cyan. */
     --portal-highlight:        #0284C7;
-    --portal-highlight-hover:  #0270A9;
-    --portal-highlight-subtle: #E1F0F8;
+    --portal-highlight-hover:  #0574AE;
+    --portal-highlight-subtle: #DFF0FA;
 
     /* Text colour to use ON TOP of a solid brand-colour fill (buttons,
        filled badges). White works in light mode (all four brand hues
@@ -112,14 +112,14 @@
        for alternating tinted panels (e.g. highlighted announcements,
        featured KB categories) to break up long pages without going to
        full colour. */
-    --portal-tint-cool:       #E7ECFC;
+    --portal-tint-cool:       #E4EAFC;
     --portal-tint-warm:       #F7E5FA;
     --portal-band-bg:         #E2E5EE;              /* == hairline; carousels/strips */
 
     /* Action (buttons, H1, stepper active) */
-    --portal-action:          #3761E2;
-    --portal-action-hover:    #2F52C0;
-    --portal-action-shadow:   rgba(55, 97, 226, 0.22);
+    --portal-action:          #3355D8;
+    --portal-action-hover:    #2C4AC0;
+    --portal-action-shadow:   rgba(51, 85, 216, 0.22);
 
     /* Borders & shadows */
     --portal-border:          #E2E5EE;   /* website hairline */
@@ -160,12 +160,12 @@
     /* Semantic: red = error/blocked/overdue, amber = warning/pending/
        review, unchanged by the 2026 re-palette (already independent
        of the brand triad). --portal-ok is a true green, DELIBERATELY
-       DISTINCT from --portal-highlight's jade/teal: jade/teal is the
+       DISTINCT from --portal-highlight's cyan: cyan is the
        Security BRAND accent only (gradient first stop, featured
        moments, live dots via --portal-highlight); the success
        SEMANTIC (approved/paid/complete/active) is this independent
        green. Don't collapse the two; an earlier pass briefly aliased
-       --portal-ok to jade and it was reverted. */
+       --portal-ok to cyan and it was reverted. */
     --portal-ok:              #15803D;
     --portal-warn:            #C2410C;
     --portal-err:             #B91C1C;
@@ -179,12 +179,12 @@
        2026 mapping: info=blue, note=violet, warn=red (the "-warning"
        class is legacy-named but renders ADF *error* panels, see
        AGENTS.md gotcha #4), tip=true green (success, see the
-       --portal-ok comment above: jade/teal is the Security BRAND
+       --portal-ok comment above: cyan is the Security BRAND
        accent only, NOT the success semantic), warnyellow=amber
        (genuine warning, disambiguated via :has(.aui-iconfont-warning)). */
     --panel-info-bg:          #F1F4FD;
-    --panel-info-border:      rgba(55, 97, 226, 0.28);
-    --panel-info-icon:        #3761E2;
+    --panel-info-border:      rgba(51, 85, 216, 0.28);
+    --panel-info-icon:        #3355D8;
     --panel-note-bg:          #F5F2FC;
     --panel-note-border:      rgba(111, 67, 214, 0.28);
     --panel-note-icon:        #6F43D6;
@@ -213,7 +213,7 @@
        stay pinned to Confluence's own default export hex (#EAE6FF,
        #E6FCFF); that's what Confluence emits, not a brand token, so
        it doesn't move with the re-palette. Only the dark-mode flip
-       (below) changes, to the new violet/jade families. */
+       (below) changes, to the new violet/cyan families. */
     --panel-b-note-bg:          #EAE6FF;
     --panel-b-note-border:      #998DD9;
     --panel-b-custom-bg:        #E6FCFF;
@@ -221,7 +221,7 @@
 
     /* Gradient system: ONE brand gradient, reserved for featured/hero
        moments only. */
-    --ik-gradient-brand: linear-gradient(115deg, #0284C7 0%, #3761E2 52%, #6F43D6 100%);
+    --ik-gradient-brand: linear-gradient(115deg, #0284C7 0%, #3355D8 52%, #6F43D6 100%);
     --ik-gradient-line:  linear-gradient(90deg, transparent, #0284C7 30%, #6F43D6 70%, transparent);
 
     /* Motion */
@@ -253,10 +253,10 @@
     --portal-text-muted:      rgba(236, 238, 244, 0.4);
     --portal-heading:         #ECEEF4;
 
-    --portal-accent:          #6E90FF;
-    --portal-accent-hover:    #84A1FF;
-    --portal-accent-subtle:   rgba(110, 144, 255, 0.14);
-    --portal-accent-soft:     rgba(110, 144, 255, 0.18);  /* website --primary-subtle */
+    --portal-accent:          #7E9CFF;
+    --portal-accent-hover:    #92ACFF;
+    --portal-accent-subtle:   rgba(126, 156, 255, 0.14);
+    --portal-accent-soft:     rgba(126, 156, 255, 0.18);  /* website --primary-subtle */
     --portal-accent-2:        #EC72CF;
     --portal-accent-2-hover:  #EF87D6;
     --portal-accent-2-subtle: rgba(236, 114, 207, 0.16);
@@ -265,17 +265,20 @@
     --portal-violet-hover:    #B28FFF;
     --portal-violet-subtle:   rgba(164, 123, 255, 0.16);
 
-    /* Highlight: brighter jade/teal for dark-mode contrast. Security
-       brand accent only, see the light-mode token block comment. */
-    --portal-highlight:        #3FC6A6;
-    --portal-highlight-hover:  #5CCFB3;
-    --portal-highlight-subtle: rgba(63, 198, 166, 0.16);
+    /* Highlight: the same cyan as light mode. The 2026 palette uses
+       one value in both modes rather than a brightened dark variant.
+       Security brand accent only, see the light-mode token block
+       comment. */
+    --portal-highlight:        #0284C7;
+    --portal-highlight-hover:  #0A93DA;
+    --portal-highlight-subtle: rgba(2, 132, 199, 0.16);
 
     /* Text on a solid brand-colour fill flips to dark ink in dark
        mode; the brightened dark-mode brand hues don't carry white
-       text at readable contrast (verified: white-on-#6E90FF measures
-       2.96:1, dark-ink-on-#6E90FF measures 5.93:1; same pattern holds
-       for violet/jade/pink). See website-portal-mapping.md. */
+       text at readable contrast (re-measured for the 2026 primary:
+       white-on-#7E9CFF is 2.60:1, dark-ink-on-#7E9CFF is 6.76:1;
+       same pattern holds for violet/highlight/pink). See
+       website-portal-mapping.md. */
     --portal-on-accent:       #161922;
 
     /* Dark tints: blue-tinted cool + pink-tinted warm, blended into
@@ -284,9 +287,9 @@
     --portal-tint-warm:       #342037;
     --portal-band-bg:         rgba(255, 255, 255, 0.072);   /* == hairline */
 
-    --portal-action:          #6E90FF;
-    --portal-action-hover:    #84A1FF;
-    --portal-action-shadow:   rgba(110, 144, 255, 0.30);
+    --portal-action:          #7E9CFF;
+    --portal-action-hover:    #92ACFF;
+    --portal-action-shadow:   rgba(126, 156, 255, 0.30);
 
     /* Hairline from the 2026 lock: translucent white rather than an
        opaque lifted grey. */
@@ -309,7 +312,7 @@
 
     --portal-quote-bg:        #161A25;
 
-    /* True green (success), distinct from --portal-highlight's jade;
+    /* True green (success), distinct from --portal-highlight's cyan;
        see the light-mode token block comment. */
     --portal-ok:              #34D399;
     --portal-warn:            #FB923C;
@@ -321,9 +324,9 @@
        moderate alpha so the hairline remains visible on the deeper
        bg. Icons go to the brighter dark-mode variants used elsewhere
        for the same hue family. */
-    --panel-info-bg:          rgba(110, 144, 255, 0.15);
-    --panel-info-border:      rgba(110, 144, 255, 0.40);
-    --panel-info-icon:        #6E90FF;
+    --panel-info-bg:          rgba(126, 156, 255, 0.15);
+    --panel-info-border:      rgba(126, 156, 255, 0.40);
+    --panel-info-icon:        #7E9CFF;
     --panel-note-bg:          rgba(164, 123, 255, 0.15);
     --panel-note-border:      rgba(164, 123, 255, 0.40);
     --panel-note-icon:        #A47BFF;
@@ -347,11 +350,11 @@
        and `.theme-dark` live on different elements. */
     --panel-b-note-bg:          rgba(164, 123, 255, 0.15);
     --panel-b-note-border:      rgba(164, 123, 255, 0.40);
-    --panel-b-custom-bg:        rgba(63, 198, 166, 0.14);
-    --panel-b-custom-border:    rgba(63, 198, 166, 0.40);
+    --panel-b-custom-bg:        rgba(2, 132, 199, 0.14);
+    --panel-b-custom-border:    rgba(2, 132, 199, 0.40);
 
-    --ik-gradient-brand: linear-gradient(115deg, #3FC6A6 0%, #6E90FF 52%, #A47BFF 100%);
-    --ik-gradient-line:  linear-gradient(90deg, transparent, #3FC6A6 30%, #A47BFF 70%, transparent);
+    --ik-gradient-brand: linear-gradient(115deg, #0284C7 0%, #7E9CFF 52%, #A47BFF 100%);
+    --ik-gradient-line:  linear-gradient(90deg, transparent, #0284C7 30%, #A47BFF 70%, transparent);
 
     color-scheme: dark;
 }
@@ -1626,7 +1629,7 @@ html body .portal .status-avatar.fortile::before {
    same-hue text in light mode; translucent tint + light ink in dark
    mode) instead of the pre-2026 23-hue rainbow:
      green  → Active / Paid / Approved / Complete (true green, NOT
-              jade/teal. Jade/teal is reserved for the Security BRAND
+              cyan. Cyan is reserved for the Security BRAND
               accent only: gradient first stop, featured moments,
               --portal-highlight. Success is this separate green.)
      blue   → In progress
@@ -1658,9 +1661,9 @@ html body .portal .status-avatar.fortile::before {
        "awaiting first response". */
     --pill-new-bg:               #F8E8E2; --pill-new-ink:               #882E08;
     /* In Progress: blue (the 2026 lock's canonical "active work" hue). */
-    --pill-progress-bg:          #E7ECFC; --pill-progress-ink:          #192C66;
+    --pill-progress-bg:          #E4EAFC; --pill-progress-ink:          #192C66;
     /* Completed / Resolved: true green (Complete = green per the
-       2026 lock; jade/teal is brand-only, not a status hue). */
+       2026 lock; cyan is brand-only, not a status hue). */
     --pill-resolved-bg:          #E3F0E8; --pill-resolved-ink:          #093A1B;
     /* Agent - Triage Handoff: amber, ticket is sitting in a queue
        waiting for engineering pickup, i.e. an "awaiting" state. */
@@ -1708,13 +1711,13 @@ html body .portal .status-avatar.fortile::before {
        "awaiting" state. */
     --pill-quote-sent-bg:        #F8E8E2; --pill-quote-sent-ink:        #882E08;
     /* Assigned: blue (work has started). */
-    --pill-assigned-bg:          #E7ECFC; --pill-assigned-ink:          #192C66;
+    --pill-assigned-bg:          #E4EAFC; --pill-assigned-ink:          #192C66;
 }
 
 .theme-dark {
     --pill-new-bg:               rgba(251,146,60,0.18);   --pill-new-ink:               #FCA259;
     /* In Progress: blue in dark mode */
-    --pill-progress-bg:          rgba(110,144,255,0.18);  --pill-progress-ink:          #8EA8FF;
+    --pill-progress-bg:          rgba(126,156,255,0.18);  --pill-progress-ink:          #8EA8FF;
     /* Resolved: true green */
     --pill-resolved-bg:          rgba(52,211,153,0.18);   --pill-resolved-ink:          #61DDAF;
     /* Triage Handoff: amber */
@@ -1737,7 +1740,7 @@ html body .portal .status-avatar.fortile::before {
     --pill-dispatch-review-bg:   rgba(251,146,60,0.18);   --pill-dispatch-review-ink:   #FCA259;
     --pill-quote-raised-bg:      rgba(164,123,255,0.18);  --pill-quote-raised-ink:      #B898FF;
     --pill-quote-sent-bg:        rgba(251,146,60,0.18);   --pill-quote-sent-ink:        #FCA259;
-    --pill-assigned-bg:          rgba(110,144,255,0.18);  --pill-assigned-ink:          #8EA8FF;
+    --pill-assigned-bg:          rgba(126,156,255,0.18);  --pill-assigned-ink:          #8EA8FF;
 }
 
 /* ─── Named-status class rules ─────────────────────────────
@@ -2192,7 +2195,7 @@ html body .portal .oneline > .priority-block {
    class, fallback is the inline-rgb attribute selector. Both stamp the
    same `--p-bg / --p-ink / --p-dot` triplet onto `.oneline`.
 
-   2026 lock: Low=true green/neutral (NOT jade/teal; jade/teal is the
+   2026 lock: Low=true green/neutral (NOT cyan; cyan is the
    Security brand accent only), Medium=amber, High=red-leaning (a
    distinct blend between amber and red so it doesn't collide with
    Critical), Critical=red. */
@@ -2344,7 +2347,7 @@ html body .portal .sla-perc-bar > div {
     box-sizing: border-box;
 }
 /* Retint per-state, 2026 lock: red = overdue/breached, amber =
-   warning, true green = healthy (matches --portal-ok; jade/teal is
+   warning, true green = healthy (matches --portal-ok; cyan is
    the Security brand accent only, not used for status semantics). */
 html body .portal .sla-perc-bar > div[style*="rgb(255, 46, 0)"],
 html body .portal .sla-perc-bar > div[style*="rgb(220, 53, 69)"] {
@@ -5344,13 +5347,13 @@ html body .portal .kbdetails .status-macro.aui-lozenge {
     text-transform: uppercase !important;
     letter-spacing: 0.06em !important;
 }
-html body .portal .kbdetails .status-macro.aui-lozenge-complete { background: #E7ECFC !important; color: #192C66 !important; }
+html body .portal .kbdetails .status-macro.aui-lozenge-complete { background: #E4EAFC !important; color: #192C66 !important; }
 html body .portal .kbdetails .status-macro.aui-lozenge-success  { background: #E3F0E8 !important; color: #093A1B !important; }
 html body .portal .kbdetails .status-macro.aui-lozenge-current  { background: #F8E8E2 !important; color: #882E08 !important; }
 html body .portal .kbdetails .status-macro.aui-lozenge-error    { background: #F7E4E4 !important; color: #9D1818 !important; }
 html body .portal .kbdetails .status-macro.aui-lozenge-progress { background: #EEE8FA !important; color: #321E60 !important; }
 
-html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-complete { background: rgba(110,144,255,0.15) !important; color: #8EA8FF !important; }
+html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-complete { background: rgba(126,156,255,0.15) !important; color: #8EA8FF !important; }
 html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-success  { background: rgba(52,211,153,0.15) !important; color: #61DDAF !important; }
 html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-current  { background: rgba(251,146,60,0.15) !important; color: #FCA259 !important; }
 html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-error    { background: rgba(248,113,113,0.15) !important; color: #F97F7F !important; }
@@ -6738,7 +6741,7 @@ html body .ui.popup button {
     width: 100% !important;
     height: 36px !important;
     padding: 0 16px !important;
-    background-color: var(--portal-action, #3761E2) !important;
+    background-color: var(--portal-action, #3355D8) !important;
     background-image: none !important;
     color: #FFFFFF !important;
     border: 0 !important;
@@ -6757,7 +6760,7 @@ html body .ui.popup button {
 }
 html body .ui.popup .ui.button:hover,
 html body .ui.popup button:hover {
-    background-color: var(--portal-action-hover, #2F52C0) !important;
+    background-color: var(--portal-action-hover, #2C4AC0) !important;
     transform: translateY(-1px);
 }
 html body .ui.popup .ui.button i,

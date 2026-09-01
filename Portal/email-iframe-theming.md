@@ -8,9 +8,9 @@ Status: **unresolved on the end-user portal.** Works on the agent side (where `i
 
 HaloPSA renders email bodies on the ticket view inside `<iframe class="halo-html-renderer">` — a same-origin iframe with its own `<style>` tag setting Segoe UI and default HTML link colours. Host-document CSS does not cross the iframe boundary, so no amount of `self-service-portal.css` work can theme email bodies.
 
-The fix is `iframe-theme.js` (in this directory): a small IIFE that reaches into the iframe's document and injects a `<style>` tag with Montserrat + `#3598db` link colour. It uses a `MutationObserver` and per-iframe `load` handlers to catch ticket-switch navigation and action-history expansion.
+The fix is `iframe-theme.js` (in this directory): a small IIFE that reaches into the iframe's document and injects a `<style>` tag with Figtree + `#3355D8` link colour. It uses a `MutationObserver` and per-iframe `load` handlers to catch ticket-switch navigation and action-history expansion.
 
-**The shim works** — verified by manually injecting it via DevTools on a ticket view. Email body re-renders in Montserrat, links turn blue.
+**The shim works**, verified by manually injecting it via DevTools on a ticket view. Email body re-renders in Figtree, links turn blue.
 
 **The gap**: there is no obvious way to get the shim loaded automatically on the end-user Self-Service Portal. The agent application has a script-injection config field; the portal does not.
 

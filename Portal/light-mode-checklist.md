@@ -68,8 +68,8 @@ Toggle via the theme switcher in the portal header, or simulate via DevTools: re
 - [ ] Action history items readable
 
 ### Email iframe
-- [ ] Email body font is Montserrat (not Segoe UI)
-- [ ] Links are `#3598db` blue
+- [ ] Email body font is Figtree (not Segoe UI)
+- [ ] Links are `#3355D8` blue
 - [ ] Links underline on hover only, not by default
 - [ ] Body text colour is HaloPSA's default (dark) on white — NOT white-on-white (iframe-theme.js intentionally doesn't touch text colour)
 - [ ] After switching ticket, new email body is themed (MutationObserver + load handler working)

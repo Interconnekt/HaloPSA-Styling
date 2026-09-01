@@ -3209,6 +3209,25 @@ html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #inp
     display: none !important;
 }
 
+/* Money columns run at react-table's 90px now that the width pinning
+   is gone, and at the table's 16px cell padding that leaves 58px for
+   the label. "TOTAL TAX" is wider than that at 11.5px uppercase with
+   letter-spacing, so its header rendered clipped to "OTAL TAX".
+   10px each side gives 70px, which fits. Applied to header and body
+   cells together so the right-aligned figures stay flush with their
+   right-aligned headers. */
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(6),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(6),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(7),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(7),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(8),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(8),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-th:nth-child(9),
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr > .rt-td:nth-child(9) {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
 /* Money cells right-aligned with tabular figures so amounts line
    up digit-for-digit down the column. .rt-td is a flex row (base
    rule above), so alignment is justify-content, not text-align. */

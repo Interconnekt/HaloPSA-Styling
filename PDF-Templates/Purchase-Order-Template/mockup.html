@@ -3,21 +3,21 @@
 <head>
     <meta charset="utf-8">
     <title>Purchase Order (Mockup)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; padding: 40px; background: #e0e0e0; font-family: Montserrat, Arial, sans-serif; }
+        body { margin: 0; padding: 40px; background: #e0e0e0; font-family: Figtree, Arial, sans-serif; }
         .page { width: 210mm; margin: 0 auto 40px auto; background: #fff; box-shadow: 0 2px 16px rgba(0,0,0,0.10); padding: 0; overflow: hidden; position: relative; }
         .page-body { padding: 24px 48px 40px 48px; font-size: 12px; line-height: 1.6; color: #34495e; }
         .page-label { background: #F4F4F5; color: #30355b; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 6px 48px; }
 
         .pdf-header { background-color: #30355b; color: #fff; padding: 14px 48px; }
         .pdf-header table { width: 100%; border-collapse: collapse; }
-        .pdf-header .title { font-size: 14px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .pdf-header .title { font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px; }
         .pdf-header .subtitle { color: rgba(255,255,255,0.7); font-size: 10px; }
         .pdf-footer { background-color: #18181B; color: rgba(255,255,255,0.85); padding: 10px 48px; font-size: 9px; }
         .pdf-footer table { width: 100%; border-collapse: collapse; }
 
-        a { color: #3598db; text-decoration: none; }
+        a { color: #0284C7; text-decoration: none; }
 
         .po-header-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
         .po-header-table td { vertical-align: top; padding: 0; }
@@ -49,8 +49,8 @@
         .totals-table .subtotal td { border-bottom: 1px solid #e0e0e0; }
         .totals-table .tax td { border-bottom: 1px solid #e0e0e0; }
         .totals-table .total td { padding-top: 8px; }
-        .totals-table .total .label { font-size: 14px; font-weight: 800; color: #30355b; }
-        .totals-table .total .value { font-size: 14px; font-weight: 800; color: #30355b; }
+        .totals-table .total .label { font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif; font-size: 14px; font-weight: 800; color: #30355b; }
+        .totals-table .total .value { font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif; font-size: 14px; font-weight: 800; color: #30355b; }
 
         .po-notes { margin-top: 24px; padding: 14px 18px; background-color: #F4F4F5; border-radius: 8px; font-size: 12px; line-height: 1.6; color: #34495e; }
         .po-notes-label { font-size: 11px; font-weight: 700; color: #30355b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
@@ -59,7 +59,7 @@
 <body>
 
     <div class="page">
-        <div class="page-label">Page 1 — Purchase Order</div>
+        <div class="page-label">Page 1: Purchase Order</div>
 
         <!-- Header -->
         <div class="pdf-header">

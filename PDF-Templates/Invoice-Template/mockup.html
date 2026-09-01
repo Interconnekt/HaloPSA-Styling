@@ -2,8 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Invoice — Mockup</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" type="text/css">
+    <title>Invoice Mockup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet" type="text/css">
     <style type="text/css">
         .page-wrapper {
             max-width: 210mm;
@@ -17,7 +17,7 @@
             background-color: #30355b;
             color: #ffffff;
             padding: 14px 24px;
-            font-family: Montserrat, Arial, sans-serif;
+            font-family: Figtree, Arial, sans-serif;
         }
         .pdf-header table { width: 100%; border-collapse: collapse; }
 
@@ -25,18 +25,18 @@
             background-color: #18181B;
             color: rgba(255,255,255,0.85);
             padding: 10px 24px;
-            font-family: Montserrat, Arial, sans-serif;
+            font-family: Figtree, Arial, sans-serif;
             font-size: 9px;
         }
-        .pdf-footer table { width: 100%; border-collapse: collapse; font-size: 9px; font-family: Montserrat, Arial, sans-serif; }
-        .pdf-footer td { padding: 2px 0; font-family: Montserrat, Arial, sans-serif; font-size: 9px; }
+        .pdf-footer table { width: 100%; border-collapse: collapse; font-size: 9px; font-family: Figtree, Arial, sans-serif; }
+        .pdf-footer td { padding: 2px 0; font-family: Figtree, Arial, sans-serif; font-size: 9px; }
 
         .pdf-body { padding: 24px 24px 32px 24px; }
 
-        *, *::before, *::after { font-family: Montserrat, Arial, sans-serif !important; box-sizing: border-box; }
+        *, *::before, *::after { font-family: Figtree, Arial, sans-serif !important; box-sizing: border-box; }
 
         body {
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
             font-size: 12px;
             line-height: 1.6;
             color: #34495e;
@@ -45,7 +45,7 @@
             background: #edf0f1;
         }
 
-        a { color: #3598db; text-decoration: none; }
+        a { color: #0284C7; text-decoration: none; }
 
         .invoice-header-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
         .invoice-header-table td { vertical-align: top; padding: 0; }
@@ -74,7 +74,7 @@
         .invoice-reference { margin-bottom: 16px; font-size: 12px; color: #34495e; }
         .invoice-reference strong { color: #30355b; }
 
-        .section-header { font-size: 14px; font-weight: 700; color: #30355b; margin: 24px 0 12px 0; padding: 8px 14px; background-color: #e2eafb; border-radius: 6px; }
+        .section-header { font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif !important; font-size: 14px; font-weight: 700; color: #30355b; margin: 24px 0 12px 0; padding: 8px 14px; background-color: #E4EAFC; border-radius: 6px; }
 
         .items-table { width: 100%; border-collapse: collapse; font-size: 11px; margin: 0 0 16px 0; border-top: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; }
         .items-table thead th { background-color: #F4F4F5; color: #30355b; font-weight: 700; text-align: left; padding: 8px 12px; font-size: 11px; white-space: nowrap; }
@@ -84,7 +84,7 @@
         .items-table tbody td.right { text-align: right; }
         .items-table tbody td.center { text-align: center; }
         .items-table tbody tr:nth-child(even) { background-color: #F4F4F5; }
-        .items-table tbody tr.group-row { background-color: #e0eafd !important; font-weight: 700; color: #30355b; }
+        .items-table tbody tr.group-row { background-color: #E4EAFC !important; font-weight: 700; color: #30355b; }
         .items-table tbody tr.group-row td { color: #30355b; font-weight: 700; }
 
         .totals-table { width: 270px; margin-left: auto; border-collapse: collapse; font-size: 12px; line-height: 1.5; }
@@ -94,15 +94,15 @@
         .totals-table .subtotal td { border-bottom: 1px solid #e0e0e0; }
         .totals-table .tax td { border-bottom: 1px solid #e0e0e0; }
         .totals-table .total td { padding-top: 8px; }
-        .totals-table .total .label { font-size: 14px; font-weight: 800; color: #30355b; }
-        .totals-table .total .value { font-size: 14px; font-weight: 800; color: #30355b; }
+        .totals-table .total .label { font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif !important; font-size: 14px; font-weight: 800; color: #30355b; }
+        .totals-table .total .value { font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif !important; font-size: 14px; font-weight: 800; color: #30355b; }
 
         hr { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
 
         .payment-cards { width: 100%; border-collapse: collapse; }
         .payment-cards > tbody > tr > td { width: 50%; vertical-align: top; padding: 0; }
 
-        .payment-card { background-color: #e2eafb; border-radius: 8px; padding: 16px 20px; font-size: 12px; line-height: 1.7; min-height: 136px; }
+        .payment-card { background-color: #E4EAFC; border-radius: 8px; padding: 16px 20px; font-size: 12px; line-height: 1.7; min-height: 136px; }
         .payment-card-label { font-size: 11px; font-weight: 700; color: #30355b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
         .payment-card table { border-collapse: collapse; }
         .payment-card table td { padding: 2px 0; font-size: 12px; vertical-align: top; border: none; }
@@ -110,9 +110,9 @@
 
         .pay-button {
             display: inline-block;
-            background-color: #3574e3;
+            background-color: #3355D8;
             color: #ffffff !important;
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
             font-size: 13px;
             font-weight: 700;
             padding: 12px 36px;
@@ -136,8 +136,8 @@
                         <img src="https://assets.unlayer.com/projects/0/1740816329578-Interconnekt-Neg-Halo-300w.png" alt="Interconnekt" style="max-height: 40px; max-width: 240px;">
                     </div>
                 </td>
-                <td style="width: 50%; text-align: right; vertical-align: middle; padding: 4px 0; font-family: Montserrat, Arial, sans-serif; font-size: 10px; line-height: 1.6;">
-                    <div style="font-size: 14px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px;">TAX INVOICE</div>
+                <td style="width: 50%; text-align: right; vertical-align: middle; padding: 4px 0; font-family: Figtree, Arial, sans-serif; font-size: 10px; line-height: 1.6;">
+                    <div style="font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif !important; font-size: 14px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px;">TAX INVOICE</div>
                     <div style="color: rgba(255,255,255,0.7);">
                         #INV-00412 &bull; 10/04/2026
                     </div>
@@ -193,7 +193,7 @@
 
         <!-- ── Reference ── -->
         <div class="invoice-reference">
-            <strong>Invoice Reference:</strong> New office network setup and access control — Windsor site
+            <strong>Invoice Reference:</strong> New office network setup and access control, Windsor site
         </div>
 
         <!-- ── Line Items ── -->

@@ -3,28 +3,48 @@
 <head>
     <meta charset="utf-8">
     <title>$KBTITLE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet" type="text/css">
     <style type="text/css">
         /* Fallback @font-face if <link> fails in wkhtmltopdf */
         @font-face {
-            font-family: 'Montserrat';
+            font-family: 'Figtree';
             font-weight: 400;
-            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtr6Ew-Y3tcoqK5.woff2') format('woff2');
+            src: url('https://fonts.gstatic.com/s/figtree/v9/_Xmz-HUzqDCFdgfMsYiV_F7wfS-Bs_d_QG5ZyEA.woff2') format('woff2');
         }
         @font-face {
-            font-family: 'Montserrat';
+            font-family: 'Figtree';
             font-weight: 600;
-            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCu6YDtcoqK5.woff2') format('woff2');
+            src: url('https://fonts.gstatic.com/s/figtree/v9/_Xmz-HUzqDCFdgfMsYiV_F7wfS-Bs_ehR25ZyEA.woff2') format('woff2');
         }
         @font-face {
-            font-family: 'Montserrat';
+            font-family: 'Figtree';
             font-weight: 700;
-            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCuMYDtcoqK5.woff2') format('woff2');
+            src: url('https://fonts.gstatic.com/s/figtree/v9/_Xmz-HUzqDCFdgfMsYiV_F7wfS-Bs_eYR25ZyEA.woff2') format('woff2');
         }
         @font-face {
-            font-family: 'Montserrat';
+            font-family: 'Figtree';
             font-weight: 800;
-            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCvhYDtcoqK5.woff2') format('woff2');
+            src: url('https://fonts.gstatic.com/s/figtree/v9/_Xmz-HUzqDCFdgfMsYiV_F7wfS-Bs_f_R25ZyEA25WTzZO8.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Bricolage Grotesque';
+            font-weight: 400;
+            src: url('https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvRvi-Molsg.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Bricolage Grotesque';
+            font-weight: 600;
+            src: url('https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvcXl-Molsg.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Bricolage Grotesque';
+            font-weight: 700;
+            src: url('https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvfzl-Molsg.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Bricolage Grotesque';
+            font-weight: 800;
+            src: url('https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9H6as8bTXq_nANBjzKo3IeZx8z6up5BeSl9D4dj_x9PpZBMnuECoAsyJBOm_OJ2iCwA1XphjhQYg.woff2') format('woff2');
         }
 
         /* ── Page setup ──
@@ -35,14 +55,14 @@
             margin: 22mm 12.7mm 30mm 12.7mm;
         }
 
-        /* ── Base — !important overrides Confluence inline font styles ── */
+        /* ── Base: !important overrides Confluence inline font styles ── */
         *, *::before, *::after {
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
             box-sizing: border-box;
         }
 
         body {
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
             font-size: 13px;
             line-height: 1.7;
             color: #34495e;
@@ -52,7 +72,7 @@
 
         /* ── Headings ── */
         h1 {
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif !important;
             font-size: 28px;
             font-weight: 800;
             color: #30355b;
@@ -62,18 +82,18 @@
         }
 
         h2 {
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
             font-size: 18px;
             font-weight: 700;
             color: #30355b;
             margin: 30px 0 8px 0;
             padding-bottom: 6px;
-            border-bottom: 2px solid #3574e3;
+            border-bottom: 2px solid #3355D8;
             letter-spacing: -0.01em;
         }
 
         h3 {
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
             font-size: 15px;
             font-weight: 600;
             color: #30355b;
@@ -81,7 +101,7 @@
         }
 
         h4 {
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
             font-size: 13px;
             font-weight: 600;
             color: #34495e;
@@ -90,12 +110,12 @@
 
         /* ── Paragraphs & lists ── */
         p {
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
             margin: 8px 0;
         }
 
         li {
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
             margin-bottom: 4px;
         }
 
@@ -106,9 +126,9 @@
 
         /* ── Links ── */
         a {
-            color: #3598db;
+            color: #0284C7;
             text-decoration: none;
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
         }
 
         /* ── Divider ── */
@@ -118,13 +138,13 @@
             margin: 20px 0;
         }
 
-        /* ── Meta table (front page — Style A shaded label) ── */
+        /* ── Meta table (front page, Style A shaded label) ── */
         .meta-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 13px;
             margin-top: 12px;
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
             border-top: 1px solid #e0e0e0;
             border-bottom: 1px solid #e0e0e0;
         }
@@ -136,7 +156,7 @@
             text-align: left;
             padding: 8px 14px;
             border-bottom: 1px solid #e0e0e0;
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
         }
 
         .meta-table td {
@@ -144,7 +164,7 @@
             border-bottom: 1px solid #e0e0e0;
             vertical-align: top;
             color: #34495e;
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
         }
 
         /* ── Stats bar ── */
@@ -152,7 +172,7 @@
             font-size: 10px;
             color: #34495e;
             margin: 10px 0 0 0;
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
         }
 
         .stats-bar strong {
@@ -168,7 +188,7 @@
             font-size: 10px;
             color: #34495e;
             margin: 6px 0 0 0;
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
         }
 
         /* ── Content sections ── */
@@ -178,22 +198,23 @@
         }
 
         .section-header {
+            font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif !important;
             font-size: 16px;
             font-weight: 700;
             color: #30355b;
             margin: 24px 0 12px 0;
             padding: 10px 16px;
-            background-color: #e2eafb;
+            background-color: #E4EAFC;
             border-radius: 6px;
         }
 
         .section-body {
             font-size: 13px;
             line-height: 1.7;
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
         }
 
-        /* Deep override — catches Confluence inline style="font-family:..." on any element */
+        /* Deep override: catches Confluence inline style="font-family:..." on any element */
         .section-body *,
         .section-body span,
         .section-body div,
@@ -206,7 +227,7 @@
         .section-body em,
         .section-body b,
         .section-body i {
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
         }
 
         /* ── Tables (Confluence content) ── */
@@ -215,7 +236,7 @@
             border-collapse: collapse;
             margin: 12px 0;
             font-size: 13px;
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
         }
 
         th {
@@ -225,7 +246,7 @@
             text-align: left;
             padding: 8px 14px;
             border-bottom: 1px solid #e0e0e0;
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
         }
 
         td {
@@ -233,7 +254,7 @@
             border-bottom: 1px solid #e0e0e0;
             vertical-align: top;
             color: #34495e;
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
         }
 
         tr {
@@ -253,7 +274,7 @@
         }
 
         .confluence-information-macro-body {
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
         }
 
         .confluence-information-macro-information {
@@ -310,7 +331,7 @@
 
         .panelContent {
             padding: 10px 16px;
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
         }
 
         /* ── Status macros ── */
@@ -322,7 +343,7 @@
             border-radius: 20px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
         }
 
         .aui-lozenge-complete  { background: #deebff; color: #0747a6; }
@@ -367,19 +388,19 @@
 
         /* ── Blockquotes ── */
         blockquote {
-            border-left: 4px solid #3574e3;
+            border-left: 4px solid #3355D8;
             background: #F4F4F5;
             margin: 12px 0;
             padding: 10px 16px;
             border-radius: 0 6px 6px 0;
             color: #34495e;
             font-style: italic;
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
         }
 
         blockquote p {
             margin: 0;
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
         }
 
         /* ── Images ── */

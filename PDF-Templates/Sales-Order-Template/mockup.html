@@ -153,20 +153,22 @@
         .items-table tbody td.right { text-align: right; }
 
         .totals-table {
-            width: 240px;
+            width: 270px;
             margin-left: auto;
+            margin-right: 0;
             border-collapse: collapse;
-            font-size: 13px;
-            line-height: 1.6;
+            font-size: 12px;
+            line-height: 1.5;
+            page-break-inside: avoid;
         }
 
-        .totals-table td { padding: 6px 0; }
+        .totals-table td { padding: 8px 12px; }
 
         .totals-table .label {
             text-align: left;
-            padding-right: 20px;
             color: #30355b;
             font-weight: 700;
+            background-color: #F4F4F5;
         }
 
         .totals-table .value { text-align: right; color: #34495e; }
@@ -177,10 +179,14 @@
         .totals-table .total .label { font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif !important; font-size: 14px; font-weight: 800; color: #30355b; }
         .totals-table .total .value { font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif !important; font-size: 14px; font-weight: 800; color: #30355b; }
 
+        .section-header { font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif !important; font-size: 14px; font-weight: 700; color: #30355b; margin: 24px 0 12px 0; padding: 8px 14px; background-color: #E4EAFC; border-radius: 6px; }
         .order-notes {
-            margin-top: 24px;
-            font-size: 13px;
-            line-height: 1.7;
+            margin-top: 0;
+            padding: 14px 18px;
+            background-color: #F4F4F5;
+            border-radius: 8px;
+            font-size: 12px;
+            line-height: 1.6;
             color: #34495e;
         }
 
@@ -341,6 +347,13 @@
                 <td class="value">$7,941.03</td>
             </tr>
         </table>
+
+        <div class="section-header">Notes</div>
+        <div class="order-notes">
+            Delivery scheduled for the week commencing 20/04/2026. Installation
+            is booked separately; our Service Desk will confirm the window once
+            hardware lands at the Southbank office.
+        </div>
 
         <div class="thank-you">
             Thank you for your order. The above items have been sold by us to your company on the basis of a legally binding order. An invoice detailing your order will follow shortly from our Finance team to yours for the above amount. Should you have any questions regarding this order, please feel free to contact us at any time.

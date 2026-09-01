@@ -1,24 +1,50 @@
 <html>
 <head>
     <style type="text/css">
-        @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Spline+Sans+Mono:wght@400;600&display=swap');
     </style>
 </head>
 <body style="margin: 0; padding: 0;">
-    <div style="background-color: #30355b; color: #ffffff; margin: -20px; padding: 14px 68px; font-family: Figtree, Arial, sans-serif;">
-        <table style="width: 100%; border-collapse: collapse;">
-            <tr>
-                <td style="width: 50%; vertical-align: middle; padding: 4px 0;">
-                    <div style="height: 40px; width: 240px; background-image: url($ORLOGOSRC); background-repeat: no-repeat; background-position: left center; background-size: contain;"></div>
-                </td>
-                <td style="width: 50%; text-align: right; vertical-align: middle; padding: 4px 0; font-family: Figtree, Arial, sans-serif; font-size: 10px; line-height: 1.6;">
-                    <div style="font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px;">TAX INVOICE</div>
-                    <div style="color: rgba(255,255,255,0.7);">
-                        #$INVOICENUMBER &bull; $INVOICEDATE
-                    </div>
-                </td>
-            </tr>
-        </table>
+    <!--
+        Running header, shared with the KB PDF template: ink band
+        carrying the reversed Interconnekt mark, closed by the 3px
+        tri gradient rule (brand-1 > brand-2 > brand-3).
+
+        Geometry: the -20px margin bleeds the band past the
+        renderer's default header inset so the ink reaches all four
+        page edges, which leaves 68px - 20px = 48px = 12.7mm of side
+        padding, the body's own margin line.
+
+        The logo sits in a 240x40 box. The KB template uses 192x32
+        because its header runs on every page of a long article;
+        these are one page documents, so the mark can carry full
+        size. background-size: contain height-constrains the art so
+        it never distorts whatever aspect $ORLOGOSRC serves.
+
+        Air below the rule is a spacer element, not a page margin.
+        Halo starts body content exactly where the header's height
+        ends, so raising @page's top margin does not reliably buy a
+        gap. Building the air into the header gives the same
+        clearance on every page.
+    -->
+    <div style="margin: -20px; font-family: 'Spline Sans Mono', Menlo, monospace; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
+        <div style="background-color: #141824; padding: 10px 68px;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td style="width: 55%; vertical-align: middle;">
+                        <div style="height: 40px; width: 240px; background-image: url($ORLOGOSRC); background-repeat: no-repeat; background-position: left center; background-size: contain;"></div>
+                    </td>
+                    <td style="width: 45%; text-align: right; vertical-align: middle;">
+                        <div style="font-family: 'Spline Sans Mono', Menlo, monospace; font-size: 9px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #ffffff;">TAX INVOICE</div>
+                        <div style="font-family: 'Spline Sans Mono', Menlo, monospace; font-size: 8px; letter-spacing: 0.12em; color: #AEB5C9; margin-top: 3px;">#$INVOICENUMBER &bull; $INVOICEDATE</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div style="height: 3px; background: #3F51CE; background: linear-gradient(115deg, #0F7CBE, #3F51CE 52%, #7440D2);"></div>
+        <!-- Clear air between the rule and the document, on every
+             page. Adjust here, not in main.html's @page margin. -->
+        <div style="height: 22px; line-height: 22px; font-size: 1px;">&nbsp;</div>
     </div>
 </body>
 </html>

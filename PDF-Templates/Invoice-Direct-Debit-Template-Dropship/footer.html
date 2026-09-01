@@ -1,20 +1,41 @@
 <html>
 <head>
     <style type="text/css">
-        @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Spline+Sans+Mono:wght@400;600&display=swap');
     </style>
 </head>
 <body style="margin: 0; padding: 0;">
-    <div style="background-color: #18181B; color: #ffffff; margin: -20px; padding: 0px 50px; font-family: Figtree, Arial, sans-serif;">
+    <!--
+        Running footer: the same ink #141824 band as the header, so
+        the two bookend every page on one ground. Mono type matches
+        the header's running label; the folio is white and semibold
+        so it is the one thing that reads at a glance.
+
+        The -20px bleed plus 68px side padding lands the text on the
+        body's 12.7mm margin line.
+
+        Vertical centring, the awkward part: the footer is bottom
+        anchored and its content box is taller than the band the
+        renderer gives it, so the overflow is clipped off the TOP.
+        padding-top is therefore inert, and only padding-bottom moves
+        the text, because it sets the distance from the text to the
+        page edge. Measured band is ~39px with ~10px of text, so
+        14px below centres it; the 24px above simply keeps the box
+        taller than the band so the ink still fills it. If the band
+        height ever changes, retune padding-bottom to half of
+        (band - text). No rule across the top either, for the same
+        clipping reason.
+    -->
+    <div style="background-color: #141824; margin: -20px; padding: 0 68px; font-family: 'Spline Sans Mono', Menlo, monospace; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
         <table style="width: 100%; border-collapse: collapse; margin-top: 8px;">
             <tr>
-                <td style="width: 33%; text-align: left; padding: 20px; font-family: Figtree, Arial, sans-serif; font-size: 9px;">
+                <td style="width: 33%; text-align: left; padding: 24px 0 14px 0; font-family: 'Spline Sans Mono', Menlo, monospace; font-size: 9px; letter-spacing: 0.08em; color: #AEB5C9;">
                     interconnekt.com.au
                 </td>
-                <td style="width: 33%; text-align: center; padding: 20px; font-family: Figtree, Arial, sans-serif; font-size: 9px;">
+                <td style="width: 33%; text-align: center; padding: 24px 0 14px 0; font-family: 'Spline Sans Mono', Menlo, monospace; font-size: 9px; letter-spacing: 0.08em; color: #AEB5C9;">
                     1300 852 842
                 </td>
-                <td style="width: 33%; text-align: right; padding: 20px; font-family: Figtree, Arial, sans-serif; font-size: 9px;">
+                <td style="width: 33%; text-align: right; padding: 24px 0 14px 0; font-family: 'Spline Sans Mono', Menlo, monospace; font-size: 9px; font-weight: 600; letter-spacing: 0.08em; color: #ffffff;">
                     Page {page} of {total-pages}
                 </td>
             </tr>

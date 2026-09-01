@@ -5,21 +5,24 @@
     <title>Report (Mockup)</title>
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; padding: 40px; background: #e0e0e0; font-family: Figtree, Arial, sans-serif; }
+        body { margin: 0; padding: 40px; background: #E4E7F0; font-family: Figtree, Arial, sans-serif; }
         .page { width: 210mm; margin: 0 auto 40px auto; background: #fff; box-shadow: 0 2px 16px rgba(0,0,0,0.10); padding: 0; overflow: hidden; position: relative; }
-        .page-body { padding: 24px 48px 40px 48px; font-size: 12px; line-height: 1.6; color: #34495e; }
-        .page-label { background: #F4F4F5; color: #30355b; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 6px 48px; }
+        .page-body { padding: 24px 48px 40px 48px; font-size: 12px; line-height: 1.6; color: #33384a; }
+        .page-label { background: #F4F6FB; color: #141824; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 6px 48px; }
 
-        .pdf-header { background-color: #30355b; color: #fff; padding: 14px 48px; }
+        .pdf-header { background-color: #141824; color: #fff; padding: 14px 48px; }
         .pdf-header table { width: 100%; border-collapse: collapse; }
+        /* Tri gradient rule closing the band, matching header.html
+           and the KB template. Stops are the brand triad. */
+        .pdf-header-rule { height: 3px; background: linear-gradient(115deg, #0F7CBE, #3F51CE 52%, #7440D2); }
         .pdf-header .title { font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.5px; }
-        .pdf-footer { background-color: #18181B; color: rgba(255,255,255,0.85); padding: 10px 48px; font-size: 9px; }
+        .pdf-footer { background-color: #141824; color: rgba(255,255,255,0.85); padding: 10px 48px; font-size: 9px; }
         .pdf-footer table { width: 100%; border-collapse: collapse; }
 
-        .report-table { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 9px; border-top: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; }
-        .report-table thead th { background-color: #F4F4F5; color: #30355b; font-weight: 700; text-align: left; padding: 6px 8px; font-size: 9px; overflow: hidden; text-overflow: ellipsis; word-wrap: break-word; }
-        .report-table tbody td { padding: 6px 8px; border-bottom: 1px solid #e0e0e0; vertical-align: top; color: #34495e; font-size: 9px; word-wrap: break-word; overflow-wrap: break-word; overflow: hidden; }
-        .report-table tbody tr:nth-child(even) { background-color: #F4F4F5; }
+        .report-table { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 9px; border-top: 1px solid #E4E7F0; border-bottom: 1px solid #E4E7F0; }
+        .report-table thead th { background-color: #E7EEFA; color: #141824; font-weight: 700; text-align: left; padding: 6px 8px; font-size: 9px; overflow: hidden; text-overflow: ellipsis; word-wrap: break-word; }
+        .report-table tbody td { padding: 6px 8px; border-bottom: 1px solid #E4E7F0; vertical-align: top; color: #33384a; font-size: 9px; word-wrap: break-word; overflow-wrap: break-word; overflow: hidden; }
+        .report-table tbody tr:nth-child(even) { background-color: #F7F9FD; }
     </style>
 </head>
 <body>
@@ -33,12 +36,13 @@
                     <td style="width: 50%; vertical-align: middle;">
                         <img src="../_brand/Interconnekt-lockup-h-neg-800.png" alt="Interconnekt" style="height: 36px;">
                     </td>
-                    <td style="width: 50%; text-align: right; vertical-align: middle; font-size: 10px; line-height: 1.6;">
-                        <div class="title">REPORT</div>
+                    <td style="width: 45%; text-align: right; vertical-align: middle;">
+                        <div style="font-family: 'Spline Sans Mono', Menlo, monospace; font-size: 9px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #ffffff;">REPORT</div>
                     </td>
                 </tr>
             </table>
         </div>
+    <div class="pdf-header-rule"></div>
 
         <div class="page-body">
             <table class="report-table">

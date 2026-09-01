@@ -1056,6 +1056,29 @@ html body .portal .main-tile-item:hover {
     box-shadow: var(--portal-shadow-sm) !important;
 }
 
+/* Service catalogue tiles (/services)
+   ---------------------------------------------------------
+   HaloPSA reuses `.main-tile-item` for TWO different layouts: the
+   stacked ticket Tile view above, where rows run full width down the
+   page, and the service catalogue, where cards sit side by side
+   inside `display: inline-block` `.inlinetile` wrappers.
+
+   HaloPSA ships `.inlinetile .main-tile-item { margin: 7px 10px }`,
+   and that 10px is the only thing separating one card from the next.
+   The rule above sets `margin: 8px 0 !important` because a stacked
+   row wants no horizontal margin, and being `!important` it wins in
+   BOTH contexts. On the catalogue that zeroed the gutter and the
+   four cards butted together into one continuous band with their
+   borders touching.
+
+   Restore a real gutter for the inline case only. 10px on each side
+   gives 20px between adjacent cards, matching the portal's spacing
+   step and HaloPSA's own intent, and 20px between rows when the
+   catalogue wraps. */
+html body .portal .inlinetile > .main-tile-item {
+    margin: 10px !important;
+}
+
 /* On-hold state — HaloPSA ships `.main-tile-item.hold` with a
    native rule that paints EVERY descendant (user name, id, type,
    date, summary, status pill) in a bright blue (rgb(0, 165, 255)),

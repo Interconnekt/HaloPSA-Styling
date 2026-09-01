@@ -56,17 +56,17 @@ serif for italic emphasis); `--ik-font-body` is a new token, not a rename.
 | `--ink` | `--portal-text` / `--portal-heading` | `#161922` | Body text, headings |
 | `--muted` | `--portal-text-secondary` | `#585F76` | Secondary text, nav inks |
 | `--faint` | `--portal-text-muted` | `#8E93A4` | Placeholder, meta, disabled |
-| `--primary` (blue, Insight role) | `--portal-accent` / `--portal-action` | `#3761E2` | Links, primary buttons, focus, H1 page title |
-| n/a | `--portal-accent-hover` / `--portal-action-hover` | `#2F52C0` | Hover states (derived: 15% darker toward black) |
+| `--primary` (blue, Insight role) | `--portal-accent` / `--portal-action` | `#3355D8` | Links, primary buttons, focus, H1 page title |
+| n/a | `--portal-accent-hover` / `--portal-action-hover` | `#2C4AC0` | Hover states (derived: 15% darker toward black) |
 | n/a | `--portal-accent-subtle` | `rgba(55,92,230,0.08)`* | Focus ring, hover tint (*see note) |
-| n/a | `--portal-accent-soft` | `#E7ECFC` | Chip tint |
+| n/a | `--portal-accent-soft` | `#E4EAFC` | Chip tint |
 | `--accent` (pink, CTA-only role) | `--portal-accent-2` | `#C026D3` | Get-in-touch CTA + highlighter accent ONLY, not a general second brand colour |
 | `cat-violet` (violet, Advisory/AI/People role) | `--portal-violet` | `#6F43D6` | Third triad member, new token, see §1 |
 | `--highlight` (jade/teal, Security BRAND role only) | `--portal-highlight` | `#0284C7` | Delight moments, live dots, alt icon chips, gradient first stop. NOT the success semantic, see `--ok` below |
 | `--ok` | `--portal-ok` | `#15803D` | Semantic success: an independent true green, deliberately DISTINCT from `--portal-highlight`'s jade/teal. (An earlier pass briefly aliased `--portal-ok` to jade; reverted per design amendment, since jade/teal is brand-only and success needed its own hue.) |
 | `--warn` | `--portal-warn` | `#C2410C` | Semantic warn, unchanged by the 2026 re-palette (already brand-independent) |
 | `--err` | `--portal-err` | `#B91C1C` | Semantic error, unchanged by the 2026 re-palette |
-| `--tint-cool` | `--portal-tint-cool` | `#E7ECFC` | Cool section tint (blue-derived) |
+| `--tint-cool` | `--portal-tint-cool` | `#E4EAFC` | Cool section tint (blue-derived) |
 | `--tint-warm` | `--portal-tint-warm` | `#F7E5FA` | Warm section tint (pink-derived) |
 | n/a | `--portal-band-bg` | `#E2E5EE` | Social-proof strip / carousels, same value as hairline |
 | n/a | `--portal-on-accent` | `#FFFFFF` | Text colour for use ON TOP of a solid brand-colour fill (buttons, filled badges); see dark-mode row, this is a new token |
@@ -91,9 +91,9 @@ Both now use the same `#0C0E16 → #10131C → #161A25 → #1B2030` ladder.
 | `--ink` `#ECEEF4` | `--portal-text` | `#ECEEF4` | Identical |
 | `--muted` `rgba(236,238,244,.62)` | `--portal-text-secondary` | `rgba(236,238,244,0.62)` | Identical |
 | `--faint` `rgba(236,238,244,.4)` | `--portal-text-muted` | `rgba(236,238,244,0.4)` | Identical |
-| `--primary` `#6E90FF` | `--portal-accent` / `--portal-action` | `#6E90FF` | Identical |
+| `--primary` `#7E9CFF` | `--portal-accent` / `--portal-action` | `#7E9CFF` | Identical |
 | `cat-violet` `#A47BFF` | `--portal-violet` | `#A47BFF` | Identical |
-| `--highlight` `#3FC6A6` | `--portal-highlight` | `#3FC6A6` | Identical. Security brand accent ONLY, not the success semantic |
+| `--highlight` `#0284C7` | `--portal-highlight` | `#0284C7` | Identical, and the SAME value as light mode. Security brand accent ONLY, not the success semantic |
 | `--accent` `#EC72CF` | `--portal-accent-2` | `#EC72CF` | Identical |
 | `--ok` | `--portal-ok` | `#34D399` | Independent true green, NOT the same hue as `--portal-highlight` |
 | `--warn` | `--portal-warn` | `#FB923C` | Unchanged by re-palette |
@@ -108,12 +108,12 @@ Both now use the same `#0C0E16 → #10131C → #161A25 → #1B2030` ladder.
 
 | Website | Portal | Value | Used for |
 |---|---|---|---|
-| `--gradient-brand` | `--ik-gradient-brand` | `linear-gradient(115deg, #0284C7 0%, #3761E2 52%, #6F43D6 100%)` (light) / `linear-gradient(115deg, #3FC6A6 0%, #6E90FF 52%, #A47BFF 100%)` (dark) | Featured pills, primary button hover underlay. ONE brand gradient, reserved for featured/hero moments only, not a general decoration |
-| `--gradient-line` | `--ik-gradient-line` | `linear-gradient(90deg, transparent, #0284C7 30%, #6F43D6 70%, transparent)` (light) / same with `#3FC6A6`/`#A47BFF` (dark) | Header `::after` hairline, form-card top line |
+| `--gradient-brand` | `--ik-gradient-brand` | `linear-gradient(115deg, #0F7CBE 0%, #3F51CE 52%, #7440D2 100%)` (light) / `linear-gradient(115deg, #248DDF 0%, #5C44DE 52%, #8547EB 100%)` (dark) | Featured pills, primary button hover underlay. ONE brand gradient, reserved for featured/hero moments only, not a general decoration |
+| `--gradient-line` | `--ik-gradient-line` | `linear-gradient(90deg, transparent, #0F7CBE 30%, #7440D2 70%, transparent)` (light) / same with `#248DDF`/`#8547EB` (dark) | Header `::after` hairline, form-card top line |
 | `cubic-bezier(0.22, 1, 0.36, 1)` | `--ik-ease` | Same | Every transition timing function |
 | `200ms` (`duration-200`) | `--ik-dur` | `180ms` | Transition duration |
 
-The gradient direction changed from 135deg to 115deg and the colour stops moved from a two-tone blue to plum sweep to the full jade to blue to violet triad, with the mid stop pinned at 52%. Match the website's `--gradient-brand` exactly rather than re-deriving it if it changes again.
+The gradient direction changed from 135deg to 115deg and the colour stops moved from a two-tone blue to plum sweep to the full three-stop triad, with the mid stop pinned at 52%. The triad has its OWN three values (`--brand-1/2/3` in the website's `globals.css`, `color.locked.*.brand1/2/3` in `Interconnekt/Design-System`) and none of them equals the cyan, blue or violet role colour. Do not rebuild this gradient out of the role tokens; match the website's `--gradient-brand` exactly.
 
 ---
 
@@ -257,7 +257,7 @@ deliberate follow-up conversation, not a default to restore silently.
 | Bucket | Light bg / ink | Dark bg / ink | Derivation |
 |---|---|---|---|
 | green | `#E3F0E8` / `#093A1B` | `rgba(52,211,153,0.18)` / `#61DDAF` | Light: mix `--portal-ok` toward white 88% (bg) / toward black 55% (ink). Dark: rgba of dark `--portal-ok` at 18% / lighten 22%. Independent true green, see the §2 amendment note; do not derive this from `--portal-highlight` (jade/teal) |
-| blue | `#E7ECFC` / `#192C66` | `rgba(110,144,255,0.18)` / `#8EA8FF` | Same formula off `--portal-accent` |
+| blue | `#E4EAFC` / `#192C66` | `rgba(126,156,255,0.18)` / `#8EA8FF` | Same formula off `--portal-accent` |
 | violet | `#EEE8FA` / `#321E60` | `rgba(164,123,255,0.18)` / `#B898FF` | Same formula off `--portal-violet` |
 | amber | `#F8E8E2` / `#882E08` | `rgba(251,146,60,0.18)` / `#FCA259` | Same formula off `--portal-warn` (kept from the existing warn family per the design brief) |
 | red | `#F7E4E4` / `#9D1818` | `rgba(248,113,113,0.18)` / `#F97F7F` | Same formula off `--portal-err` |
@@ -388,16 +388,16 @@ WEBSITE TOKEN                PORTAL TOKEN                 NOTES
 --card2                    → --portal-surface-active       (#F0F2F7 / #1B2030)
 hairline                   → --portal-border               (#E2E5EE / rgba(255,255,255,.072))
 --ink / --muted / --faint  → --portal-text / -secondary / -muted
---primary (blue)           → --portal-accent (= --portal-action)   (#3761E2 / #6E90FF)
+--primary (blue)           → --portal-accent (= --portal-action)   (#3355D8 / #7E9CFF)
 cat-violet                 → --portal-violet               (#6F43D6 / #A47BFF, new token)
---highlight (jade/teal)    → --portal-highlight             (Security BRAND accent ONLY, #0284C7 / #3FC6A6, NOT --portal-ok)
+--highlight (cyan)         → --portal-highlight             (Security BRAND accent ONLY, #0284C7 in BOTH modes, NOT --portal-ok)
 --ok (true green)          → --portal-ok                   (semantic success, independent hue, #15803D / #34D399)
 --accent (pink)            → --portal-accent-2             (CTA + highlighter ONLY, #C026D3 / #EC72CF)
 --font-display              → --ik-font-display            (Bricolage Grotesque, headings only, weight 700)
 (new token)                 → --ik-font-body               (Figtree, everything else)
 --font-serif                → --ik-font-serif               (Newsreader italic accent)
 --font-mono                 → --ik-font-mono                (Spline Sans Mono)
---gradient-brand            → --ik-gradient-brand           (115deg, jade to blue to violet, 52% mid stop)
+--gradient-brand            → --ik-gradient-brand           (115deg, brand-1/2/3 triad, 52% mid stop, NOT the role colours)
 --gradient-line              → --ik-gradient-line           (header hairline)
 (new token)                 → --portal-on-accent            (white light / dark-ink dark, for text on solid brand fills)
 ```

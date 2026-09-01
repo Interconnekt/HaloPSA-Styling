@@ -13,8 +13,8 @@
    • Light-first cool-neutral grounds: bg #F1F3F7 → panel #F5F7FB →
      card #FFFFFF → card2 #F0F2F7. Dark grounds: #0C0E16 → #10131C →
      #161A25 → #1B2030
-   • Jade/teal → blue → violet brand triad (#0284C7 → #3761E2 → #6F43D6
-     light, #3FC6A6 → #6E90FF → #A47BFF dark); jade/teal is the
+   • Cyan → blue → violet brand triad (#0284C7 → #3355D8 → #6F43D6
+     light, #0284C7 → #7E9CFF → #A47BFF dark); cyan is the
      Security BRAND accent only, NOT the success semantic (success is
      a separate true green, --portal-ok, #15803D / #34D399); pink
      (#C026D3 / #EC72CF) reserved for the get-in-touch CTA + highlighter
@@ -74,16 +74,16 @@
 
     /* Brand: primary blue (Insight role: links, primary buttons,
        focus), same as website --primary */
-    --portal-accent:          #3761E2;
-    --portal-accent-hover:    #2F52C0;
-    --portal-accent-subtle:   rgba(55, 97, 226, 0.08);
-    --portal-accent-soft:     #E7ECFC;              /* website --primary-subtle */
+    --portal-accent:          #3355D8;
+    --portal-accent-hover:    #2C4AC0;
+    --portal-accent-subtle:   rgba(51, 85, 216, 0.08);
+    --portal-accent-soft:     #E4EAFC;              /* website --primary-subtle */
     --portal-accent-2:        #C026D3;              /* website --accent: pink, get-in-touch CTA + highlighter only */
     --portal-accent-2-hover:  #A320B3;
     --portal-accent-2-subtle: #F7E5FA;
 
     /* Violet: Advisory / AI / People role. Third member of the brand
-       triad alongside blue (Insight) and jade/teal (Security). New
+       triad alongside blue (Insight) and cyan (Security). New
        token: the pre-2026 palette only had a two-colour brand system
        (blue + plum); the 2026 site adds violet as its own hue (website
        `cat-violet`), so the portal gets a matching dedicated token. */
@@ -91,16 +91,16 @@
     --portal-violet-hover:    #5E39B6;
     --portal-violet-subtle:   #EEE8FA;
 
-    /* Highlight: jade/teal. Third brand colour alongside blue +
+    /* Highlight: cyan. Third brand colour alongside blue +
        violet: the Security BRAND accent (delight moments, live dots,
        alt icon chips), NOT the semantic-success hue. Success is a
        separate true green, see --portal-ok below. Replaces the
        pre-2026 emerald as the brand's third hue; the emerald's old
        success DUTY moved to --portal-ok, which kept its original
-       green value rather than adopting this jade. */
+       green value rather than adopting this cyan. */
     --portal-highlight:        #0284C7;
-    --portal-highlight-hover:  #0270A9;
-    --portal-highlight-subtle: #E1F0F8;
+    --portal-highlight-hover:  #0574AE;
+    --portal-highlight-subtle: #DFF0FA;
 
     /* Text colour to use ON TOP of a solid brand-colour fill (buttons,
        filled badges). White works in light mode (all four brand hues
@@ -112,14 +112,14 @@
        for alternating tinted panels (e.g. highlighted announcements,
        featured KB categories) to break up long pages without going to
        full colour. */
-    --portal-tint-cool:       #E7ECFC;
+    --portal-tint-cool:       #E4EAFC;
     --portal-tint-warm:       #F7E5FA;
     --portal-band-bg:         #E2E5EE;              /* == hairline; carousels/strips */
 
     /* Action (buttons, H1, stepper active) */
-    --portal-action:          #3761E2;
-    --portal-action-hover:    #2F52C0;
-    --portal-action-shadow:   rgba(55, 97, 226, 0.22);
+    --portal-action:          #3355D8;
+    --portal-action-hover:    #2C4AC0;
+    --portal-action-shadow:   rgba(51, 85, 216, 0.22);
 
     /* Borders & shadows */
     --portal-border:          #E2E5EE;   /* website hairline */
@@ -160,12 +160,12 @@
     /* Semantic: red = error/blocked/overdue, amber = warning/pending/
        review, unchanged by the 2026 re-palette (already independent
        of the brand triad). --portal-ok is a true green, DELIBERATELY
-       DISTINCT from --portal-highlight's jade/teal: jade/teal is the
+       DISTINCT from --portal-highlight's cyan: cyan is the
        Security BRAND accent only (gradient first stop, featured
        moments, live dots via --portal-highlight); the success
        SEMANTIC (approved/paid/complete/active) is this independent
        green. Don't collapse the two; an earlier pass briefly aliased
-       --portal-ok to jade and it was reverted. */
+       --portal-ok to cyan and it was reverted. */
     --portal-ok:              #15803D;
     --portal-warn:            #C2410C;
     --portal-err:             #B91C1C;
@@ -179,12 +179,12 @@
        2026 mapping: info=blue, note=violet, warn=red (the "-warning"
        class is legacy-named but renders ADF *error* panels, see
        AGENTS.md gotcha #4), tip=true green (success, see the
-       --portal-ok comment above: jade/teal is the Security BRAND
+       --portal-ok comment above: cyan is the Security BRAND
        accent only, NOT the success semantic), warnyellow=amber
        (genuine warning, disambiguated via :has(.aui-iconfont-warning)). */
     --panel-info-bg:          #F1F4FD;
-    --panel-info-border:      rgba(55, 97, 226, 0.28);
-    --panel-info-icon:        #3761E2;
+    --panel-info-border:      rgba(51, 85, 216, 0.28);
+    --panel-info-icon:        #3355D8;
     --panel-note-bg:          #F5F2FC;
     --panel-note-border:      rgba(111, 67, 214, 0.28);
     --panel-note-icon:        #6F43D6;
@@ -213,7 +213,7 @@
        stay pinned to Confluence's own default export hex (#EAE6FF,
        #E6FCFF); that's what Confluence emits, not a brand token, so
        it doesn't move with the re-palette. Only the dark-mode flip
-       (below) changes, to the new violet/jade families. */
+       (below) changes, to the new violet/cyan families. */
     --panel-b-note-bg:          #EAE6FF;
     --panel-b-note-border:      #998DD9;
     --panel-b-custom-bg:        #E6FCFF;
@@ -221,8 +221,15 @@
 
     /* Gradient system: ONE brand gradient, reserved for featured/hero
        moments only. */
-    --ik-gradient-brand: linear-gradient(115deg, #0284C7 0%, #3761E2 52%, #6F43D6 100%);
-    --ik-gradient-line:  linear-gradient(90deg, transparent, #0284C7 30%, #6F43D6 70%, transparent);
+    /* The brand gradient has its OWN triad, separate from the role
+       tokens above. `--brand-1/2/3` in the website's globals.css and
+       `color.locked.light.brand1/2/3` in Interconnekt/Design-System
+       agree on these three values, and none of them equals the blue,
+       cyan or violet role colour. Building the gradient out of the
+       role tokens (what this did previously) produced a gradient that
+       matched nothing shipped. */
+    --ik-gradient-brand: linear-gradient(115deg, #0F7CBE 0%, #3F51CE 52%, #7440D2 100%);
+    --ik-gradient-line:  linear-gradient(90deg, transparent, #0F7CBE 30%, #7440D2 70%, transparent);
 
     /* Motion */
     --ik-ease:           cubic-bezier(0.22, 1, 0.36, 1);
@@ -253,10 +260,10 @@
     --portal-text-muted:      rgba(236, 238, 244, 0.4);
     --portal-heading:         #ECEEF4;
 
-    --portal-accent:          #6E90FF;
-    --portal-accent-hover:    #84A1FF;
-    --portal-accent-subtle:   rgba(110, 144, 255, 0.14);
-    --portal-accent-soft:     rgba(110, 144, 255, 0.18);  /* website --primary-subtle */
+    --portal-accent:          #7E9CFF;
+    --portal-accent-hover:    #92ACFF;
+    --portal-accent-subtle:   rgba(126, 156, 255, 0.14);
+    --portal-accent-soft:     rgba(126, 156, 255, 0.18);  /* website --primary-subtle */
     --portal-accent-2:        #EC72CF;
     --portal-accent-2-hover:  #EF87D6;
     --portal-accent-2-subtle: rgba(236, 114, 207, 0.16);
@@ -265,17 +272,20 @@
     --portal-violet-hover:    #B28FFF;
     --portal-violet-subtle:   rgba(164, 123, 255, 0.16);
 
-    /* Highlight: brighter jade/teal for dark-mode contrast. Security
-       brand accent only, see the light-mode token block comment. */
-    --portal-highlight:        #3FC6A6;
-    --portal-highlight-hover:  #5CCFB3;
-    --portal-highlight-subtle: rgba(63, 198, 166, 0.16);
+    /* Highlight: the same cyan as light mode. The 2026 palette uses
+       one value in both modes rather than a brightened dark variant.
+       Security brand accent only, see the light-mode token block
+       comment. */
+    --portal-highlight:        #0284C7;
+    --portal-highlight-hover:  #0A93DA;
+    --portal-highlight-subtle: rgba(2, 132, 199, 0.16);
 
     /* Text on a solid brand-colour fill flips to dark ink in dark
        mode; the brightened dark-mode brand hues don't carry white
-       text at readable contrast (verified: white-on-#6E90FF measures
-       2.96:1, dark-ink-on-#6E90FF measures 5.93:1; same pattern holds
-       for violet/jade/pink). See website-portal-mapping.md. */
+       text at readable contrast (re-measured for the 2026 primary:
+       white-on-#7E9CFF is 2.60:1, dark-ink-on-#7E9CFF is 6.76:1;
+       same pattern holds for violet/highlight/pink). See
+       website-portal-mapping.md. */
     --portal-on-accent:       #161922;
 
     /* Dark tints: blue-tinted cool + pink-tinted warm, blended into
@@ -284,9 +294,9 @@
     --portal-tint-warm:       #342037;
     --portal-band-bg:         rgba(255, 255, 255, 0.072);   /* == hairline */
 
-    --portal-action:          #6E90FF;
-    --portal-action-hover:    #84A1FF;
-    --portal-action-shadow:   rgba(110, 144, 255, 0.30);
+    --portal-action:          #7E9CFF;
+    --portal-action-hover:    #92ACFF;
+    --portal-action-shadow:   rgba(126, 156, 255, 0.30);
 
     /* Hairline from the 2026 lock: translucent white rather than an
        opaque lifted grey. */
@@ -309,7 +319,7 @@
 
     --portal-quote-bg:        #161A25;
 
-    /* True green (success), distinct from --portal-highlight's jade;
+    /* True green (success), distinct from --portal-highlight's cyan;
        see the light-mode token block comment. */
     --portal-ok:              #34D399;
     --portal-warn:            #FB923C;
@@ -321,9 +331,9 @@
        moderate alpha so the hairline remains visible on the deeper
        bg. Icons go to the brighter dark-mode variants used elsewhere
        for the same hue family. */
-    --panel-info-bg:          rgba(110, 144, 255, 0.15);
-    --panel-info-border:      rgba(110, 144, 255, 0.40);
-    --panel-info-icon:        #6E90FF;
+    --panel-info-bg:          rgba(126, 156, 255, 0.15);
+    --panel-info-border:      rgba(126, 156, 255, 0.40);
+    --panel-info-icon:        #7E9CFF;
     --panel-note-bg:          rgba(164, 123, 255, 0.15);
     --panel-note-border:      rgba(164, 123, 255, 0.40);
     --panel-note-icon:        #A47BFF;
@@ -347,11 +357,12 @@
        and `.theme-dark` live on different elements. */
     --panel-b-note-bg:          rgba(164, 123, 255, 0.15);
     --panel-b-note-border:      rgba(164, 123, 255, 0.40);
-    --panel-b-custom-bg:        rgba(63, 198, 166, 0.14);
-    --panel-b-custom-border:    rgba(63, 198, 166, 0.40);
+    --panel-b-custom-bg:        rgba(2, 132, 199, 0.14);
+    --panel-b-custom-border:    rgba(2, 132, 199, 0.40);
 
-    --ik-gradient-brand: linear-gradient(115deg, #3FC6A6 0%, #6E90FF 52%, #A47BFF 100%);
-    --ik-gradient-line:  linear-gradient(90deg, transparent, #3FC6A6 30%, #A47BFF 70%, transparent);
+    /* Dark triad, same source. See the light-mode block. */
+    --ik-gradient-brand: linear-gradient(115deg, #248DDF 0%, #5C44DE 52%, #8547EB 100%);
+    --ik-gradient-line:  linear-gradient(90deg, transparent, #248DDF 30%, #8547EB 70%, transparent);
 
     color-scheme: dark;
 }
@@ -1626,7 +1637,7 @@ html body .portal .status-avatar.fortile::before {
    same-hue text in light mode; translucent tint + light ink in dark
    mode) instead of the pre-2026 23-hue rainbow:
      green  → Active / Paid / Approved / Complete (true green, NOT
-              jade/teal. Jade/teal is reserved for the Security BRAND
+              cyan. Cyan is reserved for the Security BRAND
               accent only: gradient first stop, featured moments,
               --portal-highlight. Success is this separate green.)
      blue   → In progress
@@ -1658,9 +1669,9 @@ html body .portal .status-avatar.fortile::before {
        "awaiting first response". */
     --pill-new-bg:               #F8E8E2; --pill-new-ink:               #882E08;
     /* In Progress: blue (the 2026 lock's canonical "active work" hue). */
-    --pill-progress-bg:          #E7ECFC; --pill-progress-ink:          #192C66;
+    --pill-progress-bg:          #E4EAFC; --pill-progress-ink:          #192C66;
     /* Completed / Resolved: true green (Complete = green per the
-       2026 lock; jade/teal is brand-only, not a status hue). */
+       2026 lock; cyan is brand-only, not a status hue). */
     --pill-resolved-bg:          #E3F0E8; --pill-resolved-ink:          #093A1B;
     /* Agent - Triage Handoff: amber, ticket is sitting in a queue
        waiting for engineering pickup, i.e. an "awaiting" state. */
@@ -1708,13 +1719,13 @@ html body .portal .status-avatar.fortile::before {
        "awaiting" state. */
     --pill-quote-sent-bg:        #F8E8E2; --pill-quote-sent-ink:        #882E08;
     /* Assigned: blue (work has started). */
-    --pill-assigned-bg:          #E7ECFC; --pill-assigned-ink:          #192C66;
+    --pill-assigned-bg:          #E4EAFC; --pill-assigned-ink:          #192C66;
 }
 
 .theme-dark {
     --pill-new-bg:               rgba(251,146,60,0.18);   --pill-new-ink:               #FCA259;
     /* In Progress: blue in dark mode */
-    --pill-progress-bg:          rgba(110,144,255,0.18);  --pill-progress-ink:          #8EA8FF;
+    --pill-progress-bg:          rgba(126,156,255,0.18);  --pill-progress-ink:          #8EA8FF;
     /* Resolved: true green */
     --pill-resolved-bg:          rgba(52,211,153,0.18);   --pill-resolved-ink:          #61DDAF;
     /* Triage Handoff: amber */
@@ -1737,7 +1748,7 @@ html body .portal .status-avatar.fortile::before {
     --pill-dispatch-review-bg:   rgba(251,146,60,0.18);   --pill-dispatch-review-ink:   #FCA259;
     --pill-quote-raised-bg:      rgba(164,123,255,0.18);  --pill-quote-raised-ink:      #B898FF;
     --pill-quote-sent-bg:        rgba(251,146,60,0.18);   --pill-quote-sent-ink:        #FCA259;
-    --pill-assigned-bg:          rgba(110,144,255,0.18);  --pill-assigned-ink:          #8EA8FF;
+    --pill-assigned-bg:          rgba(126,156,255,0.18);  --pill-assigned-ink:          #8EA8FF;
 }
 
 /* ─── Named-status class rules ─────────────────────────────
@@ -2192,7 +2203,7 @@ html body .portal .oneline > .priority-block {
    class, fallback is the inline-rgb attribute selector. Both stamp the
    same `--p-bg / --p-ink / --p-dot` triplet onto `.oneline`.
 
-   2026 lock: Low=true green/neutral (NOT jade/teal; jade/teal is the
+   2026 lock: Low=true green/neutral (NOT cyan; cyan is the
    Security brand accent only), Medium=amber, High=red-leaning (a
    distinct blend between amber and red so it doesn't collide with
    Critical), Critical=red. */
@@ -2344,7 +2355,7 @@ html body .portal .sla-perc-bar > div {
     box-sizing: border-box;
 }
 /* Retint per-state, 2026 lock: red = overdue/breached, amber =
-   warning, true green = healthy (matches --portal-ok; jade/teal is
+   warning, true green = healthy (matches --portal-ok; cyan is
    the Security brand accent only, not used for status semantics). */
 html body .portal .sla-perc-bar > div[style*="rgb(255, 46, 0)"],
 html body .portal .sla-perc-bar > div[style*="rgb(220, 53, 69)"] {
@@ -3000,24 +3011,58 @@ html body .portal .-pagination input {
    cells with parallel selectors so both stay in lockstep; it also
    covers the .-filters row if HaloPSA ever enables one here. */
 
-/* Natural width = sum of visible columns, not the stock 1730px. */
+/* Natural width = sum of visible columns, not the stock 1730px.
+   This MUST be a real width, not 0: it is the single value both the
+   header and every body row resolve their 100% against, and it is
+   what keeps the columns in one vertical line. Arithmetic, matching
+   the per-column rules below:
+
+     ID 110 + Invoice Date 125 + Agreement 110 (its min)
+     + 4 money columns at 105 = 420 + Date Sent 140
+     + Payment Status 150 + Invoice Reference 140 (its min)
+     + Pay 100                                        = 1295
+
+   Keep this in step if any column width below changes. */
 html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-thead,
 html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tbody {
-    min-width: 0 !important;
+    min-width: 1295px !important;
 }
-/* Row boxes must span the full content width when the table still
-   overflows (very narrow windows). With min-width freed above, a
-   flex row would otherwise shrink to the scrollport width while
-   its cells overflow it, which cuts row borders and hover short
-   mid-scroll AND breaks the sticky Pay cell below (sticky insets
-   resolve against the containing block, the row). max-content
-   spans all cells when overflowing; the 100% floor keeps rows
-   filling the card when content fits, so the flexible columns
-   still grow. */
+/* Row boxes take their width from the tbody, never from their own
+   content.
+
+   This previously read `width: max-content; min-width: 100%`, which
+   was the cause of the column misalignment Joel reported. `.rt-tbody`
+   is a block container, so `max-content` sizes EACH ROW to ITS OWN
+   content: a row whose Invoice Reference holds "ConnektCloud
+   Subscriptions ..." measured 1979px while a row holding "Adobe
+   Licensing" measured 1474px. The two flexible columns then divided
+   a different amount of leftover width per row, so every long-text
+   row sat about 130px right of the header and of its neighbours.
+
+   `width: 100%` makes all rows and the header resolve against the
+   one shared width set on `.rt-tbody` / `.rt-thead` above, which is
+   the invariant a table needs. Long text still truncates, because
+   `.rt-td` is already `overflow: hidden; text-overflow: ellipsis`.
+   The sticky Pay cell is unaffected: its containing block is the
+   row, the row now spans the full scroll width (1295px floor), and
+   sticky still resolves its inset against the `.rt-table`
+   scrollport. Verified at a 1100px window: rows 1295px, the table
+   scrolls, Pay stays pinned to the right edge. */
 html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr,
 html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tr-group {
-    width: max-content !important;
-    min-width: 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+/* HaloPSA ships body rows with `padding-left: 3px` and header rows
+   with none, so every body cell sat 3px right of its header. Barely
+   visible on the tickets list; obvious here, where four right-
+   aligned money columns make the header and its figures read as two
+   separate grids. Zero it so header and body cells share one box.
+   (The same 3px applies to every other react-table list in the
+   portal; left alone there for now, that is a separate call.) */
+html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tbody .rt-tr {
+    padding-left: 0 !important;
 }
 /* HaloPSA gives .rt-tbody `overflow: hidden auto`, which makes the
    tbody itself a scroll container. position: sticky resolves its
@@ -3759,6 +3804,150 @@ html body .portal .details-form .Select__control:has(.Select__single-value > div
 }
 html body .portal .details-form .searchbox {
     height: 42px !important;
+}
+
+/* Date + time fields (react-dates `SingleDatePicker`)
+   ---------------------------------------------------------
+   HaloPSA renders custom date fields with Airbnb's react-dates.
+   The widget nests the real control three wrappers deep:
+
+     div.SingleDatePicker          inline-block, 150px
+       div.SingleDatePickerInput   inline-block, 50px right padding
+         div.DateInput             inline-block, 100px, own 1px border
+           input.DateInput_input   <- the only part our generic
+                                      `.details-form input` rule reached
+
+   So the input picked up our 42px / 10px-radius / muted-fill styling
+   while its three parents kept react-dates' own 30px inline-block
+   geometry. The 42px control overflowed a 30px box, the placeholder
+   was clipped to about ten characters, and because the outermost
+   wrapper is inline-block the `<label>` (which we set to
+   inline-block too) stayed on the SAME LINE instead of sitting above
+   the field like every other row on the form.
+
+   Fix: blockify all three wrappers, strip their competing borders so
+   only `.DateInput_input` paints a box, and lay the field row out
+   with flex so the label spans the full width and the date + time
+   pair share one line. `flex: 1 1 220px` means a date-only row gets
+   a full-width control while a date-and-time row leaves 148px for
+   the time input. */
+html body .portal .details-form .col-md-12:has(> .SingleDatePicker),
+html body .portal .details-form .col-md-12:has(> .browser-time-input) {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 10px;
+}
+html body .portal .details-form .col-md-12:has(> .SingleDatePicker) > label,
+html body .portal .details-form .col-md-12:has(> .browser-time-input) > label {
+    flex: 0 0 100%;
+    margin-bottom: 0 !important;
+}
+html body .portal .details-form .SingleDatePicker {
+    flex: 1 1 220px;
+    display: block !important;
+    width: auto !important;
+    margin: 7px 0 !important;
+}
+html body .portal .details-form .SingleDatePickerInput {
+    display: block !important;
+    width: 100% !important;
+    position: relative;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+}
+html body .portal .details-form .DateInput {
+    display: block !important;
+    width: 100% !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+}
+html body .portal .details-form .DateInput_input {
+    width: 100% !important;
+    height: 42px !important;
+    line-height: 42px !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-sm) !important;
+    background-color: var(--portal-bg) !important;
+    color: var(--portal-text) !important;
+    font-family: var(--ik-font-body) !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    padding: 0 14px !important;
+    /* Some HaloPSA date fields carry a full sentence of help text as
+       their placeholder; ellipsis beats a hard clip mid-word. */
+    text-overflow: ellipsis;
+    transition: border-color var(--ik-dur) var(--ik-ease),
+                box-shadow var(--ik-dur) var(--ik-ease),
+                background var(--ik-dur) var(--ik-ease);
+}
+html body .portal .details-form .DateInput_input::placeholder {
+    color: var(--portal-text-muted) !important;
+}
+html body .portal .details-form .DateInput_input__focused,
+html body .portal .details-form .DateInput_input:focus {
+    border: 1px solid var(--portal-accent) !important;
+    background: var(--portal-surface) !important;
+    box-shadow: 0 0 0 3px var(--portal-accent-subtle) !important;
+    outline: none !important;
+}
+/* react-dates' caret that tucks the popup under the input. We give
+   the popup its own card shadow, so the caret has nothing to join. */
+html body .portal .details-form .DateInput_fang { display: none !important; }
+
+/* Clear-date button. react-dates reserves 50px of right padding on
+   the input wrapper for it; we dropped that padding above, so pin it
+   inside the field instead. */
+html body .portal .details-form .SingleDatePickerInput_clearDate {
+    position: absolute !important;
+    top: 50% !important;
+    right: 8px !important;
+    margin: 0 !important;
+    transform: translateY(-50%) !important;
+    padding: 6px !important;
+    border-radius: 999px !important;
+    background: transparent !important;
+    line-height: 0;
+}
+html body .portal .details-form .SingleDatePickerInput_clearDate:hover,
+html body .portal .details-form .SingleDatePickerInput_clearDate:focus {
+    background: var(--portal-surface-active) !important;
+}
+html body .portal .details-form .SingleDatePickerInput_clearDate svg {
+    fill: var(--portal-text-muted) !important;
+    height: 11px;
+    width: 11px;
+}
+
+/* Native time input that pairs with the date picker on
+   "date and time" fields. Match the text-input box exactly; the
+   only difference is a fixed width, since the value is always
+   the same length. */
+html body .portal .details-form input.browser-time-input {
+    flex: 0 0 148px;
+    height: 42px !important;
+    min-height: 42px !important;
+    margin: 7px 0 !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-sm) !important;
+    background-color: var(--portal-bg) !important;
+    color: var(--portal-text) !important;
+    font-family: var(--ik-font-body) !important;
+    font-size: 14px !important;
+    padding: 0 12px !important;
+    transition: border-color var(--ik-dur) var(--ik-ease),
+                box-shadow var(--ik-dur) var(--ik-ease),
+                background var(--ik-dur) var(--ik-ease);
+}
+html body .portal .details-form input.browser-time-input:focus {
+    border-color: var(--portal-accent) !important;
+    background: var(--portal-surface) !important;
+    box-shadow: 0 0 0 3px var(--portal-accent-subtle) !important;
+    outline: none !important;
 }
 
 /* Froala editor */
@@ -5166,13 +5355,13 @@ html body .portal .kbdetails .status-macro.aui-lozenge {
     text-transform: uppercase !important;
     letter-spacing: 0.06em !important;
 }
-html body .portal .kbdetails .status-macro.aui-lozenge-complete { background: #E7ECFC !important; color: #192C66 !important; }
+html body .portal .kbdetails .status-macro.aui-lozenge-complete { background: #E4EAFC !important; color: #192C66 !important; }
 html body .portal .kbdetails .status-macro.aui-lozenge-success  { background: #E3F0E8 !important; color: #093A1B !important; }
 html body .portal .kbdetails .status-macro.aui-lozenge-current  { background: #F8E8E2 !important; color: #882E08 !important; }
 html body .portal .kbdetails .status-macro.aui-lozenge-error    { background: #F7E4E4 !important; color: #9D1818 !important; }
 html body .portal .kbdetails .status-macro.aui-lozenge-progress { background: #EEE8FA !important; color: #321E60 !important; }
 
-html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-complete { background: rgba(110,144,255,0.15) !important; color: #8EA8FF !important; }
+html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-complete { background: rgba(126,156,255,0.15) !important; color: #8EA8FF !important; }
 html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-success  { background: rgba(52,211,153,0.15) !important; color: #61DDAF !important; }
 html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-current  { background: rgba(251,146,60,0.15) !important; color: #FCA259 !important; }
 html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-error    { background: rgba(248,113,113,0.15) !important; color: #F97F7F !important; }
@@ -5651,18 +5840,30 @@ html body .portal .tree-menu .tree-node:hover {
     background: var(--portal-surface-hover);
 }
 
-/* Selected tree-node — HaloPSA marks the active item via inline
-   `background-color: rgb(47, 53, 94)` (heading purple). Re-skin as
-   a soft tonal pill — same accent-subtle wash + accent ink used on
-   other active-row surfaces (ticket list row, account sidebar nav).
-   Dropped the earlier 3px left stripe + square corners so the row
-   reads as one of the family rather than a special case. */
-html body .portal .tree-menu .tree-node[style*="rgb(47, 53, 94)"],
-html body .portal .tree-menu .tree-node[style*="background-color: rgb(47"] {
+/* Selected tree-node. HaloPSA marks the active item by stamping an
+   inline `background-color` + `color` pair on the node, taken from
+   a portal theme setting. Re-skin as a soft tonal pill: the same
+   accent-subtle wash and accent ink used on other active-row
+   surfaces (ticket list row, account sidebar nav). No left stripe
+   and no square corners, so the row reads as one of the family
+   rather than a special case.
+
+   Matched on the PRESENCE of an inline background-color, not on its
+   value. The previous version keyed on `rgb(47, 53, 94)` (the
+   heading purple HaloPSA used to stamp). HaloPSA has since changed
+   that setting to a near-black `rgb(11, 14, 21)`, so the attribute
+   selector stopped matching and the raw vendor colour showed
+   through: a heavy black bar across the KB sidebar, which is what
+   Joel reported. Only the selected node ever receives an inline
+   background-color, so presence alone identifies it, and the rule
+   survives the vendor changing that value again. Note the inline
+   pair also sets `color: rgb(255, 255, 255)`, so the colour
+   override needs !important too or the label goes white-on-pale. */
+html body .portal .tree-menu .tree-node[style*="background-color"],
+html body .portal .kblist .tree-node[style*="background-color"] {
     background-color: var(--portal-accent-subtle) !important;
     color: var(--portal-accent) !important;
     border-left: 0 !important;
-    padding-left: 10px !important;
     font-weight: 600;
     border-radius: var(--portal-radius-xs) !important;
 }
@@ -6548,7 +6749,7 @@ html body .ui.popup button {
     width: 100% !important;
     height: 36px !important;
     padding: 0 16px !important;
-    background-color: var(--portal-action, #3761E2) !important;
+    background-color: var(--portal-action, #3355D8) !important;
     background-image: none !important;
     color: #FFFFFF !important;
     border: 0 !important;
@@ -6567,7 +6768,7 @@ html body .ui.popup button {
 }
 html body .ui.popup .ui.button:hover,
 html body .ui.popup button:hover {
-    background-color: var(--portal-action-hover, #2F52C0) !important;
+    background-color: var(--portal-action-hover, #2C4AC0) !important;
     transform: translateY(-1px);
 }
 html body .ui.popup .ui.button i,
@@ -6581,6 +6782,157 @@ html body .ui.popup button svg {
     margin: 0 !important;
 }
 
+
+
+/* Calendar popup (react-dates `DayPicker`)
+   -------------------------------------------------------
+   Same portal-boundary problem as the Semantic UI popup above:
+   react-dates mounts the calendar as a BARE `<div>` directly under
+   `<body>`, outside `#app-container`. Any `.portal`-scoped selector
+   misses it entirely, which is why the calendar rendered as stock
+   react-dates (square cells, 1px grid, mustard "today") while the
+   field next to it was fully themed.
+
+   Dark mode uses the token-flip AGENTS.md §1 recommends rather than
+   the literal-hex approach the `.ui.popup` block above took. Because
+   `.theme-dark` sits on `#app-container` and the calendar is outside
+   it, the calendar inherits the `:root` LIGHT token values. So we
+   re-declare the dark tokens once on the picker root; every rule
+   below then reads `var(--portal-*)` and resolves correctly in both
+   modes. One token list instead of a dark twin for every rule.
+
+   Every rule keeps a literal fallback inside the `var()` in case
+   custom property inheritance ever fails to cross the boundary. */
+html body:has(.theme-dark) .SingleDatePicker_picker,
+html body:has(.theme-dark) .DateRangePicker_picker {
+    --portal-bg:              #0C0E16;
+    --portal-surface:         #161A25;
+    --portal-surface-active:  #1B2030;
+    --portal-text:            #ECEEF4;
+    --portal-text-secondary:  rgba(236, 238, 244, 0.62);
+    --portal-text-muted:      rgba(236, 238, 244, 0.4);
+    --portal-heading:         #ECEEF4;
+    --portal-accent:          #7E9CFF;
+    --portal-on-accent:       #0C0E16;
+    --portal-border:          rgba(255, 255, 255, 0.08);
+    --portal-shadow-hover:    0 24px 60px -20px rgba(0, 0, 0, 0.55),
+                              0 8px 20px -6px rgba(0, 0, 0, 0.3);
+}
+
+html body .DayPicker,
+html body .DayPicker__horizontal,
+html body .DayPicker__withBorder,
+html body .DayPicker_portal__horizontal,
+html body .CalendarMonth,
+html body .CalendarMonthGrid,
+html body .CalendarMonthGrid__horizontal {
+    background: var(--portal-surface, #FFFFFF) !important;
+}
+html body .DayPicker__withBorder {
+    border: 1px solid var(--portal-border, #E2E5EE) !important;
+    border-radius: var(--portal-radius, 16px) !important;
+    box-shadow: var(--portal-shadow-hover,
+                0 16px 40px -12px rgba(22, 25, 34, 0.14)) !important;
+    overflow: hidden;
+}
+
+/* Month + year selects. react-dates ships them as native `<select>`
+   with no styling at all, so they read as browser chrome dropped
+   into a designed card. The extra caption padding-bottom is what
+   keeps the weekday header row clear of the selects. */
+html body .CalendarMonth_caption {
+    color: var(--portal-heading, #161922) !important;
+    font-family: var(--ik-font-display), system-ui, sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    padding-top: 20px !important;
+    padding-bottom: 36px !important;
+}
+html body .CalendarMonth_caption select {
+    font-family: var(--ik-font-body), system-ui, sans-serif !important;
+    font-size: 13px !important;
+    color: var(--portal-text, #161922) !important;
+    background: var(--portal-bg, #F1F3F7) !important;
+    border: 1px solid var(--portal-border, #E2E5EE) !important;
+    border-radius: var(--portal-radius-xs, 8px) !important;
+    padding: 5px 8px !important;
+    margin: 0 3px;
+}
+
+/* Weekday header, as a mono eyebrow matching the form labels. */
+html body .DayPicker_weekHeader {
+    color: var(--portal-text-muted, #8E93A4) !important;
+}
+html body .DayPicker_weekHeader_li small {
+    font-family: var(--ik-font-mono), ui-monospace, monospace !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* Day cells. react-dates paints a 1px grid on every cell, which
+   turns the month into a spreadsheet. Drop the grid, round the
+   cells, and let hover and selected carry the interaction. */
+html body td.CalendarDay,
+html body td.CalendarDay__default {
+    background: transparent !important;
+    border: 0 !important;
+    color: var(--portal-text, #161922) !important;
+    font-family: var(--ik-font-body), system-ui, sans-serif !important;
+    font-size: 13px !important;
+    border-radius: var(--portal-radius-xs, 8px) !important;
+    vertical-align: middle;
+    transition: background var(--ik-dur, 180ms) var(--ik-ease, ease),
+                color var(--ik-dur, 180ms) var(--ik-ease, ease);
+}
+html body td.CalendarDay__default:hover {
+    background: var(--portal-surface-active, #F0F2F7) !important;
+    border: 0 !important;
+    color: var(--portal-text, #161922) !important;
+}
+
+/* Today. react-dates' default is a mustard fill (#FFE8BC) that reads
+   as a warning state and belongs to no palette we ship. An accent
+   ring says "today" without competing with the selected day. */
+html body td.CalendarDay__today,
+html body td.CalendarDay__highlighted_calendar,
+html body td.CalendarDay__highlighted_calendar:hover {
+    background: transparent !important;
+    color: var(--portal-accent, #3355D8) !important;
+    font-weight: 700 !important;
+    box-shadow: inset 0 0 0 1px var(--portal-accent, #3355D8) !important;
+}
+html body td.CalendarDay__selected,
+html body td.CalendarDay__selected:hover,
+html body td.CalendarDay__selected:active {
+    background: var(--portal-accent, #3355D8) !important;
+    color: var(--portal-on-accent, #FFFFFF) !important;
+    font-weight: 600 !important;
+    box-shadow: none !important;
+}
+html body td.CalendarDay__blocked_out_of_range,
+html body td.CalendarDay__blocked_calendar,
+html body td.CalendarDay__blocked_calendar:hover {
+    color: var(--portal-text-muted, #8E93A4) !important;
+    background: transparent !important;
+    opacity: 0.45;
+}
+
+/* Previous / next month buttons. */
+html body .DayPickerNavigation_button__default {
+    background: var(--portal-bg, #F1F3F7) !important;
+    border: 1px solid var(--portal-border, #E2E5EE) !important;
+    border-radius: var(--portal-radius-xs, 8px) !important;
+}
+html body .DayPickerNavigation_button__default:hover,
+html body .DayPickerNavigation_button__default:focus {
+    background: var(--portal-surface-active, #F0F2F7) !important;
+    border-color: var(--portal-accent, #3355D8) !important;
+}
+html body .DayPickerNavigation_svg__horizontal {
+    fill: var(--portal-text-secondary, #585F76) !important;
+}
 
 /* ─────────────────────────────────────────────────────────
    19 · Column filter button (react-table header funnel)

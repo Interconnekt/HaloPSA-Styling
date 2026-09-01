@@ -76,7 +76,7 @@ line-height: 1.8;
 /* ═══════════════════════════════════════
    Precedence: 20 | Selector: a
    ═══════════════════════════════════════ */
-color: #3761E2;
+color: #3355D8;
 text-decoration-thickness: 1px;
 text-underline-offset: 3px;
 transition: color 0.2s ease;
@@ -157,7 +157,7 @@ font-size: inherit;
 /* ═══════════════════════════════════════
    Precedence: 20 | Selector: blockquote
    ═══════════════════════════════════════ */
-border-left: 4px solid #3761E2;
+border-left: 4px solid #3355D8;
 background: #f5f7fb;
 margin: 16px 0;
 padding: 12px 20px;
@@ -238,7 +238,7 @@ letter-spacing: 0.02em;
 /* ═══════════════════════════════════════
    Precedence: 25 | Selector: .status-macro.aui-lozenge-complete
    ═══════════════════════════════════════ */
-background-color: #e7ecfc !important;
+background-color: #E4EAFC !important;
 color: #192c66 !important;
 
 

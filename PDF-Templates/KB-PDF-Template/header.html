@@ -1,21 +1,56 @@
 <html>
 <head>
     <style type="text/css">
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Spline+Sans+Mono:wght@400;600&display=swap');
     </style>
 </head>
 <body style="margin: 0; padding: 0;">
-    <div style="background-color: #30355b; color: #ffffff; margin: -20px; padding: 14px 68px; font-family: Montserrat, Arial, sans-serif;">
-        <table style="width: 100%; border-collapse: collapse;">
-            <tr>
-                <td style="width: 50%; vertical-align: middle; padding: 4px 0;">
-                    <div style="height: 40px; width: 240px; background-image: url($ORLOGOSRC); background-repeat: no-repeat; background-position: left center; background-size: contain;"></div>
-                </td>
-                <td style="width: 50%; text-align: right; vertical-align: middle; padding: 4px 0; font-size: 10px; color: rgba(255,255,255,0.7); font-family: Montserrat, Arial, sans-serif;">
-                    Knowledge Base Article &bull; $KBID
-                </td>
-            </tr>
-        </table>
+    <!--
+        Running header: ink band carrying the reversed Interconnekt
+        mark, closed by the 3px tri gradient rule (jade > blue >
+        violet) from the report design system.
+
+        Geometry: the -20px margin bleeds the band past the renderer's
+        default header inset so the ink reaches all four page edges,
+        which leaves 68px - 20px = 48px = 12.7mm of side padding, the
+        body's own margin line.
+
+        The logo sits in a 192x32 box. Other Interconnekt PDF
+        templates use 240x40; the KB header runs on every page of a
+        long article rather than heading a one page document, so it
+        carries the mark slightly smaller. background-size: contain
+        height-constrains the art (300x52, 5.77:1) inside the 6:1
+        box, so it renders 185x32 and never distorts.
+
+        Air below the rule is a spacer element, not a page margin.
+        Measured from a Halo render, body content begins exactly
+        where the header's own height ends, so raising @page's top
+        margin does not reliably buy a gap and the body's padding-top
+        only applies to page one. Building the air into the header
+        gives the same clearance on every page. Band + rule = 51px
+        (~13.8mm) visible, plus a 22px (~6mm) spacer.
+
+        The band is ink #141824, matching the footer and the code
+        panels, so the reversed logo and the running label sit on the
+        same ground everywhere they appear.
+    -->
+    <div style="margin: -20px; font-family: 'Spline Sans Mono', Menlo, monospace; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
+        <div style="background-color: #141824; padding: 8px 68px;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td style="width: 55%; vertical-align: middle;">
+                        <div style="height: 32px; width: 192px; background-image: url($ORLOGOSRC); background-repeat: no-repeat; background-position: left center; background-size: contain;"></div>
+                    </td>
+                    <td style="width: 45%; text-align: right; vertical-align: middle; font-family: 'Spline Sans Mono', Menlo, monospace; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: #AEB5C9;">
+                        Knowledge Base &nbsp;&bull;&nbsp; Article $KBID
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div style="height: 3px; background: #3F51CE; background: linear-gradient(115deg, #0F7CBE, #3F51CE 52%, #7440D2);"></div>
+        <!-- Clear air between the rule and the article, on every
+             page. Adjust here, not in main.html's @page margin. -->
+        <div style="height: 22px; line-height: 22px; font-size: 1px;">&nbsp;</div>
     </div>
 </body>
 </html>

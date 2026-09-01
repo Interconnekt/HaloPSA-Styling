@@ -3,27 +3,47 @@
 <head>
     <meta charset="utf-8">
     <title>Tax Invoice $INVOICENUMBER</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet" type="text/css">
     <style type="text/css">
         @font-face {
-            font-family: 'Montserrat';
+            font-family: 'Figtree';
             font-weight: 400;
-            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtr6Ew-Y3tcoqK5.woff2') format('woff2');
+            src: url('https://fonts.gstatic.com/s/figtree/v9/_Xmz-HUzqDCFdgfMsYiV_F7wfS-Bs_d_QG5ZyEA.woff2') format('woff2');
         }
         @font-face {
-            font-family: 'Montserrat';
+            font-family: 'Figtree';
             font-weight: 600;
-            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCu6YDtcoqK5.woff2') format('woff2');
+            src: url('https://fonts.gstatic.com/s/figtree/v9/_Xmz-HUzqDCFdgfMsYiV_F7wfS-Bs_ehR25ZyEA.woff2') format('woff2');
         }
         @font-face {
-            font-family: 'Montserrat';
+            font-family: 'Figtree';
             font-weight: 700;
-            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCuMYDtcoqK5.woff2') format('woff2');
+            src: url('https://fonts.gstatic.com/s/figtree/v9/_Xmz-HUzqDCFdgfMsYiV_F7wfS-Bs_eYR25ZyEA.woff2') format('woff2');
         }
         @font-face {
-            font-family: 'Montserrat';
+            font-family: 'Figtree';
             font-weight: 800;
-            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCvhYDtcoqK5.woff2') format('woff2');
+            src: url('https://fonts.gstatic.com/s/figtree/v9/_Xmz-HUzqDCFdgfMsYiV_F7wfS-Bs_f_R25ZyEA25WTzZO8.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Bricolage Grotesque';
+            font-weight: 400;
+            src: url('https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvRvi-Molsg.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Bricolage Grotesque';
+            font-weight: 600;
+            src: url('https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvcXl-Molsg.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Bricolage Grotesque';
+            font-weight: 700;
+            src: url('https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvfzl-Molsg.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Bricolage Grotesque';
+            font-weight: 800;
+            src: url('https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9H6as8bTXq_nANBjzKo3IeZx8z6up5BeSl9D4dj_x9PpZBMnuECoAsyJBOm_OJ2iCwA1XphjhQYg.woff2') format('woff2');
         }
 
         @page {
@@ -32,22 +52,22 @@
         }
 
         *, *::before, *::after {
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
             box-sizing: border-box;
         }
 
         body {
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
             font-size: 12px;
             line-height: 1.6;
-            color: #34495e;
+            color: #33384a;
             margin: 0;
             padding: 20px 0 0 0;
         }
 
         /* ── Links ── */
         a {
-            color: #3598db;
+            color: #3355D8;
             text-decoration: none;
         }
 
@@ -65,7 +85,7 @@
 
         /* ── Company details (from) ── */
         .from-block {
-            background-color: #F4F4F5;
+            background-color: #F4F6FB;
             border-radius: 8px;
             padding: 12px 16px;
             line-height: 1.5;
@@ -75,7 +95,7 @@
         .from-block .block-label {
             font-size: 10px;
             font-weight: 700;
-            color: #30355b;
+            color: #141824;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 4px;
@@ -84,13 +104,13 @@
         .from-block .company-name {
             font-size: 13px;
             font-weight: 700;
-            color: #30355b;
+            color: #141824;
             margin-bottom: 2px;
         }
 
         /* ── Billing details (to) ── */
         .to-block {
-            background-color: #F4F4F5;
+            background-color: #F4F6FB;
             border-radius: 8px;
             padding: 12px 16px;
             line-height: 1.5;
@@ -100,7 +120,7 @@
         .to-block .block-label {
             font-size: 10px;
             font-weight: 700;
-            color: #30355b;
+            color: #141824;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 4px;
@@ -109,7 +129,7 @@
         .to-block .customer-name {
             font-size: 13px;
             font-weight: 700;
-            color: #30355b;
+            color: #141824;
             margin-bottom: 2px;
         }
 
@@ -118,17 +138,17 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
-            border-top: 1px solid #e0e0e0;
-            border-bottom: 1px solid #e0e0e0;
+            border-top: 1px solid #E4E7F0;
+            border-bottom: 1px solid #E4E7F0;
         }
 
         .invoice-meta th {
-            background-color: #F4F4F5;
-            color: #30355b;
+            background-color: #E7EEFA;
+            color: #141824;
             font-weight: 700;
             text-align: left;
             padding: 8px 14px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #E4E7F0;
             white-space: nowrap;
             font-size: 12px;
             width: 25%;
@@ -138,9 +158,9 @@
         .invoice-meta td {
             width: 25%;
             padding: 8px 14px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #E4E7F0;
             vertical-align: middle;
-            color: #34495e;
+            color: #33384a;
             font-size: 12px;
             word-wrap: break-word;
             overflow-wrap: break-word;
@@ -159,7 +179,7 @@
         .due-date-pill {
             display: inline-block;
             background-color: #fffae6;
-            color: #30355b;
+            color: #141824;
             font-weight: 700;
             font-size: 11px;
             padding: 3px 12px;
@@ -171,21 +191,22 @@
         .invoice-reference {
             margin-bottom: 16px;
             font-size: 12px;
-            color: #34495e;
+            color: #33384a;
         }
 
         .invoice-reference strong {
-            color: #30355b;
+            color: #141824;
         }
 
         /* ── Section headers ── */
         .section-header {
+            font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif !important;
             font-size: 14px;
             font-weight: 700;
-            color: #30355b;
+            color: #141824;
             margin: 24px 0 12px 0;
             padding: 8px 14px;
-            background-color: #e2eafb;
+            background-color: #E4EAFC;
             border-radius: 6px;
         }
 
@@ -195,13 +216,13 @@
             border-collapse: collapse;
             font-size: 11px;
             margin: 0 0 16px 0;
-            border-top: 1px solid #e0e0e0;
-            border-bottom: 1px solid #e0e0e0;
+            border-top: 1px solid #E4E7F0;
+            border-bottom: 1px solid #E4E7F0;
         }
 
         .items-table thead th {
-            background-color: #F4F4F5;
-            color: #30355b;
+            background-color: #E7EEFA;
+            color: #141824;
             font-weight: 700;
             text-align: left;
             padding: 8px 12px;
@@ -211,9 +232,9 @@
 
         .items-table tbody td {
             padding: 8px 12px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #E4E7F0;
             vertical-align: top;
-            color: #34495e;
+            color: #33384a;
             font-size: 11px;
         }
 
@@ -226,7 +247,7 @@
         }
 
         .items-table tbody tr:nth-child(even) {
-            background-color: #F4F4F5;
+            background-color: #F7F9FD;
         }
 
         .items-table thead th:nth-child(2),
@@ -251,22 +272,22 @@
 
         .totals-table .label {
             text-align: left;
-            color: #30355b;
+            color: #141824;
             font-weight: 700;
-            background-color: #F4F4F5;
+            background-color: #E7EEFA;
         }
 
         .totals-table .value {
             text-align: right;
-            color: #34495e;
+            color: #33384a;
         }
 
         .totals-table .subtotal td {
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #E4E7F0;
         }
 
         .totals-table .tax td {
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #E4E7F0;
         }
 
         .totals-table .total td {
@@ -274,21 +295,23 @@
         }
 
         .totals-table .total .label {
+            font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif !important;
             font-size: 14px;
             font-weight: 800;
-            color: #30355b;
+            color: #141824;
         }
 
         .totals-table .total .value {
+            font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif !important;
             font-size: 14px;
             font-weight: 800;
-            color: #30355b;
+            color: #141824;
         }
 
         /* ── Divider ── */
         hr {
             border: none;
-            border-top: 1px solid #e0e0e0;
+            border-top: 1px solid #E4E7F0;
             margin: 24px 0;
         }
 
@@ -309,7 +332,7 @@
         }
 
         .payment-card {
-            background-color: #e2eafb;
+            background-color: #E4EAFC;
             border-radius: 8px;
             padding: 16px 20px;
             font-size: 12px;
@@ -320,7 +343,7 @@
         .payment-card-label {
             font-size: 11px;
             font-weight: 700;
-            color: #30355b;
+            color: #141824;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 10px;
@@ -339,7 +362,7 @@
 
         .payment-card table td:first-child {
             font-weight: 700;
-            color: #30355b;
+            color: #141824;
             padding-right: 12px;
             white-space: nowrap;
         }
@@ -347,9 +370,9 @@
         /* ── Pay button ── */
         .pay-button {
             display: inline-block;
-            background-color: #3574e3;
+            background-color: #3355D8;
             color: #ffffff !important;
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
             font-size: 13px;
             font-weight: 700;
             padding: 12px 36px;

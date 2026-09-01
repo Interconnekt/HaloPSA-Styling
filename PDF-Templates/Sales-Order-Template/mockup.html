@@ -2,8 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Sales Order — Mockup</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" type="text/css">
+    <title>Sales Order Mockup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet" type="text/css">
     <style type="text/css">
         /* ── Simulated page wrapper for browser preview ── */
         .page-wrapper {
@@ -15,13 +15,16 @@
         }
 
         .pdf-header {
-            background-color: #30355b;
+            background-color: #141824;
             color: #ffffff;
             padding: 12px 24px;
-            font-family: Montserrat, Arial, sans-serif;
+            font-family: Figtree, Arial, sans-serif;
         }
 
         .pdf-header table { width: 100%; border-collapse: collapse; }
+        /* Tri gradient rule closing the band, matching header.html
+           and the KB template. Stops are the brand triad. */
+        .pdf-header-rule { height: 3px; background: linear-gradient(115deg, #0F7CBE, #3F51CE 52%, #7440D2); }
 
         .pdf-header .logo-placeholder {
             height: 40px;
@@ -36,39 +39,40 @@
         }
 
         .pdf-footer {
-            background-color: #18181B;
+            background-color: #141824;
             color: rgba(255,255,255,0.85);
             padding: 10px 24px;
-            font-family: Montserrat, Arial, sans-serif;
+            font-family: 'Spline Sans Mono', Menlo, monospace;
             font-size: 9px;
             line-height: 1.4;
         }
 
-        .pdf-footer table { width: 100%; border-collapse: collapse; font-family: Montserrat, Arial, sans-serif; font-size: 9px; }
-        .pdf-footer td { padding: 2px 0; font-family: Montserrat, Arial, sans-serif; font-size: 9px; }
+        .pdf-footer table { width: 100%; border-collapse: collapse; font-family: 'Spline Sans Mono', Menlo, monospace; font-size: 9px; }
+        .pdf-footer td { padding: 2px 0; font-family: 'Spline Sans Mono', Menlo, monospace; font-size: 9px; }
 
         .pdf-body { padding: 24px 24px 32px 24px; }
 
         /* ── Base reset ── */
         *, *::before, *::after {
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
             box-sizing: border-box;
         }
 
         body {
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
             font-size: 13px;
             line-height: 1.7;
-            color: #34495e;
+            color: #33384a;
             margin: 0;
             padding: 20px;
-            background: #edf0f1;
+            background: #F1F3F7;
         }
 
         .order-title {
+            font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif !important;
             font-size: 20px;
             font-weight: 700;
-            color: #30355b;
+            color: #141824;
             margin: 0 0 4px 0;
             letter-spacing: -0.02em;
             line-height: 1.4;
@@ -77,7 +81,7 @@
         .order-subtitle {
             font-size: 12px;
             font-weight: 700;
-            color: #30355b;
+            color: #141824;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin: 0 0 16px 0;
@@ -89,26 +93,26 @@
             border-collapse: collapse;
             font-size: 13px;
             margin-bottom: 24px;
-            border-top: 1px solid #e0e0e0;
-            border-bottom: 1px solid #e0e0e0;
+            border-top: 1px solid #E4E7F0;
+            border-bottom: 1px solid #E4E7F0;
         }
 
         .meta-table th {
-            background-color: #F4F4F5;
-            color: #30355b;
+            background-color: #F4F6FB;
+            color: #141824;
             font-weight: 700;
             text-align: left;
             padding: 8px 14px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #E4E7F0;
             white-space: nowrap;
             width: 110px;
         }
 
         .meta-table td {
             padding: 8px 14px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #E4E7F0;
             vertical-align: top;
-            color: #34495e;
+            color: #33384a;
         }
 
         .items-table {
@@ -116,13 +120,13 @@
             border-collapse: collapse;
             font-size: 12px;
             margin: 0 0 20px 0;
-            border-top: 1px solid #e0e0e0;
-            border-bottom: 1px solid #e0e0e0;
+            border-top: 1px solid #E4E7F0;
+            border-bottom: 1px solid #E4E7F0;
         }
 
         .items-table thead th {
-            background-color: #F4F4F5;
-            color: #30355b;
+            background-color: #E7EEFA;
+            color: #141824;
             font-weight: 700;
             text-align: left;
             padding: 20px 14px 10px 14px;
@@ -134,13 +138,13 @@
 
         .items-table tbody td {
             padding: 10px 14px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #E4E7F0;
             vertical-align: top;
-            color: #34495e;
+            color: #33384a;
         }
 
         .items-table tbody tr:nth-child(even) {
-            background-color: #F4F4F5;
+            background-color: #F7F9FD;
         }
 
 
@@ -152,49 +156,55 @@
         .items-table tbody td.right { text-align: right; }
 
         .totals-table {
-            width: 240px;
+            width: 270px;
             margin-left: auto;
+            margin-right: 0;
             border-collapse: collapse;
-            font-size: 13px;
-            line-height: 1.6;
+            font-size: 12px;
+            line-height: 1.5;
+            page-break-inside: avoid;
         }
 
-        .totals-table td { padding: 6px 0; }
+        .totals-table td { padding: 8px 12px; }
 
         .totals-table .label {
             text-align: left;
-            padding-right: 20px;
-            color: #30355b;
+            color: #141824;
             font-weight: 700;
+            background-color: #E7EEFA;
         }
 
-        .totals-table .value { text-align: right; color: #34495e; }
+        .totals-table .value { text-align: right; color: #33384a; }
 
-        .totals-table .subtotal td { border-bottom: 1px solid #e0e0e0; }
-        .totals-table .tax td { border-bottom: 1px solid #e0e0e0; }
+        .totals-table .subtotal td { border-bottom: 1px solid #E4E7F0; }
+        .totals-table .tax td { border-bottom: 1px solid #E4E7F0; }
         .totals-table .total td { padding-top: 8px; }
-        .totals-table .total .label { font-size: 14px; font-weight: 800; color: #30355b; }
-        .totals-table .total .value { font-size: 14px; font-weight: 800; color: #30355b; }
+        .totals-table .total .label { font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif !important; font-size: 14px; font-weight: 800; color: #141824; }
+        .totals-table .total .value { font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif !important; font-size: 14px; font-weight: 800; color: #141824; }
 
+        .section-header { font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif !important; font-size: 14px; font-weight: 700; color: #141824; margin: 24px 0 12px 0; padding: 8px 14px; background-color: #E4EAFC; border-radius: 6px; }
         .order-notes {
-            margin-top: 24px;
-            font-size: 13px;
-            line-height: 1.7;
-            color: #34495e;
+            margin-top: 0;
+            padding: 14px 18px;
+            background-color: #F4F6FB;
+            border-radius: 8px;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #33384a;
         }
 
         .thank-you {
             margin-top: 30px;
             padding: 16px 20px;
-            background-color: #F4F4F5;
+            background-color: #F4F6FB;
             border-radius: 6px;
             font-size: 11px;
             line-height: 1.6;
-            color: #34495e;
+            color: #33384a;
             text-align: center;
         }
 
-        a { color: #3598db; text-decoration: none; }
+        a { color: #3355D8; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -207,15 +217,17 @@
             <tr>
                 <td style="width: 50%; vertical-align: middle; padding: 4px 0;">
                     <div class="logo-placeholder">
-                        <img src="https://assets.unlayer.com/projects/0/1740816329578-Interconnekt-Neg-Halo-300w.png" alt="Interconnekt">
+                        <img src="../_brand/Interconnekt-lockup-h-neg-800.png" alt="Interconnekt" style="max-height: 40px; max-width: 240px;">
                     </div>
                 </td>
-                <td style="width: 50%; text-align: right; vertical-align: middle; padding: 4px 0; font-size: 10px; color: rgba(255,255,255,0.7); font-family: Montserrat, Arial, sans-serif;">
-                    Sales Order
-                </td>
+                <td style="width: 45%; text-align: right; vertical-align: middle;">
+                        <div style="font-family: 'Spline Sans Mono', Menlo, monospace; font-size: 9px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #ffffff;">SALES ORDER</div>
+                        <div style="font-family: 'Spline Sans Mono', Menlo, monospace; font-size: 8px; letter-spacing: 0.12em; color: #AEB5C9; margin-top: 3px;">10/2/2026</div>
+                    </td>
             </tr>
         </table>
     </div>
+    <div class="pdf-header-rule"></div>
 
     <!-- ══════ BODY ══════ -->
     <div class="pdf-body">
@@ -340,6 +352,13 @@
                 <td class="value">$7,941.03</td>
             </tr>
         </table>
+
+        <div class="section-header">Notes</div>
+        <div class="order-notes">
+            Delivery scheduled for the week commencing 20/04/2026. Installation
+            is booked separately; our Service Desk will confirm the window once
+            hardware lands at the Southbank office.
+        </div>
 
         <div class="thank-you">
             Thank you for your order. The above items have been sold by us to your company on the basis of a legally binding order. An invoice detailing your order will follow shortly from our Finance team to yours for the above amount. Should you have any questions regarding this order, please feel free to contact us at any time.

@@ -3,28 +3,48 @@
 <head>
     <meta charset="utf-8">
     <title>Sales Order</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet" type="text/css">
     <style type="text/css">
         /* Fallback @font-face if <link> fails in wkhtmltopdf */
         @font-face {
-            font-family: 'Montserrat';
+            font-family: 'Figtree';
             font-weight: 400;
-            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtr6Ew-Y3tcoqK5.woff2') format('woff2');
+            src: url('https://fonts.gstatic.com/s/figtree/v9/_Xmz-HUzqDCFdgfMsYiV_F7wfS-Bs_d_QG5ZyEA.woff2') format('woff2');
         }
         @font-face {
-            font-family: 'Montserrat';
+            font-family: 'Figtree';
             font-weight: 600;
-            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCu6YDtcoqK5.woff2') format('woff2');
+            src: url('https://fonts.gstatic.com/s/figtree/v9/_Xmz-HUzqDCFdgfMsYiV_F7wfS-Bs_ehR25ZyEA.woff2') format('woff2');
         }
         @font-face {
-            font-family: 'Montserrat';
+            font-family: 'Figtree';
             font-weight: 700;
-            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCuMYDtcoqK5.woff2') format('woff2');
+            src: url('https://fonts.gstatic.com/s/figtree/v9/_Xmz-HUzqDCFdgfMsYiV_F7wfS-Bs_eYR25ZyEA.woff2') format('woff2');
         }
         @font-face {
-            font-family: 'Montserrat';
+            font-family: 'Figtree';
             font-weight: 800;
-            src: url('https://fonts.gstatic.com/s/montserrat/v29/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCvhYDtcoqK5.woff2') format('woff2');
+            src: url('https://fonts.gstatic.com/s/figtree/v9/_Xmz-HUzqDCFdgfMsYiV_F7wfS-Bs_f_R25ZyEA25WTzZO8.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Bricolage Grotesque';
+            font-weight: 400;
+            src: url('https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvRvi-Molsg.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Bricolage Grotesque';
+            font-weight: 600;
+            src: url('https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvcXl-Molsg.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Bricolage Grotesque';
+            font-weight: 700;
+            src: url('https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvfzl-Molsg.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Bricolage Grotesque';
+            font-weight: 800;
+            src: url('https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9H6as8bTXq_nANBjzKo3IeZx8z6up5BeSl9D4dj_x9PpZBMnuECoAsyJBOm_OJ2iCwA1XphjhQYg.woff2') format('woff2');
         }
 
         /* ── Page setup ── */
@@ -35,24 +55,25 @@
 
         /* ── Base reset ── */
         *, *::before, *::after {
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
             box-sizing: border-box;
         }
 
         body {
-            font-family: Montserrat, Arial, sans-serif !important;
+            font-family: Figtree, Arial, sans-serif !important;
             font-size: 13px;
             line-height: 1.7;
-            color: #34495e;
+            color: #33384a;
             margin: 0;
             padding: 0;
         }
 
         /* ── Title area ── */
         .order-title {
+            font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif !important;
             font-size: 20px;
             font-weight: 700;
-            color: #30355b;
+            color: #141824;
             margin: 0 0 4px 0;
             letter-spacing: -0.02em;
             line-height: 1.4;
@@ -61,54 +82,54 @@
         .order-subtitle {
             font-size: 12px;
             font-weight: 700;
-            color: #30355b;
+            color: #141824;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin: 0 0 16px 0;
             line-height: 1.4;
         }
 
-        /* ── Metadata table (Style A — shaded label column) ── */
+        /* ── Metadata table (Style A: shaded label column) ── */
         .meta-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 13px;
             margin-bottom: 24px;
-            border-top: 1px solid #e0e0e0;
-            border-bottom: 1px solid #e0e0e0;
+            border-top: 1px solid #E4E7F0;
+            border-bottom: 1px solid #E4E7F0;
         }
 
         .meta-table th {
-            background-color: #F4F4F5;
-            color: #30355b;
+            background-color: #F4F6FB;
+            color: #141824;
             font-weight: 700;
             text-align: left;
             padding: 8px 14px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #E4E7F0;
             white-space: nowrap;
             width: 110px;
         }
 
         .meta-table td {
             padding: 8px 14px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #E4E7F0;
             vertical-align: top;
-            color: #34495e;
+            color: #33384a;
         }
 
-        /* ── Line items table (Style B — coloured header row) ── */
+        /* ── Line items table (Style B: coloured header row) ── */
         .items-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 12px;
             margin: 0 0 20px 0;
-            border-top: 1px solid #e0e0e0;
-            border-bottom: 1px solid #e0e0e0;
+            border-top: 1px solid #E4E7F0;
+            border-bottom: 1px solid #E4E7F0;
         }
 
         .items-table thead th {
-            background-color: #F4F4F5;
-            color: #30355b;
+            background-color: #E7EEFA;
+            color: #141824;
             font-weight: 700;
             text-align: left;
             padding: 20px 14px 10px 14px;
@@ -118,9 +139,9 @@
 
         .items-table tbody td {
             padding: 10px 14px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #E4E7F0;
             vertical-align: top;
-            color: #34495e;
+            color: #33384a;
         }
 
 
@@ -134,40 +155,46 @@
         }
 
         .items-table tbody tr:nth-child(even) {
-            background-color: #F4F4F5;
+            background-color: #F7F9FD;
         }
 
         /* ── Totals table ── */
+        /* Geometry and the shaded label column match the Invoice and
+           Purchase Order templates exactly. This block used to run
+           240px wide with no label fill, which read as a different
+           component in a document family that is otherwise identical. */
         .totals-table {
-            width: 240px;
+            width: 270px;
             margin-left: auto;
+            margin-right: 0;
             border-collapse: collapse;
-            font-size: 13px;
-            line-height: 1.6;
+            font-size: 12px;
+            line-height: 1.5;
+            page-break-inside: avoid;
         }
 
         .totals-table td {
-            padding: 6px 0;
+            padding: 8px 12px;
         }
 
         .totals-table .label {
             text-align: left;
-            padding-right: 20px;
-            color: #30355b;
+            color: #141824;
             font-weight: 700;
+            background-color: #E7EEFA;
         }
 
         .totals-table .value {
             text-align: right;
-            color: #34495e;
+            color: #33384a;
         }
 
         .totals-table .subtotal td {
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #E4E7F0;
         }
 
         .totals-table .tax td {
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #E4E7F0;
         }
 
         .totals-table .total td {
@@ -175,47 +202,70 @@
         }
 
         .totals-table .total .label {
+            font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif !important;
             font-size: 14px;
             font-weight: 800;
-            color: #30355b;
+            color: #141824;
         }
 
         .totals-table .total .value {
+            font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif !important;
             font-size: 14px;
             font-weight: 800;
-            color: #30355b;
+            color: #141824;
         }
 
-        /* ── Order notes ── */
+
+        /* ── Section header ──
+           Shared component with the Invoice and KB PDF templates:
+           Bricolage Grotesque on the primary-subtle pill. Keep the
+           three in step if this changes. */
+        .section-header {
+            font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif !important;
+            font-size: 14px;
+            font-weight: 700;
+            color: #141824;
+            margin: 24px 0 12px 0;
+            padding: 8px 14px;
+            background-color: #E4EAFC;
+            border-radius: 6px;
+        }
+
+        /* ── Order notes ──
+           The heading is .section-header above this block, so the
+           body carries no top margin of its own. */
         .order-notes {
-            margin-top: 24px;
-            font-size: 13px;
-            line-height: 1.7;
-            color: #34495e;
+            margin-top: 0;
+            padding: 14px 18px;
+            background-color: #F4F6FB;
+            border-radius: 8px;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #33384a;
         }
 
         /* ── Thank you / legal text ── */
         .thank-you {
             margin-top: 30px;
             padding: 16px 20px;
-            background-color: #F4F4F5;
+            background-color: #F4F6FB;
             border-radius: 6px;
             font-size: 11px;
             line-height: 1.6;
-            color: #34495e;
+            color: #33384a;
             text-align: center;
         }
 
         /* ── Divider ── */
         hr {
             border: none;
-            border-top: 1px solid #e0e0e0;
+            border-top: 1px solid #E4E7F0;
             margin: 24px 0;
         }
 
         /* ── Links ── */
         a {
-            color: #3598db;
+            color: #3355D8;
             text-decoration: none;
         }
     </style>
@@ -268,6 +318,7 @@
     </table>
 
     <!-- ── Order Notes ── -->
+    <div class="section-header">Notes</div>
     <div class="order-notes">
         $ORDERNOTE
     </div>

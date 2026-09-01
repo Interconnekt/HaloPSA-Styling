@@ -43,19 +43,18 @@
         'html, body, body * {',
         '    font-family: \'Figtree\', system-ui, -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif !important;',
         '}',
-        /* 2026 design-system lock: role blue (Insight role: links,
-           primary buttons, focus). Intentionally diverges from
+        /* 2026 measured palette: role blue (Insight role: links,
+           primary buttons, focus). This now MATCHES
            Interconnekt/Email-Templates' _base/base-template.html,
-           which still ships the legacy operational blue (#3598db) at
-           time of writing; that template is a separate repo/deploy
-           and out of scope here. Revisit if/when Email-Templates
-           adopts the same 2026 palette, so the two stay in sync. */
+           which migrated to the same #3355D8. The two were out of
+           sync while that repo still shipped the legacy operational
+           blue; keep them together on any future palette change. */
         'a, a:visited {',
-        '    color: #3761E2 !important;',
+        '    color: #3355D8 !important;',
         '    text-decoration: none;',
         '}',
         'a:hover {',
-        '    color: #3761E2 !important;',
+        '    color: #3355D8 !important;',
         '    text-decoration: underline;',
         '}'
     ].join('\n');

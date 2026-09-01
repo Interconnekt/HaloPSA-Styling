@@ -38,8 +38,8 @@ fallback and does not contain the active token set).
 2026 design-system lock: full reference in `website-portal-mapping.md`
 §1 and §2; summary here:
 
-- `--portal-action: #3761E2`: primary blue, Insight role (buttons, links, focus ring)
-- `--portal-action-hover: #2F52C0`: darker blue on hover
+- `--portal-action: #3355D8`: primary blue, Insight role (buttons, links, focus ring)
+- `--portal-action-hover: #2C4AC0`: darker blue on hover
 - `--portal-action-shadow`: drop shadow under action buttons, `rgba()` of the accent
 - `--portal-violet: #6F43D6`: third brand triad member, Advisory/AI/People role (new token)
 - `--portal-highlight: #0284C7`: jade/teal, Security BRAND role only (delight moments, live dots, gradient first stop). NOT the success semantic; `--portal-ok` is an independent true green (`#15803D` light / `#34D399` dark), unchanged by the 2026 re-palette
@@ -96,10 +96,10 @@ HaloPSA renders email bodies inside `<iframe class="halo-html-renderer">`, a **s
 ### What the injected CSS sets
 
 - Font: `'Figtree', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important` (2026 lock body font; was Montserrat/Poppins)
-- Link colour: `#3761E2` (2026 lock role blue: Insight role, links/primary buttons/focus. Was the legacy operational blue `#3598db`, which matched `Interconnekt/Email-Templates` `_base/base-template.html` at the time; that template repo has not been updated to the 2026 palette as part of this change, so the two are now intentionally out of sync until Email-Templates catches up)
+- Link colour: `#3355D8` (2026 measured role blue: Insight role, links/primary buttons/focus. Was the legacy operational blue `#3598db`, then briefly the pre-measurement `#3761E2`. `Interconnekt/Email-Templates` has since migrated to the same `#3355D8`, so the iframe shim and the email templates now agree again)
 - Hover: underline on hover only
 
-`#3761E2` reads at 5.29:1 against white; email bodies stay white regardless of portal theme, so a single literal value works for both light and dark portal surfaces without detecting host theme.
+`#3355D8` reads at 6.12:1 against white (the retired `#3761E2` was 5.29:1, so this is a contrast improvement as well as a brand fix); email bodies stay white regardless of portal theme, so a single literal value works for both light and dark portal surfaces without detecting host theme.
 
 ### How to load it
 
@@ -146,5 +146,5 @@ HaloPSA renders every top-nav button with `class="nhd-nav-btn undefined"` — in
 
 - Root `README.md`: KB article styling, Style Profile setup, panel colour mapping
 - `dark-mode-test-checklist.md`: KB content dark-mode coverage
-- `website-portal-mapping.md`: full 2026 token reference (source of truth for the current `#3761E2` link colour)
-- `Interconnekt/Email-Templates`: still on the legacy `#3598db` blue at time of writing; not part of this change, see the Email Iframe Theming section above
+- `website-portal-mapping.md`: full 2026 token reference (source of truth for the current `#3355D8` link colour)
+- `Interconnekt/Email-Templates`: migrated to the 2026 palette (`#3355D8` / `#7E9CFF`); see the Email Iframe Theming section above

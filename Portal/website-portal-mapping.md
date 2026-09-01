@@ -108,12 +108,12 @@ Both now use the same `#0C0E16 → #10131C → #161A25 → #1B2030` ladder.
 
 | Website | Portal | Value | Used for |
 |---|---|---|---|
-| `--gradient-brand` | `--ik-gradient-brand` | `linear-gradient(115deg, #0284C7 0%, #3355D8 52%, #6F43D6 100%)` (light) / `linear-gradient(115deg, #0284C7 0%, #7E9CFF 52%, #A47BFF 100%)` (dark) | Featured pills, primary button hover underlay. ONE brand gradient, reserved for featured/hero moments only, not a general decoration |
-| `--gradient-line` | `--ik-gradient-line` | `linear-gradient(90deg, transparent, #0284C7 30%, #6F43D6 70%, transparent)` (light) / same with `#0284C7`/`#A47BFF` (dark) | Header `::after` hairline, form-card top line |
+| `--gradient-brand` | `--ik-gradient-brand` | `linear-gradient(115deg, #0F7CBE 0%, #3F51CE 52%, #7440D2 100%)` (light) / `linear-gradient(115deg, #248DDF 0%, #5C44DE 52%, #8547EB 100%)` (dark) | Featured pills, primary button hover underlay. ONE brand gradient, reserved for featured/hero moments only, not a general decoration |
+| `--gradient-line` | `--ik-gradient-line` | `linear-gradient(90deg, transparent, #0F7CBE 30%, #7440D2 70%, transparent)` (light) / same with `#248DDF`/`#8547EB` (dark) | Header `::after` hairline, form-card top line |
 | `cubic-bezier(0.22, 1, 0.36, 1)` | `--ik-ease` | Same | Every transition timing function |
 | `200ms` (`duration-200`) | `--ik-dur` | `180ms` | Transition duration |
 
-The gradient direction changed from 135deg to 115deg and the colour stops moved from a two-tone blue to plum sweep to the full jade to blue to violet triad, with the mid stop pinned at 52%. Match the website's `--gradient-brand` exactly rather than re-deriving it if it changes again.
+The gradient direction changed from 135deg to 115deg and the colour stops moved from a two-tone blue to plum sweep to the full three-stop triad, with the mid stop pinned at 52%. The triad has its OWN three values (`--brand-1/2/3` in the website's `globals.css`, `color.locked.*.brand1/2/3` in `Interconnekt/Design-System`) and none of them equals the cyan, blue or violet role colour. Do not rebuild this gradient out of the role tokens; match the website's `--gradient-brand` exactly.
 
 ---
 
@@ -397,7 +397,7 @@ cat-violet                 → --portal-violet               (#6F43D6 / #A47BFF,
 (new token)                 → --ik-font-body               (Figtree, everything else)
 --font-serif                → --ik-font-serif               (Newsreader italic accent)
 --font-mono                 → --ik-font-mono                (Spline Sans Mono)
---gradient-brand            → --ik-gradient-brand           (115deg, jade to blue to violet, 52% mid stop)
+--gradient-brand            → --ik-gradient-brand           (115deg, brand-1/2/3 triad, 52% mid stop, NOT the role colours)
 --gradient-line              → --ik-gradient-line           (header hairline)
 (new token)                 → --portal-on-accent            (white light / dark-ink dark, for text on solid brand fills)
 ```

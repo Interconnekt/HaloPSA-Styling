@@ -221,8 +221,15 @@
 
     /* Gradient system: ONE brand gradient, reserved for featured/hero
        moments only. */
-    --ik-gradient-brand: linear-gradient(115deg, #0284C7 0%, #3355D8 52%, #6F43D6 100%);
-    --ik-gradient-line:  linear-gradient(90deg, transparent, #0284C7 30%, #6F43D6 70%, transparent);
+    /* The brand gradient has its OWN triad, separate from the role
+       tokens above. `--brand-1/2/3` in the website's globals.css and
+       `color.locked.light.brand1/2/3` in Interconnekt/Design-System
+       agree on these three values, and none of them equals the blue,
+       cyan or violet role colour. Building the gradient out of the
+       role tokens (what this did previously) produced a gradient that
+       matched nothing shipped. */
+    --ik-gradient-brand: linear-gradient(115deg, #0F7CBE 0%, #3F51CE 52%, #7440D2 100%);
+    --ik-gradient-line:  linear-gradient(90deg, transparent, #0F7CBE 30%, #7440D2 70%, transparent);
 
     /* Motion */
     --ik-ease:           cubic-bezier(0.22, 1, 0.36, 1);
@@ -353,8 +360,9 @@
     --panel-b-custom-bg:        rgba(2, 132, 199, 0.14);
     --panel-b-custom-border:    rgba(2, 132, 199, 0.40);
 
-    --ik-gradient-brand: linear-gradient(115deg, #0284C7 0%, #7E9CFF 52%, #A47BFF 100%);
-    --ik-gradient-line:  linear-gradient(90deg, transparent, #0284C7 30%, #A47BFF 70%, transparent);
+    /* Dark triad, same source. See the light-mode block. */
+    --ik-gradient-brand: linear-gradient(115deg, #248DDF 0%, #5C44DE 52%, #8547EB 100%);
+    --ik-gradient-line:  linear-gradient(90deg, transparent, #248DDF 30%, #8547EB 70%, transparent);
 
     color-scheme: dark;
 }

@@ -9,16 +9,7 @@
         <table style="width: 100%; border-collapse: collapse;">
             <tr>
                 <td style="width: 50%; vertical-align: middle; padding: 4px 0;">
-                    <!-- 2026 brand lockup, reversed ink for the navy band.
-                         Not $ORLOGOSRC: that merge field serves whatever was
-                         uploaded to HaloPSA, currently a 300px web asset that
-                         prints soft. Not interconnekt.com.au/brand/2026/ either:
-                         those are served with cross-origin-resource-policy:
-                         same-site, so a browser blocks them from a cross-site
-                         document and the logo renders broken. Served instead
-                         from this repo via GitHub Pages, same path the portal
-                         CSS uses. See PDF-Templates/_brand/README.md. -->
-                    <div style="height: 40px; width: 240px; background-image: url('https://interconnekt.github.io/HaloPSA-Styling/PDF-Templates/_brand/Interconnekt-lockup-h-neg-800.png'); background-repeat: no-repeat; background-position: left center; background-size: contain;"></div>
+                    <div style="height: 40px; width: 240px; background-image: url($ORLOGOSRC); background-repeat: no-repeat; background-position: left center; background-size: contain;"></div>
                 </td>
                 <td style="width: 50%; text-align: right; vertical-align: middle; padding: 4px 0; font-family: Figtree, Arial, sans-serif; font-size: 10px; line-height: 1.6;">
                     <div style="font-family: 'Bricolage Grotesque', Figtree, Arial, sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px;">TAX INVOICE</div>

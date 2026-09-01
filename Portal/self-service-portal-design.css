@@ -1081,6 +1081,28 @@ html body .portal .inlinetile > .main-tile-item {
 
 /* Service catalogue tile internals
    ---------------------------------------------------------
+   SCOPE, and it matters: every rule in this block is scoped under
+   `.main-tile-item`, because HaloPSA reuses the `.svcatalog-item*`
+   class names on TWO structurally different pages.
+
+     /services?...&categoryid=N   the item list
+       .inlinetile > .main-tile-item > div > .svcatalog-item
+
+     /services?... (no categoryid)  the category picker
+       .svcatalog-item.varheight.inlinetile > button.card.dashbtn
+
+   On the category page HaloPSA sizes the tile with
+   `.svcatalog-item.varheight { height: inherit }` and
+   `.dashbtn { height: 100% }`. An unscoped
+   `.svcatalog-item { height: auto !important }` beat that, the
+   button lost its height reference, `.card-body` grew to 1295px,
+   and the row it sits in collapsed to 20px with `overflow: hidden`,
+   so the category page rendered as an empty gap under the search
+   box. Verified against the page with this stylesheet disabled:
+   stock gives row 339px, pic 100px, four visible cards.
+
+   Keep every selector here under `.main-tile-item`.
+   ---------------------------------------------------------
    HaloPSA nests `.svcatalog-item` inside the card and gives it its
    own `padding: 20px`, on top of the card's `14px 18px 18px`. The
    two stack, so every tile carried 34 to 38px of inset before any
@@ -1089,7 +1111,7 @@ html body .portal .inlinetile > .main-tile-item {
    the card already supplies it, and bring the artwork down to 64px:
    these are category signposts, not illustrations, and the tile
    should read as a compact row of choices rather than four posters. */
-html body .portal .svcatalog-item {
+html body .portal .main-tile-item .svcatalog-item {
     padding: 0 !important;
     /* HaloPSA hardcodes `height: 245px` here. With the artwork and
        padding reduced the content stops around 130px, so the rest was
@@ -1104,31 +1126,31 @@ html body .portal .svcatalog-item {
    separating nothing. Hide it when it has no content; when a
    catalogue does carry prices the rule stays, softened to the
    portal's own hairline rather than near-black. */
-html body .portal .svcatalog-item-price:empty {
+html body .portal .main-tile-item .svcatalog-item-price:empty {
     display: none !important;
 }
-html body .portal .svcatalog-item-price {
+html body .portal .main-tile-item .svcatalog-item-price {
     border-top-color: var(--portal-border) !important;
     font-size: 12.5px;
     color: var(--portal-text-secondary) !important;
 }
-html body .portal .svcatalog-item-pic {
+html body .portal .main-tile-item .svcatalog-item-pic {
     height: 64px !important;
     margin-bottom: 14px;
 }
-html body .portal .svcatalog-item-pic img {
+html body .portal .main-tile-item .svcatalog-item-pic img {
     max-height: 64px;
     width: auto;
 }
 /* The description sat 20px below the title, which on a two line
    title opened a gap wider than the title itself. */
-html body .portal .svcatalog-item-detail {
+html body .portal .main-tile-item .svcatalog-item-detail {
     margin-top: 8px !important;
     font-size: 12.5px;
     line-height: 1.5;
     color: var(--portal-text-secondary) !important;
 }
-html body .portal .svcatalog-item-name {
+html body .portal .main-tile-item .svcatalog-item-name {
     font-size: 14px !important;
     font-weight: 600 !important;
     color: var(--portal-heading) !important;
@@ -5845,16 +5867,25 @@ html body .portal .articleInfoSmall.kb .heading {
     padding-left: 8px !important;
 }
 
-/* KB-list tag chips — drop the per-chip `margin` from the global rule so
-   the parent flex container's `column-gap` is the single source of truth
-   for horizontal rhythm. The leading pill sits flush with the card's
-   content edge so its background aligns with the article title's left
-   edge above it. (Previous -12px negative-margin hack aligned pill TEXT
-   to title text but left the pill BG extruding into the card padding,
-   which read as misaligned chrome — user flagged this on the Top
-   Articles widget.) */
+/* KB-list tag chips: drop the per-chip `margin` so the parent flex
+   container's `column-gap` is the single source of truth for
+   horizontal rhythm. The leading pill sits flush with the card's
+   content edge so its background aligns with the article title's
+   left edge above it. (A previous -12px negative-margin hack aligned
+   pill TEXT to title text but left the pill BG extruding into the
+   card padding, which read as misaligned chrome.)
+
+   DIRECT CHILDREN ONLY. This previously carried a second, descendant
+   selector (`.articleInfoSmall.kb span.kbtags`), which reached pills
+   nested inside a wrapper element. `column-gap` only spaces a flex
+   container's own children, so on the KB landing page
+   (`/kb?btn=46`), where HaloPSA wraps the tag row in an unclassed
+   block `div`, those pills lost their margin AND never received the
+   gap: four chips rendered touching edge to edge. Restricting to `>`
+   means a nested tag row keeps the global
+   `margin: 3px 6px 3px 0` instead. */
 html body .portal .articleInfoSmall.kb > .kbtags,
-html body .portal .articleInfoSmall.kb span.kbtags {
+html body .portal .articleInfoSmall.kb > span.kbtags {
     margin: 0 !important;
 }
 

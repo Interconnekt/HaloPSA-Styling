@@ -15,21 +15,23 @@ Read `AGENTS.md` first, then section 7 of the earliest handoff, then this.
 | Joel logged out and back in through the proxy | Done by Joel. The return leg works: the tab landed on `/portal/tickets` signed in. |
 | PR #20, two stylesheet fixes (below) | Open, not merged. The auto-mode classifier blocked `gh pr merge`, so Joel merges it. Merging is the deploy. |
 | One-hour token refresh | Passes. A tab left on `/portal/tickets` through the proxy from 22:39 to 23:38 AEST stayed signed in; `P__token_next_refresh` moved from 23:32:57 to 00:29:18 without a reload. |
-| Scheduled pill in a browser | Blocked, see section 1. |
+| Scheduled pill in a browser | Verified. Impersonation fixed (clear portal cookies + reopen), then seen as an IDA contact in light mode on ticket 358840: violet, #EFE9FB on #321E60. Correct. |
 | Get-in-touch CTA | Closed as a non-item, see section 1. |
 
 ### PR #20
 
-- **Long status labels in the ticket sidebar.** HaloPSA's own CSS is
-  `.status-avatar.smallestest { font-size: 6px !important }`, stamped
-  on labels like "Awaiting Change Review". Our three shared pill rules
-  (shape, dot kill, typography) listed `.small`, `.bitsmall`,
-  `.smallest` and `.fortile` but not `.smallestest`. Added it to all
-  three. Proven against HaloPSA's live CSS with a synthetic
-  `.status-avatar.smallestest` element on `/portal/tickets`: before,
-  6px text, `display: block`, 1793px wide; after injecting the new
-  rule, 10.5px, `inline-flex`, 189px, identical to a `.small` pill
-  beside it. Not yet seen on a real ticket (section 1 explains why).
+- **Ticket-detail status pill size variants.** HaloPSA sizes the
+  ticket-detail status pill by label length across SIX shrinking
+  variants (`bitsmall` 11px, `small` 10px, `smaller` 9px, `smallest`
+  8px, `smallester` 7px, `smallestest` 6px), each with an `!important`
+  font-size and no width cap. Any variant not in our three shared pill
+  rules (shape, dot kill, typography) renders as tiny text stretched to
+  the full sidebar width. The first commit added only `.smallestest`;
+  the follow-up commit (`b14442d`) added `.smaller` and `.smallester`
+  so all six are covered. Seen on a real ticket: the Scheduled pill on
+  358840 uses `.smaller` and rendered 9px/323px; with the fix injected
+  it becomes a compact 10.5px/92px violet pill matching the ON HOLD
+  pill beside it.
 - **"No Tickets found" invisible in dark mode.** HaloPSA writes the
   portal's light-mode text colour inline on `.notickets-lbl`
   (`style="font-size: 14px; color: rgb(11, 14, 21);"`), and the inline

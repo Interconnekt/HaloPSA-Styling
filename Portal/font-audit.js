@@ -1,5 +1,5 @@
 /**
- * Self-Service Portal — Font Audit
+ * Self-Service Portal, Font Audit
  *
  * Paste this whole file into the DevTools console on any portal page to
  * enumerate every visible element whose computed `font-family` does NOT
@@ -38,7 +38,7 @@
     // Monospace stacks we deliberately keep (inline code + pre blocks).
     var MONO_HINTS = ['sfmono', 'consolas', 'menlo', 'monaco', 'courier', 'liberation mono'];
 
-    // Selectors whose *subtree* is out of scope — ticket-note email bodies
+    // Selectors whose *subtree* is out of scope, ticket-note email bodies
     // live inside `iframe.halo-html-renderer` and are intentionally themed
     // (or not) by iframe-theme.js, not by the host CSS.
     var SKIP_IFRAME_SELECTORS = ['iframe.halo-html-renderer'];
@@ -144,7 +144,7 @@
             injected: injected,
             bodyFont: bodyFont
         });
-        // Don't include ticket-notes subtree offenders in the main table —
+        // Don't include ticket-notes subtree offenders in the main table;
         // they're intentionally out of scope for this audit.
         if (!isNotes) collect(doc, 'iframe:' + (f.className || ''), offenders, skipped);
     });

@@ -1,22 +1,22 @@
 /**
- * Self-Service Portal — chrome JS shims
+ * Self-Service Portal, chrome JS shims
  *
  * Five independent IIFEs in this file:
  *
- * 1. iframe theming — HaloPSA renders email bodies inside
+ * 1. iframe theming, HaloPSA renders email bodies inside
  *    `<iframe class="halo-html-renderer">`, a same-origin iframe with
  *    its own `<style>` tag that sets Segoe UI. CSS from the host
  *    document does not cross the iframe boundary, so the only way to
  *    theme that content is via JavaScript: reach into the same-origin
  *    document and inject a `<style>` of our own.
  *
- * 2. Ticket list formatting — HaloPSA renders the `Age` column as a
+ * 2. Ticket list formatting, HaloPSA renders the `Age` column as a
  *    raw float of days ("4.1446736001620375"). CSS cannot round
  *    numeric text content, so we post-process the DOM to format each
  *    Age cell to 2 decimal places. Runs on load + MutationObserver so
  *    sort/filter/pagination don't leave stale raw floats.
  *
- * 3. Status-chip class stamping — HaloPSA ships status pills as
+ * 3. Status-chip class stamping, HaloPSA ships status pills as
  *    `.status-avatar` with the state name in textContent, but with
  *    only an inline `background-color` as a colour signal. We read
  *    the label and stamp a matching `.s-*` class so CSS can render
@@ -24,12 +24,12 @@
  *    self-service-portal-design.css). A MutationObserver catches
  *    re-renders (sort/filter/kanban/page change).
  *
- * 4. Priority-pill class stamping — the `.oneline` priority wrapper
+ * 4. Priority-pill class stamping, the `.oneline` priority wrapper
  *    ships as `<swatch><text>`. We stamp a matching `.p-*` class on
  *    the wrapper from its text (or the swatch rgb as a fallback) so
  *    CSS can render the tonal pill tokens.
  *
- * 5. On-hold indicator stamping — on home-page ticket tiles HaloPSA
+ * 5. On-hold indicator stamping, on home-page ticket tiles HaloPSA
  *    substitutes the `$sla_bar` placeholder with the raw string
  *    "On Hold" when a ticket's SLA is paused. The text ships with no
  *    class hook, so we walk candidate tiles, find the leaf element
@@ -140,10 +140,10 @@
                 style.textContent = CSS;
                 doc.head.appendChild(style);
             }
-            // Always re-strip on inject — email re-renders may bring
+            // Always re-strip on inject, email re-renders may bring
             // the inline styles back on ticket navigation.
             stripInlineFonts(doc);
-        } catch (e) { /* cross-origin or detached — ignore */ }
+        } catch (e) { /* cross-origin or detached, ignore */ }
     }
 
     function theme(iframe) {
@@ -186,10 +186,10 @@
 
 
 /**
- * Ticket list — format the `Age` column to 2 decimal places.
+ * Ticket list, format the `Age` column to 2 decimal places.
  *
  * HaloPSA renders the Age column as a raw Number that represents days
- * since the ticket was opened — e.g. "4.1446736001620375". CSS cannot
+ * since the ticket was opened, e.g. "4.1446736001620375". CSS cannot
  * round text, so we post-process the DOM.
  *
  * Strategy: locate the Age column by its header text (order varies per
@@ -222,7 +222,7 @@
         var raw = (td.textContent || '').trim();
         // Format any float with 2+ decimals down to a single decimal place.
         // Skip blanks, whole numbers, and non-numeric text (e.g. "N/A",
-        // "—"). Allow leading minus for negatives. Threshold is `\d{2,}`
+        // "-"). Allow leading minus for negatives. Threshold is `\d{2,}`
         // so a value already at one decimal ("4.2") is left alone.
         if (!/^-?\d+\.\d{2,}$/.test(raw)) return;
         var n = parseFloat(raw);
@@ -248,7 +248,7 @@
     function start() {
         sweep();
         if (!document.body) return;
-        // Global subtree observer — the ticket list may not exist at
+        // Global subtree observer, the ticket list may not exist at
         // script start (SPA route change). Re-sweep on any DOM change
         // that adds .rt-tr rows. Marker on formatted cells prevents
         // re-format loops; react-table re-creates cells on render, so
@@ -290,11 +290,11 @@
  * HaloPSA renders `.status-avatar` elements with the status name as
  * textContent and only an inline `background-color` as a colour
  * signal. The portal CSS has a named-status palette keyed on
- * `.s-<slug>` classes — we read each chip's textContent and stamp
+ * `.s-<slug>` classes, we read each chip's textContent and stamp
  * the matching class so CSS can render the brand tint + ink.
  *
  * Class lookup is case-insensitive and trims trailing whitespace.
- * Unknown status names get no class — they'll fall through to the
+ * Unknown status names get no class, they'll fall through to the
  * inline-rgb fallback rules in the CSS (which map HaloPSA's
  * default colours to the closest brand state).
  *
@@ -438,7 +438,7 @@
  * wrapper's text content (excluding the swatch element).
  *
  * Why text-content stamping (not inline-rgb selectors): HaloPSA's per-
- * tenant priority colours vary — e.g. one instance emits Low as
+ * tenant priority colours vary, e.g. one instance emits Low as
  * `rgb(0, 98, 177)` while another uses a custom blue. The CSS keeps a
  * legacy rgb-based fallback for chips this stamper hasn't touched yet,
  * but text-content matching is the durable path.
@@ -471,12 +471,12 @@
     });
 
     function matchPriorityKey(text) {
-        // Fast path — exact match on the label (table cell).
+        // Fast path, exact match on the label (table cell).
         if (PRIORITY_MAP.hasOwnProperty(text)) return text;
         // Filter sidebar / saved-view chips sometimes suffix a ticket
         // count ("Low (0)", "Critical  3") or wrap the label in extra
         // spans. Fall back to substring match against the priority
-        // vocabulary — longest key wins first.
+        // vocabulary, longest key wins first.
         for (var i = 0; i < PRIORITY_KEYS_LONGEST_FIRST.length; i++) {
             var k = PRIORITY_KEYS_LONGEST_FIRST[i];
             if (text.indexOf(k) !== -1) return k;
@@ -555,7 +555,7 @@
  * On home-page ticket tiles (`.action-history-item.tile-item`) HaloPSA
  * replaces the SLA countdown bar with the raw string "On Hold" when a
  * ticket's SLA is paused. The text ships as a bare text node inside
- * whatever leaf element received the `$sla_bar` substitution — no
+ * whatever leaf element received the `$sla_bar` substitution, no
  * class, no attribute, no hook for CSS to target (CSS has no way to
  * select an element by its text content).
  *
@@ -566,7 +566,7 @@
  * shape from self-service-portal-design.css.
  *
  * Wrap-in-span (rather than styling the host element directly)
- * because the host could be a <div>, <span>, or <td> — forcing
+ * because the host could be a <div>, <span>, or <td>, forcing
  * `display: inline-flex` on an unknown container could disrupt the
  * surrounding layout. A dedicated span insulates our styling.
  *
@@ -601,7 +601,7 @@
         var elements = tile.querySelectorAll('*');
         for (var i = 0; i < elements.length; i++) {
             var el = elements[i];
-            // Only leaf elements — we want the node that directly
+            // Only leaf elements, we want the node that directly
             // holds the "On Hold" text, not an ancestor that contains
             // it alongside other content.
             if (el.children.length > 0) continue;

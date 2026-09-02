@@ -1,21 +1,21 @@
 <!--
-  Kanban card template — NEW (Interconnekt 2026 refresh).
+  Kanban card template, NEW (Interconnekt 2026 refresh).
 
   Paste into: Configuration → Tickets → Field Lists → Kanban Template
 
-  Semantic BEM structure. No inline styles — all visual work lives in
+  Semantic BEM structure. No inline styles, all visual work lives in
   Portal/self-service-portal-design.css, keyed on the .kanban-card
   classes and data-* attributes below.
 
   data-* attributes:
-    data-priority — drives the priority accent top bar/colour
-    data-status   — drives the status lozenge tint
-    data-type     — drives the leading icon (CSS ::before by type)
+    data-priority, drives the priority accent top bar/colour
+    data-status, drives the status lozenge tint
+    data-type, drives the leading icon (CSS ::before by type)
 
   Missing placeholders (not in the tile/kanban dialect):
-    $tickettype_icon — no icon variable. CSS injects per-type via
+    $tickettype_icon, no icon variable. CSS injects per-type via
       `.kanban-card[data-type="..."]::before`.
-    $agent_image — no agent-avatar variable on the card. The <img> will
+    $agent_image, no agent-avatar variable on the card. The <img> will
       fail to resolve; either delete the <img> line and drive avatars
       from CSS (e.g. initials generated from $agent_name) or swap to
       a HaloPSA field-list column if one becomes available.

@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════════
-   HaloPSA Self-Service Portal — Custom CSS
+   HaloPSA Self-Service Portal, Custom CSS
    ═══════════════════════════════════════════════════════════════════════
 
    Loaded via @import in: Configuration > Self Service Portal > Custom CSS
@@ -43,7 +43,7 @@
     --portal-accent: #4088D4;
     --portal-accent-hover: #3572b0;
 
-    /* Primary action colour — used on H1 page titles, back button, and
+    /* Primary action colour, used on H1 page titles, back button, and
        pill action buttons (Add Note, Time Entry, View All, etc.). Unified
        to one blue so the portal doesn't read as three competing shades
        (the previous value `#5084ee` leaned more purple/indigo against
@@ -61,7 +61,7 @@
     --portal-shadow-hover: 0 20px 30px rgba(36, 50, 66, .14);
     --portal-shadow-sm: 0 1px 3px rgba(0, 0, 0, .06);
 
-    /* Table tokens — alpha-tinted so they lift from whatever surface
+    /* Table tokens, alpha-tinted so they lift from whatever surface
        sits underneath, and adapt automatically in .theme-dark. */
     --portal-table-header-bg: rgba(15, 23, 42, 0.04);
     --portal-table-border: rgba(15, 23, 42, 0.08);
@@ -83,7 +83,7 @@
     --portal-quote-border: var(--portal-accent);
     --portal-quote-bg: #f8f9fc;
 
-    /* Interconnekt brand tokens — referenced by the header/nav spec.
+    /* Interconnekt brand tokens, referenced by the header/nav spec.
        Mirrored from self-service-portal-design.css so selectors that
        use these tokens work whichever file is loaded. */
     --ik-font-display: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -91,7 +91,7 @@
     --ik-dur: 180ms;
     --ik-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
-    /* Confluence panel tokens — per-type bg + hairline border + icon
+    /* Confluence panel tokens, per-type bg + hairline border + icon
        tint. Referenced by the `.confluence-information-macro-*` rules
        in section 9. Auto-flipped in `.theme-dark`. */
     --panel-info-bg:          #EAF2FD;
@@ -126,7 +126,7 @@
     --portal-shadow-hover: 0 20px 30px rgba(0, 0, 0, .4);
     --portal-shadow-sm: 0 1px 3px rgba(0, 0, 0, .2);
 
-    /* Table tokens — flipped to white alpha so headers lift from the
+    /* Table tokens, flipped to white alpha so headers lift from the
        dark body instead of becoming bright light islands. */
     --portal-table-header-bg: rgba(255, 255, 255, 0.04);
     --portal-table-border: rgba(255, 255, 255, 0.08);
@@ -143,7 +143,7 @@
     --portal-quote-border: var(--portal-accent);
     --portal-quote-bg: #3a3a4a;
 
-    /* Confluence panel tokens — dark-mode counterparts. */
+    /* Confluence panel tokens, dark-mode counterparts. */
     --panel-info-bg:          rgba(74, 116, 240, 0.15);
     --panel-info-border:      rgba(74, 116, 240, 0.40);
     --panel-info-icon:        #4C9AFF;
@@ -175,7 +175,7 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--portal-heading);
 }
 
-/* Heading scale — tightened from the previous 2.5/2/1.75/1.5/1.25/1rem
+/* Heading scale, tightened from the previous 2.5/2/1.75/1.5/1.25/1rem
    ladder which made KB articles feel like posters and the portal
    chrome feel bloated. Modern app-style hierarchy: page title ~22px,
    section ~18px, sub-section ~16px. Body root stays 16px for article
@@ -193,17 +193,17 @@ p, span, li, a {
     font-weight: 400;
 }
 
-/* Comprehensive font-family sweep — ensures Montserrat wins everywhere
+/* Comprehensive font-family sweep, ensures Montserrat wins everywhere
    in the portal chrome, not just through the per-component overrides
-   scattered in sections 3–8. Two layers:
+   scattered in sections 3-8. Two layers:
 
-   1. Form controls — inputs, textareas, selects, buttons and optgroups
+   1. Form controls, inputs, textareas, selects, buttons and optgroups
       do NOT inherit `font-family` by default (HTML spec: browser UA
       styles set a system font on these elements). Forcing `inherit`
       makes them pick up Montserrat from <body> so the New Ticket form,
       filter dropdowns, searchboxes etc all match the rest of the portal.
 
-   2. Scoped universal override for `.portal` subtree — catches anything
+   2. Scoped universal override for `.portal` subtree, catches anything
       HaloPSA's bundled libraries (react-select Lato, react-kanban /
       react-table Poppins, Segoe UI Light on some profile headers)
       paint via same-specificity class rules that beat plain body
@@ -211,10 +211,10 @@ p, span, li, a {
       declarations ship inline.
 
    Exclusions:
-     - `i`, `svg`, `.fa` — FontAwesome icon glyphs would render as
+     - `i`, `svg`, `.fa`, FontAwesome icon glyphs would render as
        unicode placeholders if forced to Montserrat. HaloPSA loads FA
        separately and paints icons via `font-family: FontAwesome`.
-     - `code`, `pre`, `pre *` — monospace stacks (SFMono, Consolas,
+     - `code`, `pre`, `pre *`, monospace stacks (SFMono, Consolas,
        Menlo) defined in section 9 for inline/block code. */
 input, textarea, select, button, optgroup {
     font-family: inherit;
@@ -249,7 +249,7 @@ header h1, header h2, header h3,
     color: #fff !important;
 }
 
-/* Tablet — nudge body down by 1px and shrink headings proportionally
+/* Tablet, nudge body down by 1px and shrink headings proportionally
    to the desktop scale. */
 @media (max-width: 768px) {
     html, body { font-size: 15px; }
@@ -275,7 +275,7 @@ header h1, header h2, header h3,
 }
 
 /* ─────────────────────────────────────────────────
-   Responsive polish — tablet + mobile layout fixes
+   Responsive polish, tablet + mobile layout fixes
    ─────────────────────────────────────────────────
    HaloPSA ships a mostly-fluid desktop layout that leaks a few
    issues at narrower breakpoints. Fix them here rather than
@@ -288,7 +288,7 @@ header h1, header h2, header h3,
    sibling to match, producing ~390px cards with huge dead space
    below short content. Tighten padding, shrink the icon, and
    reduce the title → text gap so the stretched height is less
-   wasteful — we can't stop Bootstrap equalising rows without
+   wasteful, we can't stop Bootstrap equalising rows without
    breaking the look, so we just make the equalised height smaller. */
 @media (max-width: 1199px) {
     html body .portal .dashbtn {
@@ -310,7 +310,7 @@ header h1, header h2, header h3,
     }
 }
 
-/* Ticket-view workflow stepper — 6 steps × ~100px overflow the
+/* Ticket-view workflow stepper, 6 steps × ~100px overflow the
    ~450px wrap on mobile, clipping `Review` and `Complete`.
    Make the wrap scrollable so the full chain is reachable
    (dragging or swiping on touch devices). `min-width: max-content`
@@ -362,7 +362,7 @@ header h1, header h2, header h3,
     letter-spacing: -0.01em;
 }
 
-/* Page subtitle (eyebrow label — e.g. "Top Articles" on the KB index) */
+/* Page subtitle (eyebrow label, e.g. "Top Articles" on the KB index) */
 .portal .page-title .page-subtitle,
 .portal .page-subtitle {
     font-size: 0.6875rem !important;
@@ -376,7 +376,7 @@ header h1, header h2, header h3,
 
 /* Collapsible section headers inside KB articles / ticket details
    (e.g. "Description" expander on a KB article). HaloPSA ships these as
-   <h2> inside .details-group-header.title — renders Poppins 21px/200 by
+   <h2> inside .details-group-header.title, renders Poppins 21px/200 by
    default. Reframe them as Montserrat uppercase eyebrows so they match
    the rest of the portal's section-label language. */
 .portal .details-group-header h2,
@@ -394,7 +394,7 @@ header h1, header h2, header h3,
    4. SEARCH
    ───────────────────────────────────────────────── */
 
-/* Search box wrapper — borderless pill, soft shadow.
+/* Search box wrapper, borderless pill, soft shadow.
    Selector matches HaloPSA's `.portal .theme-dark .searchscreen:not(.searchscreen-full) .searchbox`
    specificity so we can win the cascade in dark mode. */
 .portal .searchscreen .searchbox,
@@ -442,7 +442,7 @@ html body .portal .searchholder input:focus-visible {
    5. CARDS, PANELS & TILES
    ───────────────────────────────────────────────── */
 
-/* Dashboard tiles — modern elevated card with hover lift.
+/* Dashboard tiles, modern elevated card with hover lift.
    HaloPSA ships these as .card.dashbtn.noborder; we override font, radius,
    padding and shadow. Border is hairline rgba so it adapts to theme surface. */
 .portal .card.dashbtn,
@@ -481,7 +481,7 @@ searchboxinput,
 
 /* ── Knowledge Base index page ── */
 
-/* Article list row — surface card matching the home-page Recent Activity
+/* Article list row, surface card matching the home-page Recent Activity
    tiles (`.action-history-item.tile-item`). Same surface token, radius,
    padding and lift-on-hover, so the home page's "Top 5 Articles" widget
    reads as a peer of the Recent Activity column next to it. The KB index
@@ -491,7 +491,7 @@ searchboxinput,
     border-radius: 14px !important;
     padding: 15px !important;
     /* `.article` sits inside `<table.results-table>` which establishes
-       a new block-formatting context — so the first child's top margin
+       a new block-formatting context, so the first child's top margin
        does NOT collapse with the parent (unlike `.action-history-item`
        in Recent Activity, whose top margin does collapse). Use bottom-
        only margin to mirror the visual rhythm of the Recent column
@@ -504,7 +504,7 @@ searchboxinput,
 /* HaloPSA renders the article-type badge twice per row: once inside
    `.articleRight` (next to the views count) and once as a direct child
    of `.articleInfoSmall.kb` (a standalone chip with `i.fas.book`).
-   They render side-by-side on the right of every card — duplication.
+   They render side-by-side on the right of every card, duplication.
    Hide the standalone one; keep the one grouped with the views count
    so the right-edge of each card reads as a clean stat block. */
 .portal .articleInfoSmall.kb > .status-avatar {
@@ -512,7 +512,7 @@ searchboxinput,
 }
 
 /* The remaining ARTICLE chip (inside `.articleRight`) ships at HaloPSA's
-   default heading-purple rgb(47,53,94) with 4px corners — too square
+   default heading-purple rgb(47,53,94) with 4px corners, too square
    against the rest of the pill chrome on the page. Re-skin to a pill
    in the surface-hover token so it reads as a soft category chip
    rather than a competing solid bg. */
@@ -573,7 +573,7 @@ searchboxinput,
     color: var(--portal-text-muted);
 }
 
-/* Tag pills — real pills, subtle surface, hover tint */
+/* Tag pills, real pills, subtle surface, hover tint */
 .portal .kbtags {
     font-size: 11px !important;
     font-weight: 500 !important;
@@ -587,7 +587,7 @@ searchboxinput,
     background: var(--portal-surface-active) !important;
 }
 
-/* Sidebar search (tree-menu / kblist) — borderless pill matching home search */
+/* Sidebar search (tree-menu / kblist); borderless pill matching home search */
 .portal .kblist .searchbox,
 .portal .tree-menu .searchbox {
     background: var(--portal-surface-hover) !important;
@@ -610,7 +610,7 @@ searchboxinput,
     box-shadow: 0 0 0 2px rgba(107, 163, 224, 0.3) inset;
 }
 
-/* Sidebar tree items — hover tint */
+/* Sidebar tree items, hover tint */
 .portal .tree-menu .sidebar,
 .portal .kblist .sidebar {
     border-radius: 8px;
@@ -624,12 +624,12 @@ searchboxinput,
     background: var(--portal-surface-hover);
 }
 
-/* KB sidebar — selected article highlight.
+/* KB sidebar, selected article highlight.
    HaloPSA applies the active state as an *inline* style setting bg to
    the heading-purple (rgb(47, 53, 94)). That's both hard to read and
    visually heavy. Attribute selectors match the inline style, and the
    !importants win inline-specificity. Result is a tonal accent tint
-   with a left accent bar — a lighter, softer modern nav pattern. */
+   with a left accent bar, a lighter, softer modern nav pattern. */
 .portal .tree-menu .tree-node[style*="rgb(47, 53, 94)"],
 .portal .tree-menu .tree-node[style*="background-color: rgb(47"] {
     background-color: transparent !important;
@@ -640,7 +640,7 @@ searchboxinput,
     border-radius: 0 !important;
 }
 
-/* KB sidebar — shrink tree-node labels from HaloPSA's default 16px to
+/* KB sidebar, shrink tree-node labels from HaloPSA's default 16px to
    14px. Scoped to `.tree-menu` so article body text (16px) is untouched. */
 .portal .tree-menu .tree-node {
     font-size: 14px !important;
@@ -650,7 +650,7 @@ searchboxinput,
    These are the dashboard-row tiles at the bottom of the portal home
    page (`.listwidget` containers with `.action-history-item.tile-item`
    rows). The defaults are 25px-radius tiles with a chunky 10px coloured
-   left bar — too heavy for small cards. Slim the bar, tighten radius,
+   left bar, too heavy for small cards. Slim the bar, tighten radius,
    add a subtle hover lift. No hairline border so the bar sits flush. */
 .portal .listwidget .listwidget-title {
     font-size: 1rem !important;
@@ -687,7 +687,7 @@ searchboxinput,
 }
 
 /* SLA countdown bar (bottom-right of home-page ticket cards).
-   HaloPSA paints the fill colour inline per ticket state — we need
+   HaloPSA paints the fill colour inline per ticket state, we need
    per-state overrides (not a blanket colour) to preserve the state
    signal while retinting HaloPSA's harsh primary hues into the portal
    palette. Attribute selectors match the inline bg string directly. */
@@ -700,13 +700,13 @@ html body .portal .sla-perc-bar > div {
     border-radius: 999px !important;
 }
 
-/* Overdue (HaloPSA ships rgb(255, 46, 0) — pure vermilion). Swap to a
+/* Overdue (HaloPSA ships rgb(255, 46, 0); pure vermilion). Swap to a
    muted coral-red that still reads as alarm but doesn't scream. */
 html body .portal .sla-perc-bar > div[style*="rgb(255, 46, 0)"] {
     background-color: #d05a52 !important;
 }
 
-/* Warning (HaloPSA ships rgb(255, 191, 0) — pure amber). Swap to a
+/* Warning (HaloPSA ships rgb(255, 191, 0); pure amber). Swap to a
    warmer honey-amber that complements the dark card. */
 html body .portal .sla-perc-bar > div[style*="rgb(255, 191, 0)"] {
     background-color: #e0a84a !important;
@@ -721,7 +721,7 @@ html body .portal .sla-perc-bar > div[style*="rgb(34, 139, 34)"] {
     background-color: #4fa37a !important;
 }
 
-/* Centred countdown text inside the SLA bar — Montserrat so it matches
+/* Centred countdown text inside the SLA bar, Montserrat so it matches
    the rest of the portal surfaces, weight 500 and 12px to stay legible
    on the coloured fills without shouting. Two rules collapsed into one:
    previous revision had a duplicate block, and both had lost the
@@ -735,7 +735,7 @@ html body .portal .bar-text {
 
 /* ── Kanban view (tickets list → Kanban View) ──
    HaloPSA's kanban uses `.board-card-content` for the actual card
-   surface (not `.card`) — the old `.react-kanban-column .card` rules
+   surface (not `.card`); the old `.react-kanban-column .card` rules
    targeted a class that doesn't exist. Structure per card:
      .board-card > .board-card-content
                      ├ .board-card-bar    (status stripe, absolute-left)
@@ -746,7 +746,7 @@ html body .portal .bar-text {
    symmetrical padding, Montserrat throughout, a proper gap between
    cards, and a uppercase-eyebrow column header. */
 
-/* Column header — 'Assigned', 'In Progress' etc. */
+/* Column header, 'Assigned', 'In Progress' etc. */
 html body .portal .board-column-title {
     font-family: 'Montserrat', 'Poppins', sans-serif !important;
     font-size: 11px !important;
@@ -778,7 +778,7 @@ html body .portal .react-kanban-column > div > div {
     margin-bottom: 10px;
 }
 
-/* Status stripe — mirror the home-page Option A (6px, rounded leading
+/* Status stripe, mirror the home-page Option A (6px, rounded leading
    edge). HaloPSA positions this absolute inside the rounded content,
    so overflow:hidden on the content clips it to the same radius. */
 html body .portal .board-card-bar {
@@ -843,14 +843,14 @@ html body .portal .solidbutton.fabtn.notext:hover {
     background-color: var(--portal-surface-hover) !important;
 }
 
-/* Shared height for all action-row buttons — fabtns (icon + label),
+/* Shared height for all action-row buttons, fabtns (icon + label),
    fabtn.notext (icon-only), fabtn.noprint (ticket-view collapse/
    download icons) and `.nhd-button.curve` pills all need to match so
    the row visually aligns as one family. 36px is the middle of the
-   old ladder (30 for icons, 40 for HaloPSA's pills) — gives icon
+   old ladder (30 for icons, 40 for HaloPSA's pills); gives icon
    buttons enough tap target without making the pills feel chunky.
 
-   The `.nhd-button.curve` match is below in its own block — HaloPSA
+   The `.nhd-button.curve` match is below in its own block, HaloPSA
    ships `height: 40px` on `.nhd-button` which we beat there. */
 html body .portal .solidbutton.fabtn,
 html body .portal .solidbutton.fabtn.notext,
@@ -862,7 +862,7 @@ html body .portal .solidbutton.fabtn.noprint {
 
 /* Text-bearing fabtns on the KB chrome (Generate PDF, Print, Download,
    Share Link when rendered with a label). HaloPSA ships them at 32×32
-   with 0 padding — fine for the `.notext` icon-only siblings, but it
+   with 0 padding, fine for the `.notext` icon-only siblings, but it
    crushes the label down to a 32px square and clips the text.
    The `.buttons-container .solidbutton` rule below was the culprit: it
    was grabbing *every* solid button in the container (including these)
@@ -892,7 +892,7 @@ html body .portal .solidbutton.fabtn.noprint {
 }
 
 /* `.buttons-container` ships as `display: block` which relies on inline
-   whitespace between children for spacing — fragile when HaloPSA emits
+   whitespace between children for spacing, fragile when HaloPSA emits
    the markup without whitespace. Flex + gap makes the row layout
    predictable and keeps the Generate PDF pill and its icon sibling
    vertically aligned. */
@@ -914,7 +914,7 @@ html body .portal .history-options-portal.buttons-container {
     padding-left: 17px !important;
 }
 
-/* Back button — HaloPSA applies an inline style that paints this the
+/* Back button, HaloPSA applies an inline style that paints this the
    heading-purple, which disappears into the dark body. Force the action
    colour with !important so the button is actually visible.
    `html body .portal` prefix raises specificity above any later-loaded
@@ -957,7 +957,7 @@ span.kbtags {
     border-radius: var(--portal-radius);
 }
 
-/* Primary pill action buttons — "View All" on the home widgets plus
+/* Primary pill action buttons, "View All" on the home widgets plus
    the row of ticket actions (Add Note, Time Entry, Project Time, Add
    Comment, Schedule New User, Book an Appointment). HaloPSA ships an
    inline style that paints these the heading-purple; we override with
@@ -971,7 +971,7 @@ html body .portal button.nhd-button.curve {
     font-size: 12px !important;
     font-weight: 500 !important;
     letter-spacing: 0.02em;
-    /* Explicit pill — HaloPSA paints these at 40px radius natively which
+    /* Explicit pill, HaloPSA paints these at 40px radius natively which
        is incidentally pill-shaped at 36px height. State the intent
        directly so any future height tweak doesn't break the pill, and
        so our peer "View More" rule can match exactly. */
@@ -986,12 +986,12 @@ html body .portal button.nhd-button.curve {
     display: inline-flex !important;
     align-items: center;
 }
-/* Icons inside action buttons — HaloPSA's Font Awesome stylesheet paints
+/* Icons inside action buttons, HaloPSA's Font Awesome stylesheet paints
    `.fa` at `color: #555` globally, which sits grey on our blue button
    bg (the `Book an appointment` calendar and `Time Entry` clock were the
    visible offenders; `Add Note` uses an inline SVG that correctly
    inherits the button's text colour). Forcing `color: inherit` on the
-   icons lets them adopt whatever `color` the button sets — stays white
+   icons lets them adopt whatever `color` the button sets, stays white
    here, auto-adapts if the button's colour ever changes. */
 html body .portal .nhd-button.curve i,
 html body .portal .nhd-button.curve .fa,
@@ -1011,7 +1011,7 @@ html body .portal button.nhd-button.curve:hover {
    HaloPSA renders it as a bare unclassed <a> sitting in the div that
    immediately follows `.results-table`, which gives us a tight, unique
    anchor. We re-skin it as a primary action button so it visually
-   matches the "View All" buttons under the ticket widgets — same
+   matches the "View All" buttons under the ticket widgets, same
    `--portal-action` fill, same shadow token, same 36px height and
    12px Montserrat label. Centred under the card list via `display:
    block` + `width: max-content` + `margin: auto`. */
@@ -1055,7 +1055,7 @@ html body .portal .profile-extra {
     letter-spacing: 0.01em;
 }
 
-/* Discussion thread boxes on ticket pages — bump radius to match the
+/* Discussion thread boxes on ticket pages, bump radius to match the
    softer card language used elsewhere (tiles, widgets). HaloPSA ships
    these at 5px which reads as a sharper, older aesthetic. */
 html body .portal .action-history-item {
@@ -1066,11 +1066,11 @@ html body .portal .action-history-item {
    Two fixes here:
 
    1. Connector line. rc-steps ships `background: #e9e9e9` on
-      `.rc-steps-item-tail::after` — near-white, too loud on both the
+      `.rc-steps-item-tail::after`, near-white, too loud on both the
       dark surface and the light one. Retint via `--portal-border` so
       it reads as a subtle hairline in both themes. (An older rule
       targeted `.rc-steps-item-title::after` which doesn't exist in
-      this variant — the real connector is on the tail pseudo.)
+      this variant, the real connector is on the tail pseudo.)
 
    2. Title-under-icon centring. rc-steps paints
       `.rc-steps-item-icon { margin: 0 10px 0 36px }` inside a 100px
@@ -1100,7 +1100,7 @@ html body .portal .rc-steps-item-process .rc-steps-item-title {
 
 /* Semantic UI popup (share sheet on ticket view). HaloPSA leans on
    Semantic's `.ui.popup` which ships hardcoded white bg, dark body
-   text and a 4.57px radius — a jarring white card against the dark
+   text and a 4.57px radius, a jarring white card against the dark
    portal surface. Retint to surface tokens, round to match our card
    radius, and theme the inner `.nhd-button.curve` which Semantic's
    `.ui.button` default paints `#0f61a1` (ignoring our existing
@@ -1143,8 +1143,7 @@ html body .portal .ui.popup .ui.button:hover {
 /* Home page hero background. HaloPSA's chunk.css ships
    `.portal-background { background-position: top !important }` plus
    a tenant inline `height: 155%`, which stretches the frame to a
-   ~5.9:1 aspect and — combined with `background-size: cover` —
-   crops a 1.5:1 hero image down to a thin top strip. The subject of
+   ~5.9:1 aspect and, combined with `background-size: cover`, crops a 1.5:1 hero image down to a thin top strip. The subject of
    the image (sitting near the vertical middle of the source) gets
    cut off entirely. Anchor the position to the centre so the subject
    is visible instead of the sky. */
@@ -1152,18 +1151,18 @@ html body .portal .portal-background {
     background-position: center center !important;
 }
 
-/* Ticket list view (tickets?viewid=…) — status pills, table density,
+/* Ticket list view (tickets?viewid=…); status pills, table density,
    search bar, and scrollbar polish.
 
    HaloPSA renders status chips via `.status-avatar.fortable` which ship
-   at a 4px radius — too square against the rounded Select controls
+   at a 4px radius, too square against the rounded Select controls
    (`Select__control`, 50px) sitting next to them. We push to a full
    pill shape so the status reads as a chip, not a button.
 
    Ticket-view sidebar variant (`.status-avatar.small`) also ships with
    `margin-left: -3px` and `display: block` + full parent width, which
    pushes the pill's left edge 3px past the parent's `overflow: hidden`
-   clip — hiding the rounded left corner. We reset margin and switch to
+   clip, hiding the rounded left corner. We reset margin and switch to
    inline-block so the pill shrinks to its label and the rounded ends
    are visible on both sides. */
 html body .portal .status-avatar.fortable,
@@ -1181,10 +1180,10 @@ html body .portal .status-avatar.bitsmall {
     width: auto !important;
 }
 
-/* Tickets list header controls — "1-15 of 23" counter plus the prev /
+/* Tickets list header controls, "1-15 of 23" counter plus the prev /
    next / more-menu buttons at the top-right of the list. HaloPSA
    ships the counter in Poppins 16px and the buttons at a 4px radius
-   in `rgb(80, 80, 80)` — they feel disconnected from the pilled
+   in `rgb(80, 80, 80)`, they feel disconnected from the pilled
    chrome elsewhere on the page. Unify: Montserrat counter, circular
    buttons with surface tokens and a soft hover. */
 html body .portal .page-counts,
@@ -1196,7 +1195,7 @@ html body .portal .page-counts h98 {
     letter-spacing: 0.2px;
 }
 
-/* Tickets-list pagination buttons — prev / next / more-menu. Scoped to
+/* Tickets-list pagination buttons, prev / next / more-menu. Scoped to
    `:not(.fabtn)` so we don't grab the KB-header utility buttons
    (Generate PDF / Print / Download / Share Link) which also live
    inside `.buttons-container` but render with text labels. `.fabtn`
@@ -1239,7 +1238,7 @@ html body .portal .buttons-container .ui.button.dropdown {
     box-shadow: none !important;
 }
 
-/* Table text — HaloPSA's `.rt-td` is 16px which is quite heavy for a
+/* Table text, HaloPSA's `.rt-td` is 16px which is quite heavy for a
    data table. 13px keeps things readable while fitting more rows. Also
    force Montserrat to keep the ticket list consistent with the ticket
    page (which already uses Montserrat across every text surface). */
@@ -1251,7 +1250,7 @@ html body .portal .rt-th {
 
 /* Vertically centre cell contents. react-table ships `.rt-td` as
    `display: block` with 7px top padding, which pins text, status
-   pills and asset chips to the top of the 56px row — mixed-height
+   pills and asset chips to the top of the 56px row, mixed-height
    content (text + pills) reads as misaligned. Switching `.rt-td` to
    flex with `align-items: center` centres the children on the row's
    vertical midline regardless of their intrinsic height. */
@@ -1260,7 +1259,7 @@ html body .portal .rt-td {
     align-items: center;
 }
 
-/* Search bar — the visible pill is actually the `.searchbox` wrapper,
+/* Search bar, the visible pill is actually the `.searchbox` wrapper,
    not the input itself. HaloPSA sets it to a 5px radius with a hardcoded
    dark-grey bg that looks like a square shell in light mode. We round
    the wrapper to match the view/filter Selects ("Open Tickets",
@@ -1277,11 +1276,11 @@ html body .portal .searchholder input[name="searchbox"] {
     padding-right: 16px !important;
 }
 
-/* Typography for list-top controls — the "Open Tickets" / "All Tickets"
+/* Typography for list-top controls, the "Open Tickets" / "All Tickets"
    react-select dropdowns and the search input all ship in Poppins. Target
-   the stable react-select BEM classes (`.Select__single-value` etc) — NOT
+   the stable react-select BEM classes (`.Select__single-value` etc); NOT
    the Emotion hash classes (`css-1dimb5e-singleValue`), which change on
-   library upgrades — plus the search input's wrapper so placeholder and
+   library upgrades, plus the search input's wrapper so placeholder and
    typed text pick up Montserrat too. */
 html body .portal .searchholder input,
 html body .portal .searchholder input[name="searchbox"],
@@ -1296,13 +1295,13 @@ html body .portal .Select__option {
     font-size: 13px !important;
 }
 
-/* Home page horizontal width — align dashbtn cards row and the hero
+/* Home page horizontal width, align dashbtn cards row and the hero
    search to the same content zone as the Recent Activity / Top 5
    Articles columns below. Those cols use Bootstrap's `.col-xl-6.px-xl-5`
    which adds 3rem (48px) of inner padding at xl, AND their child tiles
    are direct children of the col (no extra col-padding). The dashbtn
    row's children are `.col-md-3` cards which carry their own 15px
-   Bootstrap col-padding — so we apply 33px (= 48 - 15) row-padding to
+   Bootstrap col-padding, so we apply 33px (= 48 - 15) row-padding to
    land cards exactly on the Recent col's content edge. The hero search
    has no inner col-padding, so it gets the full 48px. xl-only media
    query matches Bootstrap's `.px-xl-5` breakpoint. */
@@ -1312,28 +1311,28 @@ html body .portal .Select__option {
         padding-right: 33px !important;
     }
     /* The visible dark pill is `.searchbox` (parent of `.searchholder`),
-       not the input or holder themselves — both inner layers are
+       not the input or holder themselves, both inner layers are
        transparent. So the alignment must be applied to `.searchbox`'s
        OUTER box, not to inner padding. We inset `.searchbox` by 33px on
        each side so the visible pill lands on the same vertical lines as
        the dashbtn tile content (e.g. 236-1557 at 1800vw). */
     html body .portal .searchscreen form.container > .searchbox {
         /* HaloPSA pins .searchbox to an explicit width that fills its
-           form parent — so margin-right alone can't shrink the visible
+           form parent, so margin-right alone can't shrink the visible
            pill. Override to width:auto so the symmetric margins
            actually compute the box smaller (parent_content - 66px). */
         width: auto !important;
         margin-left: 33px !important;
         margin-right: 33px !important;
     }
-    /* Holder no longer needs internal padding — keep width:100% so it
+    /* Holder no longer needs internal padding, keep width:100% so it
        fills the now-narrower `.searchbox` parent. */
     html body .portal .container .searchholder {
         width: 100% !important;
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
-    /* Search magnifier icon — HaloPSA pins it absolute right:0 with
+    /* Search magnifier icon, HaloPSA pins it absolute right:0 with
        margin-right:12px, so it hugs the pill edge. We push it inward
        so its right edge sits 33px from the visible pill right. */
     html body .portal .searchbox svg.searchbutton {
@@ -1355,7 +1354,7 @@ html body .portal .Select__option {
 /* Navbar search ("Search" placeholder, top-right of the header).
    Typography (13px/500/Montserrat/0.26px) already matches the nav
    buttons, but HaloPSA paints the `.Select__control` as a pill with
-   visible chrome — which reads as a competing input chip next to
+   visible chrome, which reads as a competing input chip next to
    the flat nav-text peers. Flatten the chrome so the search reads
    as a peer text element. The pill/border returns on focus to give
    clear "I'm now active" affordance without shouting at rest. */
@@ -1380,7 +1379,7 @@ html body .portal .buttoncontainer.nav-search .Select__input-container {
     letter-spacing: 0.04em !important;
 }
 
-/* Slim scrollbars — HaloPSA inherits default OS scrollbars which look
+/* Slim scrollbars, HaloPSA inherits default OS scrollbars which look
    chunky in a modern portal UI. Using the border token as the thumb
    colour keeps them subtle in both light and dark mode. */
 html body .portal *::-webkit-scrollbar {
@@ -1433,20 +1432,20 @@ html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"] {
    external background-color, even with `!important`, because inline
    styles beat external at equal-specificity. A single-stop linear-
    gradient is a paintable image fill that sits on top of the inline
-   navy — hue-agnostic and self-correcting if HaloPSA changes the bar
+   navy, hue-agnostic and self-correcting if HaloPSA changes the bar
    colour later. Label lifts 82% → 100% white.
 
    `background-size: 100%` + `background-repeat: no-repeat` are
-   REQUIRED — HaloPSA ships `.nhd-nav-btn { background-size: 18px }`
+   REQUIRED, HaloPSA ships `.nhd-nav-btn { background-size: 18px }`
    for the hamburger icon; without the reset our hover gradient
    renders as an 18px stripe centred on the button.
 
-   :not(.active) — selected tab keeps its own look; no hover wash.
-   :not(.highlight) — the right-aligned filled "Log out" style action
+   :not(.active); selected tab keeps its own look; no hover wash.
+   :not(.highlight); the right-aligned filled "Log out" style action
    has its own primary look; don't double-apply.
 
    Note: HaloPSA does NOT emit `.active` on the current-page nav
-   button — every nav button renders with `class="nhd-nav-btn undefined"`.
+   button, every nav button renders with `class="nhd-nav-btn undefined"`.
    A JS shim setting .active via classList doesn't stick either because
    HaloPSA's React render pins className to derived state and strips
    it on the next reconciliation. See `portal-chrome.md → Navbar
@@ -1466,7 +1465,7 @@ html body .portal .nhd-nav-rightAlign button:not(.active):not(.highlight):hover 
 }
 
 /* NOTE: No "selected nav" rule. HaloPSA never emits `.active` (or any
-   other marker) on the current-page `.nhd-nav-btn` — every nav button
+   other marker) on the current-page `.nhd-nav-btn`, every nav button
    renders with `class="nhd-nav-btn undefined"`. A JS shim that adds
    `.active` via classList doesn't stick either: HaloPSA's React render
    pins `className` to derived state, so the next reconciliation strips
@@ -1485,7 +1484,7 @@ html body .portal .nhd-nav-rightAlign button:not(.active):not(.highlight):hover 
 /* Constrain the `.page-title` block to the same 1040px as the form card
    below so the header doesn't sprawl edge-to-edge while the form sits
    neatly centred. The `:has(.mandatory-hint)` predicate scopes this to
-   form pages (new ticket / ticket edit) — pages without a form
+   form pages (new ticket / ticket edit); pages without a form
    (dashboard, KB index) keep their wide title. */
 html body .portal .page-title:has(.mandatory-hint) {
     max-width: 1040px !important;
@@ -1509,8 +1508,7 @@ html body .portal:has(.mandatory-hint) .details-form.readeditform {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
 }
 
-/* Neutralise the card-panel wrappers HaloPSA applies to each group —
-   we want one outer card, not nested cards inside it. */
+/* Neutralise the card-panel wrappers HaloPSA applies to each group, we want one outer card, not nested cards inside it. */
 html body .portal:has(.mandatory-hint) .details-form .details-group.card-panel {
     background: transparent !important;
     border: 0 !important;
@@ -1519,7 +1517,7 @@ html body .portal:has(.mandatory-hint) .details-form .details-group.card-panel {
     box-shadow: none !important;
 }
 
-/* Labels as uppercase eyebrow — more scannable than the default 12px
+/* Labels as uppercase eyebrow, more scannable than the default 12px
    400-weight light-grey which got lost against dark surfaces. */
 html body .portal .details-form label {
     font-size: 11px !important;
@@ -1550,7 +1548,7 @@ html body .portal .details-form textarea {
     padding: 12px 14px !important;
 }
 
-/* Focus state — keep the border stable (just the normal border colour)
+/* Focus state, keep the border stable (just the normal border colour)
    and use a subtle 2px ring for the focus indicator. The earlier design
    swapped the border itself to solid action blue which read as an
    over-bold "blue line around the text" when typing. */
@@ -1562,7 +1560,7 @@ html body .portal .details-form textarea:focus {
     outline: none !important;
 }
 
-/* react-select controls (Contact, Site, Impact etc) — match text input
+/* react-select controls (Contact, Site, Impact etc); match text input
    chrome so the whole form reads as one consistent field set. Note we
    deliberately don't touch the radius on the global `.Select__control`
    rule since that one's already handled by HaloPSA tokens; here we're
@@ -1584,13 +1582,13 @@ html body .portal .details-form .mb-3 {
     margin-bottom: 20px !important;
 }
 
-/* Froala rich-text editor (Details field) — HaloPSA renders it with a
+/* Froala rich-text editor (Details field); HaloPSA renders it with a
    white content area and no border, which clashes badly with the dark
    form chrome around it. We unify to match other inputs: 10px radius,
    border-token outline, surface toolbar, bg content area, text-token
    body. Note: scoped tightly to `.fr-box` so we don't accidentally
    restyle Froala when it shows up on other pages (e.g. the ticket
-   reply editor — which should inherit the same treatment anyway). */
+   reply editor, which should inherit the same treatment anyway). */
 html body .portal .fr-box {
     border: 1px solid var(--portal-border) !important;
     border-radius: 10px !important;
@@ -1628,7 +1626,7 @@ html body .portal .fr-placeholder {
     color: var(--portal-text-muted) !important;
 }
 
-/* "* denotes a mandatory field" hint — HaloPSA ships this in alarm red
+/* "* denotes a mandatory field" hint, HaloPSA ships this in alarm red
    (`rgb(235, 0, 0)`) which reads as an error. It's instructional copy,
    not an error, so we soften to a pinky-red that still reads as a
    "required" hint without shouting. */
@@ -1639,7 +1637,7 @@ html body .portal .mandatory-hint {
     opacity: 0.9;
 }
 
-/* Attachment drop zone — HaloPSA's 5px chunky blue dashed border looks
+/* Attachment drop zone, HaloPSA's 5px chunky blue dashed border looks
    heavy and out of theme. Slim to 2px using the border token so it
    integrates with the surrounding form chrome. */
 html body .portal .attachment-container.edit {
@@ -1647,7 +1645,7 @@ html body .portal .attachment-container.edit {
     border-radius: 14px !important;
 }
 
-/* Pagination bar (react-table) — the defaults are a 28px-tall strip
+/* Pagination bar (react-table); the defaults are a 28px-tall strip
    with fixed `.-btn` heights that caused text to clip and misalign.
    We grow the bar to 62px, centre all children, and use inline-flex on
    the buttons with line-height:1 so vertical centring is exact.
@@ -1694,7 +1692,7 @@ html body .portal button.-btn[disabled] {
     opacity: 0.5;
     cursor: not-allowed;
 }
-/* Page-number jump input — pill it to match form chrome. */
+/* Page-number jump input, pill it to match form chrome. */
 html body .portal .-pagination input {
     height: 32px !important;
     border-radius: 8px !important;
@@ -1708,7 +1706,7 @@ html body .portal .-pagination .-pageJump {
     margin: 0 6px !important;
 }
 
-/* Asset selector — fix the overlap where the switches row touched the
+/* Asset selector, fix the overlap where the switches row touched the
    asset table directly below, and restyle `.switches` as a proper
    segmented-pill control. HaloPSA uses inline `rgb(47, 53, 94)` to mark
    the selected switch, so we key off that attribute selector rather
@@ -1744,13 +1742,12 @@ html body .portal .switches > button:not([style*="rgb(47, 53, 94)"]):hover {
     background: var(--portal-surface) !important;
 }
 
-/* Asset table filter row — react-table ships `.rt-thead.-filters` at a
+/* Asset table filter row, react-table ships `.rt-thead.-filters` at a
    fixed 40px height, so padding alone just compresses content rather
    than growing the row. We force `height: auto` + box-sizing to let the
    row grow to `padding + content`. Inputs are sized at 30px inside a
    10px-padded row (= 50px total) so nothing clips into the header above
-   or the tbody below. `overflow: visible` on `.rt-th` is critical —
-   react-table sets it to `hidden` by default which would clip any
+   or the tbody below. `overflow: visible` on `.rt-th` is critical, react-table sets it to `hidden` by default which would clip any
    focus ring or shadow on the inputs. */
 html body .portal .rt-thead.-filters {
     height: auto !important;
@@ -1774,7 +1771,7 @@ html body .portal .details-form .rt-thead.-filters input[type="text"] {
     width: 100%;
     box-sizing: border-box;
 }
-/* Header row: drop the default bottom border — the filter row below
+/* Header row: drop the default bottom border, the filter row below
    carries the separator instead, avoiding a double-line effect. */
 html body .portal .rt-thead.-header {
     border-bottom: 0 !important;
@@ -1829,7 +1826,7 @@ footer {
 /* Materialize gives `.row` a 20px bottom margin. With the Halo
    attribution row hidden (see §end), that trailing margin has no
    sibling to collapse against and shows up as extra space below
-   the icon row — making the footer look top-loaded. Zero it so
+   the icon row, making the footer look top-loaded. Zero it so
    the footer's own padding controls breathing room symmetrically. */
 footer .row {
     margin-bottom: 0;
@@ -1896,7 +1893,7 @@ footer a svg {
     margin: 15px 0;
 }
 
-/* Doubled class specificity — see rationale in self-service-portal-design.css
+/* Doubled class specificity, see rationale in self-service-portal-design.css
    header comment: a stray (0,4,2)+!important rule elsewhere in HaloPSA's
    stylesheet chain paints panel wrappers white. Doubling class names
    bumps us to (0,4,0) → beats the competing rule without !important wars. */
@@ -1918,13 +1915,13 @@ footer a svg {
     background: var(--panel-tip-bg) !important;
     border: 1px solid var(--panel-tip-border) !important;
 }
-/* Generic `.panel` — neutral surface. */
+/* Generic `.panel`, neutral surface. */
 .kbdetails.kbdetails .panel.panel {
     background: var(--portal-surface) !important;
     border: 1px solid var(--portal-border) !important;
 }
 
-/* Shared body — transparent bg so the wrapper tint shows, readable
+/* Shared body, transparent bg so the wrapper tint shows, readable
    token ink, consistent padding. */
 .kbdetails [class*="confluence-information-macro-"] > .confluence-information-macro-body,
 .kbdetails .panel .panelContent {
@@ -1934,7 +1931,7 @@ footer a svg {
     padding: 15px 25px !important;
 }
 
-/* Leading `.aui-icon` tint — per-type colour matching the panel hue. */
+/* Leading `.aui-icon` tint, per-type colour matching the panel hue. */
 .kbdetails .confluence-information-macro-information .confluence-information-macro-icon {
     color: var(--panel-info-icon) !important;
     margin-right: 4px;
@@ -1957,7 +1954,7 @@ footer a svg {
 /* ── Tables: clean modern style (no border-radius, no zebra stripes) ──
    Uses alpha-tinted tokens so the same rules work for header row AND
    header column in both light and dark mode. Colour is inherited so
-   text stays readable on whatever body surface sits underneath — this
+   text stays readable on whatever body surface sits underneath, this
    avoids the bright-island problem we hit previously when hard-coding
    light greys (#f5f6f8) in dark mode. */
 .kbdetails .confluenceTable {
@@ -1980,7 +1977,7 @@ footer a svg {
     font-weight: 600 !important;
 }
 
-/* Subtle row hover — alpha so it works on any body bg */
+/* Subtle row hover, alpha so it works on any body bg */
 .kbdetails .confluenceTable tbody tr:hover td {
     background-color: var(--portal-table-row-hover);
 }

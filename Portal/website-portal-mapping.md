@@ -60,14 +60,14 @@ serif for italic emphasis); `--ic-font-body` is a new token, not a rename.
 | n/a | `--portal-accent-hover` / `--portal-action-hover` | `#2C4AC0` | Hover states (derived: 15% darker toward black) |
 | n/a | `--portal-accent-subtle` | `rgba(55,92,230,0.08)`* | Focus ring, hover tint (*see note) |
 | n/a | `--portal-accent-soft` | `#E4EAFC` | Chip tint |
-| `--accent` (pink, CTA-only role) | `--portal-accent-2` | `#C026D3` | Get-in-touch CTA + highlighter accent ONLY, not a general second brand colour |
-| `cat-violet` (violet, Advisory/AI/People role) | `--portal-violet` | `#6F43D6` | Third triad member, new token, see §1 |
+| `--accent` (pink, CTA-only role) | `--portal-accent-2` | `#A343BE` | Get-in-touch CTA + highlighter accent ONLY, not a general second brand colour |
+| `cat-violet` (violet, Advisory/AI/People role) | `--portal-violet` | `#7B47DE` | Third triad member, new token, see §1 |
 | `--highlight` (jade/teal, Security BRAND role only) | `--portal-highlight` | `#0284C7` | Delight moments, live dots, alt icon chips, gradient first stop. NOT the success semantic, see `--ok` below |
 | `--ok` | `--portal-ok` | `#15803D` | Semantic success: an independent true green, deliberately DISTINCT from `--portal-highlight`'s jade/teal. (An earlier pass briefly aliased `--portal-ok` to jade; reverted per design amendment, since jade/teal is brand-only and success needed its own hue.) |
 | `--warn` | `--portal-warn` | `#C2410C` | Semantic warn, unchanged by the 2026 re-palette (already brand-independent) |
 | `--err` | `--portal-err` | `#B91C1C` | Semantic error, unchanged by the 2026 re-palette |
 | `--tint-cool` | `--portal-tint-cool` | `#E4EAFC` | Cool section tint (blue-derived) |
-| `--tint-warm` | `--portal-tint-warm` | `#F7E5FA` | Warm section tint (pink-derived) |
+| `--tint-warm` | `--portal-tint-warm` | `#F4E8F7` | Warm section tint (pink-derived) |
 | n/a | `--portal-band-bg` | `#E2E5EE` | Social-proof strip / carousels, same value as hairline |
 | n/a | `--portal-on-accent` | `#FFFFFF` | Text colour for use ON TOP of a solid brand-colour fill (buttons, filled badges); see dark-mode row, this is a new token |
 
@@ -92,9 +92,9 @@ Both now use the same `#0C0E16 → #10131C → #161A25 → #1B2030` ladder.
 | `--muted` `rgba(236,238,244,.62)` | `--portal-text-secondary` | `rgba(236,238,244,0.62)` | Identical |
 | `--faint` `rgba(236,238,244,.4)` | `--portal-text-muted` | `rgba(236,238,244,0.4)` | Identical |
 | `--primary` `#7E9CFF` | `--portal-accent` / `--portal-action` | `#7E9CFF` | Identical |
-| `cat-violet` `#A47BFF` | `--portal-violet` | `#A47BFF` | Identical |
+| `cat-violet` `#9B7BF5` | `--portal-violet` | `#9B7BF5` | Identical |
 | `--highlight` `#0284C7` | `--portal-highlight` | `#0284C7` | Identical, and the SAME value as light mode. Security brand accent ONLY, not the success semantic |
-| `--accent` `#EC72CF` | `--portal-accent-2` | `#EC72CF` | Identical |
+| `--accent` `#D08BE4` | `--portal-accent-2` | `#D08BE4` | Identical |
 | `--ok` | `--portal-ok` | `#34D399` | Independent true green, NOT the same hue as `--portal-highlight` |
 | `--warn` | `--portal-warn` | `#FB923C` | Unchanged by re-palette |
 | `--err` | `--portal-err` | `#F87171` | Unchanged by re-palette |
@@ -258,7 +258,7 @@ deliberate follow-up conversation, not a default to restore silently.
 |---|---|---|---|
 | green | `#E3F0E8` / `#093A1B` | `rgba(52,211,153,0.18)` / `#61DDAF` | Light: mix `--portal-ok` toward white 88% (bg) / toward black 55% (ink). Dark: rgba of dark `--portal-ok` at 18% / lighten 22%. Independent true green, see the §2 amendment note; do not derive this from `--portal-highlight` (jade/teal) |
 | blue | `#E4EAFC` / `#192C66` | `rgba(126,156,255,0.18)` / `#8EA8FF` | Same formula off `--portal-accent` |
-| violet | `#EEE8FA` / `#321E60` | `rgba(164,123,255,0.18)` / `#B898FF` | Same formula off `--portal-violet` |
+| violet | `#EFE9FB` / `#321E60` | `rgba(155,123,245,0.18)` / `#B898FF` | Same formula off `--portal-violet` |
 | amber | `#F8E8E2` / `#882E08` | `rgba(251,146,60,0.18)` / `#FCA259` | Same formula off `--portal-warn` (kept from the existing warn family per the design brief) |
 | red | `#F7E4E4` / `#9D1818` | `rgba(248,113,113,0.18)` / `#F97F7F` | Same formula off `--portal-err` |
 | grey | `#F0F2F7` / `#585F76` | `rgba(255,255,255,0.08)` / `rgba(236,238,244,0.4)` | `--portal-surface-active` / `--portal-text-secondary` (light); existing dark neutral tokens |
@@ -389,10 +389,10 @@ WEBSITE TOKEN                PORTAL TOKEN                 NOTES
 hairline                   → --portal-border               (#E2E5EE / rgba(255,255,255,.072))
 --ink / --muted / --faint  → --portal-text / -secondary / -muted
 --primary (blue)           → --portal-accent (= --portal-action)   (#3355D8 / #7E9CFF)
-cat-violet                 → --portal-violet               (#6F43D6 / #A47BFF, new token)
+cat-violet                 → --portal-violet               (#7B47DE / #9B7BF5, new token)
 --highlight (cyan)         → --portal-highlight             (Security BRAND accent ONLY, #0284C7 in BOTH modes, NOT --portal-ok)
 --ok (true green)          → --portal-ok                   (semantic success, independent hue, #15803D / #34D399)
---accent (pink)            → --portal-accent-2             (CTA + highlighter ONLY, #C026D3 / #EC72CF)
+--accent (pink)            → --portal-accent-2             (CTA + highlighter ONLY, #A343BE / #D08BE4)
 --font-display              → --ic-font-display            (Bricolage Grotesque, headings only, weight 700)
 (new token)                 → --ic-font-body               (Figtree, everything else)
 --font-serif                → --ic-font-serif               (Newsreader italic accent)

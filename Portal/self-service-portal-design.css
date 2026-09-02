@@ -4932,6 +4932,27 @@ html body .portal .kbdetails p {
     margin-bottom: 12px;
     color: var(--portal-text);
 }
+/* ...but not on the last paragraph inside a table cell. Confluence
+   wraps even a single line of cell text in a `<p>`, so that 12px rode
+   on below the text and broke the cell's optical padding: a one-line
+   cell measured 60px tall for a 27px line inside 10px/10px padding,
+   with all the slack under the text. Zeroing the trailing margin
+   gives the 47px the padding actually asks for, and multi-paragraph
+   cells keep their internal 12px rhythm. */
+html body .portal .kbdetails td > p:last-child,
+html body .portal .kbdetails th > p:last-child {
+    margin-bottom: 0 !important;
+}
+
+/* Cell text aligns to the top. Most cells already inherit this, but a
+   row whose tallest cell holds a nested table or a long list leaves
+   the short cells (a step number, a label) floating at the vertical
+   centre against nothing. `!important` because Confluence pastes
+   carry `style="vertical-align: middle"` inline on some tables. */
+html body .portal .kbdetails td,
+html body .portal .kbdetails th {
+    vertical-align: top !important;
+}
 
 /* Article meta strip — if present above the H1 */
 html body .portal .kbdetails .kbmeta {
@@ -5938,8 +5959,13 @@ html body .portal .kblist .sidebar {
     font-family: var(--ik-font-display) !important;
     font-size: 13.5px !important;
     border-radius: var(--portal-radius-xs) !important;
-    padding: 3px 10px;
-    margin: 0;
+    /* 3px vertical padding with no margin put consecutive rows in
+       contact (measured gap: 0px), so a long article list read as one
+       block of text. 6px padding plus a 1px margin gives a 32px row
+       with clear separation, which also makes the hover and selected
+       pills land on a shape rather than on the text itself. */
+    padding: 6px 10px;
+    margin: 1px 0;
     transition: background-color var(--ik-dur) var(--ik-ease),
                 color var(--ik-dur) var(--ik-ease);
 }
@@ -5949,8 +5975,18 @@ html body .portal .kblist .sidebar {
    like an interactive row when it's really just a disclosure toggle;
    the `>` caret is enough affordance on its own. Individual article
    rows still get their hover from the `.tree-node:hover` family. */
-html body .portal .tree-menu .tree-node:hover {
-    background: var(--portal-surface-hover);
+/* Hover wash. This used `--portal-surface-hover`, which is #F5F7FB:
+   LIGHTER than the `--portal-bg` #F1F3F7 the tree actually sits on,
+   since the KB sidebar has no card behind it. Hovering therefore made
+   a row a shade paler than its own background and read as nothing at
+   all. `--portal-band-bg` is the hairline grey (#E2E5EE light,
+   rgba(255,255,255,0.072) dark), which reads clearly against the
+   ground in both modes and stays distinct from the selected row,
+   which is a blue accent-subtle wash with accent ink. */
+html body .portal .tree-menu .tree-node:hover,
+html body .portal .kblist .tree-node:hover {
+    background: var(--portal-band-bg) !important;
+    color: var(--portal-heading) !important;
 }
 
 /* Selected tree-node. HaloPSA marks the active item by stamping an

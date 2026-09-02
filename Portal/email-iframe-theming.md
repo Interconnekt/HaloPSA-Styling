@@ -8,7 +8,25 @@ Status: **unresolved on the end-user portal.** Works on the agent side (where `i
 
 HaloPSA renders email bodies on the ticket view inside `<iframe class="halo-html-renderer">` — a same-origin iframe with its own `<style>` tag setting Segoe UI and default HTML link colours. Host-document CSS does not cross the iframe boundary, so no amount of `self-service-portal.css` work can theme email bodies.
 
-The fix is `iframe-theme.js` (in this directory): a small IIFE that reaches into the iframe's document and injects a `<style>` tag with Figtree + `#3355D8` link colour. It uses a `MutationObserver` and per-iframe `load` handlers to catch ticket-switch navigation and action-history expansion.
+The fix is `iframe-theme.js` (in this directory): a small IIFE that reaches into the iframe's document and injects a `<style>` tag with Figtree + `#3355D8` link colour, plus overflow containment so fixed-width email reflows to the card instead of being clipped. It uses a `MutationObserver` and per-iframe `load` handlers to catch ticket-switch navigation and action-history expansion.
+
+## Why overflow containment has to live here too
+
+Forwarded marketing email is built as fixed-width nested tables. A
+monday.com newsletter on ticket 358840 measured **4407px of content
+inside a 641px iframe**, so the message was clipped at the card edge
+with no way to reach the rest.
+
+That cannot be fixed from `self-service-portal-design.css`. CSS does not
+cross a document boundary, even a same-origin one, so no host rule can
+ever reach inside `iframe.halo-html-renderer`. The only lever is a style
+element injected into the iframe's own document, which is what this shim
+does, and which means the fix is inert until the Worker ships.
+
+Verified by injecting it manually on that ticket: content width went
+from 4407px to 642px, so it genuinely reflows rather than merely
+becoming scrollable. `overflow-x: auto` remains as the backstop for
+content that still cannot reflow, such as a wide inline image.
 
 **The shim works**, verified by manually injecting it via DevTools on a ticket view. Email body re-renders in Figtree, links turn blue.
 

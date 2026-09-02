@@ -56,6 +56,43 @@
         'a:hover {',
         '    color: #3355D8 !important;',
         '    text-decoration: underline;',
+        '}',
+        /* Overflow containment. Forwarded marketing email is built as
+           fixed-width nested tables: one monday.com newsletter on
+           ticket 358840 measured 4407px of content inside a 641px
+           iframe, so the message was clipped at the card edge with no
+           way to reach the rest. Joel reported it as text not wrapping
+           to the container.
+
+           `max-width: 100%` on the structural elements is what does
+           the work: it overrides the fixed `width="600"` attributes
+           and inline widths that email HTML uses, and the tables then
+           reflow. Measured on that same frame: 4407px to 642px, i.e.
+           it genuinely wraps rather than merely becoming scrollable.
+           `overflow-x: auto` stays as the backstop for content that
+           still cannot reflow (a wide inline image, a preformatted
+           block), so it scrolls instead of being cut off.
+
+           This CANNOT be done from self-service-portal-design.css.
+           CSS does not cross a document boundary, even a same-origin
+           one, so the host stylesheet can never reach inside
+           `iframe.halo-html-renderer`. It has to be injected here,
+           which means it is inert until the Cloudflare Worker ships
+           (see email-iframe-theming.md). */
+        'html, body {',
+        '    overflow-x: auto !important;',
+        '    max-width: 100% !important;',
+        '}',
+        'body table, body td, body div, body p, body span, body li {',
+        '    max-width: 100% !important;',
+        '}',
+        'body, body p, body div, body td, body span, body li {',
+        '    overflow-wrap: break-word !important;',
+        '    word-break: break-word !important;',
+        '}',
+        'body img {',
+        '    max-width: 100% !important;',
+        '    height: auto !important;',
         '}'
     ].join('\n');
 

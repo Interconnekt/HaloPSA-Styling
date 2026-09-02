@@ -1726,17 +1726,23 @@ html body .portal .kbdetails button[title="Scroll to top"].solidbutton.fabtn .fa
    Force full-pill geometry on every `.status-avatar` variant
    HaloPSA emits. Clean pill, no leading dot, labels carry
    enough signal on their own with the colour mapping below.
-   `.smallestest` is the variant HaloPSA stamps on long labels
-   ("Awaiting Change Review" in the ticket sidebar) with a 6px
-   `!important` font-size and no width cap, so the pill rendered
-   as 6px text stretched across the whole sidebar column. Listing
-   it here restores the shared 10.5px size and lets the pill
-   shrink to its content like every other variant. */
+   HaloPSA sizes the ticket-detail status pill by label length,
+   stamping one of six shrinking variants: bitsmall 11px, small
+   10px, smaller 9px, smallest 8px, smallester 7px, smallestest
+   6px, each with an `!important` font-size and no width cap. Any
+   variant not listed here falls through to HaloPSA's default and
+   renders as tiny text stretched across the whole sidebar column
+   (seen 2026-09-02: "Awaiting Change Review" at 6px and the
+   "Scheduled" pill at 9px, both 323px wide). List every variant
+   so the pill keeps the shared 10.5px size and shrinks to its
+   content. */
 html body .portal .status-avatar.fortable,
 html body .portal .status-avatar.small,
 html body .portal .status-avatar.bitsmall,
+html body .portal .status-avatar.smaller,
 html body .portal .status-avatar.smallest,
 html body .portal .status-avatar.smallestest,
+html body .portal .status-avatar.smallester,
 html body .portal .status-avatar.fortile {
     border-radius: 999px !important;
     padding: 3px 12px !important;
@@ -1773,8 +1779,10 @@ html body .portal .rt-td > div:has(> .status-avatar) {
 html body .portal .status-avatar.fortable::before,
 html body .portal .status-avatar.small::before,
 html body .portal .status-avatar.bitsmall::before,
+html body .portal .status-avatar.smaller::before,
 html body .portal .status-avatar.smallest::before,
 html body .portal .status-avatar.smallestest::before,
+html body .portal .status-avatar.smallester::before,
 html body .portal .status-avatar.fortile::before {
     content: none !important;
     display: none !important;
@@ -2262,8 +2270,10 @@ html body .portal .status-avatar[style*="background-color"]:not([title="New"]):n
 html body .portal .status-avatar.fortable,
 html body .portal .status-avatar.small,
 html body .portal .status-avatar.bitsmall,
+html body .portal .status-avatar.smaller,
 html body .portal .status-avatar.smallest,
 html body .portal .status-avatar.smallestest,
+html body .portal .status-avatar.smallester,
 html body .portal .status-avatar.fortile {
     font-family: var(--ic-font-body) !important;
     font-weight: 600 !important;

@@ -13,11 +13,11 @@
    • Light-first cool-neutral grounds: bg #F1F3F7 → panel #F5F7FB →
      card #FFFFFF → card2 #F0F2F7. Dark grounds: #0C0E16 → #10131C →
      #161A25 → #1B2030
-   • Cyan → blue → violet brand triad (#0284C7 → #3355D8 → #6F43D6
-     light, #0284C7 → #7E9CFF → #A47BFF dark); cyan is the
+   • Cyan → blue → violet brand triad (#0284C7 → #3355D8 → #7B47DE
+     light, #0284C7 → #7E9CFF → #9B7BF5 dark); cyan is the
      Security BRAND accent only, NOT the success semantic (success is
      a separate true green, --portal-ok, #15803D / #34D399); pink
-     (#C026D3 / #EC72CF) reserved for the get-in-touch CTA + highlighter
+     (#A343BE / #D08BE4) reserved for the get-in-touch CTA + highlighter
      accent only
    • Tighter radii (10-16px) than the website's 20/26/34 scale,
      a deliberate portal density choice, see website-portal-mapping.md §4
@@ -78,18 +78,18 @@
     --portal-accent-hover:    #2C4AC0;
     --portal-accent-subtle:   rgba(51, 85, 216, 0.08);
     --portal-accent-soft:     #E4EAFC;              /* website --primary-subtle */
-    --portal-accent-2:        #C026D3;              /* website --accent: pink, get-in-touch CTA + highlighter only */
-    --portal-accent-2-hover:  #A320B3;
-    --portal-accent-2-subtle: #F7E5FA;
+    --portal-accent-2:        #A343BE;              /* website --accent: pink, get-in-touch CTA + highlighter only */
+    --portal-accent-2-hover:  #8C34A3;
+    --portal-accent-2-subtle: #F4E8F7;
 
     /* Violet: Advisory / AI / People role. Third member of the brand
        triad alongside blue (Insight) and cyan (Security). New
        token: the pre-2026 palette only had a two-colour brand system
        (blue + plum); the 2026 site adds violet as its own hue (website
        `cat-violet`), so the portal gets a matching dedicated token. */
-    --portal-violet:          #6F43D6;
-    --portal-violet-hover:    #5E39B6;
-    --portal-violet-subtle:   #EEE8FA;
+    --portal-violet:          #7B47DE;
+    --portal-violet-hover:    #693CBD;
+    --portal-violet-subtle:   #EFE9FB;
 
     /* Highlight: cyan. Third brand colour alongside blue +
        violet: the Security BRAND accent (delight moments, live dots,
@@ -113,7 +113,7 @@
        featured KB categories) to break up long pages without going to
        full colour. */
     --portal-tint-cool:       #E4EAFC;
-    --portal-tint-warm:       #F7E5FA;
+    --portal-tint-warm:       #F4E8F7;
     --portal-band-bg:         #E2E5EE;              /* == hairline; carousels/strips */
 
     /* Action (buttons, H1, stepper active) */
@@ -186,8 +186,8 @@
     --panel-info-border:      rgba(51, 85, 216, 0.28);
     --panel-info-icon:        #3355D8;
     --panel-note-bg:          #F5F2FC;
-    --panel-note-border:      rgba(111, 67, 214, 0.28);
-    --panel-note-icon:        #6F43D6;
+    --panel-note-border:      rgba(123, 71, 222, 0.28);
+    --panel-note-icon:        #7B47DE;
     --panel-warn-bg:          #FAEFEF;
     --panel-warn-border:      rgba(185, 28, 28, 0.28);
     --panel-warn-icon:        #B91C1C;
@@ -264,13 +264,13 @@
     --portal-accent-hover:    #92ACFF;
     --portal-accent-subtle:   rgba(126, 156, 255, 0.14);
     --portal-accent-soft:     rgba(126, 156, 255, 0.18);  /* website --primary-subtle */
-    --portal-accent-2:        #EC72CF;
-    --portal-accent-2-hover:  #EF87D6;
-    --portal-accent-2-subtle: rgba(236, 114, 207, 0.16);
+    --portal-accent-2:        #D08BE4;
+    --portal-accent-2-hover:  #DDA3EC;
+    --portal-accent-2-subtle: rgba(208, 139, 228, 0.16);
 
-    --portal-violet:          #A47BFF;
-    --portal-violet-hover:    #B28FFF;
-    --portal-violet-subtle:   rgba(164, 123, 255, 0.16);
+    --portal-violet:          #9B7BF5;
+    --portal-violet-hover:    #A78BF6;
+    --portal-violet-subtle:   rgba(155, 123, 245, 0.16);
 
     /* Highlight: the same cyan as light mode. The 2026 palette uses
        one value in both modes rather than a brightened dark variant.
@@ -334,9 +334,9 @@
     --panel-info-bg:          rgba(126, 156, 255, 0.15);
     --panel-info-border:      rgba(126, 156, 255, 0.40);
     --panel-info-icon:        #7E9CFF;
-    --panel-note-bg:          rgba(164, 123, 255, 0.15);
-    --panel-note-border:      rgba(164, 123, 255, 0.40);
-    --panel-note-icon:        #A47BFF;
+    --panel-note-bg:          rgba(155, 123, 245, 0.15);
+    --panel-note-border:      rgba(155, 123, 245, 0.40);
+    --panel-note-icon:        #9B7BF5;
     --panel-warn-bg:          rgba(248, 113, 113, 0.15);
     --panel-warn-border:      rgba(248, 113, 113, 0.40);
     --panel-warn-icon:        #F87171;
@@ -355,8 +355,8 @@
        per mode. This sidesteps the AGENTS.md gotcha about
        `.portal.theme-dark` compound selectors failing when `.portal`
        and `.theme-dark` live on different elements. */
-    --panel-b-note-bg:          rgba(164, 123, 255, 0.15);
-    --panel-b-note-border:      rgba(164, 123, 255, 0.40);
+    --panel-b-note-bg:          rgba(155, 123, 245, 0.15);
+    --panel-b-note-border:      rgba(155, 123, 245, 0.40);
     --panel-b-custom-bg:        rgba(2, 132, 199, 0.14);
     --panel-b-custom-border:    rgba(2, 132, 199, 0.40);
 
@@ -1848,7 +1848,7 @@ html body .portal .status-avatar.fortile::before {
        "in review". */
     --pill-updated-bg:           #F8E8E2; --pill-updated-ink:           #882E08;
     /* Scheduled: violet (explicit in the 2026 lock). */
-    --pill-scheduled-bg:         #EEE8FA; --pill-scheduled-ink:         #321E60;
+    --pill-scheduled-bg:         #EFE9FB; --pill-scheduled-ink:         #321E60;
     /* Qualified: true green (a positive milestone, same family as Approved). */
     --pill-qualified-bg:         #E3F0E8; --pill-qualified-ink:         #093A1B;
     /* Awaiting Change Review / Billing Review: amber ("review"). */
@@ -1857,7 +1857,7 @@ html body .portal .status-avatar.fortile::before {
     /* Quote Raised / Scoped: violet, pre-sales/scoping work, kept in
        a distinct hue from core ticket-workflow blue so a quote-family
        item doesn't read as "just another in-progress ticket". */
-    --pill-quote-raised-bg:      #EEE8FA; --pill-quote-raised-ink:      #321E60;
+    --pill-quote-raised-bg:      #EFE9FB; --pill-quote-raised-ink:      #321E60;
     /* Quote Sent: amber, the ball is in the customer's court, an
        "awaiting" state. */
     --pill-quote-sent-bg:        #F8E8E2; --pill-quote-sent-ink:        #882E08;
@@ -1885,11 +1885,11 @@ html body .portal .status-avatar.fortile::before {
     --pill-action-completed-bg:  rgba(52,211,153,0.18);   --pill-action-completed-ink:  #61DDAF;
     --pill-on-hold-bg:           rgba(251,146,60,0.18);   --pill-on-hold-ink:           #FCA259;
     --pill-updated-bg:           rgba(251,146,60,0.18);   --pill-updated-ink:           #FCA259;
-    --pill-scheduled-bg:         rgba(164,123,255,0.18);  --pill-scheduled-ink:         #B898FF;
+    --pill-scheduled-bg:         rgba(155,123,245,0.18);  --pill-scheduled-ink:         #B898FF;
     --pill-qualified-bg:         rgba(52,211,153,0.18);   --pill-qualified-ink:         #61DDAF;
     --pill-review-bg:            rgba(251,146,60,0.18);   --pill-review-ink:            #FCA259;
     --pill-dispatch-review-bg:   rgba(251,146,60,0.18);   --pill-dispatch-review-ink:   #FCA259;
-    --pill-quote-raised-bg:      rgba(164,123,255,0.18);  --pill-quote-raised-ink:      #B898FF;
+    --pill-quote-raised-bg:      rgba(155,123,245,0.18);  --pill-quote-raised-ink:      #B898FF;
     --pill-quote-sent-bg:        rgba(251,146,60,0.18);   --pill-quote-sent-ink:        #FCA259;
     --pill-assigned-bg:          rgba(126,156,255,0.18);  --pill-assigned-ink:          #8EA8FF;
 }
@@ -5931,13 +5931,13 @@ html body .portal .kbdetails .status-macro.aui-lozenge-complete { background: #E
 html body .portal .kbdetails .status-macro.aui-lozenge-success  { background: #E3F0E8 !important; color: #093A1B !important; }
 html body .portal .kbdetails .status-macro.aui-lozenge-current  { background: #F8E8E2 !important; color: #882E08 !important; }
 html body .portal .kbdetails .status-macro.aui-lozenge-error    { background: #F7E4E4 !important; color: #9D1818 !important; }
-html body .portal .kbdetails .status-macro.aui-lozenge-progress { background: #EEE8FA !important; color: #321E60 !important; }
+html body .portal .kbdetails .status-macro.aui-lozenge-progress { background: #EFE9FB !important; color: #321E60 !important; }
 
 html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-complete { background: rgba(126,156,255,0.15) !important; color: #8EA8FF !important; }
 html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-success  { background: rgba(52,211,153,0.15) !important; color: #61DDAF !important; }
 html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-current  { background: rgba(251,146,60,0.15) !important; color: #FCA259 !important; }
 html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-error    { background: rgba(248,113,113,0.15) !important; color: #F97F7F !important; }
-html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-progress { background: rgba(164,123,255,0.15) !important; color: #B898FF !important; }
+html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-progress { background: rgba(155,123,245,0.15) !important; color: #B898FF !important; }
 
 
 /* ─────────────────────────────────────────────────────────

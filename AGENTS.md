@@ -34,10 +34,14 @@ There are **two separate CSS layers** in HaloPSA, each with different deployment
 ### Layer 2: Custom CSS
 
 - **Scope:** Self-Service Portal ONLY
-- **Deployment:** Edit `self-service-portal-design.css`, commit, push to GitHub → served via GitHub Pages → live in ~10 minutes
+- **Deployment:** Edit `self-service-portal-design.css`, commit, push to GitHub → served via GitHub Pages → live in ~10 minutes (about 1 minute once the Custom CSS `@import` points at the Cloudflare Worker path; see `Portal/worker/README.md`)
 - **Not auto-scoped:** Selectors are used exactly as written
 - **HaloPSA field contains:** A single `@import url('https://interconnekt.github.io/HaloPSA-Styling/Portal/self-service-portal-design.css');` line
 - **Source:** `self-service-portal-design.css` (ONLY, `self-service-portal.css` is legacy and unused, see note at top)
+
+### JavaScript on the Self-Service Portal
+
+HaloPSA has no script field for the Self-Service Portal. `Portal/iframe-theme.js` reaches it through the Cloudflare Worker in `Portal/worker/`, which sits on the `portal.interconnekt.com.au/*` route and appends one `<script>` tag to every top-level HTML page. The same Worker serves the stylesheet and the shim at `/__interconnekt/` with a one minute cache. Runbook: `Portal/worker/README.md`.
 
 ### What Goes Where
 
@@ -132,7 +136,7 @@ Both inline `code` and `pre` blocks use a dark background with light text (Catpp
 
 1. Edit `self-service-portal-design.css` (the live file, only file the portal actually loads)
 2. Commit and push
-3. GitHub Pages serves the updated file within ~10 minutes. Hard-refresh the portal (Cmd+Shift+R) to bust the browser CSS cache
+3. GitHub Pages serves the updated file within ~10 minutes. Hard-refresh the portal (Cmd+Shift+R) to bust the browser CSS cache. Once the Custom CSS `@import` points at the Cloudflare Worker path (`Portal/worker/README.md`), the file is fresh within about a minute
 
 **Do NOT edit `self-service-portal.css`.** It's legacy, unused, and changes there don't propagate to the portal. If you find yourself about to "mirror" a change into it, stop, you're doubling the maintenance burden for zero runtime benefit.
 

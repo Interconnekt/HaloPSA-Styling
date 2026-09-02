@@ -1,0 +1,15 @@
+{
+    "name": "halopsa-portal-edge",
+    "private": true,
+    "type": "module",
+    "description": "Cloudflare Worker that injects the portal shim and serves the stylesheet with a short TTL",
+    "scripts": {
+        "dev": "wrangler dev --port 8787",
+        "deploy": "wrangler deploy",
+        "smoke": "node test/smoke.mjs",
+        "smoke:prod": "node test/smoke.mjs https://portal.interconnekt.com.au"
+    },
+    "devDependencies": {
+        "wrangler": "^4.128.0"
+    }
+}

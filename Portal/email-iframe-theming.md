@@ -1,6 +1,6 @@
 # Email iframe theming, open problem
 
-Status: **unresolved on the end-user portal.** Works on the agent side (where `iframe-theme.js` is already loaded). Captured here so we can revisit without re-doing the discovery.
+Status: **Worker built and smoke-tested on 2026-09-02; awaiting deploy and DNS cutover.** The runbook is `worker/README.md`. The agent side already loads `iframe-theme.js` through its script-injection field; this document covers the end-user portal, where that field does not exist.
 
 ---
 
@@ -67,6 +67,8 @@ See below.
 
 ## Recommended path: Cloudflare Worker
 
+Implemented in [`worker/`](worker/README.md) on 2026-09-02. The sections below are the design it was built from; the README is the runbook for deploying, cutting over and rolling back.
+
 ### Architecture
 
 ```
@@ -94,6 +96,8 @@ DNS for `portal.interconnekt.com.au` moves behind Cloudflare. A Worker sits on t
 - Adds single-digit ms latency via Cloudflare's streaming `HTMLRewriter`.
 
 ### The Worker code
+
+The live source is `worker/src/index.js`. It is the sketch below plus four things the sketch left out: a `/__interconnekt/` path that serves the stylesheet and the shim from GitHub Pages with a 60 second TTL (the "proxy the asset through the Worker" option from the 2026-09-02 handoff), a `Sec-Fetch-Dest: document` guard so HTML loaded into `iframe.halo-html-renderer` by URL is not injected a second time, a bypass for WebSocket upgrades and non-2xx pages, and an `x-interconnekt-worker` response header that says which branch handled a request. `worker/test/smoke.mjs` proves all of it against the real origin without a login.
 
 ```js
 export default {
@@ -173,6 +177,7 @@ If none of the above hold, accepting the default Segoe UI for end-user email bod
 |------|----------|-----------|
 | 2026-04 | Deferred, accept Segoe UI email bodies for end-users for now | Cosmetic-only; Cloudflare Worker infra not justified by a single script. Path documented here for future reactivation. |
 | 2026-04-19 | **Reactivated, queued for completion.** Cloudflare Worker reverse-proxy is the chosen path. | Multiple `iframe-theme.js` features now live in the repo and depend on JS being injected into the SSP: On-Hold pill stamping (home tiles + ticket sidebar), status / priority class stamping, ticket-list `Age` column 2dp formatting, and email-body Montserrat injection. All shipped to the repo but inert on the SSP without a delivery mechanism. The Worker also unlocks future script-injection needs (analytics, feature flags) without a per-feature deploy story. |
+| 2026-09-02 | **Built.** Worker, wrangler config, smoke test and runbook landed in `worker/`. Stylesheet delivery moves to the Worker path (option 1 of the handoff: proxy the asset, short TTL) once the Custom CSS `@import` is repointed after cutover. | DNS for `interconnekt.com.au` moved to Cloudflare, which was the only blocker. Local `wrangler dev` against the real HaloPSA origin passed every smoke check: injection on page shells and deep links, passthrough for JSON, static chunks, iframe-destined HTML and non-2xx pages, assets with ETag revalidation. Deploy and cutover need Cloudflare credentials on the machine doing it. |
 
 ---
 
@@ -180,13 +185,14 @@ If none of the above hold, accepting the default Segoe UI for end-user email bod
 
 Tracked here as the actionable task. Tick off as completed.
 
-- [ ] Confirm Entra app registration's redirect URI hostname is `portal.interconnekt.com.au/...`
-- [ ] Stand up `portal-staging.interconnekt.com.au` → Halo origin via Cloudflare + Worker
-- [ ] Ask HaloPSA to register the staging hostname as an additional portal URL
-- [ ] Add staging hostname as an additional redirect URI in Entra
-- [ ] Test full login + 1-hour token refresh + logout cycle on staging
-- [ ] Verify `iframe-theme.js` features fire on staging: email Montserrat, On-Hold pill on home `.main-tile-item`, On-Hold pill in ticket sidebar `.details-form`, Age column 2dp, status pill class stamping
-- [ ] Confirm Worker bypasses non-HTML responses (`/api/*`, token endpoints); check Cloudflare analytics for transformed-vs-passthrough split
-- [ ] Production DNS cutover (weekend / low-traffic window)
-- [ ] Post-cutover smoke test: log in, open a ticket with an email body, verify SLA-paused ticket shows red On-Hold pill on home + sidebar
-- [ ] Document the kill-switch procedure (Cloudflare "Pause Cloudflare on Site" toggle) in this file's runbook section
+- [x] Worker written, with a `content-type` and `Sec-Fetch-Dest` safety net so only top-level HTML is touched (`worker/src/index.js`)
+- [x] Worker bypasses non-HTML responses: proven by `worker/test/smoke.mjs` against the real origin (`/auth/token` JSON, static chunks, HaloPSA 404 page all pass through untouched)
+- [x] Kill-switch procedure documented (`worker/README.md`, three levels: delete the route, unproxy the record, pause the zone)
+- [x] Stylesheet delivery decision made: proxy through the Worker at `/__interconnekt/` with a 60 second TTL, switch the Custom CSS `@import` after cutover
+- [ ] `npx wrangler login` (or `CLOUDFLARE_API_TOKEN`) on the deploying machine, then `npm run deploy` in `worker/`
+- [ ] Confirm the zone settings listed in `worker/README.md` (SSL Full strict, Rocket Loader off, Email Obfuscation off, Workers plan cap)
+- [ ] Confirm the Entra app registration redirect URI hostname is `portal.interconnekt.com.au/...` (unchanged by the cutover, but check)
+- [ ] Decide whether to skip the staging hostname. `worker/README.md` explains why the smoke test covers the unauthenticated half and why the login cycle can only be proven on the real hostname
+- [ ] Production cutover: set the `portal` DNS record to Proxied in a low-traffic window
+- [ ] Post-cutover checks from `worker/README.md`: `curl` for `cf-ray` and `x-interconnekt-worker: html-injected`, `npm run smoke:prod`, then log in and verify email reflow on ticket 358840, the `Age` column, the On-Hold pill on home and sidebar, status and priority pills, logout and login, one-hour token refresh
+- [ ] Repoint the HaloPSA Custom CSS `@import` at `https://portal.interconnekt.com.au/__interconnekt/self-service-portal-design.css`

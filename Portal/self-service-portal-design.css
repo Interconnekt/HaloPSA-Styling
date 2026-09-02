@@ -4317,6 +4317,177 @@ html body .portal .rc-steps-item-wait .rc-steps-item-title {
     color: var(--portal-text-muted) !important;
 }
 
+
+/* ───────────────────────────────────────────────────────
+   Ticket / opportunity detail: workflow connector, card rail,
+   Next Appointment banner
+   ───────────────────────────────────────────────────────
+   Measured on /portal/opportunity?id=154833, /portal/ticket?id=348275
+   and /portal/ticket?id=358838 at a 1793px viewport, where
+   `.content` runs 300.5 to 1492.5.
+
+   1. The workflow connector never touched the step circles.
+
+      rc-steps ships TWO horizontal layouts and HaloPSA emits both.
+      Workflows passing `labelPlacement="vertical"` get
+      `.rc-steps-label-vertical` (opportunity 154833, ticket 348275);
+      the rest get the literal class `rc-steps-label-` with an empty
+      placement (ticket 358838). Each draws the connector a different
+      way, and our own re-flow higher up this file
+      (`.rc-steps-item { flex: 1 1 0 }` plus
+      `.rc-steps-item-icon { margin: 0 auto }`) broke both:
+
+      label-vertical uses the real `.rc-steps-item-tail`, but
+      rc-steps offsets it with a hardcoded `margin-left: 48px` sized
+      for its own fixed 116px item, where the icon sits at a fixed
+      left inset rather than centred. Once items are evenly flexed
+      and the icon centred, the run is displaced left by
+      (item width / 2 - 48px): 89.75px on the 4-step opportunity,
+      43.35px on the 6-step ticket. On screen the line began about
+      90px before the first circle and stopped about 90px short of
+      the last.
+
+      Plain horizontal hides the tail outright and draws the
+      connector as `.rc-steps-item-title::after`: a 1px, 1000px bar
+      anchored to the right edge of the LABEL. On ticket 358838 that
+      put the line at the label baseline (y 265.6) instead of the
+      icon centre (y 220.8), starting after "SERVICE DESK" and
+      running through the word "RESOLVED" to the card edge, in
+      rc-steps' raw #e9e9e9 rather than a token, so it stayed light
+      grey in dark mode. That layout also adds `margin-right: 10px`
+      between items, pushing the icon run off the card's centreline.
+
+      Fix: normalise both variants onto the tail element and pin it
+      to the geometry our layout already implies. The icon is 40px
+      and horizontally centred in an evenly flexed item, so the gap
+      between two adjacent rims is exactly `left: calc(50% + 20px)`
+      by `width: calc(100% - 40px)`. Symmetric for any step count.
+
+   2. The card grid sat 5px off centre. The left column's cards and
+      the stepper card both inset 20px, but Bootstrap's `.col-md-4`
+      gutter insets the sidebar only 15px, so sidebar cards ended
+      5px past the stepper directly above them. Sidebar cards also
+      sat 8px apart against the left column's 15px, because our New
+      Ticket rule (`.details-form .details-group.card-panel
+      { margin-bottom: 4px }`) clamps HaloPSA's `margin: .5rem 0
+      30px`. That is right for the form and wrong for the read-only
+      sidebar which happens to share the class.
+
+   3. `.nextappointmentbox` was never themed. HaloPSA paints it
+      `background: #fff !important` with one left rule, no radius
+      and no vertical padding, so the text sat on its top edge, and
+      Bootstrap's `.col-md-12` put it 20px out on the left and 32px
+      out on the right of the cards below. The hardcoded white also
+      made it unreadable in dark mode. Every counter-declaration
+      below needs `!important` because HaloPSA's do.
+
+   Note: `.rc-steps-item-tail`'s `top: 20px` is hardcoded against the
+   40px icon. If the icon size changes, `top`, the `+20px` and the
+   `-40px` all move together. */
+
+/* Even tiling. The plain-horizontal layout adds a 10px gutter between
+   items and zeroes it on the last, which knocks the icon run off the
+   card's centreline. Our items are `flex: 1 1 0`, so removing the
+   gutter puts every icon centre on its item's midpoint. */
+html body .portal .rc-steps.rc-steps-horizontal > .rc-steps-item {
+    margin-right: 0 !important;
+}
+
+/* Kill the label-anchored pseudo connector. It is drawn from the end
+   of the label text, at label height, so it can never line up with a
+   centred 40px icon; the real tail below replaces it. */
+html body .portal .rc-steps.rc-steps-horizontal .rc-steps-item-title::after {
+    display: none !important;
+}
+/* rc-steps reserves 10px on the title's right for that pseudo line.
+   With the line gone the padding just shifts the label 5px left of
+   its circle (measured on 358838: label centre 616.0, icon 621.0). */
+html body .portal .rc-steps.rc-steps-horizontal .rc-steps-item-title {
+    padding-right: 0 !important;
+}
+
+/* Connector geometry. `.rc-steps-item` is `position: relative`, so the
+   percentages resolve against the item box: `50%` is the icon centre
+   (the icon is `margin: 0 auto`), `+ 20px` clears its rim, and
+   `100% - 40px` lands the far end on the next icon's rim. `display:
+   block` un-hides the tail for the plain-horizontal variant. The tail
+   deliberately overflows into the next item, which the existing
+   `.rc-steps-item { overflow: visible }` rule already allows. Colour
+   and height stay with the earlier `.rc-steps-item-tail` and
+   `.rc-steps-item-finish ... ::after` rules, so the accent-tinted
+   completed segments keep working. */
+html body .portal .rc-steps.rc-steps-horizontal .rc-steps-item-tail {
+    display: block !important;
+    left: calc(50% + 20px) !important;
+    right: auto !important;
+    width: calc(100% - 40px) !important;
+    margin: 0 !important;   /* drops rc-steps' 48px label-vertical offset */
+}
+/* Re-assert rc-steps' own last-child hide: the `display: block` above
+   carries !important and would otherwise resurrect the trailing stub
+   hanging off the final circle. */
+html body .portal .rc-steps.rc-steps-horizontal .rc-steps-item:last-child .rc-steps-item-tail {
+    display: none !important;
+}
+
+/* Next Appointment banner: same card language as the activity cards
+   and the sidebar panels. The inset shadow keeps HaloPSA's "this is a
+   notice" left rule but redraws it as a 3px accent bar that follows
+   the radius. Doubled class beats HaloPSA's `!important` paint. */
+html body .portal .nextappointmentbox.nextappointmentbox {
+    background: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-md) !important;
+    box-shadow: inset 3px 0 0 0 var(--portal-accent) !important;
+    padding: 14px 18px !important;
+}
+html body .portal .nextappointmentbox.nextappointmentbox > label {
+    margin: 0 !important;
+    display: block !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    font-weight: 500 !important;
+    color: var(--portal-text) !important;
+}
+/* Put it on the left column's card rail. `width: auto` is required:
+   Bootstrap's `.col-md-12` ships `width: 100%`, so margins alone would
+   push the box right and overflow rather than narrow it. 32px on the
+   right is not arbitrary: the activity cards below sit inside
+   `.infinite-scroll-component`, which carries a 12px scrollbar gutter
+   on top of their own 20px margin. Left stays 20px to match. */
+html body .portal .content > .col-md-8 > .nextappointmentbox {
+    width: auto !important;
+    margin: 0 32px 0 20px !important;
+}
+
+/* Sidebar card rhythm: match the activity column's 15px. Scoped to
+   `.details-sidebar` because `.details-group.card-panel` is also the
+   New Ticket form's row wrapper, where the 4px clamp set earlier in
+   this file is correct. `.details-form.colmd-compensator.readeditform`
+   is NOT a usable discriminator: the New Ticket form carries exactly
+   the same three classes. Verified bit-identical on /portal/newticket
+   before and after. */
+html body .portal .content > .col-md-4.details-sidebar .details-group.card-panel {
+    margin-bottom: 15px !important;
+}
+
+/* Two-column geometry only. Below the breakpoint the columns stack,
+   where a right-only pad would be lopsided against Bootstrap's 15px
+   left gutter and there is no left column to align the first card
+   against. The `:not(:has(.portal-ticket-splitter))` guard keeps this
+   inert inside the Tile-view split pane, which renders the same
+   ticket-detail component under a container whose right padding is
+   deliberately zeroed further up this file. */
+@media (min-width: 769px) {
+    html body .portal:not(:has(.portal-ticket-splitter)) .content > .col-md-4.details-sidebar {
+        padding-top: 20px !important;
+        padding-right: 20px !important;
+    }
+    html body .portal:not(:has(.portal-ticket-splitter)) .content > .col-md-4.details-sidebar .details-group.card-panel {
+        margin-top: 0 !important;
+    }
+}
+
 /* Switches segmented control */
 html body .portal .switches {
     display: inline-flex !important;

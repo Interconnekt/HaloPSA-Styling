@@ -50,10 +50,10 @@
 
 :root {
     /* Typography */
-    --ik-font-display: 'Bricolage Grotesque', system-ui, -apple-system, 'Segoe UI', sans-serif;
-    --ik-font-body:    'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
-    --ik-font-serif:   'Newsreader', Georgia, 'Times New Roman', serif;
-    --ik-font-mono:    'Spline Sans Mono', ui-monospace, Consolas, Menlo, monospace;
+    --ic-font-display: 'Bricolage Grotesque', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --ic-font-body:    'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --ic-font-serif:   'Newsreader', Georgia, 'Times New Roman', serif;
+    --ic-font-mono:    'Spline Sans Mono', ui-monospace, Consolas, Menlo, monospace;
 
     /* ── LIGHT mode palette ──
        2026 design-system lock: cool-neutral grounds aligned with the
@@ -228,15 +228,15 @@
        cyan or violet role colour. Building the gradient out of the
        role tokens (what this did previously) produced a gradient that
        matched nothing shipped. */
-    --ik-gradient-brand: linear-gradient(115deg, #0F7CBE 0%, #3F51CE 52%, #7440D2 100%);
-    --ik-gradient-line:  linear-gradient(90deg, transparent, #0F7CBE 30%, #7440D2 70%, transparent);
+    --ic-gradient-brand: linear-gradient(115deg, #0F7CBE 0%, #3F51CE 52%, #7440D2 100%);
+    --ic-gradient-line:  linear-gradient(90deg, transparent, #0F7CBE 30%, #7440D2 70%, transparent);
 
     /* Motion */
-    --ik-ease:           cubic-bezier(0.22, 1, 0.36, 1);
-    --ik-dur:            180ms;
+    --ic-ease:           cubic-bezier(0.22, 1, 0.36, 1);
+    --ic-dur:            180ms;
 
     /* Density, overridden inline by the Tweaks panel */
-    --ik-density-pad:    1;   /* 1 = default, 0.75 = compact, 1.25 = roomy */
+    --ic-density-pad:    1;   /* 1 = default, 0.75 = compact, 1.25 = roomy */
 
     color-scheme: light;
 }
@@ -361,8 +361,8 @@
     --panel-b-custom-border:    rgba(2, 132, 199, 0.40);
 
     /* Dark triad, same source. See the light-mode block. */
-    --ik-gradient-brand: linear-gradient(115deg, #248DDF 0%, #5C44DE 52%, #8547EB 100%);
-    --ik-gradient-line:  linear-gradient(90deg, transparent, #248DDF 30%, #8547EB 70%, transparent);
+    --ic-gradient-brand: linear-gradient(115deg, #248DDF 0%, #5C44DE 52%, #8547EB 100%);
+    --ic-gradient-line:  linear-gradient(90deg, transparent, #248DDF 30%, #8547EB 70%, transparent);
 
     color-scheme: dark;
 }
@@ -373,7 +373,7 @@
    ───────────────────────────────────────────────────────── */
 
 html, body {
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 16px;
     line-height: 1.6;
     color: var(--portal-text);
@@ -425,7 +425,7 @@ html body .portal h4,
 html body .portal h5,
 html body .portal h6 {
     color: var(--portal-heading);
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ic-font-display) !important;
     letter-spacing: -0.015em;
     line-height: 1.15;
 }
@@ -441,7 +441,7 @@ html body .portal h1 em,
 html body .portal h2 em,
 html body .portal h3 em,
 html body .portal .page-title h1 em {
-    font-family: var(--ik-font-serif) !important;
+    font-family: var(--ic-font-serif) !important;
     font-style: italic;
     font-weight: 400;
     letter-spacing: -0.005em;
@@ -467,13 +467,13 @@ html body .portal li {
    the cascade and flatten every heading back to the body font. */
 input, textarea, select, button, optgroup { font-family: inherit; }
 html body .portal *:not(i):not(svg):not(.fa):not(code):not(pre):not(pre *):not(.ik-mono):not(.ik-serif):not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
-    font-family: var(--ik-font-body), sans-serif !important;
+    font-family: var(--ic-font-body), sans-serif !important;
 }
 
 /* Utility classes the Custom JS can stamp onto HaloPSA elements if
    desired, but the defaults below don't require JS. */
-.ik-mono  { font-family: var(--ik-font-mono)  !important; letter-spacing: 0.06em; }
-.ik-serif { font-family: var(--ik-font-serif) !important; font-style: italic; font-weight: 400; }
+.ik-mono  { font-family: var(--ic-font-mono)  !important; letter-spacing: 0.06em; }
+.ik-serif { font-family: var(--ic-font-serif) !important; font-style: italic; font-weight: 400; }
 
 
 /* ─────────────────────────────────────────────────────────
@@ -484,7 +484,7 @@ html body .portal *:not(i):not(svg):not(.fa):not(code):not(pre):not(pre *):not(.
 
 html body .portal .page-subtitle,
 html body .portal .page-title .page-subtitle {
-    font-family: var(--ik-font-mono) !important;
+    font-family: var(--ic-font-mono) !important;
     font-size: 11px !important;
     font-weight: 500 !important;
     letter-spacing: 0.14em !important;
@@ -511,7 +511,7 @@ html body .portal .page-title h1,
 html body .portal h1.profile-full-name,
 html body .portal h1.profile-full-name.oneline,
 html body .portal .details-form .details-group-header.title {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ic-font-display) !important;
     font-size: 1.75rem !important;
     font-weight: 700 !important;
     letter-spacing: -0.02em !important;
@@ -539,7 +539,7 @@ html body .portal .page-title {
    HaloPSA won't render <em>, but the KB/article content uses it,
    and any headings the Custom JS enriches will inherit this. */
 html body .portal .page-title h1 em {
-    font-family: var(--ik-font-serif) !important;
+    font-family: var(--ic-font-serif) !important;
     font-style: italic;
     font-weight: 400;
     position: relative;
@@ -552,7 +552,7 @@ html body .portal .page-title h1 em::after {
     right: -2%;
     bottom: 6%;
     height: 2px;
-    background: var(--ik-gradient-line);
+    background: var(--ic-gradient-line);
     opacity: 0.85;
 }
 
@@ -586,7 +586,7 @@ html body .portal .portal-header::after {
     position: absolute;
     left: 0; right: 0; bottom: 0;
     height: 1px;
-    background: var(--ik-gradient-line);
+    background: var(--ic-gradient-line);
     opacity: 0.5;
 }
 
@@ -606,7 +606,7 @@ html body .portal .nhd-nav {
 html body .portal .nhd-nav,
 html body .portal .nhd-nav button.nhd-nav-btn,
 html body .portal .nhd-nav .buttoncontainer {
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     letter-spacing: 0.02em;
@@ -616,8 +616,8 @@ html body .portal button.nhd-nav-btn,
 html body .portal button.nhd-nav-btn[style*="rgb(47, 53, 94)"] {
     background-color: transparent !important;
     color: rgba(255,255,255,0.82) !important;
-    transition: background-image var(--ik-dur) var(--ik-ease),
-                color var(--ik-dur) var(--ik-ease) !important;
+    transition: background-image var(--ic-dur) var(--ic-ease),
+                color var(--ic-dur) var(--ic-ease) !important;
 }
 
 html body .portal button.nhd-nav-btn:not(.active):hover,
@@ -648,7 +648,7 @@ html body .portal .buttoncontainer.nav-search .Select__input,
 html body .portal .buttoncontainer.nav-search .Select__input input,
 html body .portal .buttoncontainer.nav-search .Select__placeholder,
 html body .portal .buttoncontainer.nav-search .Select__single-value {
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     letter-spacing: 0.02em !important;
@@ -687,7 +687,7 @@ html body .portal .ik-status-strip {
     padding: 10px 24px;
     background: var(--portal-surface);
     border-bottom: 1px solid var(--portal-border-soft);
-    font-family: var(--ik-font-mono);
+    font-family: var(--ic-font-mono);
     font-size: 11px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -736,16 +736,16 @@ html body .portal div.app-notice[style*="position: absolute"] {
     border: 1px solid color-mix(in srgb, var(--portal-warn, #d97706) 55%, var(--portal-border)) !important;
     border-radius: 999px !important;
     box-shadow: 0 10px 24px rgba(0,0,0,0.18) !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     letter-spacing: 0.01em !important;
     text-align: center !important;
     z-index: 1000 !important;
     cursor: pointer;
-    transition: background-color var(--ik-dur) var(--ik-ease),
-                border-color var(--ik-dur) var(--ik-ease),
-                box-shadow var(--ik-dur) var(--ik-ease) !important;
+    transition: background-color var(--ic-dur) var(--ic-ease),
+                border-color var(--ic-dur) var(--ic-ease),
+                box-shadow var(--ic-dur) var(--ic-ease) !important;
 }
 html body .portal .app-notice:hover,
 html body .portal div.app-notice[style*="background-color: rgb(47, 53, 94)"]:hover {
@@ -771,7 +771,7 @@ html body .portal .portal-background {
 /* Hero title ("How can we help?") */
 html body .portal .search-title,
 html body .portal .searchscreen .search-title {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ic-font-display) !important;
     font-size: clamp(2rem, 3.5vw, 3rem) !important;
     font-weight: 700 !important;
     letter-spacing: -0.02em !important;
@@ -803,8 +803,8 @@ html body .portal .theme-dark .searchscreen:not(.searchscreen-full) .searchbox {
        specificity, and the hero collapses to 40px. */
     height: 64px !important;
     overflow: hidden;
-    transition: border-color var(--ik-dur) var(--ik-ease),
-                box-shadow var(--ik-dur) var(--ik-ease);
+    transition: border-color var(--ic-dur) var(--ic-ease),
+                box-shadow var(--ic-dur) var(--ic-ease);
 }
 /* Generic fallback (results-page search + legacy selector) keeps
    the original 60px so it matches the list-top filter controls. */
@@ -815,15 +815,15 @@ html body .portal .theme-dark .searchscreen .searchbox {
     border-radius: 14px !important;
     box-shadow: var(--portal-shadow) !important;
     overflow: hidden;
-    transition: border-color var(--ik-dur) var(--ik-ease),
-                box-shadow var(--ik-dur) var(--ik-ease);
+    transition: border-color var(--ic-dur) var(--ic-ease),
+                box-shadow var(--ic-dur) var(--ic-ease);
 }
 html body .portal .searchscreen .searchbox:focus-within {
     border-color: var(--portal-accent) !important;
     box-shadow: 0 0 0 4px var(--portal-accent-subtle), var(--portal-shadow-hover) !important;
 }
 html body .portal .searchscreen .searchbox input[type=text] {
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 16px !important;
     border-radius: 14px !important;
     padding: 14px 22px;
@@ -858,9 +858,9 @@ html body .portal .dashbtn {
     border-radius: var(--portal-radius) !important;
     padding: 28px 24px 24px !important;
     box-shadow: var(--portal-shadow-sm) !important;
-    transition: transform 220ms var(--ik-ease),
-                border-color 220ms var(--ik-ease),
-                box-shadow 220ms var(--ik-ease) !important;
+    transition: transform 220ms var(--ic-ease),
+                border-color 220ms var(--ic-ease),
+                box-shadow 220ms var(--ic-ease) !important;
     position: relative;
     overflow: hidden;
 }
@@ -872,9 +872,9 @@ html body .portal .dashbtn::before {
     position: absolute;
     left: 0; right: 0; top: 0;
     height: 1px;
-    background: var(--ik-gradient-line);
+    background: var(--ic-gradient-line);
     opacity: 0;
-    transition: opacity 220ms var(--ik-ease);
+    transition: opacity 220ms var(--ic-ease);
 }
 
 html body .portal .card.dashbtn:hover,
@@ -939,7 +939,7 @@ html body .portal .dashbtn .card-img img {
 }
 
 html body .portal .dashbtn .card-title {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ic-font-display) !important;
     font-size: 1.0625rem !important;
     font-weight: 500 !important;
     letter-spacing: -0.01em !important;
@@ -959,7 +959,7 @@ html body .portal .dashbtn .card-text {
 html body .portal .dashbtn .card-link,
 html body .portal .dashbtn .card-footer {
     margin-top: 14px !important;
-    font-family: var(--ik-font-mono) !important;
+    font-family: var(--ic-font-mono) !important;
     font-size: 10.5px !important;
     letter-spacing: 0.14em !important;
     text-transform: uppercase;
@@ -984,8 +984,8 @@ html body .portal .tile-widget {
     border: 1px solid var(--portal-border) !important;
     border-radius: var(--portal-radius-md) !important;
     box-shadow: none !important;
-    transition: border-color var(--ik-dur) var(--ik-ease),
-                transform var(--ik-dur) var(--ik-ease);
+    transition: border-color var(--ic-dur) var(--ic-ease),
+                transform var(--ic-dur) var(--ic-ease);
 }
 html body .portal .tile-widget:hover {
     border-color: var(--portal-accent) !important;
@@ -1012,7 +1012,7 @@ html body .portal .tile-item .tile-widget-bar {
 /* Section headings on the home page ("Recent Tickets", "Top Articles") */
 html body .portal .col-xl-6 > h3,
 html body .portal .col-xl-6 > h2 {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ic-font-display) !important;
     font-weight: 700 !important;
     font-size: 1.5rem !important;
     letter-spacing: -0.02em !important;
@@ -1045,9 +1045,9 @@ html body .portal .main-tile-item {
        room it needs without expanding the whole card. */
     padding: 14px 18px 18px !important;
     color: var(--portal-text) !important;
-    transition: border-color var(--ik-dur) var(--ik-ease),
-                transform var(--ik-dur) var(--ik-ease),
-                box-shadow var(--ik-dur) var(--ik-ease);
+    transition: border-color var(--ic-dur) var(--ic-ease),
+                transform var(--ic-dur) var(--ic-ease),
+                box-shadow var(--ic-dur) var(--ic-ease);
     cursor: pointer;
 }
 html body .portal .main-tile-item:hover {
@@ -1209,7 +1209,7 @@ html body .portal .main-tile-item tr {
 }
 html body .portal .main-tile-item td {
     padding: 2px 0 !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     color: inherit;
     line-height: 1.5;
     vertical-align: middle;
@@ -1248,7 +1248,7 @@ html body .portal .main-tile-item .status-avatar.fortile.small {
     max-width: none !important;
     width: auto !important;
     padding: 4px 12px !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 10.5px !important;
     font-weight: 600 !important;
     letter-spacing: 0.06em !important;
@@ -1310,7 +1310,7 @@ html body .portal .action-history-item {
 
 html body .portal .action-history-item {
     border-radius: var(--portal-radius-md) !important;
-    transition: border-color var(--ik-dur) var(--ik-ease);
+    transition: border-color var(--ic-dur) var(--ic-ease);
 }
 html body .portal .action-history-item:hover {
     border-color: var(--portal-border) !important;
@@ -1359,13 +1359,13 @@ html body .portal button.-btn:hover:not([disabled]) {
     border-radius: 999px !important;
     border: 1px solid transparent !important;
     box-shadow: none !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     letter-spacing: -0.005em !important;
-    transition: background-color var(--ik-dur) var(--ik-ease),
-                transform var(--ik-dur) var(--ik-ease),
-                box-shadow var(--ik-dur) var(--ik-ease) !important;
+    transition: background-color var(--ic-dur) var(--ic-ease),
+                transform var(--ic-dur) var(--ic-ease),
+                box-shadow var(--ic-dur) var(--ic-ease) !important;
     padding: 0 18px !important;
     height: 36px !important;
     display: inline-flex !important;
@@ -1401,9 +1401,9 @@ html body .portal .nhd-button.curve::before {
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: var(--ik-gradient-brand);
+    background: var(--ic-gradient-brand);
     opacity: 0;
-    transition: opacity var(--ik-dur) var(--ik-ease);
+    transition: opacity var(--ic-dur) var(--ic-ease);
     z-index: -1;
 }
 html body .portal .nhd-button.curve:hover::before { opacity: 1; }
@@ -1435,7 +1435,7 @@ html body .portal .listwidget button.nhd-button.curve {
     align-items: center !important;
     justify-content: center !important;
     gap: 6px;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     letter-spacing: -0.005em !important;
@@ -1449,9 +1449,9 @@ html body .portal .listwidget button.nhd-button.curve {
     box-shadow: none !important;
     text-decoration: none !important;
     transform: none !important;
-    transition: background-color var(--ik-dur) var(--ik-ease),
-                border-color var(--ik-dur) var(--ik-ease),
-                color var(--ik-dur) var(--ik-ease) !important;
+    transition: background-color var(--ic-dur) var(--ic-ease),
+                border-color var(--ic-dur) var(--ic-ease),
+                color var(--ic-dur) var(--ic-ease) !important;
 }
 /* Kill the primary-button gradient underlay when a .nhd-button.curve
    is inside a listwidget (it's a secondary action here, not CTA). */
@@ -1509,9 +1509,9 @@ html body .portal button.backbtn {
     justify-content: center;
     font-size: 13px !important;
     cursor: pointer;
-    transition: background-color var(--ik-dur) var(--ik-ease),
-                border-color var(--ik-dur) var(--ik-ease),
-                color var(--ik-dur) var(--ik-ease) !important;
+    transition: background-color var(--ic-dur) var(--ic-ease),
+                border-color var(--ic-dur) var(--ic-ease),
+                color var(--ic-dur) var(--ic-ease) !important;
     transform: none !important;
 }
 /* Keep it on screen. `.backbtn` shipped `position: static`, so on any
@@ -1599,13 +1599,13 @@ html body .portal .solidbutton.fabtn.noprint {
        context; everywhere else, the 14px still earns its keep. */
     margin: 14px 0 0 0 !important;
     padding: 0 !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     cursor: pointer;
-    transition: background-color var(--ik-dur) var(--ik-ease),
-                border-color var(--ik-dur) var(--ik-ease),
-                color var(--ik-dur) var(--ik-ease) !important;
+    transition: background-color var(--ic-dur) var(--ic-ease),
+                border-color var(--ic-dur) var(--ic-ease),
+                color var(--ic-dur) var(--ic-ease) !important;
     transform: none !important;
 }
 
@@ -1704,9 +1704,9 @@ html body .portal .kbdetails button[title="Scroll to top"].solidbutton.fabtn {
     align-items: center;
     justify-content: center;
     color: var(--portal-text-secondary) !important;
-    transition: transform 180ms var(--ik-ease),
-                background-color 180ms var(--ik-ease),
-                border-color 180ms var(--ik-ease) !important;
+    transition: transform 180ms var(--ic-ease),
+                background-color 180ms var(--ic-ease),
+                border-color 180ms var(--ic-ease) !important;
 }
 html body .portal .kbdetails button[title="Scroll to top"].solidbutton.fabtn:hover {
     background: var(--portal-accent-soft) !important;
@@ -1733,7 +1733,7 @@ html body .portal .status-avatar.smallest,
 html body .portal .status-avatar.fortile {
     border-radius: 999px !important;
     padding: 3px 12px !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-weight: 600 !important;
     font-size: 10.5px !important;
     letter-spacing: 0.06em;
@@ -2256,7 +2256,7 @@ html body .portal .status-avatar.small,
 html body .portal .status-avatar.bitsmall,
 html body .portal .status-avatar.smallest,
 html body .portal .status-avatar.fortile {
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-weight: 600 !important;
     font-size: 10.5px !important;
     letter-spacing: 0.06em !important;
@@ -2318,7 +2318,7 @@ html body .portal .oneline:has(> .priority-block) {
     background: var(--p-bg, var(--portal-surface-active)) !important;
     border: 0 !important;
     border-radius: 999px !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 11px !important;
     font-weight: 600 !important;
     letter-spacing: 0.06em;
@@ -2339,7 +2339,7 @@ html body .portal .oneline > .priority-block {
     background-image: linear-gradient(var(--p-dot, var(--portal-text-muted)), var(--p-dot, var(--portal-text-muted))) !important;
     background-color: var(--p-dot, var(--portal-text-muted)) !important;
     color: var(--p-dot, var(--portal-text-muted));
-    animation: ik-priority-pulse 2.4s var(--ik-ease) infinite;
+    animation: ik-priority-pulse 2.4s var(--ic-ease) infinite;
 }
 
 /* Per-priority token triplets, primary path is the JS-stamped `.p-*`
@@ -2452,7 +2452,7 @@ html body .portal .priority-avatar,
 html body .portal .priority-chip {
     border-radius: 999px !important;
     padding: 2px 10px !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 10.5px !important;
     font-weight: 600 !important;
     letter-spacing: 0.06em !important;
@@ -2493,7 +2493,7 @@ html body .portal .sla-perc-bar {
 html body .portal .sla-perc-bar > div {
     height: 100% !important;
     border-radius: 999px !important;
-    transition: width 300ms var(--ik-ease);
+    transition: width 300ms var(--ic-ease);
     max-width: 100% !important;
     box-sizing: border-box;
 }
@@ -2519,7 +2519,7 @@ html body .portal .sla-perc-bar > div[style*="rgb(34, 139, 34)"] {
    white so it sits legibly on coloured fills without overflowing
    the 18px bar. */
 html body .portal .bar-text {
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 10.5px !important;
     font-weight: 500 !important;
     letter-spacing: 0.02em !important;
@@ -2568,7 +2568,7 @@ html body .portal [data-on-hold-indicator] {
     padding: 5px 12px 5px 11px !important;
     background-color: #F7E4E4 !important;
     color: #9D1818 !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 10.5px !important;
     font-weight: 700 !important;
     letter-spacing: 0.06em !important;
@@ -2596,7 +2596,7 @@ html body .portal.theme-dark [data-on-hold-indicator] {
 
 html body .portal .rt-td,
 html body .portal .rt-th {
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 13px !important;
     color: var(--portal-text);
 }
@@ -2619,7 +2619,7 @@ html body .portal .rt-th {
    intrinsic height, which is what was pushing the funnel to the top
    of the cell). */
 html body .portal .rt-thead.-header .rt-th {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ic-font-display) !important;
     font-size: 11.5px !important;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -2685,7 +2685,7 @@ html body .portal .ReactTable.main-table .rt-thead.-header {
 }
 html body .portal .ReactTable.main-table .rt-thead.-header .rt-th {
     color: var(--portal-text-muted) !important;
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ic-font-display) !important;
     font-size: 11.5px !important;
     font-weight: 700 !important;
     letter-spacing: 0.08em !important;
@@ -2702,8 +2702,8 @@ html body .portal .ReactTable.main-table .rt-thead.-header .rt-th:last-child {
 html body .portal .rt-tbody .rt-tr-group {
     margin: 0 !important;
     border-bottom: 1px solid var(--portal-border-soft) !important;
-    transition: background-color var(--ik-dur) var(--ik-ease),
-                border-color var(--ik-dur) var(--ik-ease);
+    transition: background-color var(--ic-dur) var(--ic-ease),
+                border-color var(--ic-dur) var(--ic-ease);
     position: relative;
 }
 html body .portal .rt-tbody .rt-tr-group:last-child {
@@ -2723,7 +2723,7 @@ html body .portal .rt-tbody .rt-tr-group::before {
     width: 3px;
     background: var(--portal-accent);
     opacity: 0;
-    transition: opacity var(--ik-dur) var(--ik-ease);
+    transition: opacity var(--ic-dur) var(--ic-ease);
 }
 html body .portal .rt-tbody .rt-tr-group:hover::before {
     opacity: 1;
@@ -2773,7 +2773,7 @@ html body .portal .rt-thead.-filters input:not([type="checkbox"]):not([type="rad
 html body .portal .details-form .rt-thead.-filters input:not([type="checkbox"]):not([type="radio"]) {
     height: 30px !important;
     min-height: 30px !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 12.5px !important;
     padding: 0 10px !important;
     width: 100% !important;
@@ -2828,7 +2828,7 @@ html body .portal .rt-thead.-header .rt-th.-sort-desc {
 /* Counter + prev/next */
 html body .portal .page-counts,
 html body .portal .page-counts h98 {
-    font-family: var(--ik-font-mono) !important;
+    font-family: var(--ic-font-mono) !important;
     font-size: 11px !important;
     font-weight: 500 !important;
     letter-spacing: 0.1em !important;
@@ -2860,9 +2860,9 @@ html body .portal .buttons-container .solidbutton.fabtn {
     vertical-align: middle !important;
     margin: 0 3px !important;
     box-shadow: none !important;
-    transition: background-color var(--ik-dur) var(--ik-ease),
-                border-color var(--ik-dur) var(--ik-ease),
-                color var(--ik-dur) var(--ik-ease) !important;
+    transition: background-color var(--ic-dur) var(--ic-ease),
+                border-color var(--ic-dur) var(--ic-ease),
+                color var(--ic-dur) var(--ic-ease) !important;
 }
 html body .portal .buttons-container .solidbutton:hover,
 html body .portal .buttons-container .solidbutton.fabtn:hover {
@@ -2902,7 +2902,7 @@ html body .portal .searchbox {
     background-color: var(--portal-surface) !important;
     border: 1px solid var(--portal-border) !important;
     overflow: hidden;
-    transition: border-color var(--ik-dur) var(--ik-ease);
+    transition: border-color var(--ic-dur) var(--ic-ease);
 }
 html body .portal .searchbox:focus-within {
     border-color: var(--portal-accent) !important;
@@ -2918,7 +2918,7 @@ html body .portal .Select__input,
 html body .portal .Select__input input,
 html body .portal .Select__menu,
 html body .portal .Select__option {
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 13px !important;
 }
 
@@ -2992,8 +2992,8 @@ html body .portal .Select__option {
     border-radius: var(--portal-radius-xs) !important;
     margin: 2px 0 !important;
     cursor: pointer;
-    transition: background-color var(--ik-dur) var(--ik-ease),
-                color var(--ik-dur) var(--ik-ease) !important;
+    transition: background-color var(--ic-dur) var(--ic-ease),
+                color var(--ic-dur) var(--ic-ease) !important;
 }
 /* Hover tint matches `.ui.dropdown .menu .item:hover` (view-mode menu):
    both use `accent-soft` bg + `accent` ink so every dropdown on the
@@ -3070,7 +3070,7 @@ html body .portal .-pagination .-pageJump {
     margin: 0 !important;
 }
 html body .portal .-pagination .-totalPages {
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 13px !important;
     color: var(--portal-text-secondary) !important;
 }
@@ -3087,16 +3087,16 @@ html body .portal button.-btn {
     width: auto !important;
     height: 36px !important;
     padding: 0 22px !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-weight: 500 !important;
     font-size: 13px !important;
     line-height: 1 !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    transition: background-color var(--ik-dur) var(--ik-ease),
-                border-color var(--ik-dur) var(--ik-ease),
-                color var(--ik-dur) var(--ik-ease) !important;
+    transition: background-color var(--ic-dur) var(--ic-ease),
+                border-color var(--ic-dur) var(--ic-ease),
+                color var(--ic-dur) var(--ic-ease) !important;
 }
 html body .portal button.-btn:hover:not([disabled]) {
     background-color: var(--portal-accent-soft) !important;
@@ -3114,7 +3114,7 @@ html body .portal .-pagination input {
     text-align: center;
     padding: 0 8px;
     width: 56px;
-    font-family: var(--ik-font-mono) !important;
+    font-family: var(--ic-font-mono) !important;
     font-size: 12.5px !important;
     color: var(--portal-text) !important;
 }
@@ -3310,7 +3310,7 @@ html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #inp
 }
 html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tbody .rt-td:last-child {
     background: var(--portal-surface) !important;
-    transition: background-color var(--ik-dur) var(--ik-ease);
+    transition: background-color var(--ic-dur) var(--ic-ease);
 }
 /* Keep the sticky cell in step with the row hover tint. */
 html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable .rt-tbody .rt-tr-group:hover .rt-td:last-child {
@@ -3344,7 +3344,7 @@ html body .portal .react-kanban-column {
 
 html body .portal .react-kanban-column > div:first-child,
 html body .portal .react-kanban-column-header {
-    font-family: var(--ik-font-mono) !important;
+    font-family: var(--ic-font-mono) !important;
     font-size: 11px !important;
     font-weight: 500 !important;
     letter-spacing: 0.14em !important;
@@ -3374,10 +3374,10 @@ html body .portal .react-kanban-card {
     padding: 14px !important;
     margin-bottom: 10px !important;
     box-shadow: var(--portal-shadow-sm) !important;
-    transition: transform var(--ik-dur) var(--ik-ease),
-                border-color var(--ik-dur) var(--ik-ease),
-                box-shadow var(--ik-dur) var(--ik-ease);
-    font-family: var(--ik-font-body) !important;
+    transition: transform var(--ic-dur) var(--ic-ease),
+                border-color var(--ic-dur) var(--ic-ease),
+                box-shadow var(--ic-dur) var(--ic-ease);
+    font-family: var(--ic-font-body) !important;
 }
 html body .portal .react-kanban-card:hover {
     transform: translateY(-1px);
@@ -3416,11 +3416,11 @@ html body .portal .board-card-content {
     padding: 12px 14px !important;
     margin: 0 0 8px !important;
     box-shadow: var(--portal-shadow-sm) !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     color: var(--portal-text) !important;
-    transition: border-color var(--ik-dur) var(--ik-ease),
-                transform var(--ik-dur) var(--ik-ease),
-                box-shadow var(--ik-dur) var(--ik-ease) !important;
+    transition: border-color var(--ic-dur) var(--ic-ease),
+                transform var(--ic-dur) var(--ic-ease),
+                box-shadow var(--ic-dur) var(--ic-ease) !important;
     cursor: pointer;
     position: relative;
 }
@@ -3477,7 +3477,7 @@ html body .portal .board-card-content .board-card-details:empty {
 html body .portal .react-calendar-timeline {
     background: transparent !important;
     color: var(--portal-text) !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     border: 1px solid var(--portal-border) !important;
     border-radius: var(--portal-radius-md) !important;
     overflow: hidden;
@@ -3497,7 +3497,7 @@ html body .portal .react-calendar-timeline .rct-header .rct-label-group {
     background: transparent !important;
     border-color: var(--portal-border-soft) !important;
     color: var(--portal-text-muted) !important;
-    font-family: var(--ik-font-mono) !important;
+    font-family: var(--ic-font-mono) !important;
     font-size: 10.5px !important;
     font-weight: 500 !important;
     letter-spacing: 0.1em !important;
@@ -3510,7 +3510,7 @@ html body .portal .react-calendar-timeline .rct-sidebar-right {
     background: var(--portal-surface) !important;
     border-right: 1px solid var(--portal-border) !important;
     color: var(--portal-text) !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 13px !important;
 }
 html body .portal .react-calendar-timeline .rct-sidebar .rct-sidebar-header {
@@ -3575,12 +3575,12 @@ html body .portal .react-calendar-timeline .rct-items .rct-item {
     border: 1px solid var(--portal-accent-hover, var(--portal-accent)) !important;
     color: var(--portal-on-accent) !important;
     border-radius: var(--portal-radius-xs) !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 12px !important;
     font-weight: 500 !important;
-    transition: transform var(--ik-dur) var(--ik-ease),
-                box-shadow var(--ik-dur) var(--ik-ease),
-                filter var(--ik-dur) var(--ik-ease) !important;
+    transition: transform var(--ic-dur) var(--ic-ease),
+                box-shadow var(--ic-dur) var(--ic-ease),
+                filter var(--ic-dur) var(--ic-ease) !important;
 }
 html body .portal .react-calendar-timeline .rct-items .rct-item:hover {
     filter: brightness(1.1);
@@ -3653,8 +3653,8 @@ html body .portal .searchscreen .searchbox .searchclear {
     color: var(--portal-text-muted) !important;
     cursor: pointer;
     z-index: 2;
-    transition: background-color var(--ik-dur) var(--ik-ease),
-                color var(--ik-dur) var(--ik-ease) !important;
+    transition: background-color var(--ic-dur) var(--ic-ease),
+                color var(--ic-dur) var(--ic-ease) !important;
 }
 html body .portal .searchscreen .searchbox .searchclear:hover {
     background-color: var(--portal-surface-hover) !important;
@@ -3678,14 +3678,14 @@ html body .portal .entity-selection .pill {
     border: 1px solid var(--portal-border) !important;
     border-radius: 999px !important;
     padding: 8px 18px !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     letter-spacing: -0.005em;
     cursor: pointer;
-    transition: background-color var(--ik-dur) var(--ik-ease),
-                color var(--ik-dur) var(--ik-ease),
-                border-color var(--ik-dur) var(--ik-ease) !important;
+    transition: background-color var(--ic-dur) var(--ic-ease),
+                color var(--ic-dur) var(--ic-ease),
+                border-color var(--ic-dur) var(--ic-ease) !important;
 }
 html body .portal .entity-selection .pill:hover {
     background: var(--portal-accent-soft) !important;
@@ -3721,9 +3721,9 @@ html body .portal .search-result-item {
     border-radius: var(--portal-radius-md) !important;
     padding: 0 !important;
     box-shadow: none !important;
-    transition: border-color var(--ik-dur) var(--ik-ease),
-                box-shadow var(--ik-dur) var(--ik-ease),
-                transform var(--ik-dur) var(--ik-ease);
+    transition: border-color var(--ic-dur) var(--ic-ease),
+                box-shadow var(--ic-dur) var(--ic-ease),
+                transform var(--ic-dur) var(--ic-ease);
 }
 html body .portal .search-result-item:hover {
     border-color: var(--portal-accent) !important;
@@ -3759,7 +3759,7 @@ html body .portal .search-result-item .articleInfo {
 }
 html body .portal .search-result-item .articleInfo .heading,
 html body .portal .search-result-item .articleInfo .summary {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ic-font-display) !important;
     font-size: 15px !important;
     font-weight: 600 !important;
     color: var(--portal-heading) !important;
@@ -3768,7 +3768,7 @@ html body .portal .search-result-item .articleInfo .summary {
     padding: 0 !important;
 }
 html body .portal .search-result-item .articleInfo .desc-large {
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 13px !important;
     line-height: 1.55 !important;
     color: var(--portal-text-secondary) !important;
@@ -3810,7 +3810,7 @@ html body .portal:has(.mandatory-hint) .details-form.readeditform::before {
     position: absolute;
     left: 0; right: 0; top: 0;
     height: 1px;
-    background: var(--ik-gradient-line);
+    background: var(--ic-gradient-line);
     opacity: 0.6;
 }
 
@@ -3823,7 +3823,7 @@ html body .portal:has(.mandatory-hint) .details-form .details-group.card-panel {
 }
 
 html body .portal .details-form label {
-    font-family: var(--ik-font-mono) !important;
+    font-family: var(--ic-font-mono) !important;
     font-size: 10.5px !important;
     font-weight: 500 !important;
     letter-spacing: 0.12em !important;
@@ -3842,11 +3842,11 @@ html body .portal .details-form textarea {
     background-color: var(--portal-bg) !important;
     color: var(--portal-text) !important;
     padding: 0 14px !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 14px !important;
-    transition: border-color var(--ik-dur) var(--ik-ease),
-                box-shadow var(--ik-dur) var(--ik-ease),
-                background var(--ik-dur) var(--ik-ease);
+    transition: border-color var(--ic-dur) var(--ic-ease),
+                box-shadow var(--ic-dur) var(--ic-ease),
+                background var(--ic-dur) var(--ic-ease);
 }
 html body .portal .details-form textarea {
     height: auto !important;
@@ -4002,16 +4002,16 @@ html body .portal .details-form .DateInput_input {
     border-radius: var(--portal-radius-sm) !important;
     background-color: var(--portal-bg) !important;
     color: var(--portal-text) !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 14px !important;
     font-weight: 400 !important;
     padding: 0 14px !important;
     /* Some HaloPSA date fields carry a full sentence of help text as
        their placeholder; ellipsis beats a hard clip mid-word. */
     text-overflow: ellipsis;
-    transition: border-color var(--ik-dur) var(--ik-ease),
-                box-shadow var(--ik-dur) var(--ik-ease),
-                background var(--ik-dur) var(--ik-ease);
+    transition: border-color var(--ic-dur) var(--ic-ease),
+                box-shadow var(--ic-dur) var(--ic-ease),
+                background var(--ic-dur) var(--ic-ease);
 }
 html body .portal .details-form .DateInput_input::placeholder {
     color: var(--portal-text-muted) !important;
@@ -4064,12 +4064,12 @@ html body .portal .details-form input.browser-time-input {
     border-radius: var(--portal-radius-sm) !important;
     background-color: var(--portal-bg) !important;
     color: var(--portal-text) !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 14px !important;
     padding: 0 12px !important;
-    transition: border-color var(--ik-dur) var(--ik-ease),
-                box-shadow var(--ik-dur) var(--ik-ease),
-                background var(--ik-dur) var(--ik-ease);
+    transition: border-color var(--ic-dur) var(--ic-ease),
+                box-shadow var(--ic-dur) var(--ic-ease),
+                background var(--ic-dur) var(--ic-ease);
 }
 html body .portal .details-form input.browser-time-input:focus {
     border-color: var(--portal-accent) !important;
@@ -4104,7 +4104,7 @@ html body .portal .fr-box .fr-element,
 html body .portal .fr-box .fr-view {
     color: var(--portal-text) !important;
     background: transparent !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     line-height: 1.6;
 }
 html body .portal .fr-placeholder { color: var(--portal-text-muted) !important; }
@@ -4117,7 +4117,7 @@ html body .portal .fr-placeholder { color: var(--portal-text-muted) !important; 
    inside the element text, so we don't add a `::before` (an earlier
    pseudo had been duplicating it as "* * denotes…"). */
 html body .portal .mandatory-hint {
-    font-family: var(--ik-font-mono) !important;
+    font-family: var(--ic-font-mono) !important;
     font-size: 11px !important;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -4150,8 +4150,8 @@ html body .portal .attachment-container.edit {
     border: 1.5px dashed var(--portal-border) !important;
     border-radius: var(--portal-radius-sm) !important;
     background: var(--portal-surface-hover) !important;
-    transition: border-color var(--ik-dur) var(--ik-ease),
-                background var(--ik-dur) var(--ik-ease);
+    transition: border-color var(--ic-dur) var(--ic-ease),
+                background var(--ic-dur) var(--ic-ease);
 }
 html body .portal .attachment-container.edit:hover {
     border-color: var(--portal-accent) !important;
@@ -4200,18 +4200,18 @@ html body .portal .rc-steps-item-icon {
     height: 40px !important;
     line-height: 38px !important;   /* visual centre for 1px border */
     border-radius: 999px !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 14px !important;
     font-weight: 600 !important;
     text-align: center !important;
     box-sizing: border-box !important;
-    transition: background-color var(--ik-dur) var(--ik-ease),
-                border-color var(--ik-dur) var(--ik-ease),
-                color var(--ik-dur) var(--ik-ease) !important;
+    transition: background-color var(--ic-dur) var(--ic-ease),
+                border-color var(--ic-dur) var(--ic-ease),
+                color var(--ic-dur) var(--ic-ease) !important;
 }
 /* rc-steps uses a span inside, ensure the digit / check centres. */
 html body .portal .rc-steps-item-icon .rc-steps-icon {
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 14px !important;
     font-weight: 600 !important;
     line-height: 1 !important;
@@ -4324,7 +4324,7 @@ html body .portal .rc-steps-item-wait .rc-steps-item-icon .rc-steps-icon {
 /* Titles: Bricolage Grotesque (NOT mono) so the label reads as
    content, not eyebrow metadata. Per-state colour below. */
 html body .portal .rc-steps-item-title {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ic-font-display) !important;
     font-size: 12px !important;
     font-weight: 600 !important;
     letter-spacing: 0.06em !important;
@@ -4533,13 +4533,13 @@ html body .portal .switches > button {
     border: 0 !important;
     border-radius: calc(var(--portal-radius-sm) - 4px) !important;
     padding: 6px 14px !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-weight: 500 !important;
     font-size: 13px !important;
     background: transparent !important;
     color: var(--portal-text-muted) !important;
-    transition: background-color var(--ik-dur) var(--ik-ease),
-                color var(--ik-dur) var(--ik-ease);
+    transition: background-color var(--ic-dur) var(--ic-ease),
+                color var(--ic-dur) var(--ic-ease);
 }
 html body .portal .switches > button[style*="rgb(47, 53, 94)"] {
     background: var(--portal-action) !important;
@@ -4586,7 +4586,7 @@ html body .portal .tablist {
 }
 /* Individual tab item */
 html body .portal .tabsheet {
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     color: var(--portal-text-muted) !important;
@@ -4598,9 +4598,9 @@ html body .portal .tabsheet {
     align-items: center !important;
     border-bottom: 2px solid transparent !important;
     border-radius: var(--portal-radius-xs) var(--portal-radius-xs) 0 0 !important;
-    transition: color var(--ik-dur) var(--ik-ease),
-                background-color var(--ik-dur) var(--ik-ease),
-                border-color var(--ik-dur) var(--ik-ease) !important;
+    transition: color var(--ic-dur) var(--ic-ease),
+                background-color var(--ic-dur) var(--ic-ease),
+                border-color var(--ic-dur) var(--ic-ease) !important;
 }
 html body .portal .tabsheet:hover {
     color: var(--portal-text) !important;
@@ -4782,7 +4782,7 @@ html body .portal .action-history-item.wcontainer .detailsholder .when {
     position: absolute;
     top: 14px;
     right: 18px;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 12px !important;
     font-weight: 400 !important;
     color: var(--portal-text-muted) !important;
@@ -4968,7 +4968,7 @@ html body .portal .workflow-steps-wrap {
    the form untouched (66 element rects on that page measured
    bit identical before and after). Not width dependent. */
 html body .portal .content > .col-md-4.details-sidebar .details-group-header.title {
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 15px !important;
     font-weight: 600 !important;
     line-height: 1.35 !important;
@@ -5068,16 +5068,16 @@ html body .portal .tab-container > .tab {
     color: var(--portal-text-muted) !important;
     padding: 8px 16px 10px !important;
     margin: 0 !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     cursor: pointer;
     display: inline-flex !important;
     align-items: center !important;
     box-shadow: none !important;
-    transition: color var(--ik-dur) var(--ik-ease),
-                background-color var(--ik-dur) var(--ik-ease),
-                border-color var(--ik-dur) var(--ik-ease) !important;
+    transition: color var(--ic-dur) var(--ic-ease),
+                background-color var(--ic-dur) var(--ic-ease),
+                border-color var(--ic-dur) var(--ic-ease) !important;
 }
 html body .portal .tab-container > .tab:hover {
     color: var(--portal-text) !important;
@@ -5101,7 +5101,7 @@ html body .portal .tab-container > .tab.tabactive {
    feedback, the user sees one consistent tab family. */
 html body .portal .react-tabs__tab,
 html body .portal ul.react-tabs__tab-list .react-tabs__tab {
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     color: var(--portal-text-muted) !important;
@@ -5117,9 +5117,9 @@ html body .portal ul.react-tabs__tab-list .react-tabs__tab {
     border-radius: var(--portal-radius-xs) var(--portal-radius-xs) 0 0 !important;
     list-style: none !important;
     cursor: pointer;
-    transition: color var(--ik-dur) var(--ik-ease),
-                background-color var(--ik-dur) var(--ik-ease),
-                border-color var(--ik-dur) var(--ik-ease) !important;
+    transition: color var(--ic-dur) var(--ic-ease),
+                background-color var(--ic-dur) var(--ic-ease),
+                border-color var(--ic-dur) var(--ic-ease) !important;
 }
 html body .portal .react-tabs__tab:hover {
     color: var(--portal-text) !important;
@@ -5157,7 +5157,7 @@ html body .portal ul.react-tabs__tab-list {
    above so all three families render identically, flat transparent
    background, muted text inactive, action-blue underline active. */
 html body .portal [role="tab"] {
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     color: var(--portal-text-muted) !important;
@@ -5174,9 +5174,9 @@ html body .portal [role="tab"] {
     align-items: center !important;
     cursor: pointer;
     list-style: none !important;
-    transition: color var(--ik-dur) var(--ik-ease),
-                background-color var(--ik-dur) var(--ik-ease),
-                border-color var(--ik-dur) var(--ik-ease) !important;
+    transition: color var(--ic-dur) var(--ic-ease),
+                background-color var(--ic-dur) var(--ic-ease),
+                border-color var(--ic-dur) var(--ic-ease) !important;
 }
 html body .portal [role="tab"]:hover {
     color: var(--portal-text) !important;
@@ -5280,7 +5280,7 @@ html body .portal .mainscreen2 .history-options-portal.buttons-container {
    ───────────────────────────────────────────────────────── */
 
 html body .portal .kbdetails {
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     /* Wider than the old 760px reading measure, KB articles carry
        tables + screenshots that need room. Still bounded for
        comfortable long-form reading on ultrawide displays. */
@@ -5323,7 +5323,7 @@ html body .portal .kbdetails > .article {
    compound into ~40-50px of gap between title and date/author.
    Collapsed to ~20px total. */
 html body .portal .kbdetails h1 {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ic-font-display) !important;
     font-size: 2.25rem !important;
     font-weight: 700 !important;
     letter-spacing: -0.02em !important;
@@ -5354,7 +5354,7 @@ html body .portal .kbdetails > .article > .content {
     margin-top: 8px !important;
 }
 html body .portal .kbdetails h1 em {
-    font-family: var(--ik-font-serif) !important;
+    font-family: var(--ic-font-serif) !important;
     font-style: italic;
     font-weight: 400;
 }
@@ -5408,7 +5408,7 @@ html body .portal .kbdetails th {
 
 /* Article meta strip, if present above the H1 */
 html body .portal .kbdetails .kbmeta {
-    font-family: var(--ik-font-mono) !important;
+    font-family: var(--ic-font-mono) !important;
     font-size: 11px !important;
     letter-spacing: 0.1em !important;
     text-transform: uppercase;
@@ -5439,7 +5439,7 @@ html body .portal .kbdetails .kbmeta {
 
    `'Spline Sans Mono'` is listed FIRST in the font stack (ahead of the
    var) so even if the custom-property cascade fails to resolve
-   `--ik-font-mono` (e.g. on legacy deploys or in Style-Profile-
+   `--ic-font-mono` (e.g. on legacy deploys or in Style-Profile-
    injected contexts where vars don't inherit cleanly), the literal
    name still wins and the user gets the intended font instead of
    falling back to the surrounding Figtree.
@@ -5452,7 +5452,7 @@ html body .portal .kbtags {
     display: inline-block !important;
     background: var(--pill-assigned-bg) !important;
     color: var(--pill-assigned-ink) !important;
-    font-family: 'Spline Sans Mono', var(--ik-font-mono), ui-monospace, Consolas, Menlo, monospace !important;
+    font-family: 'Spline Sans Mono', var(--ic-font-mono), ui-monospace, Consolas, Menlo, monospace !important;
     font-size: 9px !important;
     font-weight: 500 !important;
     letter-spacing: 0.1em !important;
@@ -5462,9 +5462,9 @@ html body .portal .kbtags {
     border-radius: 999px !important;
     margin: 3px 6px 3px 0 !important;
     line-height: 1.5 !important;
-    transition: border-color var(--ik-dur) var(--ik-ease),
-                color var(--ik-dur) var(--ik-ease),
-                background var(--ik-dur) var(--ik-ease);
+    transition: border-color var(--ic-dur) var(--ic-ease),
+                color var(--ic-dur) var(--ic-ease),
+                background var(--ic-dur) var(--ic-ease);
 }
 /* Position 1 (5n+1); blue (--pill-assigned-*); matches the base rule
    above, repeated here so the full 5-cycle reads as one cohesive
@@ -5815,7 +5815,7 @@ html body .portal .kbdetails .confluence-information-macro-success .confluence-i
 
 /* Code */
 html body .portal .kbdetails code {
-    font-family: var(--ik-font-mono) !important;
+    font-family: var(--ic-font-mono) !important;
     font-size: 0.875em;
     background: var(--portal-code-bg);
     color: var(--portal-code-text);
@@ -5823,7 +5823,7 @@ html body .portal .kbdetails code {
     border-radius: 4px;
 }
 html body .portal .kbdetails pre {
-    font-family: var(--ik-font-mono) !important;
+    font-family: var(--ic-font-mono) !important;
     background: var(--portal-pre-bg);
     color: var(--portal-pre-text);
     border: 1px solid var(--portal-pre-border);
@@ -5844,7 +5844,7 @@ html body .portal .kbdetails blockquote {
     background: transparent;
     margin: 22px 0;
     padding: 4px 0 4px 22px;
-    font-family: var(--ik-font-serif) !important;
+    font-family: var(--ic-font-serif) !important;
     font-style: italic;
     font-size: 20px;
     line-height: 1.45;
@@ -5889,7 +5889,7 @@ html body .portal .kbdetails .confluenceTable th,
 html body .portal .kbdetails .confluenceTable td {
     border: 1px solid var(--portal-table-border) !important;
     padding: 10px 14px !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 14px !important;
     vertical-align: top;
     color: var(--portal-text);
@@ -5901,7 +5901,7 @@ html body .portal .kbdetails .confluenceTable td {
    mono label floating in a bigger cell" feel. */
 html body .portal .kbdetails .confluenceTable th {
     background: var(--portal-table-header-bg) !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 14px !important;
     font-weight: 600 !important;
     color: var(--portal-heading) !important;
@@ -5919,7 +5919,7 @@ html body .portal .kbdetails .confluenceTable tr:nth-child(even) { background: t
 html body .portal .kbdetails .status-macro.aui-lozenge {
     display: inline-block !important;
     padding: 4px 10px !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-weight: 600 !important;
     font-size: 10.5px !important;
     line-height: 1.5 !important;
@@ -5956,7 +5956,7 @@ html body .portal #text-scroll-container {
     background: var(--portal-surface-hover);
     border: 0;
     padding: 12px 16px;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-weight: 500;
     font-size: 13.5px;
     color: var(--portal-text);
@@ -5994,12 +5994,12 @@ html body .portal footer {
 }
 html body .portal footer a {
     color: rgba(255, 255, 255, 0.82) !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 12px !important;
     font-weight: 400 !important;
     letter-spacing: normal !important;
     text-transform: none !important;
-    transition: color var(--ik-dur) var(--ik-ease);
+    transition: color var(--ic-dur) var(--ic-ease);
 }
 html body .portal footer a:hover {
     color: #fff !important;
@@ -6057,7 +6057,7 @@ html body .portal .page-title:has(> .listwidget-icon.fa-desktop) + div {
     justify-content: center;
     text-align: center;
     color: var(--portal-text-muted) !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 14px !important;
     font-weight: 500 !important;
     letter-spacing: 0.005em;
@@ -6136,8 +6136,8 @@ html body .portal .Select__option {
     background-color: transparent !important;
     color: var(--portal-text) !important;
     cursor: pointer;
-    transition: background-color var(--ik-dur) var(--ik-ease),
-                color var(--ik-dur) var(--ik-ease) !important;
+    transition: background-color var(--ic-dur) var(--ic-ease),
+                color var(--ic-dur) var(--ic-ease) !important;
 }
 /* Specificity note, HaloPSA ships
    `.theme-dark .Select__option.Select__option--is-focused` at (0,0,3,0)
@@ -6179,7 +6179,7 @@ html body .portal footer.page-footer .box1 a[href^="https://interconnekt"] > div
     content: "interconnekt.com.au";
     font-size: 12px;
     font-weight: 400;
-    font-family: var(--ik-font-body);
+    font-family: var(--ic-font-body);
     color: rgba(255, 255, 255, 0.82);
     text-transform: none;
     letter-spacing: normal;
@@ -6227,9 +6227,9 @@ html body .portal .article.searchlist:not(.search-result-item) {
     border-radius: var(--portal-radius-md) !important;
     padding: 15px 18px !important;
     margin: 0 0 10px !important;
-    transition: border-color var(--ik-dur) var(--ik-ease),
-                transform var(--ik-dur) var(--ik-ease),
-                box-shadow var(--ik-dur) var(--ik-ease);
+    transition: border-color var(--ic-dur) var(--ic-ease),
+                transform var(--ic-dur) var(--ic-ease),
+                box-shadow var(--ic-dur) var(--ic-ease);
 }
 html body .portal .article:hover:not(.search-result-item),
 html body .portal .article.searchlist:hover:not(.search-result-item) {
@@ -6273,9 +6273,9 @@ html body .portal .articleInfoSmall.kb .articleRight .status-avatar {
 html body .portal .action-history-item.tile-item,
 html body .portal .listwidget .action-history-item.tile-item {
     padding: 15px 18px !important;
-    transition: border-color var(--ik-dur) var(--ik-ease),
-                transform var(--ik-dur) var(--ik-ease),
-                box-shadow var(--ik-dur) var(--ik-ease) !important;
+    transition: border-color var(--ic-dur) var(--ic-ease),
+                transform var(--ic-dur) var(--ic-ease),
+                box-shadow var(--ic-dur) var(--ic-ease) !important;
 }
 html body .portal .action-history-item.tile-item:hover,
 html body .portal .listwidget .action-history-item.tile-item:hover {
@@ -6323,7 +6323,7 @@ html body .portal .articleInfoSmall.kb {
    card content edge, so the chrome doesn't extrude into the gutter. */
 html body .portal .article .heading,
 html body .portal .articleInfoSmall.kb .heading {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ic-font-display) !important;
     font-size: 14.5px !important;
     font-weight: 600 !important;
     color: var(--portal-text) !important;
@@ -6400,7 +6400,7 @@ html body .portal .tree-menu .tree-node,
 html body .portal .kblist .tree-node,
 html body .portal .tree-menu .sidebar,
 html body .portal .kblist .sidebar {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ic-font-display) !important;
     font-size: 13.5px !important;
     border-radius: var(--portal-radius-xs) !important;
     /* 3px vertical padding with no margin put consecutive rows in
@@ -6410,8 +6410,8 @@ html body .portal .kblist .sidebar {
        pills land on a shape rather than on the text itself. */
     padding: 6px 10px;
     margin: 1px 0;
-    transition: background-color var(--ik-dur) var(--ik-ease),
-                color var(--ik-dur) var(--ik-ease);
+    transition: background-color var(--ic-dur) var(--ic-ease),
+                color var(--ic-dur) var(--ic-ease);
 }
 /* Section-toggle hover intentionally suppressed, `.sidebar` is the
    collapsible section header ("Knowledge Base" at the top of the
@@ -6476,7 +6476,7 @@ html body .portal .tree-menu .searchbox {
     border-radius: var(--portal-radius-sm) !important;
     box-shadow: none !important;
     overflow: hidden;
-    transition: border-color var(--ik-dur) var(--ik-ease);
+    transition: border-color var(--ic-dur) var(--ic-ease);
 }
 html body .portal .kblist .searchbox:focus-within,
 html body .portal .tree-menu .searchbox:focus-within {
@@ -7114,7 +7114,7 @@ html body .portal .kbdetails > .article.nohover::before {
     position: absolute;
     left: 0; right: 0; top: 0;
     height: 1px;
-    background: var(--ik-gradient-line);
+    background: var(--ic-gradient-line);
     opacity: 0.6;
     z-index: 1;
 }
@@ -7213,7 +7213,7 @@ html body .portal .preview-noneselected.tickets {
     margin: 60px auto 0 !important;
     max-width: 420px;
     text-align: center;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 15px !important;
     font-weight: 500 !important;
     letter-spacing: 0.005em;
@@ -7225,7 +7225,7 @@ html body .portal .preview-noneselected.tickets {
        leaves room for the icon. */
     padding-top: 110px !important;
     filter: grayscale(1) opacity(0.45);
-    transition: opacity var(--ik-dur) var(--ik-ease);
+    transition: opacity var(--ic-dur) var(--ic-ease);
 }
 /* Subtle hover lift on the whole block, signals the pane is
    interactive (clicking a ticket on the left will populate it). */
@@ -7301,7 +7301,7 @@ html body .ui.popup.transition.visible {
     border-radius: 12px !important;
     box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18) !important;
     padding: 16px 18px !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     min-width: 200px;
 }
 html body .ui.popup::before,
@@ -7340,7 +7340,7 @@ html body .ui.popup h1,
 html body .ui.popup h2,
 html body .ui.popup h3,
 html body .ui.popup h4 {
-    font-family: 'Spline Sans Mono', var(--ik-font-mono), ui-monospace, monospace !important;
+    font-family: 'Spline Sans Mono', var(--ic-font-mono), ui-monospace, monospace !important;
     font-size: 10.5px !important;
     font-weight: 500 !important;
     letter-spacing: 0.12em !important;
@@ -7376,7 +7376,7 @@ html body .ui.popup button {
     color: #FFFFFF !important;
     border: 0 !important;
     border-radius: 999px !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     display: inline-flex !important;
@@ -7385,8 +7385,8 @@ html body .ui.popup button {
     gap: 8px;
     box-shadow: none !important;
     cursor: pointer;
-    transition: background-color var(--ik-dur, 180ms) var(--ik-ease, ease),
-                transform var(--ik-dur, 180ms) var(--ik-ease, ease) !important;
+    transition: background-color var(--ic-dur, 180ms) var(--ic-ease, ease),
+                transform var(--ic-dur, 180ms) var(--ic-ease, ease) !important;
 }
 html body .ui.popup .ui.button:hover,
 html body .ui.popup button:hover {
@@ -7464,7 +7464,7 @@ html body .DayPicker__withBorder {
    keeps the weekday header row clear of the selects. */
 html body .CalendarMonth_caption {
     color: var(--portal-heading, #161922) !important;
-    font-family: var(--ik-font-display), system-ui, sans-serif !important;
+    font-family: var(--ic-font-display), system-ui, sans-serif !important;
     font-size: 15px !important;
     font-weight: 600 !important;
     padding-top: 20px !important;
@@ -7481,7 +7481,7 @@ html body .CalendarMonth_caption {
 html body .CalendarMonth_caption select {
     -webkit-appearance: none !important;
     appearance: none !important;
-    font-family: var(--ik-font-body), system-ui, sans-serif !important;
+    font-family: var(--ic-font-body), system-ui, sans-serif !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     color: var(--portal-text, #161922) !important;
@@ -7494,7 +7494,7 @@ html body .CalendarMonth_caption select {
     padding: 5px 26px 5px 10px !important;
     margin: 0 3px;
     cursor: pointer;
-    transition: border-color var(--ik-dur, 180ms) var(--ik-ease, ease);
+    transition: border-color var(--ic-dur, 180ms) var(--ic-ease, ease);
 }
 html body .CalendarMonth_caption select:hover,
 html body .CalendarMonth_caption select:focus {
@@ -7507,7 +7507,7 @@ html body .DayPicker_weekHeader {
     color: var(--portal-text-muted, #8E93A4) !important;
 }
 html body .DayPicker_weekHeader_li small {
-    font-family: var(--ik-font-mono), ui-monospace, monospace !important;
+    font-family: var(--ic-font-mono), ui-monospace, monospace !important;
     font-size: 10px !important;
     font-weight: 500 !important;
     letter-spacing: 0.08em;
@@ -7522,12 +7522,12 @@ html body td.CalendarDay__default {
     background: transparent !important;
     border: 0 !important;
     color: var(--portal-text, #161922) !important;
-    font-family: var(--ik-font-body), system-ui, sans-serif !important;
+    font-family: var(--ic-font-body), system-ui, sans-serif !important;
     font-size: 13px !important;
     border-radius: var(--portal-radius-xs, 8px) !important;
     vertical-align: middle;
-    transition: background var(--ik-dur, 180ms) var(--ik-ease, ease),
-                color var(--ik-dur, 180ms) var(--ik-ease, ease);
+    transition: background var(--ic-dur, 180ms) var(--ic-ease, ease),
+                color var(--ic-dur, 180ms) var(--ic-ease, ease);
 }
 html body td.CalendarDay__default:hover {
     background: var(--portal-surface-active, #F0F2F7) !important;
@@ -7613,10 +7613,10 @@ html body .portal .column-header button:has(i.fa-filter) {
        when columns resize. */
     opacity: 0;
     pointer-events: none;
-    transition: opacity var(--ik-dur) var(--ik-ease),
-                background-color var(--ik-dur) var(--ik-ease),
-                border-color var(--ik-dur) var(--ik-ease),
-                color var(--ik-dur) var(--ik-ease) !important;
+    transition: opacity var(--ic-dur) var(--ic-ease),
+                background-color var(--ic-dur) var(--ic-ease),
+                border-color var(--ic-dur) var(--ic-ease),
+                color var(--ic-dur) var(--ic-ease) !important;
 }
 html body .portal .rt-th:hover button,
 html body .portal .rt-th:focus-within button,
@@ -7681,7 +7681,7 @@ html body .portal .app-nav-menu {
     border-left: 1px solid var(--portal-border) !important;
     box-shadow: var(--portal-shadow-hover) !important;
     padding: 24px !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
 }
 
 /* Mobile primary-nav drawer (`.app-nav-menu`); same surface treatment
@@ -7705,15 +7705,15 @@ html body .portal .app-nav-menu > a {
     display: block !important;
     padding: 12px 14px !important;
     margin: 2px 0 !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 14px !important;
     font-weight: 500 !important;
     letter-spacing: -0.005em;
     color: var(--portal-text) !important;
     text-decoration: none !important;
     border-radius: var(--portal-radius-xs) !important;
-    transition: background-color var(--ik-dur) var(--ik-ease),
-                color var(--ik-dur) var(--ik-ease) !important;
+    transition: background-color var(--ic-dur) var(--ic-ease),
+                color var(--ic-dur) var(--ic-ease) !important;
 }
 html body .portal .app-nav-menu > a:hover {
     background: var(--portal-accent-soft) !important;
@@ -7752,7 +7752,7 @@ html body .portal .ui.sidebar .header,
 html body .portal .ui.sidebar .sidebar-header,
 html body .portal .ui.sidebar > div:first-child > span,
 html body .portal .ui.sidebar > div:first-child > div {
-    font-family: var(--ik-font-display) !important;
+    font-family: var(--ic-font-display) !important;
     font-size: 1.25rem !important;
     font-weight: 700 !important;
     letter-spacing: -0.02em !important;
@@ -7792,9 +7792,9 @@ html body .portal .ui.sidebar [class*="close"] {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background-color var(--ik-dur) var(--ik-ease),
-                border-color var(--ik-dur) var(--ik-ease),
-                color var(--ik-dur) var(--ik-ease) !important;
+    transition: background-color var(--ic-dur) var(--ic-ease),
+                border-color var(--ic-dur) var(--ic-ease),
+                color var(--ic-dur) var(--ic-ease) !important;
 }
 html body .portal .sidemenu .close:hover,
 html body .portal .sidemenu button.close:hover,
@@ -7829,7 +7829,7 @@ html body .portal .ui.sidebar img.rounded-circle {
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 16px !important;
     font-weight: 600 !important;
     letter-spacing: 0;
@@ -7844,7 +7844,7 @@ html body .portal .ui.sidebar .username,
 html body .portal .ui.sidebar .user-name,
 html body .portal .ui.sidebar .email,
 html body .portal .ui.sidebar .user-email {
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     color: var(--portal-text) !important;
 }
 html body .portal .sidemenu .email,
@@ -7870,7 +7870,7 @@ html body .portal .ui.sidebar ul li a {
     display: block !important;
     padding: 12px 14px !important;
     margin: 2px -14px !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 14px !important;
     font-weight: 500 !important;
     letter-spacing: -0.005em;
@@ -7879,8 +7879,8 @@ html body .portal .ui.sidebar ul li a {
     border-radius: var(--portal-radius-xs) !important;
     border: 0 !important;
     background: transparent !important;
-    transition: background-color var(--ik-dur) var(--ik-ease),
-                color var(--ik-dur) var(--ik-ease) !important;
+    transition: background-color var(--ic-dur) var(--ic-ease),
+                color var(--ic-dur) var(--ic-ease) !important;
 }
 html body .portal .sidemenu-links a:hover,
 html body .portal .sidemenu-links > a:hover,
@@ -7943,14 +7943,14 @@ html body .portal .menu.transition.visible > a {
     border-radius: var(--portal-radius-xs) !important;
     background: transparent !important;
     color: var(--portal-text) !important;
-    font-family: var(--ik-font-body) !important;
+    font-family: var(--ic-font-body) !important;
     font-size: 13px !important;
     font-weight: 500 !important;
     border: 0 !important;
     cursor: pointer;
     text-decoration: none !important;
-    transition: background-color var(--ik-dur) var(--ik-ease),
-                color var(--ik-dur) var(--ik-ease) !important;
+    transition: background-color var(--ic-dur) var(--ic-ease),
+                color var(--ic-dur) var(--ic-ease) !important;
 }
 html body .portal .ui.menu.transition.visible .item:hover,
 html body .portal .ui.dropdown .menu .item:hover,

@@ -214,7 +214,7 @@ Style Profile rules are wrapped as `.kbdetails selector { properties }`. There i
 4. Enable GitHub Pages and update the `@import` URL
 5. Enter the Style Profile rules manually in HaloPSA
 
-The font imports (Montserrat + Instrument Serif + JetBrains Mono via Google Fonts) can be swapped at the top of `self-service-portal-design.css`. The matching `--ik-font-*` tokens in `:root` need to update to the new family name. Also update `Portal/iframe-theme.js` if the primary display font changes (the shim injects it into email-body iframes).
+The font imports (Montserrat + Instrument Serif + JetBrains Mono via Google Fonts) can be swapped at the top of `self-service-portal-design.css`. The matching `--ic-font-*` tokens in `:root` need to update to the new family name. Also update `Portal/iframe-theme.js` if the primary display font changes (the shim injects it into email-body iframes).
 
 ---
 

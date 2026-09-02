@@ -12,7 +12,7 @@ Use this when you change a token or component on the website and need to propaga
 |---|---|---|
 | Website | `src/app/globals.css` (`:root`, `[data-theme="dark"]`) | `--bg`, `--fg`, `--primary`, etc. |
 | Website | `tailwind.config.ts` | Semantic names that map `bg-*`, `text-*`, `border-*` classes to CSS vars |
-| Portal | `Portal/self-service-portal-design.css` (`:root`, `.theme-dark`) | `--portal-*` + `--ik-*` tokens |
+| Portal | `Portal/self-service-portal-design.css` (`:root`, `.theme-dark`) | `--portal-*` + `--ic-*` tokens |
 | Portal | `Portal/self-service-portal.css` (legacy fallback) | Same token names; mirror of design CSS for safety |
 
 **Live portal loads:** `self-service-portal-design.css` via HaloPSA Custom CSS `@import` (GitHub Pages-hosted). Any change pushed to main is live within ~10 minutes.
@@ -23,16 +23,16 @@ Use this when you change a token or component on the website and need to propaga
 
 2026 lock: four families, each with a fixed role. Pre-2026 the portal only
 had a two-family system (one sans for both display and body text, one
-serif for italic emphasis); `--ik-font-body` is a new token, not a rename.
+serif for italic emphasis); `--ic-font-body` is a new token, not a rename.
 
 | Website var | Portal var | Value | Used for |
 |---|---|---|---|
-| `--font-display` | `--ik-font-display` | `'Bricolage Grotesque', system-ui, -apple-system, 'Segoe UI', sans-serif` | Headings only (h1-h6, page titles, hero title, section headers), weight 700 |
-| n/a | `--ik-font-body` | `'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif` | Everything else: body copy, nav, labels, buttons, tags, table cells, form fields |
-| `--font-serif` | `--ik-font-serif` | `'Newsreader', Georgia, 'Times New Roman', serif` | `<em>` inside headings (italic emphasis), the one accent-word move |
-| `--font-mono` | `--ik-font-mono` | `'Spline Sans Mono', ui-monospace, Consolas, Menlo, monospace` | Eyebrows (`.page-subtitle`), page counters, KB tags, pagination input |
+| `--font-display` | `--ic-font-display` | `'Bricolage Grotesque', system-ui, -apple-system, 'Segoe UI', sans-serif` | Headings only (h1-h6, page titles, hero title, section headers), weight 700 |
+| n/a | `--ic-font-body` | `'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif` | Everything else: body copy, nav, labels, buttons, tags, table cells, form fields |
+| `--font-serif` | `--ic-font-serif` | `'Newsreader', Georgia, 'Times New Roman', serif` | `<em>` inside headings (italic emphasis), the one accent-word move |
+| `--font-mono` | `--ic-font-mono` | `'Spline Sans Mono', ui-monospace, Consolas, Menlo, monospace` | Eyebrows (`.page-subtitle`), page counters, KB tags, pagination input |
 
-**Rule of thumb:** if the website uses `font-display` → portal uses `var(--ik-font-display)`, and ONLY on genuine headings. Tailwind class `font-mono` on website maps to `var(--ik-font-mono)` in portal. Everything that isn't a heading, an eyebrow/mono element, or an `<em>` accent uses `var(--ik-font-body)`.
+**Rule of thumb:** if the website uses `font-display` → portal uses `var(--ic-font-display)`, and ONLY on genuine headings. Tailwind class `font-mono` on website maps to `var(--ic-font-mono)` in portal. Everything that isn't a heading, an eyebrow/mono element, or an `<em>` accent uses `var(--ic-font-body)`.
 
 **Cascade gotcha:** the portal's global "font sweep" rule (`html body .portal *:not(...)`) has higher CSS specificity than the plain heading rule, so it must explicitly `:not(h1):not(h2)...:not(h6)` itself or it silently overrides every heading back to the body font. See the comment above the sweep rule in `self-service-portal-design.css` §2 if you're touching this again.
 
@@ -108,10 +108,10 @@ Both now use the same `#0C0E16 → #10131C → #161A25 → #1B2030` ladder.
 
 | Website | Portal | Value | Used for |
 |---|---|---|---|
-| `--gradient-brand` | `--ik-gradient-brand` | `linear-gradient(115deg, #0F7CBE 0%, #3F51CE 52%, #7440D2 100%)` (light) / `linear-gradient(115deg, #248DDF 0%, #5C44DE 52%, #8547EB 100%)` (dark) | Featured pills, primary button hover underlay. ONE brand gradient, reserved for featured/hero moments only, not a general decoration |
-| `--gradient-line` | `--ik-gradient-line` | `linear-gradient(90deg, transparent, #0F7CBE 30%, #7440D2 70%, transparent)` (light) / same with `#248DDF`/`#8547EB` (dark) | Header `::after` hairline, form-card top line |
-| `cubic-bezier(0.22, 1, 0.36, 1)` | `--ik-ease` | Same | Every transition timing function |
-| `200ms` (`duration-200`) | `--ik-dur` | `180ms` | Transition duration |
+| `--gradient-brand` | `--ic-gradient-brand` | `linear-gradient(115deg, #0F7CBE 0%, #3F51CE 52%, #7440D2 100%)` (light) / `linear-gradient(115deg, #248DDF 0%, #5C44DE 52%, #8547EB 100%)` (dark) | Featured pills, primary button hover underlay. ONE brand gradient, reserved for featured/hero moments only, not a general decoration |
+| `--gradient-line` | `--ic-gradient-line` | `linear-gradient(90deg, transparent, #0F7CBE 30%, #7440D2 70%, transparent)` (light) / same with `#248DDF`/`#8547EB` (dark) | Header `::after` hairline, form-card top line |
+| `cubic-bezier(0.22, 1, 0.36, 1)` | `--ic-ease` | Same | Every transition timing function |
+| `200ms` (`duration-200`) | `--ic-dur` | `180ms` | Transition duration |
 
 The gradient direction changed from 135deg to 115deg and the colour stops moved from a two-tone blue to plum sweep to the full three-stop triad, with the mid stop pinned at 52%. The triad has its OWN three values (`--brand-1/2/3` in the website's `globals.css`, `color.locked.*.brand1/2/3` in `Interconnekt/Design-System`) and none of them equals the cyan, blue or violet role colour. Do not rebuild this gradient out of the role tokens; match the website's `--gradient-brand` exactly.
 
@@ -311,11 +311,11 @@ See full spec doc: header + nav styling is locked to the website's dark chrome. 
 | Element | Selector | Value |
 |---|---|---|
 | Bar (both modes) | `html body .portal header / .portal-header / .nhd-nav / footer` | `background-color: #0C0E16` (2026: same hex as the dark-mode `--portal-bg`; pre-2026 this was an independently-chosen navy `#0A0F1C`) |
-| Gradient hairline | `html body .portal header::after` | `background: var(--ik-gradient-line); opacity: 0.5; height: 1px` |
+| Gradient hairline | `html body .portal header::after` | `background: var(--ic-gradient-line); opacity: 0.5; height: 1px` |
 | Nav buttons resting | `button.nhd-nav-btn` + `[style*="rgb(47, 53, 94)"]` | `color: rgba(255,255,255,0.82)`, bg transparent |
 | Nav buttons hover | same + `:not(.active):hover` | `background-image: linear-gradient(rgba(255,255,255,0.08), ...)`, `color: #fff` |
 | Navbar search focus | `.buttoncontainer.nav-search .Select__control--is-focused` | `bg: rgba(255,255,255,0.06); box-shadow: 0 0 0 1px rgba(255,255,255,0.14)` |
-| Transition | All nav motion | `var(--ik-dur) var(--ik-ease)` = `180ms cubic-bezier(0.22,1,0.36,1)` |
+| Transition | All nav motion | `var(--ic-dur) var(--ic-ease)` = `180ms cubic-bezier(0.22,1,0.36,1)` |
 
 **Never change** the bar colour in light mode (logo is white-on-dark) or use `background-color` for hover (HaloPSA inline style wins; use `background-image` instead). The header/nav/footer's white text and `rgba(255,255,255,…)` overlays stay literal (not `var(--portal-on-accent)`) because that bar is hardcoded dark in both modes; it never sees the bright dark-mode brand hue that makes `--portal-on-accent` necessary elsewhere.
 
@@ -337,7 +337,7 @@ Use this flow when a website change needs to propagate into the portal:
 ### "I changed a font"
 
 1. Update `@import url('https://fonts.googleapis.com/css2?family=...')` at the top of `self-service-portal-design.css`
-2. Update the matching `--ik-font-*` token below
+2. Update the matching `--ic-font-*` token below
 3. Also update `self-service-portal.css` (legacy file) to keep fallback in sync
 4. Test in iframe email bodies: `Portal/iframe-theme.js` injects the body font into email iframes; update the `CSS` constant there if the primary body font changes (NOT the display font; email bodies use the body/UI font, not the display face)
 5. If the display/body split itself changes (e.g. a font is promoted from body to display or vice versa), re-check the font-sweep cascade note in §1; the sweep's `:not()` exclusion list must keep excluding every element that should keep the display font
@@ -393,11 +393,11 @@ cat-violet                 → --portal-violet               (#6F43D6 / #A47BFF,
 --highlight (cyan)         → --portal-highlight             (Security BRAND accent ONLY, #0284C7 in BOTH modes, NOT --portal-ok)
 --ok (true green)          → --portal-ok                   (semantic success, independent hue, #15803D / #34D399)
 --accent (pink)            → --portal-accent-2             (CTA + highlighter ONLY, #C026D3 / #EC72CF)
---font-display              → --ik-font-display            (Bricolage Grotesque, headings only, weight 700)
-(new token)                 → --ik-font-body               (Figtree, everything else)
---font-serif                → --ik-font-serif               (Newsreader italic accent)
---font-mono                 → --ik-font-mono                (Spline Sans Mono)
---gradient-brand            → --ik-gradient-brand           (115deg, brand-1/2/3 triad, 52% mid stop, NOT the role colours)
---gradient-line              → --ik-gradient-line           (header hairline)
+--font-display              → --ic-font-display            (Bricolage Grotesque, headings only, weight 700)
+(new token)                 → --ic-font-body               (Figtree, everything else)
+--font-serif                → --ic-font-serif               (Newsreader italic accent)
+--font-mono                 → --ic-font-mono                (Spline Sans Mono)
+--gradient-brand            → --ic-gradient-brand           (115deg, brand-1/2/3 triad, 52% mid stop, NOT the role colours)
+--gradient-line              → --ic-gradient-line           (header hairline)
 (new token)                 → --portal-on-accent            (white light / dark-ink dark, for text on solid brand fills)
 ```

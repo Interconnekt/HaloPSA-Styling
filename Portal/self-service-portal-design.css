@@ -66,6 +66,12 @@
     --portal-surface:         #FFFFFF;   /* website --card */
     --portal-surface-hover:   #F5F7FB;   /* == bg-subtle */
     --portal-surface-active:  #F0F2F7;   /* website --card2 */
+    /* Email body "paper". Deliberately NOT flipped in `.theme-dark`:
+       email HTML inlines its colours for a light background, so the
+       message is rendered on the surface it was authored for in both
+       modes rather than repainted. See the iframe rule in section 6
+       and `themeCss` in `Portal/iframe-theme.js`. */
+    --portal-email-paper:     #FFFFFF;
 
     --portal-text:            #161922;   /* website --ink */
     --portal-text-secondary:  #585F76;   /* website --muted */
@@ -7250,6 +7256,34 @@ html body .portal .preview-noneselected.tickets {
    interactive (clicking a ticket on the left will populate it). */
 html body .portal .preview-noneselected:hover {
     filter: grayscale(1) opacity(0.65);
+}
+
+/* Email body paper surface, dark mode.
+   HaloPSA renders email bodies inside `iframe.halo-html-renderer`,
+   and CSS cannot cross a document boundary, so the text inside is
+   painted by `themeCss` in `Portal/iframe-theme.js`, not from here.
+   That shim paints the iframe DOCUMENT white in dark mode, because
+   email HTML inlines `color` on nearly every cell and an inline
+   declaration outranks a stylesheet one; repainting the text would
+   win on some elements and lose on others, leaving half the message
+   unreadable, while stripping those inline colours would destroy the
+   sender's design. Before this, the iframe body kept `color: #000`
+   over a transparent background, so every email rendered as black
+   text on the dark card (found 2026-09-02 on ticket 358840).
+
+   This rule dresses the iframe ELEMENT to match the paper the shim
+   paints inside it: the same white removes the dark flash between
+   first paint and injection, the radius stops the paper reading as a
+   bare rectangle against the dark card, and the padding keeps body
+   text off the paper edge.
+
+   `.theme-dark` is used as an ancestor rather than compounded with
+   `.portal`, because the two do not always sit on the same element
+   (see the Family-B panel note above). */
+html body .theme-dark iframe.halo-html-renderer {
+    background-color: var(--portal-email-paper) !important;
+    border-radius: var(--portal-radius-xs);
+    padding: 12px;
 }
 
 /* Empty state, "No Tickets found"

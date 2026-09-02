@@ -98,20 +98,36 @@ Two things learned while looking:
   and measuring, then removing it. The Scheduled pill flips to exactly
   the documented dark tokens, `rgba(155,123,245,0.18)` on `#B898FF`,
   and the page, cards and text read correctly.
-  **Limitation:** this method does NOT verify the email-iframe
-  theming. `iframe-theme.js` themes the iframes at load from the theme
-  in force at the time, so iframes loaded in light mode keep black body
-  text and look wrong under an injected `.theme-dark`. That is an
-  artefact of the method, not a bug. Email iframes in dark mode remain
-  verified only from session 3. A genuine dark-mode pass needs the
-  saved theme flipped, which is Joel's call.
+  **This uncovered a real bug, now fixed.** The first read of the dim
+  email text was wrong: it is not an artefact of the injection method.
+  The shim injected font, link colour and overflow rules but never a
+  text or background colour, so the iframe body kept `color: #000`
+  over a transparent background. In genuine dark mode that is black
+  text on the dark card, for every email on every ticket. Session 3
+  checked fonts, links and overflow, so it was never caught. Fixed in
+  commit `d2a8788`: the shim now paints the iframe document white in
+  dark mode and re-injects on a theme flip, and the stylesheet dresses
+  the iframe element to match. Rendering on white rather than
+  recolouring the text is deliberate, see the comment on
+  `--portal-email-paper`. Verified live on 358840: all five iframes go
+  from transparent/`#000` to white paper with `#161922` ink.
 - **Quote Raised pill.** Needs a ticket in that status.
-- **Mobile still not rendered.** `resize_window` cannot exercise it
-  while Chrome is in macOS fullscreen: the window object resizes
-  (`outerWidth` changes) but the viewport stays pinned to screen width
-  (`innerWidth` 1800, `clientWidth` 1793) and both `(max-width: 480px)`
-  and `(max-width: 768px)` report false, so no responsive rule fires.
-  Take Chrome out of fullscreen and retry, or use a real phone.
+- **Mobile still not rendered, and not verifiable with these tools.**
+  `resize_window` reports success and `outerWidth` changes, but the
+  rendering viewport never moves (`innerWidth` 1800 = `screen.width`,
+  `clientWidth` 1793) and the narrow media queries stay false, so no
+  responsive rule fires. Joel confirmed Chrome is not in fullscreen,
+  so the cause is unresolved. Simulating instead, by injecting the
+  narrow rules and constraining `.app-container` to 390px, is NOT
+  valid: the nav (`.nhd-nav`) is viewport-sized and stayed 1793px, so
+  fixed-position chrome ignores the container. A real phone remains
+  the honest answer.
+- **There is no phone breakpoint.** Reading the deployed stylesheet,
+  the only narrow blocks are `(max-width: 900px)` and
+  `(max-width: 768px)`. There is no `480px` block, despite
+  `dark-mode-test-checklist.md` listing "Mobile (480px) and tablet
+  (768px)". Phones currently get the tablet rules. Decide whether that
+  is intended before the mobile pass.
 - **The Tile split pane has never been exercised.** Unchanged.
 
 ---

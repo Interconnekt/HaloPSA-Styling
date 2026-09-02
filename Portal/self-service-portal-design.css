@@ -4434,11 +4434,18 @@ html body .portal .rc-steps.rc-steps-horizontal .rc-steps-item:last-child .rc-st
    and the sidebar panels. The inset shadow keeps HaloPSA's "this is a
    notice" left rule but redraws it as a 3px accent bar that follows
    the radius. Doubled class beats HaloPSA's `!important` paint. */
+/* Styled as an information panel rather than a card with an accent
+   edge: this is a notice, not a record, and it reads better sharing
+   the language of the Confluence info panels in the KB than competing
+   with the activity cards below it. Tokens are the same
+   `--panel-info-*` set those use, so it flips correctly in dark mode.
+   No left rule: an accent bar implied a status the appointment does
+   not have. */
 html body .portal .nextappointmentbox.nextappointmentbox {
-    background: var(--portal-surface) !important;
-    border: 1px solid var(--portal-border) !important;
+    background: var(--panel-info-bg) !important;
+    border: 1px solid var(--panel-info-border) !important;
     border-radius: var(--portal-radius-md) !important;
-    box-shadow: inset 3px 0 0 0 var(--portal-accent) !important;
+    box-shadow: none !important;
     padding: 14px 18px !important;
 }
 html body .portal .nextappointmentbox.nextappointmentbox > label {
@@ -6190,10 +6197,16 @@ html body .portal .kblist .tree-node[style*="background-color"] {
 
 /* KB sidebar search ("Filter articles..." input). HaloPSA ships
    a chunky 2px-border input; re-skin to match pill chrome. */
+/* White fill, not `--portal-surface-hover`. The sidebar has no card
+   behind it, so the field sat on the raw `--portal-bg` #F1F3F7 with a
+   #F5F7FB fill: two greys 4 points apart, which read as a faint
+   outline rather than an input. Same mistake as the tree hover above.
+   White gives it an edge against the ground, and the border moves to
+   the full-strength hairline for the same reason. */
 html body .portal .kblist .searchbox,
 html body .portal .tree-menu .searchbox {
-    background: var(--portal-surface-hover) !important;
-    border: 1px solid var(--portal-border-soft) !important;
+    background: var(--portal-surface) !important;
+    border: 1px solid var(--portal-border) !important;
     border-radius: var(--portal-radius-sm) !important;
     box-shadow: none !important;
     overflow: hidden;
@@ -6202,6 +6215,31 @@ html body .portal .tree-menu .searchbox {
 html body .portal .kblist .searchbox:focus-within,
 html body .portal .tree-menu .searchbox:focus-within {
     border-color: var(--portal-accent) !important;
+}
+
+/* KB sidebar vertical start.
+   HaloPSA positions BOTH the page title and the KB sidebar with
+   `position: fixed` and hardcoded tops: the title at 100px (rendering
+   112 to 176) and `.tree-menu` at 240px. Nothing in this file put them
+   there. The 64px between them showed as a large empty band under the
+   "Knowledge Base" heading, and worse, it left the sidebar starting
+   110px BELOW the article column beside it, which begins at 130px. The
+   two columns simply did not start together.
+
+   190px closes the heading gap to 24px and halves the column offset to
+   60px, without touching the article column, whose own top is set by
+   HaloPSA and is shared with pages this rule cannot reach.
+
+   Desktop only. `.page-title` is `position: static` everywhere except
+   the KB pages (verified on /portal/tickets), and the mobile block at
+   the end of this file re-flows the sidebar into the normal document
+   flow with its own max-height and margin, so a fixed `top` there
+   would be meaningless or harmful. `min-width: 769px` matches the
+   breakpoint pair already used throughout. */
+@media (min-width: 769px) {
+    html body .portal .tree-menu.kblist {
+        top: 190px !important;
+    }
 }
 html body .portal .kblist input[type="text"],
 html body .portal .tree-menu input[type="text"] {
@@ -7168,15 +7206,36 @@ html body .CalendarMonth_caption {
     padding-top: 20px !important;
     padding-bottom: 36px !important;
 }
+/* `appearance: none` plus our own chevron. Giving the native select a
+   fill and a border was not enough: it kept the OS dropdown arrow and
+   its platform metrics, so the two controls read as browser chrome
+   dropped into an otherwise designed popup. The chevron is inlined as
+   a data URI because this rule has to work in a portal-mounted
+   element that no other asset reaches. Stroke colour matches
+   `--portal-text-secondary`; it is literal because a data URI cannot
+   read a custom property. */
 html body .CalendarMonth_caption select {
+    -webkit-appearance: none !important;
+    appearance: none !important;
     font-family: var(--ik-font-body), system-ui, sans-serif !important;
     font-size: 13px !important;
+    font-weight: 500 !important;
     color: var(--portal-text, #161922) !important;
-    background: var(--portal-bg, #F1F3F7) !important;
+    background-color: var(--portal-bg, #F1F3F7) !important;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23585F76' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 9px center !important;
     border: 1px solid var(--portal-border, #E2E5EE) !important;
     border-radius: var(--portal-radius-xs, 8px) !important;
-    padding: 5px 8px !important;
+    padding: 5px 26px 5px 10px !important;
     margin: 0 3px;
+    cursor: pointer;
+    transition: border-color var(--ik-dur, 180ms) var(--ik-ease, ease);
+}
+html body .CalendarMonth_caption select:hover,
+html body .CalendarMonth_caption select:focus {
+    border-color: var(--portal-accent, #3355D8) !important;
+    outline: none !important;
 }
 
 /* Weekday header, as a mono eyebrow matching the form labels. */

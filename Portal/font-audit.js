@@ -144,7 +144,8 @@
             injected: injected,
             bodyFont: bodyFont
         });
-        // Don't include ticket-notes subtree offenders in the main table, // they're intentionally out of scope for this audit.
+        // Don't include ticket-notes subtree offenders in the main table;
+        // they're intentionally out of scope for this audit.
         if (!isNotes) collect(doc, 'iframe:' + (f.className || ''), offenders, skipped);
     });
 

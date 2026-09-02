@@ -222,7 +222,7 @@
         var raw = (td.textContent || '').trim();
         // Format any float with 2+ decimals down to a single decimal place.
         // Skip blanks, whole numbers, and non-numeric text (e.g. "N/A",
-        // ", "). Allow leading minus for negatives. Threshold is `\d{2,}`
+        // "-"). Allow leading minus for negatives. Threshold is `\d{2,}`
         // so a value already at one decimal ("4.2") is left alone.
         if (!/^-?\d+\.\d{2,}$/.test(raw)) return;
         var n = parseFloat(raw);

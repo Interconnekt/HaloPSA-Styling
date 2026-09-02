@@ -267,7 +267,7 @@ Every `--pill-<slug>-bg / -ink` token in `self-service-portal-design.css` maps t
 
 **Exception: home-tile "On Hold" indicator.** The generic `On Hold` STATUS PILL is amber (a paused/administrative wait). But the SEPARATE `[data-on-hold-indicator]` element, which HaloPSA substitutes for the SLA countdown bar itself on home-page ticket tiles, deliberately stays in the RED family, because "the clock isn't running" reads closer to the overdue/blocked semantic than a plain awaiting-state when it's replacing an SLA bar specifically. Two different UI moments, same status name, different bucket, by design.
 
-**Shared typography** for every `.status-avatar.{fortable,small,bitsmall,smallest,fortile}`: Figtree / 10.5px / weight 600 / 0.06em tracking / uppercase. Exception: the redundant KB-article Custom-CSS override and the ticket-list table header both intentionally use the DISPLAY font, see §1's cascade note.
+**Shared typography** for every `.status-avatar.{fortable,small,bitsmall,smallest,smallestest,fortile}`: Figtree / 10.5px / weight 600 / 0.06em tracking / uppercase. Exception: the redundant KB-article Custom-CSS override and the ticket-list table header both intentionally use the DISPLAY font, see §1's cascade note.
 
 ### Adding a new status
 

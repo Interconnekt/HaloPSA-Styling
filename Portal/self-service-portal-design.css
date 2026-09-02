@@ -1725,11 +1725,18 @@ html body .portal .kbdetails button[title="Scroll to top"].solidbutton.fabtn .fa
 /* ─── Status pill shape ───────────────────────────────────
    Force full-pill geometry on every `.status-avatar` variant
    HaloPSA emits. Clean pill, no leading dot, labels carry
-   enough signal on their own with the colour mapping below. */
+   enough signal on their own with the colour mapping below.
+   `.smallestest` is the variant HaloPSA stamps on long labels
+   ("Awaiting Change Review" in the ticket sidebar) with a 6px
+   `!important` font-size and no width cap, so the pill rendered
+   as 6px text stretched across the whole sidebar column. Listing
+   it here restores the shared 10.5px size and lets the pill
+   shrink to its content like every other variant. */
 html body .portal .status-avatar.fortable,
 html body .portal .status-avatar.small,
 html body .portal .status-avatar.bitsmall,
 html body .portal .status-avatar.smallest,
+html body .portal .status-avatar.smallestest,
 html body .portal .status-avatar.fortile {
     border-radius: 999px !important;
     padding: 3px 12px !important;
@@ -1767,6 +1774,7 @@ html body .portal .status-avatar.fortable::before,
 html body .portal .status-avatar.small::before,
 html body .portal .status-avatar.bitsmall::before,
 html body .portal .status-avatar.smallest::before,
+html body .portal .status-avatar.smallestest::before,
 html body .portal .status-avatar.fortile::before {
     content: none !important;
     display: none !important;
@@ -2255,6 +2263,7 @@ html body .portal .status-avatar.fortable,
 html body .portal .status-avatar.small,
 html body .portal .status-avatar.bitsmall,
 html body .portal .status-avatar.smallest,
+html body .portal .status-avatar.smallestest,
 html body .portal .status-avatar.fortile {
     font-family: var(--ic-font-body) !important;
     font-weight: 600 !important;
@@ -7231,6 +7240,25 @@ html body .portal .preview-noneselected.tickets {
    interactive (clicking a ticket on the left will populate it). */
 html body .portal .preview-noneselected:hover {
     filter: grayscale(1) opacity(0.65);
+}
+
+/* Empty state, "No Tickets found"
+   `.notickets-lbl` is the label HaloPSA renders in the ticket list
+   when the filter matches nothing. HaloPSA stamps the portal's
+   configured light-mode text colour INLINE on it
+   (`style="font-size: 14px; color: rgb(11, 14, 21);"`), and the
+   inline value does not flip with `.theme-dark`, so in dark mode
+   the label was near-black on the near-black page and invisible
+   (seen 2026-09-02 on /portal/tickets as a contact with no open
+   tickets). Inline colour needs `!important` to override. Muted
+   token, so it reads as a quiet empty state in both modes and
+   matches the "Select a Ticket to view" placeholder above. */
+html body .portal .notickets-lbl {
+    color: var(--portal-text-muted) !important;
+    font-family: var(--ic-font-body) !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.005em;
 }
 
 /* ─────────────────────────────────────────────────────────

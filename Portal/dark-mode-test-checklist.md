@@ -7,7 +7,7 @@
 
 ---
 
-## Self-Service Portal — Light Mode
+## Self-Service Portal, Light Mode
 
 ### Typography
 - [ ] Headings (h1/h2/h3) use Montserrat, correct weights
@@ -19,7 +19,7 @@
 - [ ] No border-radius (square corners, clean modern look)
 - [ ] No zebra striping (all rows transparent)
 - [ ] Thin 1px borders (#e2e5ea) on all cells
-- [ ] Header row and first-column numbered cells: identical appearance — same bg (#f5f6f8), same font, same weight, same dark text (unified .confluenceTable th rule)
+- [ ] Header row and first-column numbered cells: identical appearance, same bg (#f5f6f8), same font, same weight, same dark text (unified .confluenceTable th rule)
 - [ ] Cell padding comfortable (12px 16px)
 - [ ] border-collapse: collapse (no double borders)
 
@@ -78,7 +78,7 @@
 
 ---
 
-## Self-Service Portal — Dark Mode
+## Self-Service Portal, Dark Mode
 
 ### Typography
 - [ ] Headings readable (inherit theme #ddd colour)
@@ -87,7 +87,7 @@
 
 ### Tables
 - [ ] Borders adapt to #555
-- [ ] Header row and first-column numbered cells: identical appearance — same dark bg (#3a3a3a), same light text (#ddd), same font and weight (unified .confluenceTable th rule)
+- [ ] Header row and first-column numbered cells: identical appearance, same dark bg (#3a3a3a), same light text (#ddd), same font and weight (unified .confluenceTable th rule)
 - [ ] No zebra stripes (transparent rows)
 - [ ] Clean thin borders throughout
 
@@ -136,12 +136,12 @@
 
 ---
 
-## Agent Portal — Light Mode
+## Agent Portal, Light Mode
 
 ### Articles
 - [ ] Headings: Montserrat, correct weights, theme colour
 - [ ] Tables: clean modern style, no border-radius, no zebra stripes, thin borders
-- [ ] Table headers (th): light grey bg (#f5f6f8) — header row and first-column numbered cells look identical
+- [ ] Table headers (th): light grey bg (#f5f6f8); header row and first-column numbered cells look identical
 - [ ] Panels: correct per-type colours with left border accents
 - [ ] Status macros: coloured pills
 - [ ] Inline code: grey bg, pink text, rounded pill
@@ -153,13 +153,13 @@
 
 ---
 
-## Agent Portal — Dark Mode
+## Agent Portal, Dark Mode
 
 ### Articles
 - [ ] Headings: readable (HaloPSA built-in #ddd)
-- [ ] Table headers (th): light grey bg persists from Style Profile — header row and first-column numbered cells look identical; all th properties use !important to beat HaloPSA built-in dark mode overrides
+- [ ] Table headers (th): light grey bg persists from Style Profile, header row and first-column numbered cells look identical; all th properties use !important to beat HaloPSA built-in dark mode overrides
 - [ ] Body text: inherited dark theme colour
-- [ ] Panel text: dark (#1a1d23) on light-coloured panel backgrounds — readable in both modes
+- [ ] Panel text: dark (#1a1d23) on light-coloured panel backgrounds, readable in both modes
 - [ ] Panel left border accents: visible (Style Profile sets border-left on outer wrapper)
 - [ ] Panel backgrounds: light colours persist (Style Profile can't set dark mode bg)
 - [ ] Code blocks: dark bg persists (good contrast in both modes)
@@ -168,7 +168,7 @@
 
 ---
 
-## Responsive — Mobile (480px)
+## Responsive, Mobile (480px)
 
 - [ ] Images scale to fit viewport, no horizontal overflow
 - [ ] Tables scroll horizontally (not squished)
@@ -179,7 +179,7 @@
 - [ ] Code blocks reduce padding, font slightly smaller
 - [ ] Pre blocks scroll horizontally
 
-## Responsive — Tablet (768px)
+## Responsive, Tablet (768px)
 
 - [ ] Images at ~90% width
 - [ ] Tables readable, may scroll on narrow content

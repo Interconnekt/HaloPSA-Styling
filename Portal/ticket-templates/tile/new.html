@@ -1,19 +1,19 @@
 <!--
-  Tile template — NEW (Interconnekt 2026 refresh).
+  Tile template, NEW (Interconnekt 2026 refresh).
 
   Paste into: Configuration → Tickets → Field Lists → Tile Template
 
-  Semantic BEM structure. No inline styles — all visual work lives in
+  Semantic BEM structure. No inline styles, all visual work lives in
   Portal/self-service-portal-design.css, keyed on the .ticket-tile
   classes and data-* attributes below.
 
   data-* attributes:
-    data-priority — drives the priority accent bar/colour
-    data-status   — drives the status lozenge tint
-    data-type     — drives the leading icon (CSS ::before by type)
+    data-priority, drives the priority accent bar/colour
+    data-status, drives the status lozenge tint
+    data-type, drives the leading icon (CSS ::before by type)
 
   Missing placeholders (not in the tile/kanban dialect):
-    $tickettype_icon — no icon variable. Leave the placeholder; CSS
+    $tickettype_icon, no icon variable. Leave the placeholder; CSS
       injects a per-type icon via `.ticket-tile[data-type="..."]::before`.
       If the placeholder renders as literal text, delete it from the
       template and lean on the CSS ::before entirely.

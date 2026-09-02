@@ -1,4 +1,4 @@
-# Email iframe theming — open problem
+# Email iframe theming, open problem
 
 Status: **unresolved on the end-user portal.** Works on the agent side (where `iframe-theme.js` is already loaded). Captured here so we can revisit without re-doing the discovery.
 
@@ -6,7 +6,7 @@ Status: **unresolved on the end-user portal.** Works on the agent side (where `i
 
 ## The problem
 
-HaloPSA renders email bodies on the ticket view inside `<iframe class="halo-html-renderer">` — a same-origin iframe with its own `<style>` tag setting Segoe UI and default HTML link colours. Host-document CSS does not cross the iframe boundary, so no amount of `self-service-portal.css` work can theme email bodies.
+HaloPSA renders email bodies on the ticket view inside `<iframe class="halo-html-renderer">`, a same-origin iframe with its own `<style>` tag setting Segoe UI and default HTML link colours. Host-document CSS does not cross the iframe boundary, so no amount of `self-service-portal.css` work can theme email bodies.
 
 The fix is `iframe-theme.js` (in this directory): a small IIFE that reaches into the iframe's document and injects a `<style>` tag with Figtree + `#3355D8` link colour, plus overflow containment so fixed-width email reflows to the card instead of being clipped. It uses a `MutationObserver` and per-iframe `load` handlers to catch ticket-switch navigation and action-history expansion.
 
@@ -42,24 +42,24 @@ Exhaustive sweep of documented portal customisation settings. Confirmed fields:
 
 | Field | Location | Accepts `<script>`? |
 |-------|----------|---------------------|
-| Custom CSS | Config → Self-Service Portal → Custom CSS | No — CSS only |
+| Custom CSS | Config → Self-Service Portal → Custom CSS | No, CSS only |
 | Custom HTML Banner | Config → Self-Service Portal → Home Screen → "Display custom HTML" | Probably yes (raw HTML), **but home-page only** |
-| Custom HTML Pages | `{portal}/custom?id=[ID]` | Yes, but standalone pages — not chrome |
+| Custom HTML Pages | `{portal}/custom?id=[ID]` | Yes, but standalone pages, not chrome |
 | Google Analytics | Config → Self-Service Portal | Measurement ID only, not raw script |
 
-**No "Custom JavaScript" field exists.** This was confirmed by (a) walking the FAQ index at [usehalo.com/faq-list/portal-customisation-self-service-portal/](https://usehalo.com/faq-list/portal-customisation-self-service-portal/), and (b) the community workaround (kbni's [HaloPSA tweaks gist](https://gist.github.com/kbni/cc7f55ed353654cc5d35a235b0ea4c5f)) being a Tampermonkey userscript — strong signal there's no server-side injection point.
+**No "Custom JavaScript" field exists.** This was confirmed by (a) walking the FAQ index at [usehalo.com/faq-list/portal-customisation-self-service-portal/](https://usehalo.com/faq-list/portal-customisation-self-service-portal/), and (b) the community workaround (kbni's [HaloPSA tweaks gist](https://gist.github.com/kbni/cc7f55ed353654cc5d35a235b0ea4c5f)) being a Tampermonkey userscript, strong signal there's no server-side injection point.
 
-The **Custom HTML Banner** is the only raw-HTML field that *might* work, but it loads only on the home page (`/`). The portal is a SPA so the script would persist in memory once loaded — but users who deep-link from email notifications straight to `/ticket?id=…` never hit home, so the script never loads for that session. Unacceptable gap for the use case (email bodies are on ticket view, which is exactly where deep-links land).
+The **Custom HTML Banner** is the only raw-HTML field that *might* work, but it loads only on the home page (`/`). The portal is a SPA so the script would persist in memory once loaded, but users who deep-link from email notifications straight to `/ticket?id=…` never hit home, so the script never loads for that session. Unacceptable gap for the use case (email bodies are on ticket view, which is exactly where deep-links land).
 
 ### 2. Tampermonkey / userscript
 
-Would fix it for internal staff who install the extension. Does nothing for external customers. Rejected — doesn't solve the brand-consistency problem for end-users.
+Would fix it for internal staff who install the extension. Does nothing for external customers. Rejected, doesn't solve the brand-consistency problem for end-users.
 
 ### 3. Feature request to HaloPSA
 
-A "Custom JavaScript" admin field is a reasonable ask. No existing ideas.halopsa.com request covers it directly — would need a fresh submission. Indefinite timeline; not a near-term path.
+A "Custom JavaScript" admin field is a reasonable ask. No existing ideas.halopsa.com request covers it directly, would need a fresh submission. Indefinite timeline; not a near-term path.
 
-### 4. Cloudflare Worker reverse proxy — **recommended path if/when we pursue**
+### 4. Cloudflare Worker reverse proxy, **recommended path if/when we pursue**
 
 See below.
 
@@ -84,11 +84,11 @@ DNS (portal.interconnekt.com.au) ──► Cloudflare edge
                                      HaloPSA origin (unchanged)
 ```
 
-DNS for `portal.interconnekt.com.au` moves behind Cloudflare. A Worker sits on the edge, inspects every response, and for `text/html` responses injects a single `<script>` tag before `</body>`. Halo is untouched — from its perspective, requests still arrive over HTTPS as normal.
+DNS for `portal.interconnekt.com.au` moves behind Cloudflare. A Worker sits on the edge, inspects every response, and for `text/html` responses injects a single `<script>` tag before `</body>`. Halo is untouched, from its perspective, requests still arrive over HTTPS as normal.
 
 ### Why this works where the other options don't
 
-- Runs on **every** page load, regardless of route or deep-link — no SPA / home-page-only gap.
+- Runs on **every** page load, regardless of route or deep-link, no SPA / home-page-only gap.
 - Doesn't depend on any HaloPSA config field we don't have.
 - Worker is easily disabled (Cloudflare dashboard toggle → 30-second rollback to direct-to-Halo DNS).
 - Adds single-digit ms latency via Cloudflare's streaming `HTMLRewriter`.
@@ -126,8 +126,8 @@ The `content-type` check is the safety net: token endpoints, `/api/*`, and XHR r
 | Workers Free plan | $0, 100,000 req/day hard cap |
 | Workers Paid plan | $5/month, 10M req/month, then $0.30/M |
 | Cloudflare SSL (edge + origin cert) | Free |
-| Our time, one-off | ~1–2 hours if familiar with Cloudflare; 3–4 hours first-time |
-| Our time, ongoing | ~0–1 hour/year |
+| Our time, one-off | ~1-2 hours if familiar with Cloudflare; 3-4 hours first-time |
+| Our time, ongoing | ~0-1 hour/year |
 
 For an Interconnekt-sized portal (est. <500K req/month), the Free tier is plenty.
 
@@ -151,7 +151,7 @@ Entra SSO is unlikely to break because:
 
 ### Kill switch
 
-Cloudflare's "Pause Cloudflare on Site" toggle disables the proxy in ~30 seconds — DNS routes directly to Halo, Worker is out of the path. This is the escape hatch if anything unexpected surfaces post-cutover.
+Cloudflare's "Pause Cloudflare on Site" toggle disables the proxy in ~30 seconds, DNS routes directly to Halo, Worker is out of the path. This is the escape hatch if anything unexpected surfaces post-cutover.
 
 ### Honest assessment
 
@@ -171,8 +171,8 @@ If none of the above hold, accepting the default Segoe UI for end-user email bod
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
-| 2026-04 | Deferred — accept Segoe UI email bodies for end-users for now | Cosmetic-only; Cloudflare Worker infra not justified by a single script. Path documented here for future reactivation. |
-| 2026-04-19 | **Reactivated — queued for completion.** Cloudflare Worker reverse-proxy is the chosen path. | Multiple `iframe-theme.js` features now live in the repo and depend on JS being injected into the SSP: On-Hold pill stamping (home tiles + ticket sidebar), status / priority class stamping, ticket-list `Age` column 2dp formatting, and email-body Montserrat injection. All shipped to the repo but inert on the SSP without a delivery mechanism. The Worker also unlocks future script-injection needs (analytics, feature flags) without a per-feature deploy story. |
+| 2026-04 | Deferred, accept Segoe UI email bodies for end-users for now | Cosmetic-only; Cloudflare Worker infra not justified by a single script. Path documented here for future reactivation. |
+| 2026-04-19 | **Reactivated, queued for completion.** Cloudflare Worker reverse-proxy is the chosen path. | Multiple `iframe-theme.js` features now live in the repo and depend on JS being injected into the SSP: On-Hold pill stamping (home tiles + ticket sidebar), status / priority class stamping, ticket-list `Age` column 2dp formatting, and email-body Montserrat injection. All shipped to the repo but inert on the SSP without a delivery mechanism. The Worker also unlocks future script-injection needs (analytics, feature flags) without a per-feature deploy story. |
 
 ---
 
@@ -186,7 +186,7 @@ Tracked here as the actionable task. Tick off as completed.
 - [ ] Add staging hostname as an additional redirect URI in Entra
 - [ ] Test full login + 1-hour token refresh + logout cycle on staging
 - [ ] Verify `iframe-theme.js` features fire on staging: email Montserrat, On-Hold pill on home `.main-tile-item`, On-Hold pill in ticket sidebar `.details-form`, Age column 2dp, status pill class stamping
-- [ ] Confirm Worker bypasses non-HTML responses (`/api/*`, token endpoints) — check Cloudflare analytics for transformed-vs-passthrough split
+- [ ] Confirm Worker bypasses non-HTML responses (`/api/*`, token endpoints); check Cloudflare analytics for transformed-vs-passthrough split
 - [ ] Production DNS cutover (weekend / low-traffic window)
 - [ ] Post-cutover smoke test: log in, open a ticket with an email body, verify SLA-paused ticket shows red On-Hold pill on home + sidebar
 - [ ] Document the kill-switch procedure (Cloudflare "Pause Cloudflare on Site" toggle) in this file's runbook section

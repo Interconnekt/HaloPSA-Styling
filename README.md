@@ -25,17 +25,17 @@ Covers:
 
 HaloPSA has two separate CSS injection points for Knowledge Base articles. This project uses both.
 
-### Layer 1 — Style Profiles
+### Layer 1, Style Profiles
 
 **Applies to:** Self-Service Portal **and** Agent Portal
 **Location:** Configuration > Knowledge Base > Style Profiles
-**How it works:** HaloPSA wraps every rule you enter as `.kbdetails <selector> { <properties> }` and injects it as a `<style>` block. Rules cannot be imported from an external file — they must be entered manually in the UI.
+**How it works:** HaloPSA wraps every rule you enter as `.kbdetails <selector> { <properties> }` and injects it as a `<style>` block. Rules cannot be imported from an external file, they must be entered manually in the UI.
 
 `style-profile-rules.css` is the source of truth. Each block maps to one Style Profile entry:
 - The comment header gives you the **Precedence** and **Selector** to enter
 - The CSS properties are pasted into the **Style** field
 
-### Layer 2 — Custom CSS
+### Layer 2, Custom CSS
 
 **Applies to:** Self-Service Portal **only**
 **Location:** Configuration > Self Service Portal > Custom CSS
@@ -47,16 +47,16 @@ The Custom CSS field in HaloPSA contains a single line:
 @import url('https://interconnekt.github.io/HaloPSA-Styling/Portal/self-service-portal-design.css');
 ```
 
-`self-service-portal-design.css` is the **live** file — rebuilt for the 2026 Interconnekt website refresh (Montserrat + Instrument Serif + JetBrains Mono, neutral-grey dark mode, brand gradient accents, ghost-button family).
+`self-service-portal-design.css` is the **live** file, rebuilt for the 2026 Interconnekt website refresh (Montserrat + Instrument Serif + JetBrains Mono, neutral-grey dark mode, brand gradient accents, ghost-button family).
 
 `self-service-portal.css` remains in the repo as a **legacy fallback**: same token names + same visual chrome, maintained to parity but not loaded by default. If anything goes wrong with the design file, swap the `@import` URL to the legacy one.
 
-Both files are served via GitHub Pages. Edit, commit, push — changes are live within ~10 minutes.
+Both files are served via GitHub Pages. Edit, commit, push, changes are live within ~10 minutes.
 
-### Layer 3 — Iframe JS shim (email bodies)
+### Layer 3, Iframe JS shim (email bodies)
 
 **Applies to:** Self-Service Portal email-body iframes (`iframe.halo-html-renderer`)
-**Location:** HaloPSA admin — global `<script>` injection point
+**Location:** HaloPSA admin, global `<script>` injection point
 **How it works:** HaloPSA renders email bodies inside a same-origin iframe with its own `<style>` setting Segoe UI. Host CSS doesn't cross the iframe boundary, so the only way to theme that content is via JS. `iframe-theme.js` reaches into `iframe.contentDocument.head` and injects a `<style>` setting Montserrat + `#3598db` link colour. See `Portal/portal-chrome.md` for details.
 
 Add once in HaloPSA admin:
@@ -70,10 +70,10 @@ Add once in HaloPSA admin:
 
 | File | Purpose |
 |------|---------|
-| `Portal/self-service-portal-design.css` | **Live** Custom CSS — Interconnekt 2026 design system: Montserrat + Instrument Serif + JetBrains Mono, neutral-grey dark mode, brand gradient accents, ghost buttons, status/priority pill colour system |
-| `Portal/self-service-portal.css` | **Legacy fallback** — same chrome + same tokens, maintained to parity. Use as the `@import` target if the design file needs to be rolled back |
+| `Portal/self-service-portal-design.css` | **Live** Custom CSS, Interconnekt 2026 design system: Montserrat + Instrument Serif + JetBrains Mono, neutral-grey dark mode, brand gradient accents, ghost buttons, status/priority pill colour system |
+| `Portal/self-service-portal.css` | **Legacy fallback**, same chrome + same tokens, maintained to parity. Use as the `@import` target if the design file needs to be rolled back |
 | `Portal/iframe-theme.js` | JS shim loaded via `<script src="...">` in HaloPSA admin. Two IIFEs: (1) injects Montserrat + `#3598db` link colour into same-origin email-body iframes; (2) formats the ticket-list `Age` column to 2 decimal places via MutationObserver |
-| `Portal/website-portal-mapping.md` | **Website ⇄ Portal theme mapping spec** — per-token mapping, component mapping, status-pill inline-colour table, update workflow. Start here when a website colour/font/pattern needs to propagate into the portal |
+| `Portal/website-portal-mapping.md` | **Website ⇄ Portal theme mapping spec**, per-token mapping, component mapping, status-pill inline-colour table, update workflow. Start here when a website colour/font/pattern needs to propagate into the portal |
 | `Portal/portal-chrome.md` | Portal chrome reference: design tokens, key rules per page, iframe shim notes, gotchas |
 | `Portal/light-mode-checklist.md` | Light-mode test checklist for portal chrome (home, tickets list, ticket view, kanban, iframe) |
 | `Portal/dark-mode-test-checklist.md` | Test checklist covering KB articles across both portals, both modes, responsive breakpoints, and print |
@@ -85,25 +85,25 @@ Add once in HaloPSA admin:
 
 ## Deployment
 
-### Custom CSS — GitHub Pages
+### Custom CSS, GitHub Pages
 
 1. Fork this repository
 2. Enable GitHub Pages: Settings > Pages > Deploy from branch: `main` / root
 3. Update the `@import` URL in `self-service-portal.css` to point to your hosted file
-4. In HaloPSA: Configuration > Self Service Portal > Custom CSS — enter:
+4. In HaloPSA: Configuration > Self Service Portal > Custom CSS, enter:
    ```css
    @import url('https://<your-github-username>.github.io/<your-repo>/self-service-portal.css');
    ```
 5. To update: edit `self-service-portal.css`, commit, push. Live within ~10 minutes.
 
-### Style Profiles — Manual Entry
+### Style Profiles, Manual Entry
 
 1. Open `style-profile-rules.css`
 2. For each block, create a new Style Profile entry in HaloPSA:
    - **Name:** anything descriptive
    - **Knowledge Base:** your KB
    - **Precedence:** as shown in the block comment
-   - **Selector:** as shown in the block comment (do **not** include `.kbdetails` — HaloPSA adds it)
+   - **Selector:** as shown in the block comment (do **not** include `.kbdetails`, HaloPSA adds it)
    - **Style:** the CSS properties from the block (everything below the comment header)
 
 ---
@@ -114,7 +114,7 @@ Add once in HaloPSA admin:
 HaloPSA Styling Layers
 │
 ├── Style Profiles                    → BOTH Self-Service Portal + Agent Portal
-│   ├── Headings (no hardcoded colour — inherits theme)
+│   ├── Headings (no hardcoded colour, inherits theme)
 │   ├── Tables (clean modern: thin borders, no border-radius, no zebra stripes)
 │   ├── Confluence panels (per-type colours with left border accents)
 │   ├── Status macros (coloured pill badges)
@@ -128,7 +128,7 @@ HaloPSA Styling Layers
 └── Custom CSS                        → Self-Service Portal ONLY
     ├── Section 1:  Font import (Montserrat via Google Fonts) + CSS variables
     ├── Section 2:  Global typography
-    ├── Sections 3–7: Portal chrome (header, search, cards, buttons, footer)
+    ├── Sections 3-7: Portal chrome (header, search, cards, buttons, footer)
     ├── Section 8:  Desktop full width
     ├── Section 9:  Article light mode overrides (panels, tables, status, code, blockquote, hr, lists)
     ├── Section 10: Article dark mode overrides
@@ -140,11 +140,11 @@ HaloPSA Styling Layers
 
 ## Dark Mode
 
-HaloPSA adds `.theme-dark` to `div.app-container`, which is an **ancestor** of `.kbdetails`. This means Style Profile rules cannot target dark mode — a selector like `.theme-dark h1` becomes `.kbdetails .theme-dark h1` after auto-scoping, which never matches.
+HaloPSA adds `.theme-dark` to `div.app-container`, which is an **ancestor** of `.kbdetails`. This means Style Profile rules cannot target dark mode, a selector like `.theme-dark h1` becomes `.kbdetails .theme-dark h1` after auto-scoping, which never matches.
 
 All dark mode article overrides are therefore in `self-service-portal.css` using `.theme-dark .kbdetails ...` selectors (Custom CSS, Self-Service Portal only).
 
-The Agent Portal gets no dark mode article styling from this project — only HaloPSA's built-in dark rules apply there. Panel text uses explicit `color: #1a1d23 !important` (dark text on light panel backgrounds) to remain readable in both Agent Portal modes.
+The Agent Portal gets no dark mode article styling from this project, only HaloPSA's built-in dark rules apply there. Panel text uses explicit `color: #1a1d23 !important` (dark text on light panel backgrounds) to remain readable in both Agent Portal modes.
 
 ---
 

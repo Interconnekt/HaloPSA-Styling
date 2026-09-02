@@ -16,25 +16,25 @@ interchangeable:
 | Tile / Kanban HTML templates | lowercase `$field_name` | `$id`, `$summary`, `$priority_name` |
 | Button URLs | `{$FIELD}` braced | `{$PORTALURL}` |
 
-These files use the **tile/kanban lowercase dialect** — they're pasted
+These files use the **tile/kanban lowercase dialect**, they're pasted
 into *Configuration → Tickets → Field Lists → Tile Template / Kanban
 Template* in HaloPSA, not into an email template.
 
 The authoritative variable list for this dialect is HaloPSA guide
 [#2059 "Tile and Kanban HTML $ Variables"](https://usehalo.com/halopsa/guides/2059/).
 If a placeholder renders as literal `$name` text instead of the value
-after you paste a template, that name isn't in the dialect — check the
+after you paste a template, that name isn't in the dialect, check the
 "Insert Variable" dropdown in the editor for the canonical list.
 
 ## File variants
 
 Each view has up to three files:
 
-- `original.html` — what HaloPSA had before we touched it. Table-based
+- `original.html`, what HaloPSA had before we touched it. Table-based
   legacy WYSIWYG output, kept for diff/rollback.
-- `new.html` — semantic `<div>` + BEM restructure. Prefer this one; it's
+- `new.html`, semantic `<div>` + BEM restructure. Prefer this one; it's
   easier to restyle with flex/grid.
-- `new-table-fallback.html` — same BEM hooks + data-attrs on a `<table>`
+- `new-table-fallback.html`, same BEM hooks + data-attrs on a `<table>`
   skeleton. Only paste this if the editor strips `class` attributes off
   divs when saving. CSS targets work identically either way.
 

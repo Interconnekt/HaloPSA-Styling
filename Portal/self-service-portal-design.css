@@ -1515,6 +1515,33 @@ html body .portal button.backbtn {
                 color var(--ik-dur) var(--ik-ease) !important;
     transform: none !important;
 }
+/* Keep it on screen. `.backbtn` shipped `position: static`, so on any
+   page longer than the viewport it scrolled away while the nav bar
+   above it stayed put: measured on the ticket list at 553px of scroll,
+   the button sat at top -485, entirely gone, leaving no way back
+   without scrolling to the top first.
+
+   Sticky rather than fixed, so it participates in layout at rest and
+   never overlaps the content it sits above. `top: 68px` is the fixed
+   nav's 60px height plus the button's own 8px top margin, so it lands
+   exactly where it already sits at scroll zero and simply stops there:
+   no jump at the moment it pins. z-index 5 clears page content while
+   staying under the nav.
+
+   Desktop only. Below 769px the button moves under the hamburger with
+   its own override, and the nav is a different height there, so a
+   68px offset would be wrong. Sticky also needs an ancestor without
+   `overflow: hidden`; the chain here is `.portal-container-height`,
+   which is `overflow: visible`, so it holds for the full page. */
+@media (min-width: 769px) {
+    html body .portal .backbtn,
+    html body .portal button.backbtn {
+        position: sticky !important;
+        top: 68px !important;
+        z-index: 5 !important;
+    }
+}
+
 html body .portal .backbtn:hover,
 html body .portal button.backbtn:hover {
     background-color: var(--portal-accent-soft) !important;

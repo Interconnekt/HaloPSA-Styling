@@ -4767,6 +4767,258 @@ html body .portal .action-history-item.wcontainer .detailsholder .when {
     margin: 0 !important;
 }
 
+/* ───────────────────────────────────────────────────────
+   Ticket / opportunity detail: shared-grid pass
+   ───────────────────────────────────────────────────────
+   Measured on /portal/ticket?id=348275 (6-step Change
+   Request), /portal/ticket?id=358838 (2-step),
+   /portal/ticket?id=175536 (Project Task, no stepper,
+   3 pills) and /portal/opportunity?id=154833, all at a
+   1793px viewport where `.content` runs 300.5 to 1492.5
+   and the card rail sits at 320.5 / 1472.5.
+
+   Above the fold the page had FIVE different left edges
+   (300.5 toolbar, 320.5 cards, 321.5 subject, 346 stepper
+   content, 358.5 H1) and THREE button baselines inside one
+   toolbar row. None of that is HaloPSA data: it is inline
+   styles, Bootstrap gutters that do not cancel, and an
+   empty layout column. Every rule below drags one stray
+   element back onto the rail the cards already use. Nothing
+   here hides or reorders information.
+   ─────────────────────────────────────────────────────── */
+
+/* 1. Page title lockup: one text rail.
+   HaloPSA absolutely positions a 30px `.profile-circle` at
+   the block's left edge and reserves room for it with an
+   inline `margin-left: 38px` on `.profile-details`. The
+   subject line (`.profile-extra`) never got the same
+   reservation, so it started at 321.5 while the H1 above it
+   started at 358.5, and its first 37px ran back underneath
+   the icon. Matching the reservation gives the block one
+   text rail with the icon alone in its gutter, and that
+   gutter edge (320.5) is the card rail. Inline style on the
+   sibling, so !important is required; `:has()` keeps this
+   inert on any page that renders `.profile-extra` without
+   an avatar. Not width dependent: the inline 38px is on the
+   element at every viewport. */
+html body .portal .page-title .config-intro:has(> .avatar-holder .profile-circle) > .profile-extra {
+    margin-left: 38px !important;
+}
+
+/* 2. The empty Next Appointment column.
+   `.content` holds TWO `.col-md-8` siblings: the first is
+   the Next Appointment slot, the second the activity feed.
+   Both are `display: inline-block` at 66.67%, so they can
+   never share a line. On a ticket with no appointment the
+   first still renders, empty, 1px tall, and claims a whole
+   24px line box from `.content`'s 16px/24px strut, pushing
+   BOTH columns 24px down for nothing. `:empty` is exact: the
+   moment HaloPSA renders a banner into it the column returns
+   (verified on opportunity 154833, where it is not empty and
+   this rule does not fire). */
+html body .portal .content > .col-md-8:empty {
+    display: none !important;
+}
+
+/* 3. The stepper is a card, so draw it like the other cards.
+   It was the only card on the page in different material:
+   `--portal-radius-sm` (10px) against `--portal-radius-md`
+   (12px) on the activity and sidebar cards, `--portal-border-
+   soft` (#ECEEF4) against `--portal-border` (#E2E5EE), and
+   24px side padding against 20px everywhere else. Three near
+   misses in a row read as sloppy rather than as a deliberate
+   variant. The connector geometry is unaffected: the tail is
+   positioned off the item box (`50% + 20px` by `100% - 40px`)
+   which is padding independent, re-verified on the 2-step and
+   6-step steppers after the change. */
+html body .portal .workflow-steps-wrap {
+    border-color: var(--portal-border) !important;
+    border-radius: var(--portal-radius-md) !important;
+    padding: 20px !important;
+}
+
+@media (min-width: 769px) {
+
+    /* 4. Activity toolbar: one rail, one baseline, one height.
+       HaloPSA ships this as a float based `.buttons-container`
+       whose inline styles put the two icon buttons at 303.5,
+       17px LEFT of the 320.5 rail every card below uses, and
+       the pill cluster in a `position: relative; left: 20px;
+       width: 80%` div. Measured tops within that single row:
+       400.7 (icons), 397.8 (Add Note), 399.5 (Time Entry).
+       Three baselines and two control heights side by side is
+       most of what reads as "all over the shop" here.
+
+       Flex gives the row one cross-axis centre. `order: -1`
+       moves the primary pills onto the card rail where the eye
+       already expects the column to begin, and letting the pill
+       cluster grow pushes the two utility chips to the column's
+       right edge (1048.2), where they land on the activity
+       cards' right rail and the timestamp column. The chips go
+       32px to 36px so the row has a single height.
+
+       `margin: 20px 20px 0` puts the row's own box exactly on
+       the card rail: the activity cards carry `margin: 15px
+       20px` and `.infinite-scroll-component` reserves a 12.3px
+       scrollbar gutter, so 20px each side lands both edges on
+       320.5 / 1048.2. margin-top stays 20px because on an
+       opportunity that gap sits under the Next Appointment
+       banner.
+
+       `:not(:has(.portal-ticket-splitter))` keeps all of this
+       out of the Tile split pane, which renders the same
+       component under a container whose padding is deliberately
+       zeroed further up this file and whose `width: 80%`
+       cluster already has its own width rule. */
+    html body .portal:not(:has(.portal-ticket-splitter)) .content > .col-md-8 .history-options-portal {
+        display: flex !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+        width: auto !important;
+        height: auto !important;
+        margin: 20px 20px 0 20px !important;
+        padding: 0 0 15px 0 !important;
+    }
+    html body .portal:not(:has(.portal-ticket-splitter)) .content > .col-md-8 .history-options-portal > div[style*="width: 80%"] {
+        order: -1 !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: auto !important;
+        flex: 1 1 auto !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+    }
+    html body .portal:not(:has(.portal-ticket-splitter)) .content > .col-md-8 .history-options-portal .solidbutton.fabtn {
+        width: 36px !important;
+        height: 36px !important;
+        margin: 0 !important;
+    }
+
+    /* 5. Sidebar field rail.
+       HaloPSA nests three Bootstrap boxes per field:
+       `.col-md-12.inline` (padding 0 15px) > `.row` (margin
+       0 -15px) > `.col-md-12` (padding 5px 15px). Two 15px
+       paddings against one -15px margin do not cancel, so
+       every label sat 36px from the card border while the
+       card's own padding is 20px, and each field ran 30px
+       narrower than the card allows ("Infrastructure>Cloud
+       Infrastructure" was wrapping for no reason). Zeroing
+       all three puts labels, values, the section hairline and
+       the card padding on one 1131.2 rail.
+
+       Column geometry, so it lives here: below 769px the
+       sidebar stacks and the mobile block already zeroes the
+       `.details-form` row/col gutters. */
+    html body .portal:not(:has(.portal-ticket-splitter)) .content > .col-md-4.details-sidebar .col-md-12.inline,
+    html body .portal:not(:has(.portal-ticket-splitter)) .content > .col-md-4.details-sidebar .col-md-12.inline > .row > [class*="col-"] {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    html body .portal:not(:has(.portal-ticket-splitter)) .content > .col-md-4.details-sidebar .col-md-12.inline > .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+}
+
+/* 6. Sidebar section headers: hierarchy, not a second title.
+   `.details-group-header.title` picks up the 1.75rem/700
+   display rule near the top of this file. That is right on
+   the New Ticket form, where it IS the only heading in the
+   card, and wrong in the ticket sidebar, where "General" and
+   "Change Information" rendered at exactly the same 28px as
+   the IC:0348275 H1 two hundred pixels above them. HaloPSA
+   also ships the block with `padding: 10px 15px 30px 45px;
+   margin: 2px 0 4px -30px`, which overhung the card's left
+   border by 9px and spent 86.8px of height setting one word.
+   15px/600 sits cleanly between the 28px page H1 and the
+   10.5px uppercase field labels below, and zeroing the box
+   puts the header text on the same rail as the fields.
+
+   SCOPE: both `.details-group.card-panel` and
+   `.details-group-header.title` are shared with the New Ticket
+   form. Verified on /portal/service: three
+   `.details-group-header.title` at 28px there, and zero
+   `.content > .col-md-4.details-sidebar`. Scoping on the
+   sidebar COLUMN rather than on the header class is what keeps
+   the form untouched (66 element rects on that page measured
+   bit identical before and after). Not width dependent. */
+html body .portal .content > .col-md-4.details-sidebar .details-group-header.title {
+    font-family: var(--ik-font-body) !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    line-height: 1.35 !important;
+    letter-spacing: -0.01em !important;
+    padding: 0 !important;
+    margin: 0 0 14px !important;
+}
+/* The hairline is a child of the header, so with the box reset
+   it spans the full card content width instead of stopping
+   36px short, and it picks up a token instead of HaloPSA's
+   hardcoded rgb(205,205,205), which stayed light grey in dark
+   mode. */
+html body .portal .content > .col-md-4.details-sidebar .details-group-header.title .seperator {
+    margin: 12px 0 0 !important;
+    background: var(--portal-border) !important;
+}
+/* Collapse chevron floats right inside the header; HaloPSA's
+   `margin: 12px 20px 0 0` parked it 35px inboard of the card's
+   padding edge, so it never lined up with the hairline it sits
+   on. */
+html body .portal .content > .col-md-4.details-sidebar .details-group-header .clearbtn {
+    margin: 0 !important;
+}
+
+/* 7. Sidebar field density.
+   Each row spent 73px showing a 10.5px label and one line of
+   value: 5px + 5px column padding, 10px row margin, 8px under
+   the label, and a 5px + 5px pad inside `.read-value`. 4px
+   inside the pair and 14px between pairs (both already on this
+   file's scale) gives a uniform 58px row, so the label reads as
+   attached to its value instead of floating between two equal
+   gaps. Sidebar column height on 348275: 1931px to 1524px, and
+   every row now measures the same height instead of drifting
+   between 68 and 73. Vertical only, so it applies at every
+   width; the horizontal half is in the media query above. */
+html body .portal .content > .col-md-4.details-sidebar .col-md-12.inline > .row > [class*="col-"] {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-bottom: 14px !important;
+}
+html body .portal .content > .col-md-4.details-sidebar .col-md-12.inline > .row > [class*="col-"] > label {
+    margin-bottom: 4px !important;
+}
+html body .portal .content > .col-md-4.details-sidebar .noedit-value > .read-value {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+/* 8. SLA rows were centred inside a left aligned column.
+   `.slatarget` inherits `text-align: center`, and its children
+   are inline blocks, so the two target rows centred as a group
+   and landed on two different left edges (1181.4 and 1176.1)
+   inside a card where everything else starts at 1131.2. Left
+   aligning puts both rows on the field rail. Verified on
+   ticket 358838, which is the only one of the four with SLA
+   targets rendered. Not width dependent. */
+html body .portal .content > .col-md-4.details-sidebar .sla-info-holder .slatarget {
+    text-align: left !important;
+}
+
+/* 9. Activity card timestamp: right rail.
+   The `.when` rule earlier in this file pins the date 18px off
+   the right of `.detailsholder`, which is itself already inset
+   16px from the card border, so the date stopped 34px short of
+   the right edge the card's own body text runs to. 0 puts it on
+   the same right rail as the message body and the To/Cc lines.
+   (Equivalent to changing `right: 18px` to `right: 0` in that
+   rule; kept as an override so this block stays self contained.)
+   Not width dependent. */
+html body .portal .action-history-item.wcontainer .detailsholder .when {
+    right: 0 !important;
+}
+
 /* Tabs — HaloPSA's custom tab control uses `.tab-container` as the
    list and `.tab` / `.tab.tabactive` as items. None of the prior
    selectors (`.tabsheet`, `.react-tabs__tab`, `[role="tab"]`)

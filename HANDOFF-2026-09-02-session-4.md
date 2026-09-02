@@ -90,11 +90,28 @@ Two things learned while looking:
 
 - **Scheduled pill and the `.smallestest` fix**, as the IDA contact
   (section 1).
-- **Light mode.** Every check this session was in dark mode because
-  that is the saved theme on Joel's contact. No theme toggles from the
-  agent side; Joel flips it if a light-mode pass is wanted.
+- **Light mode.** Done. The impersonated IDA contact's saved theme is
+  `theme-light`, and the ticket list and detail both render correctly:
+  amber and blue pills, one-decimal Age, priority pills.
+- **Dark mode.** Chrome verified WITHOUT changing the contact's saved
+  preference, by adding `.theme-dark` to `div.app-container` in the DOM
+  and measuring, then removing it. The Scheduled pill flips to exactly
+  the documented dark tokens, `rgba(155,123,245,0.18)` on `#B898FF`,
+  and the page, cards and text read correctly.
+  **Limitation:** this method does NOT verify the email-iframe
+  theming. `iframe-theme.js` themes the iframes at load from the theme
+  in force at the time, so iframes loaded in light mode keep black body
+  text and look wrong under an injected `.theme-dark`. That is an
+  artefact of the method, not a bug. Email iframes in dark mode remain
+  verified only from session 3. A genuine dark-mode pass needs the
+  saved theme flipped, which is Joel's call.
 - **Quote Raised pill.** Needs a ticket in that status.
-- **Mobile has never been rendered.** Unchanged.
+- **Mobile still not rendered.** `resize_window` cannot exercise it
+  while Chrome is in macOS fullscreen: the window object resizes
+  (`outerWidth` changes) but the viewport stays pinned to screen width
+  (`innerWidth` 1800, `clientWidth` 1793) and both `(max-width: 480px)`
+  and `(max-width: 768px)` report false, so no responsive rule fires.
+  Take Chrome out of fullscreen and retry, or use a real phone.
 - **The Tile split pane has never been exercised.** Unchanged.
 
 ---

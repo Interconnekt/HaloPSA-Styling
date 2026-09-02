@@ -1,0 +1,21 @@
+{
+    // Cloudflare Worker for portal.interconnekt.com.au. See README.md.
+    "$schema": "node_modules/wrangler/config-schema.json",
+    "name": "halopsa-portal-edge",
+    "main": "src/index.js",
+    "compatibility_date": "2026-06-01",
+
+    // No workers.dev or preview hostname: the Worker only makes sense on
+    // the portal route, where subrequests to the same hostname reach the
+    // HaloPSA origin.
+    "workers_dev": false,
+    "preview_urls": false,
+
+    // The route only takes effect once the DNS record for
+    // portal.interconnekt.com.au is proxied (orange cloud).
+    "routes": [
+        { "pattern": "portal.interconnekt.com.au/*", "zone_name": "interconnekt.com.au" }
+    ],
+
+    "observability": { "enabled": true }
+}

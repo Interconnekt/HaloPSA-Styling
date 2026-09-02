@@ -51,7 +51,7 @@ The Custom CSS field in HaloPSA contains a single line:
 
 `self-service-portal.css` remains in the repo as a **legacy fallback**: same token names + same visual chrome, maintained to parity but not loaded by default. If anything goes wrong with the design file, swap the `@import` URL to the legacy one.
 
-Both files are served via GitHub Pages. Edit, commit, push, changes are live within ~10 minutes.
+Both files are served via GitHub Pages. Edit, commit, push, changes are live within ~10 minutes. On the Self-Service Portal, `Portal/iframe-theme.js` is injected by the Cloudflare Worker in [`Portal/worker/`](Portal/worker/README.md), which also serves the stylesheet with a one minute cache once the `@import` is moved to it.
 
 ### Layer 3, Iframe JS shim (email bodies)
 
@@ -73,6 +73,7 @@ Add once in HaloPSA admin:
 | `Portal/self-service-portal-design.css` | **Live** Custom CSS, Interconnekt 2026 design system: Montserrat + Instrument Serif + JetBrains Mono, neutral-grey dark mode, brand gradient accents, ghost buttons, status/priority pill colour system |
 | `Portal/self-service-portal.css` | **Legacy fallback**, same chrome + same tokens, maintained to parity. Use as the `@import` target if the design file needs to be rolled back |
 | `Portal/iframe-theme.js` | JS shim loaded via `<script src="...">` in HaloPSA admin. Two IIFEs: (1) injects Montserrat + `#3598db` link colour into same-origin email-body iframes; (2) formats the ticket-list `Age` column to 2 decimal places via MutationObserver |
+| `Portal/worker/` | Cloudflare Worker on the `portal.interconnekt.com.au/*` route: injects `iframe-theme.js` into every top-level HTML page and serves the stylesheet and shim at `/__interconnekt/` with a 60 second TTL. Runbook in its README |
 | `Portal/website-portal-mapping.md` | **Website ⇄ Portal theme mapping spec**, per-token mapping, component mapping, status-pill inline-colour table, update workflow. Start here when a website colour/font/pattern needs to propagate into the portal |
 | `Portal/portal-chrome.md` | Portal chrome reference: design tokens, key rules per page, iframe shim notes, gotchas |
 | `Portal/light-mode-checklist.md` | Light-mode test checklist for portal chrome (home, tickets list, ticket view, kanban, iframe) |

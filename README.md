@@ -11,7 +11,7 @@ Covers:
 
 ---
 
-> **Open work:** see [HANDOFF-2026-09-02.md](HANDOFF-2026-09-02.md) for the Cloudflare Worker rollout and everything still outstanding.
+> **Open work:** see [HANDOFF-2026-09-02-session-2.md](HANDOFF-2026-09-02-session-2.md) for the Cloudflare Worker cutover and everything still outstanding. Section 7 of [HANDOFF-2026-09-02.md](HANDOFF-2026-09-02.md) is still the list of traps to read before touching a selector.
 
 ## Requirements
 

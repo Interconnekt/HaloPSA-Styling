@@ -90,7 +90,10 @@ All in the Cloudflare dashboard for `interconnekt.com.au`.
    integration or the HaloPSA mobile app calls `/api` on this hostname.
    Add a WAF skip for `/api/*` rather than leaving them to guess.
 5. **Workers plan.** Every request on the hostname is a Worker invocation
-   (static chunks, API polling and SignalR included). The Free plan caps
+   (page shells, static chunks and the two `/__interconnekt/` assets).
+   The portal's API calls go straight to `connekt.halopsa.com`, not through
+   this hostname, so they do not count; confirmed in the browser on
+   cutover day. The Free plan caps
    the account at 100,000 requests a day; check what happens at the cap
    (fail open to origin, or errors) or take the USD 5 a month Paid plan
    already costed in `email-iframe-theming.md`.
@@ -101,6 +104,11 @@ If a Configuration Rule scoped to `portal.interconnekt.com.au` is easier
 than changing zone-wide settings, use that for items 2 and 3.
 
 ## Cutover
+
+Done on 2026-09-02 at about 12:10 UTC. The Worker was deployed from
+Joel's terminal, the `portal` CNAME was set to Proxied, the checks below
+all passed, and the Custom CSS `@import` was moved to the Worker path the
+same day. The steps stay here for a rebuild.
 
 The runbook in `email-iframe-theming.md` asked for a staging hostname
 first. That needs HaloPSA to register the hostname and Entra to accept it

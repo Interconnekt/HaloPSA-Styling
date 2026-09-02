@@ -44,19 +44,21 @@ HaloPSA has two separate CSS injection points for Knowledge Base articles. This 
 The Custom CSS field in HaloPSA contains a single line:
 
 ```css
-@import url('https://interconnekt.github.io/HaloPSA-Styling/Portal/self-service-portal-design.css');
+@import url('https://portal.interconnekt.com.au/__interconnekt/self-service-portal-design.css');
 ```
+
+That path is served by the Cloudflare Worker in [`Portal/worker/`](Portal/worker/README.md), which fetches the file from GitHub Pages and caches it at the edge for 60 seconds. Before 2026-09-02 the field pointed straight at `https://interconnekt.github.io/HaloPSA-Styling/Portal/self-service-portal-design.css`; that URL still works and is the fallback if the Worker route is ever removed.
 
 `self-service-portal-design.css` is the **live** file, rebuilt for the 2026 Interconnekt website refresh (Montserrat + Instrument Serif + JetBrains Mono, neutral-grey dark mode, brand gradient accents, ghost-button family).
 
 `self-service-portal.css` remains in the repo as a **legacy fallback**: same token names + same visual chrome, maintained to parity but not loaded by default. If anything goes wrong with the design file, swap the `@import` URL to the legacy one.
 
-Both files are served via GitHub Pages. Edit, commit, push, changes are live within ~10 minutes. On the Self-Service Portal, `Portal/iframe-theme.js` is injected by the Cloudflare Worker in [`Portal/worker/`](Portal/worker/README.md), which also serves the stylesheet with a one minute cache once the `@import` is moved to it.
+Both files are published by GitHub Pages and reach the portal through the Worker. Edit, commit, merge to `main`, and the change is live within about a minute (GitHub Pages alone holds a 10 minute cache). On the Self-Service Portal, `Portal/iframe-theme.js` is injected by the same Worker.
 
 ### Layer 3, Iframe JS shim (email bodies)
 
 **Applies to:** Self-Service Portal email-body iframes (`iframe.halo-html-renderer`)
-**Location:** HaloPSA admin, global `<script>` injection point
+**Location:** Appended to every top-level portal page by the Cloudflare Worker (`Portal/worker/`); HaloPSA has no script field for the Self-Service Portal
 **How it works:** HaloPSA renders email bodies inside a same-origin iframe with its own `<style>` setting Segoe UI. Host CSS doesn't cross the iframe boundary, so the only way to theme that content is via JS. `iframe-theme.js` reaches into `iframe.contentDocument.head` and injects a `<style>` setting Montserrat + `#3598db` link colour. See `Portal/portal-chrome.md` for details.
 
 Add once in HaloPSA admin:
@@ -90,12 +92,12 @@ Add once in HaloPSA admin:
 
 1. Fork this repository
 2. Enable GitHub Pages: Settings > Pages > Deploy from branch: `main` / root
-3. Update the `@import` URL in `self-service-portal.css` to point to your hosted file
+3. Point the `@import` at your hosted copy of `self-service-portal-design.css`
 4. In HaloPSA: Configuration > Self Service Portal > Custom CSS, enter:
    ```css
-   @import url('https://<your-github-username>.github.io/<your-repo>/self-service-portal.css');
+   @import url('https://<your-github-username>.github.io/<your-repo>/Portal/self-service-portal-design.css');
    ```
-5. To update: edit `self-service-portal.css`, commit, push. Live within ~10 minutes.
+5. To update: edit `self-service-portal-design.css`, commit, push. Live within ~10 minutes, or about a minute if you put the Cloudflare Worker in `Portal/worker/` in front of your portal hostname and import from its `/__interconnekt/` path.
 
 ### Style Profiles, Manual Entry
 

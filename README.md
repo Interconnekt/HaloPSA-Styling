@@ -11,6 +11,7 @@ Covers:
 
 ---
 
+> **Open work:** see [HANDOFF-2026-09-02.md](HANDOFF-2026-09-02.md) for the Cloudflare Worker rollout and everything still outstanding.
 ## Requirements
 
 - HaloPSA with the Knowledge Base module enabled

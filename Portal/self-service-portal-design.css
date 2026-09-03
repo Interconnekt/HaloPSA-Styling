@@ -6813,8 +6813,17 @@ html body .portal .tree-menu input[type="text"] {
        card-panel padding here so the form's own 5px is the sole
        gutter and inputs reach edge-to-edge. Triple .card-panel
        (specificity (0,7,2)) beats both line ~5516 (0,5,2) and the
-       desktop line ~3357 (0,6,2). */
-    html body .portal .main .details-form .details-group.card-panel.card-panel.card-panel {
+       desktop line ~3357 (0,6,2).
+       The `:has(.mandatory-hint)` guard is load bearing and was missing
+       until 2026-09-04. Ticket detail carries the SAME
+       `details-form colmd-compensator readeditform` class list as the
+       New Ticket form (verified on both pages), so `.details-form`
+       alone does not tell them apart and this zeroing leaked onto the
+       read-only ticket, leaving its sidebar card content flush against
+       the card border. `.mandatory-hint` is the real discriminator: the
+       New Ticket form has it, ticket detail does not. This is the same
+       reused-class trap as `.details-group.card-panel` itself. */
+    html body .portal:has(.mandatory-hint) .main .details-form .details-group.card-panel.card-panel.card-panel {
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
@@ -7026,6 +7035,32 @@ html body .portal .tree-menu input[type="text"] {
     html body .portal .kbdetails.kbdetails table th {
         padding: 6px 8px !important;
         white-space: nowrap !important;
+    }
+    /* ...but only while the table is narrow enough to afford it.
+       The `nowrap` above is what lets a two column key/value table
+       give a short header like "Summary" its natural width instead of
+       collapsing it to "Su/m/ma/ry". With THREE or more columns it
+       turns into the opposite problem: every header is pinned to its
+       full text width and the table cannot shrink to the card.
+
+       Measured on `/kb?faqlist=1&id=32` at 386px: headers "Service",
+       "New URL (arctera.com)" and "Old URL (veritas.com)" forced
+       65 + 167 + 157 = 389px inside a 351px card, and because
+       `.kbdetails` carries `overflow-x: hidden` the excess was clipped
+       outright rather than scrollable, so the third column was simply
+       unreachable. This is why `id=12` looked fine and `id=32` did
+       not: the difference is the column count, not the article.
+
+       `:has(tr > *:nth-child(3))` releases `nowrap` only for tables
+       that actually have a third column, so every two column table
+       keeps the behaviour it was tuned for. After this the same table
+       lays out at 317px inside a 365px article with no cell text
+       overflow. */
+    html body .portal .kbdetails.kbdetails table:has(tr > *:nth-child(3)) th.confluenceTh.confluenceTh,
+    html body .portal .kbdetails.kbdetails table:has(tr > *:nth-child(3)) th {
+        white-space: normal !important;
+        word-break: break-word !important;
+        overflow-wrap: anywhere !important;
     }
     html body .portal .kbdetails.kbdetails table td.confluenceTd.confluenceTd,
     html body .portal .kbdetails.kbdetails table td {
@@ -7277,6 +7312,222 @@ html body .portal .tree-menu input[type="text"] {
     }
     html body .portal .main .content:has(> .col-md-4.details-sidebar) > .col-md-8 {
         order: 1 !important;
+    }
+
+    /* ── Ticket detail, match the New Ticket form's horizontal extent ──
+       Measured at 386px before this: the page title ran 14 to 365, but
+       the detail blocks ran 29 to 350 and the message thread 14 to 338,
+       i.e. three different left/right edges on one page. The New Ticket
+       form spans the full 14 to 365, so that is the standard to meet.
+
+       Two separate causes. The column holding each block carries a
+       Bootstrap gutter, and the thread's column plus its
+       `.infinite-scroll-component` each add RIGHT padding only (15px
+       and 12px), which is where the lopsided 27px came from.
+
+       Scoped with `:has()` to the ticket detail route because
+       `.content > .col-md-*` is generic HaloPSA structure that appears
+       on other pages with different intent. */
+    html body .portal .main .content:has(.action-history-item, .details-sidebar) > [class*="col-md-"] {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    html body .portal .infinite-scroll-component {
+        padding-right: 0 !important;
+    }
+
+    /* ── Message cards, reclaim the desktop avatar gutter ──
+       `.action-details` ships with `padding-left: 55px`, a desktop
+       gutter that indents the message body so it aligns with the sender
+       name rather than sitting under the floated avatar. On a phone
+       that 55px is dead space directly under the avatar, and it was the
+       single biggest reason the email body was unreadably narrow:
+       measured at 386px the body rendered 197px wide, roughly half the
+       screen, inside a card that was itself inset by a 20px margin.
+
+       Zeroing that gutter, dropping the card's horizontal margin and
+       tightening the header/detail padding takes the body from 197px to
+       325px on the same 386px screen. The iframe is pinned to 100% so
+       it fills the width it is now given rather than keeping whatever
+       width HaloPSA sized it to. */
+    html body .portal .action-history-item {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    html body .portal .action-history-item .action-details {
+        padding-left: 0 !important;
+    }
+    html body .portal .action-history-item .history-header,
+    html body .portal .action-history-item .history-details {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+    }
+    html body .portal .action-history-item .actioncontent iframe.halo-html-renderer {
+        width: 100% !important;
+    }
+
+    /* ── Home, fit more than one card on a phone screen ──
+       Measured at 386x812 before this: the first dashboard card started
+       at y=409 and stood 238px tall, so barely two cards fitted on a
+       phone and the page opened on mostly empty space.
+
+       The height came from three paddings stacked inside one card: the
+       card's own 28/24, a 56px icon with an 18px margin, and a
+       `.card-body` adding another 20px INSIDE that. The empty space
+       above came from `.searchbar-container` (70px top, 50px bottom)
+       plus a 40px margin on the form it wraps, all tuned for a desktop
+       hero.
+
+       After: cards are 144px, the first starts at y=288, and four fit
+       on an 812px screen instead of two. The icon keeps its glyph size,
+       only the tile around it shrinks. */
+    html body .portal .searchbar-container {
+        padding-top: 24px !important;
+        padding-bottom: 18px !important;
+    }
+    html body .portal .searchbar-container > form.container {
+        margin-top: 12px !important;
+    }
+    html body .portal .search-title {
+        margin-bottom: 16px !important;
+    }
+    html body .portal .dashbuttons {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+    html body .portal .dashbuttons .card.dashbtn {
+        padding: 16px 18px !important;
+        margin-top: 5px !important;
+        margin-bottom: 5px !important;
+    }
+    html body .portal .dashbuttons .card.dashbtn .card-img {
+        width: 40px !important;
+        height: 40px !important;
+        margin-bottom: 10px !important;
+    }
+    /* The card's own padding is the gutter; the body does not need a
+       second one inside it. */
+    html body .portal .dashbuttons .card.dashbtn .card-body {
+        padding: 0 !important;
+    }
+
+    /* ── Service catalogue, one card width across both routes ──
+       The catalogue renders through TWO different DOMs, which is the
+       reused-class trap called out in AGENTS.md: `/services` with no
+       category is the picker (`.svcatalog-item.varheight` sitting
+       directly in `.dashbuttons`), and `/services?categoryid=N` is the
+       item list (a plain `.svcatalog-item` nested inside
+       `.inlinetile > .main-tile-item.table-tr`). They had drifted to
+       two different widths and neither used the screen: measured at
+       386px the picker card was 275px and the item list card 283px
+       with its inner content at 245px, against a 351px container.
+
+       Both now span the container, 14 to 365, with the card's own
+       padding as the only gutter.
+
+       The picker needs `width` overridden because HaloPSA stamps an
+       inline `width: 275px` on the card; the item list instead needs
+       its `.inlinetile` wrapper released from `display: inline-block`
+       at a fixed 303px. Every rule here is gated on `.svcatalog-item`
+       so the ticket tile view, which shares `.main-tile-item` and
+       `.table-tr`, is not caught by any of it. */
+    html body .portal .dashbuttons.row:has(.svcatalog-item) {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    html body .portal .dashbuttons:has(.svcatalog-item) > [class*="col-"] {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    html body .portal .inlinetile:has(.svcatalog-item) {
+        width: 100% !important;
+        display: block !important;
+    }
+    html body .portal .main-tile-item.table-tr:has(.svcatalog-item) {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    html body .portal .main-tile-item .svcatalog-item,
+    html body .portal .dashbuttons .svcatalog-item {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    /* ── Service request page, drop the masthead artwork ──
+       The catalogue artwork is reused as a 110px masthead above the
+       service name. On a phone it costs about 133px of vertical space
+       with its margin, pushing the form itself well below the fold, and
+       it is purely decorative: the H1 immediately below already names
+       the service, and the user has just tapped this exact icon on the
+       catalogue card to get here. Hiding it moves the first form field
+       from y=621 to y=495 at 386px.
+       If it should be kept but shrunk instead, swap the `display: none`
+       for a smaller `width`/`height`; the desktop rule near the top of
+       the file is the one that sets 110px. */
+    html body .portal .service-pic {
+        display: none !important;
+    }
+
+    /* Service request and New Ticket forms share a component but were
+       landing on different horizontal extents: `/newticket` ran the
+       full 14 to 365 while `/service?id=N` sat at 29 to 350, because
+       the latter's wrapping `.col-md-12` keeps its Bootstrap gutter.
+       Align them on the wider one. Gated on `.mandatory-hint`, which is
+       what distinguishes a real request form from the read-only ticket
+       that shares its class list. */
+    html body .portal:has(.mandatory-hint) .main > .container > [class*="col-md-"],
+    html body .portal:has(.mandatory-hint) .main .content > [class*="col-md-"],
+    html body .portal:has(.mandatory-hint) .main [class*="col-md-"]:has(.details-form.readeditform),
+    html body .portal:has(.mandatory-hint) .main [class*="col-md-"]:has(> .page-title) {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    /* ── Ticket tile, clamp the left column to two lines ──
+       HaloPSA swaps the ticket list from the react-table to the TILE
+       template at phone widths, so this is the list customers actually
+       see on a phone. The tile is a two column `<table>`: label text on
+       the left, ID / date / status pill on the right.
+
+       The left text was running straight through the right column, so
+       the contact name collided with the ticket ID and the summary ran
+       under the status pill. The cause is the `overflow: visible` rule
+       on `.main-tile-item td` further up this file, which exists to
+       stop the pill being chopped by the cell's own clipping; it also
+       let the left cell's text escape its box. With the label held on
+       one line the table blows out completely: reproduced at 386px, the
+       ID cell landed at right=537 against a 386px viewport.
+
+       Force the left column to wrap, then clamp it to two lines with an
+       ellipsis, which is the behaviour asked for. `overflow: hidden` on
+       the cell is scoped to `td:first-child` so the right hand cell
+       keeps the unclipped treatment the pill depends on.
+
+       The pill gets `white-space: nowrap` in the same pass. Squeezed
+       into a ~100px column its label was wrapping to two lines, which
+       is what made the pills look mispadded: measured 37px tall before,
+       25px after. */
+    html body .portal .main-tile-item table td:first-child,
+    html body .portal .main-tile-item table td:first-child span {
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+        word-break: break-word !important;
+    }
+    html body .portal .main-tile-item table td:first-child {
+        overflow: hidden !important;
+    }
+    html body .portal .main-tile-item table td:first-child > span {
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+    html body .portal .main-tile-item .status-avatar.fortile,
+    html body .portal .main-tile-item .status-avatar.fortile.small {
+        white-space: nowrap !important;
     }
 
     /* ── Impersonation banner, stop it covering the page title ──

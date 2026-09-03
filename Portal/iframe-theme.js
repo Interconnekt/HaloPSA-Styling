@@ -725,3 +725,112 @@
         start();
     }
 })();
+
+
+/**
+ * Ticket list, stamp `data-col` on every header and body cell.
+ *
+ * At phone width the ticket list is unusable: measured at a real 386px
+ * viewport the table is 2828px wide across 25 columns inside a 351px
+ * container, so everything past the second column sits off screen
+ * behind a horizontal scroll on `.split`. The fix is to card-ify each
+ * row in CSS (see the `max-width: 768px` block in
+ * self-service-portal-design.css), which means CSS has to be able to
+ * name a column.
+ *
+ * It cannot. `.rt-th` and `.rt-td` carry no per-column class, only
+ * `table-header rt-resizable-header`, and the cells for Summary, ID and
+ * Age hold bare text with no child element to hook. That leaves
+ * `:nth-child()`, which is exactly the trap `findAgeColIndex` above
+ * already documents: column order varies per saved ticket view, so an
+ * index that means "Status" for one view means something else for the
+ * next.
+ *
+ * So resolve it the same way the Age formatter does, by header text at
+ * runtime, and publish the answer to CSS as an attribute. Each cell
+ * gets `data-col="<slug>"` derived from its own column header, e.g.
+ * "SLA TIME LEFT" becomes `data-col="sla-time-left"`. CSS then selects
+ * `[data-col="summary"]` and friends and stays correct whatever order
+ * the view puts them in.
+ *
+ * Re-render safety mirrors the Age formatter: react-table rebuilds
+ * cells on sort, filter and page change, so a MutationObserver
+ * re-sweeps. Writing the attribute is skipped when the value is already
+ * correct, which is what stops the observer retriggering itself.
+ */
+(function () {
+    'use strict';
+
+    function slug(text) {
+        return (text || '')
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+    }
+
+    function stamp(el, value) {
+        // Only write when it would actually change, otherwise every
+        // sweep mutates the tbody and wakes the observer again.
+        if (el.getAttribute('data-col') !== value) {
+            el.setAttribute('data-col', value);
+        }
+    }
+
+    function stampTable(table) {
+        var heads = table.querySelectorAll('.rt-thead.-header .rt-th');
+        if (!heads.length) return;
+
+        var slugs = [];
+        for (var i = 0; i < heads.length; i++) {
+            slugs.push(slug(heads[i].textContent));
+        }
+
+        for (var h = 0; h < heads.length; h++) {
+            if (slugs[h]) stamp(heads[h], slugs[h]);
+        }
+
+        table.querySelectorAll('.rt-tbody .rt-tr').forEach(function (row) {
+            var cells = row.querySelectorAll('.rt-td');
+            for (var c = 0; c < cells.length; c++) {
+                if (slugs[c]) stamp(cells[c], slugs[c]);
+            }
+        });
+    }
+
+    function sweep() {
+        document.querySelectorAll('.ReactTable, .main-table').forEach(stampTable);
+    }
+
+    function start() {
+        sweep();
+        if (!document.body) return;
+        var obs = new MutationObserver(function (muts) {
+            var needsSweep = false;
+            for (var i = 0; i < muts.length; i++) {
+                var added = muts[i].addedNodes;
+                for (var j = 0; j < added.length; j++) {
+                    var node = added[j];
+                    if (node.nodeType !== 1) continue;
+                    if (node.matches && (node.matches('.rt-tr') || node.matches('.ReactTable'))) {
+                        needsSweep = true;
+                        break;
+                    }
+                    if (node.querySelector && node.querySelector('.rt-tr, .ReactTable')) {
+                        needsSweep = true;
+                        break;
+                    }
+                }
+                if (needsSweep) break;
+            }
+            if (needsSweep) sweep();
+        });
+        obs.observe(document.body, { childList: true, subtree: true });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', start);
+    } else {
+        start();
+    }
+})();

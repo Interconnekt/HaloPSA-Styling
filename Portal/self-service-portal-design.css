@@ -7104,6 +7104,166 @@ html body .portal .tree-menu input[type="text"] {
     html body .portal button.-btn {
         padding: 0 12px !important;
     }
+
+    /* ── Ticket list, card layout at phone width ──────────────
+       In LIST view the ticket list is a react-table grid, and measured
+       at a real 386px viewport it is 2828px wide across 25 columns
+       inside a 351px container. Everything past the second column sits
+       off screen behind a horizontal scroll on `.split`, so the rule
+       further up that sets `.rt-table { overflow: visible }` to kill a
+       scrollbar does not help: the scroll simply moves up one ancestor.
+       Note the `.main-tile-item` rules above assume the TILE view; this
+       block is what list view needs.
+
+       Turn each row into a card carrying the four things that identify
+       a ticket, and drop the rest.
+
+       Columns are addressed by `data-col`, which `Portal/iframe-theme.js`
+       stamps on every cell from its own column header text. That
+       indirection is required, not decoration: `.rt-th` and `.rt-td`
+       carry no per-column class, and the Summary, ID and Age cells hold
+       bare text with no child element to hook, which leaves
+       `:nth-child()`. Column order varies per saved ticket view (the
+       shim's own `findAgeColIndex` documents this), so an index meaning
+       "Status" in one view means something else in the next. If the
+       shim ever stops running, every cell simply stays visible and the
+       list falls back to today's horizontal scroll rather than breaking.
+
+       The row click handler lives on `.rt-tr-group` (verified on the
+       live page), not on the expander cell, so hiding the expander
+       along with the other columns leaves the whole card clickable.
+       Every rule below is gated on a row actually carrying a stamped
+       `summary` cell. That guard matters for two reasons. First, the
+       TILE view renders `.main-tile-item` inside this same ReactTable
+       (see the chrome-stripping rule earlier in this block), and an
+       ungated "hide every cell" would blank the tile list entirely,
+       which is precisely the reused-structure trap. Second, it is what
+       makes the shim fallback real: with no stamp there is no hide, so
+       the list degrades to today's horizontal scroll instead of
+       vanishing. */
+    html body .portal .container.ticket-list .split:has(.rt-td[data-col="summary"]) {
+        overflow-x: visible !important;
+    }
+    html body .portal .container.ticket-list .ReactTable.main-table:has(.rt-td[data-col="summary"]) .rt-thead {
+        display: none !important;
+    }
+    /* react-table stamps an inline `min-width` on `.rt-tbody` computed
+       from the sum of the column widths (2825px here). Without this the
+       cards inherit that width and the cascade above changes nothing
+       visible. */
+    html body .portal .container.ticket-list .ReactTable.main-table:has(.rt-td[data-col="summary"]) .rt-tbody {
+        min-width: 0 !important;
+        width: 100% !important;
+        display: block !important;
+        overflow: visible !important;
+    }
+    html body .portal .container.ticket-list .rt-tbody .rt-tr-group:has(.rt-td[data-col="summary"]) {
+        display: block !important;
+        flex: none !important;
+        min-width: 0 !important;
+        width: 100% !important;
+        background: var(--portal-surface) !important;
+        border: 1px solid var(--portal-border) !important;
+        border-radius: var(--portal-radius-sm) !important;
+        box-shadow: var(--portal-shadow-sm) !important;
+        margin-bottom: 10px !important;
+        padding: 12px 14px !important;
+    }
+    html body .portal .container.ticket-list .rt-tbody .rt-tr:has(> .rt-td[data-col="summary"]) {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        gap: 8px !important;
+        min-width: 0 !important;
+        width: 100% !important;
+        padding: 0 !important;
+        border: 0 !important;
+    }
+    /* Hide every cell, then re-show the four that matter. Both rules
+       carry the SAME `:has()` guard on `.rt-tbody` deliberately: the
+       guard adds its argument's specificity, so putting it on only one
+       of the pair unbalances them. Carrying it on both leaves the show
+       rules ahead by exactly the trailing `[data-col=...]` attribute,
+       which is the margin that makes them win.
+       Getting this wrong is silent and total: an earlier pass guarded
+       only the hide rule, which lifted it to (0,8,2) against the show
+       rules' (0,6,2), and every cell in every card disappeared. */
+    html body .portal .container.ticket-list .rt-tbody:has(.rt-td[data-col="summary"]) .rt-td {
+        display: none !important;
+    }
+    html body .portal .container.ticket-list .rt-tbody:has(.rt-td[data-col="summary"]) .rt-td[data-col="summary"],
+    html body .portal .container.ticket-list .rt-tbody:has(.rt-td[data-col="summary"]) .rt-td[data-col="status"],
+    html body .portal .container.ticket-list .rt-tbody:has(.rt-td[data-col="summary"]) .rt-td[data-col="id"],
+    html body .portal .container.ticket-list .rt-tbody:has(.rt-td[data-col="summary"]) .rt-td[data-col="age"] {
+        display: block !important;
+        flex: 0 0 auto !important;
+        width: auto !important;
+        max-width: 100% !important;
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        text-align: left !important;
+        padding: 0 !important;
+        border: 0 !important;
+    }
+    /* Summary is the card title and takes the full first line. */
+    html body .portal .container.ticket-list .rt-tbody:has(.rt-td[data-col="summary"]) .rt-td[data-col="summary"] {
+        /* Carries the guard for the same reason as the pair above: the
+           four-cell show rule sets `flex: 0 0 auto` at (0,8,2), so an
+           unguarded (0,6,2) rule here loses and the title shrinks to
+           its text, letting the ID ride up onto the title line on short
+           summaries. Matching the guard puts both at (0,8,2), and this
+           one is later in source, so it wins.
+           `flex-shrink: 0` is the other half: with shrink enabled the
+           100% basis still collapses on short titles. */
+        flex: 1 0 100% !important;
+        font-weight: 600 !important;
+        font-size: 15px !important;
+        line-height: 1.35 !important;
+        color: var(--portal-heading) !important;
+        margin-bottom: 2px !important;
+    }
+    /* ID, status and age share the meta line below it. */
+    html body .portal .container.ticket-list .rt-tbody:has(.rt-td[data-col="summary"]) .rt-td[data-col="id"],
+    html body .portal .container.ticket-list .rt-tbody:has(.rt-td[data-col="summary"]) .rt-td[data-col="age"] {
+        font-size: 12px !important;
+        color: var(--portal-text-secondary) !important;
+    }
+    /* Age is a bare number of days. Under the desktop AGE header that
+       reads fine; in a card with no header "156.0" does not, so name
+       the unit. The shim has already rounded it to one decimal. */
+    html body .portal .container.ticket-list .rt-tbody .rt-td[data-col="age"]::after {
+        content: " days";
+    }
+
+    /* ── Ticket detail, key facts above the thread ────────────
+       The sidebar stacks correctly below the main column, but measured
+       on a five email ticket it lands 5,714px down the page, so a phone
+       user scrolls the entire conversation before reaching status, SLA,
+       category and dates. Lift it above the thread.
+
+       The sidebar's parent is `.content`, a plain `display: block` div,
+       NOT a Bootstrap `.row`. `order` only applies to flex children, so
+       the parent has to be flexed first; an `order` rule alone is inert
+       here (confirmed by testing at 386px before writing this).
+
+       Rather than giving the sidebar a negative order, push the thread
+       down with `order: 1`. That keeps the workflow stepper, an
+       unclassed div first in `.content`, at the top where it belongs;
+       a negative order on the sidebar would jump it above the stepper
+       too. Result: subject, stepper, ticket facts, then conversation.
+
+       `:has(> .col-md-4.details-sidebar)` scopes both rules to the
+       ticket detail route, since `.content` is a generic HaloPSA class
+       that appears on other pages with a different structure. */
+    html body .portal .main .content:has(> .col-md-4.details-sidebar) {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+    html body .portal .main .content:has(> .col-md-4.details-sidebar) > .col-md-8 {
+        order: 1 !important;
+    }
 }
 
 /* KB article column overflow fix, HaloPSA's React runtime injects

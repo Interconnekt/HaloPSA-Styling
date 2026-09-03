@@ -66,6 +66,12 @@
     --portal-surface:         #FFFFFF;   /* website --card */
     --portal-surface-hover:   #F5F7FB;   /* == bg-subtle */
     --portal-surface-active:  #F0F2F7;   /* website --card2 */
+    /* Email body "paper". Deliberately NOT flipped in `.theme-dark`:
+       email HTML inlines its colours for a light background, so the
+       message is rendered on the surface it was authored for in both
+       modes rather than repainted. See the iframe rule in section 6
+       and `themeCss` in `Portal/iframe-theme.js`. */
+    --portal-email-paper:     #FFFFFF;
 
     --portal-text:            #161922;   /* website --ink */
     --portal-text-secondary:  #585F76;   /* website --muted */
@@ -1725,11 +1731,24 @@ html body .portal .kbdetails button[title="Scroll to top"].solidbutton.fabtn .fa
 /* ─── Status pill shape ───────────────────────────────────
    Force full-pill geometry on every `.status-avatar` variant
    HaloPSA emits. Clean pill, no leading dot, labels carry
-   enough signal on their own with the colour mapping below. */
+   enough signal on their own with the colour mapping below.
+   HaloPSA sizes the ticket-detail status pill by label length,
+   stamping one of six shrinking variants: bitsmall 11px, small
+   10px, smaller 9px, smallest 8px, smallester 7px, smallestest
+   6px, each with an `!important` font-size and no width cap. Any
+   variant not listed here falls through to HaloPSA's default and
+   renders as tiny text stretched across the whole sidebar column
+   (seen 2026-09-02: "Awaiting Change Review" at 6px and the
+   "Scheduled" pill at 9px, both 323px wide). List every variant
+   so the pill keeps the shared 10.5px size and shrinks to its
+   content. */
 html body .portal .status-avatar.fortable,
 html body .portal .status-avatar.small,
 html body .portal .status-avatar.bitsmall,
+html body .portal .status-avatar.smaller,
 html body .portal .status-avatar.smallest,
+html body .portal .status-avatar.smallestest,
+html body .portal .status-avatar.smallester,
 html body .portal .status-avatar.fortile {
     border-radius: 999px !important;
     padding: 3px 12px !important;
@@ -1766,7 +1785,10 @@ html body .portal .rt-td > div:has(> .status-avatar) {
 html body .portal .status-avatar.fortable::before,
 html body .portal .status-avatar.small::before,
 html body .portal .status-avatar.bitsmall::before,
+html body .portal .status-avatar.smaller::before,
 html body .portal .status-avatar.smallest::before,
+html body .portal .status-avatar.smallestest::before,
+html body .portal .status-avatar.smallester::before,
 html body .portal .status-avatar.fortile::before {
     content: none !important;
     display: none !important;
@@ -2254,7 +2276,10 @@ html body .portal .status-avatar[style*="background-color"]:not([title="New"]):n
 html body .portal .status-avatar.fortable,
 html body .portal .status-avatar.small,
 html body .portal .status-avatar.bitsmall,
+html body .portal .status-avatar.smaller,
 html body .portal .status-avatar.smallest,
+html body .portal .status-avatar.smallestest,
+html body .portal .status-avatar.smallester,
 html body .portal .status-avatar.fortile {
     font-family: var(--ic-font-body) !important;
     font-weight: 600 !important;
@@ -7231,6 +7256,53 @@ html body .portal .preview-noneselected.tickets {
    interactive (clicking a ticket on the left will populate it). */
 html body .portal .preview-noneselected:hover {
     filter: grayscale(1) opacity(0.65);
+}
+
+/* Email body paper surface, dark mode.
+   HaloPSA renders email bodies inside `iframe.halo-html-renderer`,
+   and CSS cannot cross a document boundary, so the text inside is
+   painted by `themeCss` in `Portal/iframe-theme.js`, not from here.
+   That shim paints the iframe DOCUMENT white in dark mode, because
+   email HTML inlines `color` on nearly every cell and an inline
+   declaration outranks a stylesheet one; repainting the text would
+   win on some elements and lose on others, leaving half the message
+   unreadable, while stripping those inline colours would destroy the
+   sender's design. Before this, the iframe body kept `color: #000`
+   over a transparent background, so every email rendered as black
+   text on the dark card (found 2026-09-02 on ticket 358840).
+
+   This rule dresses the iframe ELEMENT to match the paper the shim
+   paints inside it: the same white removes the dark flash between
+   first paint and injection, the radius stops the paper reading as a
+   bare rectangle against the dark card, and the padding keeps body
+   text off the paper edge.
+
+   `.theme-dark` is used as an ancestor rather than compounded with
+   `.portal`, because the two do not always sit on the same element
+   (see the Family-B panel note above). */
+html body .theme-dark iframe.halo-html-renderer {
+    background-color: var(--portal-email-paper) !important;
+    border-radius: var(--portal-radius-xs);
+    padding: 12px;
+}
+
+/* Empty state, "No Tickets found"
+   `.notickets-lbl` is the label HaloPSA renders in the ticket list
+   when the filter matches nothing. HaloPSA stamps the portal's
+   configured light-mode text colour INLINE on it
+   (`style="font-size: 14px; color: rgb(11, 14, 21);"`), and the
+   inline value does not flip with `.theme-dark`, so in dark mode
+   the label was near-black on the near-black page and invisible
+   (seen 2026-09-02 on /portal/tickets as a contact with no open
+   tickets). Inline colour needs `!important` to override. Muted
+   token, so it reads as a quiet empty state in both modes and
+   matches the "Select a Ticket to view" placeholder above. */
+html body .portal .notickets-lbl {
+    color: var(--portal-text-muted) !important;
+    font-family: var(--ic-font-body) !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.005em;
 }
 
 /* ─────────────────────────────────────────────────────────

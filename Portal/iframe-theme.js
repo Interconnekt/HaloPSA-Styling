@@ -98,6 +98,43 @@
 
     var MARKER = 'data-portal-font-injected';
 
+    /* Theme-dependent rules live in a SECOND style element so the
+       static block above stays untouched while this one is rewritten
+       on every theme flip.
+
+       Why a light "paper" surface rather than recolouring the text:
+       the injected sheet cannot safely repaint email bodies. Email
+       HTML inlines `color` on nearly every cell, and an inline
+       declaration outranks a stylesheet one, so a dark-mode text
+       colour would win on some elements and lose on others, leaving
+       half the message unreadable. Stripping those inline colours,
+       as we do for font-family, would also strip the sender's brand
+       colours and wreck the design. Rendering the message on white,
+       the surface it was authored for, keeps every inline colour
+       valid and readable. Mainstream mail clients do the same.
+
+       `background-color` is forced because marketing email often sets
+       its own body background. `color` is NOT forced, so an email
+       that specifies its own text colour keeps it and only bodies
+       with no colour of their own fall back to portal ink. */
+    var THEME_MARKER = 'data-portal-theme-injected';
+
+    function isDark() {
+        return !!document.querySelector('.theme-dark');
+    }
+
+    function themeCss(dark) {
+        if (!dark) return '';
+        return [
+            'html, body {',
+            '    background-color: #FFFFFF !important;',
+            '}',
+            'body {',
+            '    color: #161922;',
+            '}'
+        ].join('\n');
+    }
+
     /* Strip inline `font-family` declarations from every element in
        the iframe document. Email HTML commonly inlines
        `style="font-family: Arial !important"` at every cell/span,
@@ -140,6 +177,18 @@
                 style.textContent = CSS;
                 doc.head.appendChild(style);
             }
+            /* Theme block, rewritten on every inject so a theme
+               flip while a ticket is open repaints open messages. */
+            var themeStyle = doc.querySelector('style[' + THEME_MARKER + ']');
+            if (!themeStyle) {
+                themeStyle = doc.createElement('style');
+                themeStyle.setAttribute(THEME_MARKER, '1');
+                doc.head.appendChild(themeStyle);
+            }
+            var next = themeCss(isDark());
+            if (themeStyle.textContent !== next) {
+                themeStyle.textContent = next;
+            }
             // Always re-strip on inject, email re-renders may bring
             // the inline styles back on ticket navigation.
             stripInlineFonts(doc);
@@ -157,9 +206,36 @@
         (root || document).querySelectorAll('iframe.halo-html-renderer').forEach(theme);
     }
 
+    /* Re-inject into every open iframe. Used when the theme flips,
+       which on its own changes nothing inside the iframe documents:
+       CSS does not cross the document boundary and the portal's theme
+       class sits on the HOST document. */
+    function retheme() {
+        document.querySelectorAll('iframe.halo-html-renderer').forEach(inject);
+    }
+
+    /* Watch for a theme flip. HaloPSA toggles `.theme-dark` on
+       `div.app-container`, so watch that element's class when it is
+       present and fall back to the root element. Without this the
+       email bodies keep the theme they were injected under until the
+       page is reloaded. */
+    function watchTheme() {
+        var target = document.querySelector('.app-container') || document.documentElement;
+        var lastDark = isDark();
+        var obs = new MutationObserver(function () {
+            var nowDark = isDark();
+            if (nowDark !== lastDark) {
+                lastDark = nowDark;
+                retheme();
+            }
+        });
+        obs.observe(target, { attributes: true, attributeFilter: ['class'] });
+    }
+
     function start() {
         sweep();
         if (!document.body) return;
+        watchTheme();
         var obs = new MutationObserver(function (muts) {
             for (var i = 0; i < muts.length; i++) {
                 var added = muts[i].addedNodes;

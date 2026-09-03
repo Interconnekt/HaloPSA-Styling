@@ -263,7 +263,7 @@ Fix those before adding any new breakpoint.
 | **Home** | Clean. Cards stack full width, headline wraps, no overflow. |
 | **Ticket detail** | Sound. Sidebar stacks below the thread at full width, subject wraps (including Japanese), action buttons stack. |
 | **KB article** | **Was badly broken. Fixed in `dde4b62`.** |
-| **Ticket list** | **Worst offender, as predicted. Not yet fixed, needs a design decision.** |
+| **Ticket list** | **Worst offender, as predicted. Fixed in `dd9e7d8`.** |
 
 **KB article, fixed.** Two runtime inline styles were unopposed below
 769px. The article column kept `margin-left: 30%; width: 70%`, so it
@@ -275,22 +275,40 @@ interleaved with article text, both unreadable. After the fix the
 column is 351px, the tree is static and below the article, and nothing
 overflows.
 
-**Ticket list, still open.** In list view the table is **2828px wide
-inside a 351px container, 25 columns**. It scrolls horizontally on
-`div.split` (`overflow-x: auto`), so the existing mobile rule that sets
-`.rt-table { overflow: visible }` to kill a scrollbar does not help;
-the scroll simply moved up one ancestor. Everything past CLIENT is off
-screen. Note the mobile block's tile-card rules assume the **tile**
-view, but this contact's saved view is the **list** view.
+**Ticket list, fixed in `dd9e7d8`.** In list view the table measured
+**2828px wide inside a 351px container, 25 columns**. It scrolled
+horizontally on `div.split` (`overflow-x: auto`), so the existing rule
+setting `.rt-table { overflow: visible }` to kill a scrollbar did not
+help; the scroll simply moved up one ancestor. Note the mobile block's
+tile-card rules assume the **tile** view, but this contact's saved view
+is the **list** view. Each row is now a card with summary, ID, status
+and age. `.split` scrollWidth went from 2825 to 351.
 
-The `.rt-th` elements carry no per-column class, only
-`table-header rt-resizable-header`, so hiding columns means
-`:nth-child()`, which is fragile because the column set is configured
-per HaloPSA view and differs per customer. That is trap 1 territory,
-which is why this needs a decision rather than a quick patch. Options:
-card-ify each row at phone width, hide columns by index and accept the
-per-view fragility, or keep the horizontal scroll but pin the Summary
-column and make the scroll affordance obvious.
+**Read this before touching the ticket list again.** The card rules
+depend on a `data-col` attribute that `Portal/iframe-theme.js` now
+stamps on every `.rt-th` and `.rt-td` from that column's header text.
+That indirection is not decoration. `.rt-th` and `.rt-td` carry no
+per-column class, and the Summary, ID and Age cells hold bare text with
+no child element to hook, which leaves `:nth-child()`. Column order
+varies per saved ticket view, which the shim's own `findAgeColIndex`
+already documents, so an index meaning "Status" in one view means
+something else in the next.
+
+Three things about that block are load bearing and easy to break:
+
+1. **Every rule is gated on `:has(.rt-td[data-col="summary"])`.** The
+   tile view renders `.main-tile-item` inside this same ReactTable, so
+   an ungated "hide every cell" blanks the tile list. The guard is also
+   the shim fallback: no stamp means no hide, so the list degrades to
+   horizontal scroll rather than vanishing. Verified both ways.
+2. **The guard must sit on the hide rule and the show rules equally.**
+   `:has()` contributes its argument's specificity. Guarding only the
+   hide rule lifted it to (0,8,2) against the show rules' (0,6,2) and
+   every cell in every card disappeared, silently.
+3. **The summary cell needs `flex: 1 0 100%`, guard included.** With
+   shrink enabled, or at lower specificity than the `flex: 0 0 auto` in
+   the show rule, short titles collapse to their text width and the ID
+   rides up onto the title line.
 
 **Also seen, low priority.** The impersonation banner `.app-notice` is
 `position: fixed; z-index: 1000` and overlaps the page title at phone
@@ -298,12 +316,18 @@ width on every page (measured: banner 72 to 136, H1 top 120). It is
 agent-impersonation chrome, so no customer ever sees it, but it does
 obscure the title in every mobile screenshot you will take.
 
-**Ticket detail, worth considering.** The layout is correct but the
-sidebar lands 5,714px down the page, so a phone user scrolls past the
-entire conversation to reach Status, SLA, category and dates. An
-`order: -1` on `.details-sidebar` at phone width would lift those above
-the thread, mirroring the reorder already used for the KB tree. It
-changes customer-facing reading order, so it is Joel's call.
+**Ticket detail sidebar, fixed in `dd9e7d8`.** The layout was correct
+but the sidebar landed 5,714px down the page, so a phone user scrolled
+past the entire conversation to reach Status, SLA, category and dates.
+It now sits above the thread, at 448px.
+
+Two things to know if you revisit it. The sidebar's parent is
+`.content`, a plain `display: block` div and **not** a Bootstrap
+`.row`, so `order` on its own is inert; the parent has to be flexed
+first. And the thread is pushed down with `order: 1` rather than the
+sidebar being pulled up with `order: -1`, because `.content` also holds
+the workflow stepper as an unclassed first child, and a negative order
+on the sidebar would jump it above the stepper too.
 
 Watch for the pill work from PR #20 while you are there: HaloPSA
 sizes status pills by label length across six variants, and narrow

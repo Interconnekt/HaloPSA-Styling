@@ -132,15 +132,43 @@ first thing to confirm once PR #20 merges.
    ticket already open repainted all five already-loaded messages
    within 600ms. The DOM-injection test method is now valid end to end,
    as predicted.
-3. A genuine dark-mode page load has still never happened. Every dark
-   check so far, including the two above, was DOM injection. Doing it
-   properly needs the saved theme flipped on the contact, which is
-   Joel's call, or a contact whose saved theme is already dark.
-4. Quote Raised pill is still unseen in any mode. No ticket carries
-   that status. Note that the pill mapping is keyed on the inline
-   `rgb(...)` HaloPSA stamps, so a status list alone does not settle
-   it; you need either a ticket in that status or the configured colour
-   from HaloPSA admin.
+3. ~~A genuine dark-mode page load has still never happened.~~ **Done
+   2026-09-03.** Chrome was signed in as Joel's own agent profile, so
+   the saved theme could be changed: Settings and Preferences,
+   Application Theme, "Halo PSA Dark", Save. Verified as a real load,
+   not injection: `themeDarkOnLoad` true straight out of the reload.
+   Surfaces measured correct against the tokens, nav `#0C0E16`, cards
+   `#161A25`, headings `#ECEEF4`.
+
+   **Two things a genuine load taught us that injection could not.**
+   First, `localStorage.P_theme` is a MIRROR, not the source: setting
+   it and reloading is overwritten by the server value, so the only way
+   in is the settings form. Second, in a real dark load there are TWO
+   `.app-container` divs and `.theme-dark` lands on the one WITHOUT
+   `.portal`; `document.querySelector('.app-container')` returns the
+   other one. This vindicates the existing rule of using `.theme-dark`
+   as an ancestor rather than compounding it with `.portal`. Any new
+   selector written as `.portal.theme-dark` will silently never match.
+
+4. ~~Quote Raised pill is still unseen in any mode.~~ **Done 2026-09-03**
+   on ticket 358933, and it was broken. It rendered transparent with
+   muted inherited text.
+
+   The cause was not that status. The last-resort fallback that paints
+   unmapped chips as a neutral outlined pill excludes known chips by
+   inline `rgb()` and by a hand written `:not([title=...])` list, but
+   never by the `s-*` class the shim applies, and its 2133 character
+   selector far outranks the `.s-*` colour rules. **Eight of the
+   thirty-one mapped statuses were affected**: Open Order, Closed
+   Order, Open Item, Closed Item, Invoiced, Quote Raised, Quote Sent,
+   Scoped. Fixed in `9966a88` at the root: `data-status-stamped` now
+   means "has a mapped colour class" and the fallback carries
+   `:not([data-status-stamped])`. Adding a status to STATUS_MAP is now
+   enough; the title list no longer needs syncing.
+
+   The earlier note here that the mapping is keyed on the inline
+   `rgb(...)` was only half right. There are three paths, class, title
+   and inline rgb, and the class path is the one the shim drives.
 
 ---
 
@@ -310,11 +338,23 @@ Three things about that block are load bearing and easy to break:
    the show rule, short titles collapse to their text width and the ID
    rides up onto the title line.
 
-**Also seen, low priority.** The impersonation banner `.app-notice` is
-`position: fixed; z-index: 1000` and overlaps the page title at phone
-width on every page (measured: banner 72 to 136, H1 top 120). It is
-agent-impersonation chrome, so no customer ever sees it, but it does
-obscure the title in every mobile screenshot you will take.
+**Impersonation banner, fixed in `9966a88`.** `.app-notice` overlapped
+the page title at phone width on every page (banner y 72 to 136, H1
+from y 120). Worth knowing: the `position: fixed; top: 72px; left: 50%;
+min-width: 320px` centred pill is OUR rule near the top of the
+stylesheet, not HaloPSA's, whose own `.app-notice` sets only
+`padding: 5px`. It is now a full width sticky strip under the nav at
+phone width, which takes flow space (so no clearance constant has to
+track a banner whose height depends on the impersonated name) and stays
+pinned while scrolling.
+
+If you need to work on this banner and are not impersonating, it is not
+in the DOM. Rebuild it faithfully inside the mobile iframe with
+`class="app-notice clickable"` and
+`style="background-color: rgb(47, 53, 94); position: absolute;"`, as a
+child of `.app-container.portal` before `.main`. That reproduced the
+original overlap numbers exactly, which is what makes it a valid test
+bed.
 
 **Ticket detail sidebar, fixed in `dd9e7d8`.** The layout was correct
 but the sidebar landed 5,714px down the page, so a phone user scrolled

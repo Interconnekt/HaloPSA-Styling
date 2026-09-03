@@ -319,6 +319,49 @@ clone, and iframe documents do not survive `cloneNode`, so email
 bodies inside a ticket render as empty white boxes. That is a clone
 artefact, not a bug. For anything JS-driven, still use a real phone.
 
+**The one trap in this method, found 2026-09-04.** The clone freezes
+whatever React had ALREADY rendered at the parent tab's width. Where
+HaloPSA changes its component tree by width rather than by CSS, the
+iframe shows you the desktop tree at a phone width, which is a layout
+that never actually occurs.
+
+The ticket list is exactly that case. **At phone width HaloPSA renders
+the TILE template, not the react-table**, and it is a React decision
+with no user-facing toggle: the same URL and account shows 15
+`.rt-tbody .rt-tr` rows at 1800px and `.main-tile-item` tiles on a
+phone. Joel's phone screenshots are what proved it; every clone in this
+repo had shown the table.
+
+Two consequences worth knowing:
+
+1. The ticket-list card rules added in PR #21 target the react-table,
+   so on a real phone they are **dormant**. They are gated on a stamped
+   `summary` cell, so they are harmless, and they still fire for anyone
+   who meets the table at a narrow width (a tablet, or a resized
+   desktop window). But the phone ticket list is styled by the
+   `.main-tile-item` rules, not by those.
+2. To work on the tile, reconstruct its markup rather than trusting a
+   clone. The template is a two column table and this reproduction
+   behaved identically to Joel's screenshots:
+
+```html
+<div class="inlinetile"><div class="main-tile-item table-tr"><table><tbody>
+<tr><td><span>Contact Name (Client)</span></td>
+    <td style="width:135px; text-align: right;"><span>ID:0252741-C</span></td></tr>
+<tr><td><span>Project Task</span></td>
+    <td style="text-align: right;"><span style="color: rgb(119, 119, 119);">8/24/2026 14:50</span></td></tr>
+<tr><td><span style="color: rgb(119, 119, 119);">Long summary text</span></td>
+    <td style="text-align: right;"><div style="margin-right:20px"><span
+      class="status-avatar fortile small" title="In Progress"
+      style="background-color: rgb(0, 165, 255); max-width: 90px;">In Progress</span></div></td></tr>
+</tbody></table></div></div>
+```
+
+Before trusting any clone-based finding, ask whether the surface could
+be one HaloPSA rebuilds by width. Ticket list: yes. Ticket detail, KB,
+Home, services, forms: no, all verified to render the same tree at both
+widths.
+
 **Why the obvious routes fail, so nobody re-tries them:**
 
 - `resize_window` on the Chrome extension cannot work here. The tab's

@@ -6,6 +6,12 @@ supersedes `HANDOFF-2026-09-02-session-3.md` for status. Section 7 of
 
 Read `AGENTS.md` first, then section 7 of the earliest handoff, then this.
 
+**Dark mode and mobile have their own handoff**,
+`HANDOFF-mobile-and-dark-mode.md`. Joel is picking those two up fresh,
+and has confirmed the missing phone breakpoint is not intended. Read
+that file instead of sections 2's dark-mode and mobile bullets, which
+it supersedes.
+
 ---
 
 ## 0. What changed this session

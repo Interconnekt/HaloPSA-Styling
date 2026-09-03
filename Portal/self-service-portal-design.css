@@ -6860,8 +6860,43 @@ html body .portal .tree-menu input[type="text"] {
     }
     html body .portal .container-large > div:has(> .kblist) > .col-md-9 {
         order: -1 !important;
+        /* HaloPSA's React runtime stamps `margin-left: 30%; width: 70%`
+           INLINE on this column (see the min-width: 769px rule near the
+           end of the file, which repairs the desktop arithmetic). Below
+           769px nothing was overriding it, so on a phone the article
+           column kept a 30% margin and a 70% width: measured at a real
+           386px viewport it rendered 246px wide with 105px of dead space
+           on the left, and `.kbdetails` inside it came out at 213px, just
+           over half the screen. Zero the margin and take the full column.
+           The inline `border-left` is a desktop divider between tree and
+           article; in a vertical stack it is a stray line, so drop it
+           along with the 16px side padding it was pairing with.
+           Found 2026-09-03 in the first genuine phone-width render of
+           this page; see the handoff for the iframe method that made it
+           visible. */
+        margin-left: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        border-left: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
     }
     html body .portal .container-large > div:has(> .kblist) > .tree-menu.kblist {
+        /* The runtime also stamps `position: fixed; top: 240px; bottom: 0`
+           INLINE on the tree. Fixed elements leave the flow, so the
+           `order`/`max-height` treatment above could never place the tree
+           below the article: it stayed pinned to the viewport and painted
+           the whole article over from y=240 down, tree links interleaved
+           with article text and both unreadable. It also made `width:
+           100%` resolve against the viewport rather than the column,
+           which pushed the tree 7px past the right edge.
+           Returning it to the normal flow is what actually delivers the
+           stacked layout the rules below describe. */
+        position: static !important;
+        top: auto !important;
+        bottom: auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
         max-height: 320px !important;
         overflow-y: auto !important;
         margin-top: 16px !important;

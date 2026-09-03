@@ -2260,8 +2260,22 @@ html body .portal .status-avatar.s-neutral {
    renders as an outlined Figtree pill so a mystery chip
    doesn't shout with a raw HaloPSA hue. Excludes known rgbs AND
    known `title` values, the title-based path means a tenant can
-   customise their hex codes without the chip falling through here. */
-html body .portal .status-avatar[style*="background-color"]:not([title="New"]):not([title="Assigned"]):not([title="In Progress"]):not([title="Awaiting User"]):not([title="Awaiting Supplier"]):not([title="Action Required"]):not([title="Closed"]):not([title="Approved"]):not([title="Rejected"]):not([title="Qualified"]):not([title="Action Completed"]):not([title="On Hold"]):not([title="Updated"]):not([title="Scheduled"]):not([title*="Completed"]):not([title*="Resolved"]):not([title*="CAB"]):not([title*="Overdue"]):not([title*="Breached"]):not([title*="Awaiting Approval"]):not([title*="Customer Review"]):not([title*="Triage Handoff"]):not([title*="Billing Review"]):not([title*="Change Review"]):not([title*="Dispatch Review"]):not([style*="rgb(66, 133, 244)"]):not([style*="rgb(0, 123, 255)"]):not([style*="rgb(52, 131, 250)"]):not([style*="rgb(60, 134, 247)"]):not([style*="rgb(13, 110, 253)"]):not([style*="rgb(0, 102, 204)"]):not([style*="rgb(43, 92, 230)"]):not([style*="rgb(74, 116, 240)"]):not([style*="rgb(111, 66, 193)"]):not([style*="rgb(102, 16, 242)"]):not([style*="rgb(153, 51, 255)"]):not([style*="rgb(138, 43, 226)"]):not([style*="rgb(12, 121, 125)"]):not([style*="rgb(255, 193, 7)"]):not([style*="rgb(255, 170, 0)"]):not([style*="rgb(255, 152, 0)"]):not([style*="rgb(240, 173, 78)"]):not([style*="rgb(245, 158, 11)"]):not([style*="rgb(212, 212, 216)"]):not([style*="rgb(194, 65, 12)"]):not([style*="rgb(40, 167, 69)"]):not([style*="rgb(34, 139, 34)"]):not([style*="rgb(0, 190, 0)"]):not([style*="rgb(25, 135, 84)"]):not([style*="rgb(16, 185, 129)"]):not([style*="rgb(21, 128, 61)"]):not([style*="rgb(52, 211, 153)"]):not([style*="rgb(187, 52, 63)"]):not([style*="rgb(108, 117, 125)"]):not([style*="rgb(128, 128, 128)"]):not([style*="rgb(80, 80, 80)"]):not([style*="rgb(119, 119, 119)"]):not([style*="rgb(220, 53, 69)"]):not([style*="rgb(255, 46, 0)"]):not([style*="rgb(255, 0, 0)"]):not([style*="rgb(185, 28, 28)"]):not([style*="rgb(239, 68, 68)"]):not([style*="rgb(23, 162, 184)"]):not([style*="rgb(13, 202, 240)"]):not([style*="rgb(8, 145, 178)"]):not([style*="rgb(47, 53, 94)"]):not([style*="rgb(252, 220, 0)"]) {
+   customise their hex codes without the chip falling through here.
+
+   `:not([data-status-stamped])` comes first and is the important
+   one. This rule outranks the `.s-*` colour rules above on
+   specificity, so without it any status the shim maps by class but
+   whose label is missing from the hand written `:not([title=...])`
+   list gets clobbered back to a transparent chip with muted
+   inherited text. That was true for eight of the thirty-one mapped
+   statuses (Open/Closed Order, Open/Closed Item, Invoiced, Quote
+   Raised, Quote Sent, Scoped), found 2026-09-03 on ticket 358933.
+   `Portal/iframe-theme.js` sets `data-status-stamped` only when it
+   applied a colour class and removes it otherwise, so this single
+   exclusion covers every mapped status present and future, and the
+   title list below no longer has to be kept in sync with
+   STATUS_MAP. */
+html body .portal .status-avatar[style*="background-color"]:not([data-status-stamped]):not([title="New"]):not([title="Assigned"]):not([title="In Progress"]):not([title="Awaiting User"]):not([title="Awaiting Supplier"]):not([title="Action Required"]):not([title="Closed"]):not([title="Approved"]):not([title="Rejected"]):not([title="Qualified"]):not([title="Action Completed"]):not([title="On Hold"]):not([title="Updated"]):not([title="Scheduled"]):not([title*="Completed"]):not([title*="Resolved"]):not([title*="CAB"]):not([title*="Overdue"]):not([title*="Breached"]):not([title*="Awaiting Approval"]):not([title*="Customer Review"]):not([title*="Triage Handoff"]):not([title*="Billing Review"]):not([title*="Change Review"]):not([title*="Dispatch Review"]):not([style*="rgb(66, 133, 244)"]):not([style*="rgb(0, 123, 255)"]):not([style*="rgb(52, 131, 250)"]):not([style*="rgb(60, 134, 247)"]):not([style*="rgb(13, 110, 253)"]):not([style*="rgb(0, 102, 204)"]):not([style*="rgb(43, 92, 230)"]):not([style*="rgb(74, 116, 240)"]):not([style*="rgb(111, 66, 193)"]):not([style*="rgb(102, 16, 242)"]):not([style*="rgb(153, 51, 255)"]):not([style*="rgb(138, 43, 226)"]):not([style*="rgb(12, 121, 125)"]):not([style*="rgb(255, 193, 7)"]):not([style*="rgb(255, 170, 0)"]):not([style*="rgb(255, 152, 0)"]):not([style*="rgb(240, 173, 78)"]):not([style*="rgb(245, 158, 11)"]):not([style*="rgb(212, 212, 216)"]):not([style*="rgb(194, 65, 12)"]):not([style*="rgb(40, 167, 69)"]):not([style*="rgb(34, 139, 34)"]):not([style*="rgb(0, 190, 0)"]):not([style*="rgb(25, 135, 84)"]):not([style*="rgb(16, 185, 129)"]):not([style*="rgb(21, 128, 61)"]):not([style*="rgb(52, 211, 153)"]):not([style*="rgb(187, 52, 63)"]):not([style*="rgb(108, 117, 125)"]):not([style*="rgb(128, 128, 128)"]):not([style*="rgb(80, 80, 80)"]):not([style*="rgb(119, 119, 119)"]):not([style*="rgb(220, 53, 69)"]):not([style*="rgb(255, 46, 0)"]):not([style*="rgb(255, 0, 0)"]):not([style*="rgb(185, 28, 28)"]):not([style*="rgb(239, 68, 68)"]):not([style*="rgb(23, 162, 184)"]):not([style*="rgb(13, 202, 240)"]):not([style*="rgb(8, 145, 178)"]):not([style*="rgb(47, 53, 94)"]):not([style*="rgb(252, 220, 0)"]) {
     background-image: none !important;
     background-color: transparent !important;
     border: 1px solid var(--portal-border) !important;
@@ -7263,6 +7277,56 @@ html body .portal .tree-menu input[type="text"] {
     }
     html body .portal .main .content:has(> .col-md-4.details-sidebar) > .col-md-8 {
         order: 1 !important;
+    }
+
+    /* ── Impersonation banner, stop it covering the page title ──
+       The desktop treatment near the top of this file floats
+       `.app-notice` as a centred pill: `position: fixed; top: 72px;
+       left: 50%; transform: translateX(-50%)` with `min-width: 320px`.
+       At phone width that pill is wider than the content gutter and
+       sits exactly on the H1: measured at 386px the banner occupies
+       y 72 to 136 while the page title starts at y 120, so every page
+       renders its own title behind the banner.
+
+       Switch it to a full width sticky strip directly under the 60px
+       nav. Sticky is doing two jobs: it takes part in the normal flow,
+       so the title is pushed down and no magic clearance value has to
+       be maintained against a banner whose height depends on the
+       impersonated user's name length; and it still pins under the nav
+       while scrolling, which matters because this banner is the only
+       standing signal that the agent is acting as somebody else.
+
+       Worth knowing if this ever needs revisiting: if the banner's
+       parent were to gain `overflow: hidden`, sticky degrades to
+       static, which still occupies flow and still does not overlap.
+       Both failure modes are safe; the previous fixed pill had no safe
+       failure mode at this width.
+
+       This only ever renders for an agent who is impersonating, so no
+       customer sees it either way. Verified at 386px by rebuilding the
+       banner exactly as HaloPSA emits it (navy inline background plus
+       `position: absolute`), which reproduced the original overlap
+       numbers before the fix and cleared them after. */
+    html body .portal .app-notice,
+    html body .portal div.app-notice[style*="background-color: rgb(47, 53, 94)"],
+    html body .portal div.app-notice[style*="position: absolute"] {
+        position: sticky !important;
+        top: 60px !important;
+        left: auto !important;
+        right: auto !important;
+        transform: none !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        margin: 0 0 4px !important;
+        border-radius: 0 !important;
+        border-left: 0 !important;
+        border-right: 0 !important;
+        padding: 8px 14px !important;
+        font-size: 12px !important;
+        line-height: 1.35 !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
     }
 }
 

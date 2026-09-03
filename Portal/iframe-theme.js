@@ -461,8 +461,31 @@
                 el.classList.remove(MANAGED_CLASSES[i]);
             }
         }
-        if (cls) el.classList.add(cls);
-        el.setAttribute(MARKER, key || '');
+        /* The marker means "this chip has a mapped colour class", and the
+           stylesheet depends on that meaning: its last-resort fallback
+           (`.status-avatar[style*="background-color"]:not(...)`, which
+           paints unmapped chips as a neutral outlined pill) carries a
+           `:not([data-status-stamped])` so it cannot out-cascade the
+           per-status colours set here.
+
+           That fallback outranks the `.s-*` class rules on specificity,
+           so before this marker existed it silently clobbered any mapped
+           status whose label was not also in its hand written `:not([title
+           =...])` list: Open/Closed Order, Open/Closed Item, Invoiced,
+           Quote Raised, Quote Sent and Scoped all rendered as transparent
+           chips with muted inherited text. Found 2026-09-03 on ticket
+           358933, the first ticket to carry Quote Raised.
+
+           So set the attribute ONLY when a class was applied, and remove
+           it otherwise, which keeps unmapped chips eligible for the
+           fallback. Adding a status to STATUS_MAP is now enough; the
+           `:not([title=...])` list does not need touching again. */
+        if (cls) {
+            el.classList.add(cls);
+            el.setAttribute(MARKER, key);
+        } else {
+            el.removeAttribute(MARKER);
+        }
     }
 
     function sweep(root) {

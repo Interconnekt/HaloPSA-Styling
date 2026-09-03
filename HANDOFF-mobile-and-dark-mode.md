@@ -9,6 +9,70 @@ Read `AGENTS.md` first, then section 7 of `HANDOFF-2026-09-02.md`
 
 ---
 
+## Pick up here (written 2026-09-03, session 5)
+
+**One decision is waiting on Joel: whether to merge PR #21.**
+
+[PR #21](https://github.com/Interconnekt/HaloPSA-Styling/pull/21) has
+six commits and is green. Joel asked to "merge to staging so I can
+review live". **There is no staging.** The staging hostname was judged
+not worth its two human dependencies back in session 2 and never built;
+`Portal/worker/wrangler.jsonc` sets `workers_dev: false` and
+`preview_urls: false` with a single production route, and GitHub Pages
+serves `main`. So merging IS the customer deploy, live in about a
+minute. Do not merge it as a "staging" step; it is the real thing.
+
+**The substitute that worked.** A live review with zero customer
+exposure, by injecting the branch CSS into a real portal tab. Paste
+into the console on any portal page (it survives in-app navigation but
+not a hard reload; `window.__ikPreviewOff()` removes it):
+
+```js
+const B = 'claude/dark-mode-mobile-handoff-e1a0a7';
+const css = await fetch('https://raw.githubusercontent.com/Interconnekt/HaloPSA-Styling/' + B +
+  '/Portal/self-service-portal-design.css', {cache:'no-store'}).then(r => r.text());
+window.__ikPreviewOff?.();
+const style = document.createElement('style'); style.id = '__ikPreviewCss';
+style.textContent = css; document.body.appendChild(style);
+const slug = t => (t||'').trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+function apply() {
+  if (!document.getElementById('__ikPreviewCss')) document.body.appendChild(style);
+  document.querySelectorAll('.ReactTable, .main-table').forEach(t => {
+    const h = t.querySelectorAll('.rt-thead.-header .rt-th'); if (!h.length) return;
+    const s = [...h].map(x => slug(x.textContent));
+    h.forEach((x,i) => { if (s[i] && x.getAttribute('data-col') !== s[i]) x.setAttribute('data-col', s[i]); });
+    t.querySelectorAll('.rt-tbody .rt-tr').forEach(r => { const c = r.querySelectorAll('.rt-td');
+      for (let i = 0; i < c.length; i++) if (s[i] && c[i].getAttribute('data-col') !== s[i]) c[i].setAttribute('data-col', s[i]); }); });
+  document.querySelectorAll('.status-avatar[data-status-stamped=""]').forEach(e => e.removeAttribute('data-status-stamped'));
+}
+apply();
+const obs = new MutationObserver(() => { clearTimeout(window.__ikT); window.__ikT = setTimeout(apply, 120); });
+obs.observe(document.body, {childList: true, subtree: true});
+window.__ikPreviewOff = () => { obs.disconnect(); document.getElementById('__ikPreviewCss')?.remove(); delete window.__ikPreviewOff; };
+```
+
+Confirmed working: the Quote Raised pill went violet on the live page,
+and cloning that tab into the 390px iframe showed the ticket list cards
+in dark mode, all without a deploy. Desktop is untouched because every
+mobile rule sits inside the existing `max-width: 768px` block.
+
+**State the session was left in.** Chrome is Joel's own agent profile
+(not impersonating). His Application Theme was switched to Halo PSA
+Dark for testing and **switched back to Halo PSA Standard**; the preview
+injection and the mobile iframe were both removed. Nothing else on his
+account was changed, and the marketing-emails checkbox was left alone.
+
+**What is actually left.**
+
+1. Joel's call on merging PR #21, knowing it goes straight to
+   customers.
+2. After any merge, re-verify against the DEPLOYED stylesheet, not the
+   branch. Trap 3. Deployed ETag before this PR is `W/"6a98bb9a-5cc18"`.
+3. Nothing else is outstanding. All four dark-mode items and all four
+   mobile surfaces are closed.
+
+---
+
 ## 0. Before you touch anything
 
 ~~**PR #20 is open and unmerged, with six commits.**~~ **Merged

@@ -4876,9 +4876,17 @@ html body .portal .workflow-steps-wrap {
    and KB about 156px, services about 145px, home grid about 208px,
    ticket detail and approvals about 319px, settings about 297px.
 
-   One measure now: 1440px, centred, with a 32px inner gutter, so the
+   One measure now: 1520px, centred, with a 32px inner gutter, so the
    back button, the H1 and the page content share one left edge on
-   every non-form route (212px at 1800px, 32px at 1440px).
+   every non-form route (172px at 1800px, 32px at 1440px and below).
+   1520 rather than a rounder 1440 because of the invoice table: its
+   `.rt-thead` / `.rt-tbody` floor is 1430px (react-table's own column
+   widths, see the invoices block in section 10), and a 1440px shell
+   leaves a 1376px content box, which would put an in-card horizontal
+   scrollbar on My Invoices at every desktop width. 1520 minus the two
+   32px gutters is 1456px, so the invoice grid fits scroll-free from a
+   1520px viewport up, which is a wider range than the old 85% rule
+   gave it (that only cleared 1430 above about 1717px).
 
    Container chains, all verified from this file's own DOM notes:
      ticket detail   `.main > .container-max > .container`
@@ -4912,7 +4920,7 @@ html body .portal .main > .container-large,
 html body .portal .main > .container-max,
 html body .portal .main > .searchscreen.searchscreen-full {
     width: 100% !important;
-    max-width: 1440px !important;
+    max-width: 1520px !important;
     margin-left: auto !important;
     margin-right: auto !important;
     padding-left: 32px !important;
@@ -6351,8 +6359,10 @@ html body .portal footer {
        the visible content baseline down so the top read tight against
        the border while the bottom had room to breathe. Bumping
        padding-top to 40 makes the visible top inset = visible bottom
-       inset (40px each). Joel's review: applies across all views,
-       not scoped to mobile. */
+       inset (40px each). Joel's review: applies across all views.
+       Since 2026-09-04 the phone block overrides this to
+       `24px 14px 16px` below 769px (the links stack there and the
+       strip is already tall), so this value is the desktop one. */
     padding: 40px 24px 20px;
     text-align: center;
     color: rgba(255, 255, 255, 0.72) !important;

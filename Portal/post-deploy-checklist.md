@@ -1,173 +1,109 @@
-# Post-deploy checklist, PR #21
+# Post-deploy checklist, consistency pass (2026-09-04)
 
-Mobile card layout, KB article fix, sidebar reorder, status pill fix,
-impersonation banner. Written 2026-09-04, before the merge.
+Tokens and duplicate rules, phone block, desktop shell and padding scale.
+Written before the merge. Merging to `main` IS the deploy: GitHub Pages
+publishes and the Worker edge cache expires within 60 seconds, so this is
+in front of customers about a minute after the merge.
 
-Merging to `main` IS the deploy. GitHub Pages publishes and the Worker
-edge cache expires within 60 seconds, so this is in front of customers
-about a minute after the merge.
-
-Work top to bottom. Item 1 is the one genuine unknown and the only one
-that could justify a revert on its own.
+Work top to bottom. Items 1 and 2 are the two changes with the widest blast
+radius and the only ones that could justify a revert on their own.
 
 ---
 
 ## 0. Confirm the deploy actually landed
 
-Check the server before believing the browser. This is trap 4 from the
-earliest handoff, and it has produced several false "still broken"
-reports.
+Check the server before believing the browser (trap 4).
 
 Baseline immediately BEFORE the merge:
 
 | File | ETag | Last modified |
 |---|---|---|
-| stylesheet | `W/"6a98bb9a-5cc18"` | Thu, 03 Sep 2026 00:13:14 GMT |
+| stylesheet | `W/"6a9a031f-63353"` | Thu, 03 Sep 2026 23:30:39 GMT |
 
 ```bash
 curl -sI https://portal.interconnekt.com.au/__interconnekt/self-service-portal-design.css | grep -i 'etag\|last-modified'
 ```
 
-- [ ] ETag is no longer `W/"6a98bb9a-5cc18"`
-- [ ] The shim now carries the new column stamper (this returned `0`
-      before the merge, expect a non-zero count):
+- [ ] ETag is no longer `W/"6a9a031f-63353"`
+- [ ] Hard-refresh the portal (Cmd+Shift+R) before judging anything visually
 
-```bash
-curl -s "https://portal.interconnekt.com.au/__interconnekt/iframe-theme.js?cb=$RANDOM" | grep -c 'data-col'
-```
+## 1. Desktop page shell, every page
 
-- [ ] Hard-refresh the portal (Cmd+Shift+R) before judging anything
-      visually
+One container measure replaces the 1240px cap, the 85% list rule and
+HaloPSA's 85% `.container-large`. Before the change the page H1 sat at six
+different left edges at 1800px (156, 145, 208, 319, 297 and 412px).
 
----
+- [ ] Home, My Tickets, Sales Tickets, a ticket, an opportunity, My
+      Invoices, Service Catalogue, Knowledge Base, a KB article, Approvals,
+      My Dashboards, Settings: the back arrow, the H1 and the first card
+      share one left edge, and it is the same edge on every page
+- [ ] New Ticket still renders its form card centred (deliberate)
+- [ ] Ticket detail: thread on the left, sidebar on the right, nothing
+      clipped at the right edge, the workflow stepper spans the same width
+      as the cards below it
+- [ ] KB index: tree on the left, article cards on the right, no clipping
+      of the card's right edge (the `.container-large` overflow trap)
+- [ ] My Tickets table still fits without a horizontal scrollbar at 1440px
+      and 1800px
 
-## 1. Tile view at phone width, THE UNTESTED ONE
-
-**Do this one first.** Every other item on this list was verified at a
-real 386px viewport. This one was not, because the test contact's saved
-ticket view was the LIST view throughout, so the tile view was never
-rendered at any width.
-
-Why it matters: the stylesheet's own notes say the tile view renders
-`.main-tile-item` **inside the same ReactTable** that the new card rules
-target. Those rules hide every cell in a row. They are deliberately
-gated on the row carrying a shim-stamped `summary` cell, specifically so
-the tile view cannot be caught by that hide, and the fallback was
-verified (with no stamp, all 25 cells stay visible). But the guard was
-proven against an unstamped LIST table, not against a real tile table.
-
-- [ ] Switch the ticket list to **tile** view
-- [ ] View it at phone width (DevTools device toolbar, iPhone 12 Pro or
-      any width at or below 768px)
-- [ ] Tiles still render as tiles, with visible content
-
-**If the tile list renders blank or empty, stop and revert.** That is
-the guard failing, and it is the one failure mode in this release that
-loses information rather than merely looking wrong.
+**If any page shows a horizontally scrolling or clipped layout, revert.**
 
 ```bash
 git revert -m 1 <merge-commit-sha> && git push origin HEAD:main
 ```
 
----
+## 2. Status and priority pills, every list and every card
 
-## 2. Ticket list, LIST view, phone width
+- [ ] Ticket list: the priority pill and the status pill in one row are the
+      same height (both 10.5px text, `3px 12px`)
+- [ ] Priority colours unchanged in light mode: Low green, Medium amber,
+      High warm red, Critical red
+- [ ] Dark mode (Settings, Application Theme, Halo PSA Dark, Save, then
+      back to Halo PSA Standard when done): High reads one shade lighter
+      than before (0.18 wash), everything else unchanged
+- [ ] Home tiles: the On Hold pill is red-family, 600 weight, same height
+      as the status pill beside it, and flips correctly in dark mode (it
+      previously stayed light-mode pink)
+- [ ] KB test article (`/kb?btn=46&faqlist=1&id=16`): the five status
+      lozenges are blue, green, amber, red, violet in light mode; in dark
+      mode they match the ticket pills' wash
 
-Measured before the fix: a 2828px wide, 25 column table inside a 351px
-container, everything past the second column off screen.
+## 3. Dropdowns and tables
 
-- [ ] Each row is a card, not a wide scrolling table
-- [ ] No horizontal scrolling anywhere on the page
-- [ ] Each card shows: summary on its own line, then ID, status pill and
-      age on one line below
-- [ ] Age reads e.g. `156.0 days`, with the unit, not a bare number
-- [ ] Long summaries wrap onto two lines and the ID stays below, never
-      beside the title
-- [ ] Tapping a card still opens the ticket (the click handler is on the
-      row group, and the expander column is now hidden)
+- [ ] Any react-select dropdown (My Tickets filter, New Ticket contact,
+      nav search): hovered option is accent-soft with blue ink, the selected
+      option accent-subtle, not grey
+- [ ] Table headers on My Tickets, Sales Tickets, My Invoices, My
+      Dashboards: 1px hairline under the header, header text aligned with
+      the body cells, no double separator
+- [ ] Pagination Previous / Next: ghost style, does not narrow on hover
 
-## 3. Status pills, every width, this is the widest blast radius
+## 4. Phone width, every page (DevTools device toolbar or a real phone)
 
-The pill fix is the only change in this release that is **not** confined
-to the mobile breakpoint, so it affects desktop too.
+- [ ] Every page H1 is 24px, including ticket detail, invoices and forms
+- [ ] My Invoices: each invoice is a card (number, date, total, status
+      pill, Pay button), no horizontal scroll. If HaloPSA serves a tile
+      template on a real phone instead, the cards are simply not used
+- [ ] My Tickets list-view cards: 12px radius, no shadow (matches the tile)
+- [ ] KB article: h3, blockquote, code block, hr and panels sized for the
+      card, panels keep their icon clear of the text
+- [ ] Footer padding reduced, my-account drawer padding 18px, share popup
+      never wider than the screen
+- [ ] Service request page: masthead artwork hidden whichever class it uses
+- [ ] Impersonation banner (impersonating only): full-width strip under the
+      nav with no drop shadow
+- [ ] Nav logo: about 22px tall, close to the hamburger
+- [ ] My Dashboards: the table fills the width, second row not truncated
 
-Eight of the thirty-one mapped statuses previously rendered as a
-transparent chip with muted grey text:
+## 5. Desktop regression sweep
 
-Open Order, Closed Order, Open Item, Closed Item, Invoiced,
-Quote Raised, Quote Sent, Scoped.
-
-- [ ] Ticket 358933 (Quote Raised) shows a filled violet pill, not a
-      ghost chip. Light mode and dark mode
-- [ ] Spot check a few other statuses from that list if you have tickets
-      carrying them
-- [ ] **Regression check that matters most here:** a status that is NOT
-      in `STATUS_MAP` still renders as the neutral **outlined** pill, a
-      visible border with readable text. The marker semantics changed,
-      so this is the path most likely to have broken
-- [ ] Common statuses are unchanged: New, In Progress, On Hold,
-      Scheduled, Resolved, Closed, Assigned
-
-## 4. KB article, phone width
-
-Before the fix the article column rendered 246px wide on a 386px screen
-with 105px of dead space, and the tree menu was `position: fixed` and
-painted over the article body.
-
-- [ ] `/kb?btn=46&faqlist=1&id=16` at phone width
-- [ ] Article card fills the width, no large empty left margin
-- [ ] Tree menu sits BELOW the article, in the flow, and does not
-      overlay the text
-- [ ] No horizontal scrolling
-- [ ] Tables, panels and code blocks stay inside the card
-
-## 5. Ticket detail, phone width
-
-- [ ] Sidebar (status, SLA, dates, category) appears ABOVE the message
-      thread
-- [ ] The workflow stepper is still the first thing under the title, the
-      sidebar comes after it, not before
-- [ ] Subject wraps rather than overflowing
-- [ ] On a ticket with emails, message bodies render as white paper
-      cards and are readable in dark mode
-
-## 6. Dark mode
-
-Settings and Preferences, Application Theme, Halo PSA Dark, Save. Note
-that `localStorage.P_theme` is only a mirror; the settings form is the
-only way to change it.
-
-- [ ] Ticket list, ticket detail, KB article and Home all readable
-- [ ] Status pills readable, no black-on-dark or invisible text
-- [ ] Email iframes render as white paper with dark text
-- [ ] Switch the theme with a ticket open: already-open messages repaint
-      rather than staying on the old theme
-- [ ] Set the theme back to Halo PSA Standard when finished
-
-## 7. Impersonation banner, phone width
-
-Only visible while impersonating, so no customer ever sees it.
-
-- [ ] Impersonate a contact, open any page at phone width
-- [ ] Banner is a full width strip directly under the nav, not a
-      floating centred pill sitting on the page title
-- [ ] The page title is fully visible
-- [ ] The banner stays pinned under the nav while scrolling
-
-## 8. Desktop regression sweep
-
-Every mobile change sits inside the existing `max-width: 768px` block,
-so desktop should be untouched apart from the status pills in item 3.
-This was verified at 1800px before the merge, so treat it as a quick
-confirmation rather than a hunt.
-
-- [ ] Ticket list still renders as a normal table with all columns
-- [ ] Ticket detail still has the sidebar on the right, beside the
-      thread, not above it
-- [ ] KB article still shows the tree and article side by side
-- [ ] Home unchanged
-
----
+- [ ] Home unchanged apart from the grid edge aligning with the shell
+- [ ] Kanban (if any customer view uses it): cards 12px radius, no resting
+      shadow, columns intact
+- [ ] Service Catalogue: "Service Categories" reads as a section heading
+      under the page title, search box at list-filter height
+- [ ] No orphan dash under any page title (KB, services, approvals,
+      tickets, invoices, dashboards)
 
 ## If something is wrong
 
@@ -178,7 +114,3 @@ git revert -m 1 <merge-commit-sha> && git push origin HEAD:main
 ```
 
 The revert is live within about a minute on the same cache timing.
-
-To review a fix WITHOUT deploying it, use the branch-injection snippet
-at the top of `HANDOFF-mobile-and-dark-mode.md`, and the same-origin
-iframe method in that file to see any page at a real 390px viewport.

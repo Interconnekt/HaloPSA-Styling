@@ -11,7 +11,7 @@ Covers:
 
 ---
 
-> **Open work:** see [HANDOFF-2026-09-02-session-2.md](HANDOFF-2026-09-02-session-2.md) for the Cloudflare Worker cutover and everything still outstanding. Section 7 of [HANDOFF-2026-09-02.md](HANDOFF-2026-09-02.md) is still the list of traps to read before touching a selector.
+> **Open work:** see [HANDOFF-2026-09-04-consistency.md](HANDOFF-2026-09-04-consistency.md) for the consistency pass (one desktop shell, one padding scale, phone conventions) and what is still outstanding; [HANDOFF-mobile-and-dark-mode.md](HANDOFF-mobile-and-dark-mode.md) has the phone and dark-mode history. Section 7 of [HANDOFF-2026-09-02.md](HANDOFF-2026-09-02.md) is still the list of traps to read before touching a selector.
 
 ## Requirements
 

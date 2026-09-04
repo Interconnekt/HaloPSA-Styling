@@ -812,8 +812,11 @@ html body .portal .theme-dark .searchscreen:not(.searchscreen-full) .searchbox {
     transition: border-color var(--ic-dur) var(--ic-ease),
                 box-shadow var(--ic-dur) var(--ic-ease);
 }
-/* Generic fallback (results-page search + legacy selector) keeps
-   the original 60px so it matches the list-top filter controls. */
+/* Generic fallback (results-page search + legacy selector). Chrome
+   only: this rule sets NO height, so the search-results page falls
+   through to the 40px on the generic `.searchbox` rule further down
+   and matches the list-top filter controls. Only the home hero
+   above is taller, at 64px. */
 html body .portal .searchscreen .searchbox,
 html body .portal .theme-dark .searchscreen .searchbox {
     background: var(--portal-surface) !important;
@@ -1248,12 +1251,16 @@ html body .portal .main-tile-item tr:not(:first-child) td span {
    its label, normalise typography into the same Figtree pill
    family used elsewhere. The bg colour comes from the existing
    status-pill mapping system (title-based JS stamper + rgb()
-   fallbacks), so no per-status colour rules needed here. */
+   fallbacks), so no per-status colour rules needed here.
+
+   Padding is the shared `3px 12px` from the `.status-avatar.*` rule
+   further down; a tile pill is the same component as a list pill and
+   nothing about the tile asks for a taller one. */
 html body .portal .main-tile-item .status-avatar.fortile,
 html body .portal .main-tile-item .status-avatar.fortile.small {
     max-width: none !important;
     width: auto !important;
-    padding: 4px 12px !important;
+    padding: 3px 12px !important;
     font-family: var(--ic-font-body) !important;
     font-size: 10.5px !important;
     font-weight: 600 !important;
@@ -1358,8 +1365,7 @@ html body .portal .action-history-item img.avatar {
 html body .portal .nhd-button.curve,
 html body .portal button.nhd-button.curve,
 html body .portal .ui.popup .ui.button,
-html body .portal .solidbutton:not(.menubtn):not(.fabtn),
-html body .portal button.-btn:hover:not([disabled]) {
+html body .portal .solidbutton:not(.menubtn):not(.fabtn) {
     background-color: var(--portal-action) !important;
     color: var(--portal-on-accent) !important;
     border-radius: 999px !important;
@@ -1755,8 +1761,8 @@ html body .portal .status-avatar.fortile {
     font-family: var(--ic-font-body) !important;
     font-weight: 600 !important;
     font-size: 10.5px !important;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase !important;
     margin-left: 0 !important;
     display: inline-flex !important;
     align-items: center;
@@ -1885,6 +1891,15 @@ html body .portal .status-avatar.fortile::before {
     --pill-quote-sent-bg:        #F8E8E2; --pill-quote-sent-ink:        #882E08;
     /* Assigned: blue (work has started). */
     --pill-assigned-bg:          #E4EAFC; --pill-assigned-ink:          #192C66;
+    /* Priority High: a blend between amber and red, so a High ticket
+       reads as "warmer than Medium, one step short of Critical"
+       instead of colliding with either. The only hue here with no
+       workflow-status counterpart; it exists for the priority pill
+       alone (see `.oneline:has(> .priority-block)` further down).
+       `-dot` is the saturated swatch colour, the priority pill is the
+       only pill family that carries a dot. */
+    --pill-high-bg:              #F7E6E3; --pill-high-ink:              #8E220F;
+    --pill-high-dot:             #BE2E14;
 }
 
 .theme-dark {
@@ -1914,6 +1929,11 @@ html body .portal .status-avatar.fortile::before {
     --pill-quote-raised-bg:      rgba(155,123,245,0.18);  --pill-quote-raised-ink:      #B898FF;
     --pill-quote-sent-bg:        rgba(251,146,60,0.18);   --pill-quote-sent-ink:        #FCA259;
     --pill-assigned-bg:          rgba(126,156,255,0.18);  --pill-assigned-ink:          #8EA8FF;
+    /* Priority High: the same amber-to-red blend in dark mode. The
+       background carries the standard 0.18 wash every other dark pill
+       token uses; as a bare literal it had drifted to 0.20. */
+    --pill-high-bg:              rgba(250,130,86,0.18);   --pill-high-ink:              #FA8C64;
+    --pill-high-dot:             #FA8256;
 }
 
 /* ─── Named-status class rules ─────────────────────────────
@@ -2283,24 +2303,12 @@ html body .portal .status-avatar[style*="background-color"]:not([data-status-sta
     padding: 3px 10px !important;
 }
 
-/* Unified status-avatar typography, every mapped colour variant
-   above sets bg/ink only; this single rule forces Figtree +
-   matching tracking across ALL status chips so they read as one
-   family regardless of HaloPSA's inline colour. */
-html body .portal .status-avatar.fortable,
-html body .portal .status-avatar.small,
-html body .portal .status-avatar.bitsmall,
-html body .portal .status-avatar.smaller,
-html body .portal .status-avatar.smallest,
-html body .portal .status-avatar.smallestest,
-html body .portal .status-avatar.smallester,
-html body .portal .status-avatar.fortile {
-    font-family: var(--ic-font-body) !important;
-    font-weight: 600 !important;
-    font-size: 10.5px !important;
-    letter-spacing: 0.06em !important;
-    text-transform: uppercase !important;
-}
+/* Status-avatar typography is set once, on the size-variant rule
+   earlier in this section; every colour variant above sets bg/ink only, so
+   all status chips read as one family regardless of HaloPSA's inline
+   colour. A second copy of that rule used to sit here restating the
+   same five properties with the same values; the two `!important`
+   flags it added have been carried onto the original. */
 
 /* ─── Priority indicator, radiating dot in tonal pill ─────
    HaloPSA emits two patterns for the priority indicator:
@@ -2353,12 +2361,19 @@ html body .portal .oneline:has(> .priority-block) {
     align-items: center;
     justify-content: flex-start;
     gap: 8px;
-    padding: 4px 12px 4px 10px !important;
+    /* Geometry is the standard status pill's (10.5px / `3px 12px`,
+       see `.status-avatar.*`), because the two sit in ADJACENT cells
+       of the same ticket-list row and any difference reads as a
+       misalignment. Only the left inset is pulled in to 10px, to
+       absorb the 8px dot this pill carries and the status pill does
+       not, so both pills end up the same height and their text
+       starts on the same optical inset. */
+    padding: 3px 12px 3px 10px !important;
     background: var(--p-bg, var(--portal-surface-active)) !important;
     border: 0 !important;
     border-radius: 999px !important;
     font-family: var(--ic-font-body) !important;
-    font-size: 11px !important;
+    font-size: 10.5px !important;
     font-weight: 600 !important;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -2388,7 +2403,16 @@ html body .portal .oneline > .priority-block {
    2026 lock: Low=true green/neutral (NOT cyan; cyan is the
    Security brand accent only), Medium=amber, High=red-leaning (a
    distinct blend between amber and red so it doesn't collide with
-   Critical), Critical=red. */
+   Critical), Critical=red.
+
+   Every value below resolves through the shared pill tokens rather
+   than a literal, so a priority pill and the status pill beside it
+   can never drift apart: Low borrows the Resolved green, Medium the
+   New amber, Critical the Rejected red, and High uses its own
+   `--pill-high-*` set (the one hue with no status counterpart). The
+   `-dot` swatches use `--portal-ok / --portal-warn / --portal-err`,
+   the saturated siblings of those same washes. Both modes flip
+   automatically because the tokens do. */
 
 /* Low: true green. `rgb(104, 188, 0)` is this tenant's HaloPSA-default
    Low swatch (lime green). */
@@ -2398,31 +2422,31 @@ html body .portal .oneline:has(> .priority-block[style*="rgb(0, 123, 255)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(108, 117, 125)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(40, 167, 69)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(104, 188, 0)"]) {
-    --p-bg: #E3F0E8;
-    --p-ink: #093A1B;
-    --p-dot: #15803D;
+    --p-bg: var(--pill-resolved-bg);
+    --p-ink: var(--pill-resolved-ink);
+    --p-dot: var(--portal-ok);
 }
 /* Medium: amber. */
 html body .portal .oneline.p-medium,
 html body .portal .oneline:has(> .priority-block[style*="rgb(164, 221, 0)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(252, 220, 0)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(255, 193, 7)"]) {
-    --p-bg: #F8E8E2;
-    --p-ink: #882E08;
-    --p-dot: #C2410C;
+    --p-bg: var(--pill-new-bg);
+    --p-ink: var(--pill-new-ink);
+    --p-dot: var(--portal-warn);
 }
-/* High: red-leaning. A blend between amber and red so it reads as
-   "warmer than Medium, one step short of Critical" rather than
-   colliding with either. `rgb(254, 146, 0)` is a HaloPSA variant seen
-   on older records (1-digit off the more common 251/158 default). */
+/* High: red-leaning, the amber-to-red blend defined as
+   `--pill-high-*` in the token block above. `rgb(254, 146, 0)` is a
+   HaloPSA variant seen on older records (1-digit off the more common
+   251/158 default). */
 html body .portal .oneline.p-high,
 html body .portal .oneline:has(> .priority-block[style*="rgb(251, 158, 0)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(255, 152, 0)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(255, 87, 34)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(254, 146, 0)"]) {
-    --p-bg: #F7E6E3;
-    --p-ink: #8E220F;
-    --p-dot: #BE2E14;
+    --p-bg: var(--pill-high-bg);
+    --p-ink: var(--pill-high-ink);
+    --p-dot: var(--pill-high-dot);
 }
 /* Critical: red. `rgb(244, 78, 59)` is the HaloPSA-default vermillion
    this tenant ships. */
@@ -2432,39 +2456,48 @@ html body .portal .oneline:has(> .priority-block[style*="rgb(255, 0, 0)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(255, 46, 0)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(183, 28, 28)"]),
 html body .portal .oneline:has(> .priority-block[style*="rgb(244, 78, 59)"]) {
-    --p-bg: #F7E4E4;
-    --p-ink: #9D1818;
-    --p-dot: #B91C1C;
+    --p-bg: var(--pill-rejected-bg);
+    --p-ink: var(--pill-rejected-ink);
+    --p-dot: var(--portal-err);
 }
 
-/* Dark-mode tints, translucent washes + light ink, matching the
-   status-pill dark treatment elsewhere in this file. */
+/* Dark-mode tints, translucent washes + light ink.
+
+   Since the block above stopped hardcoding literals these four rules
+   are strictly redundant: they assign the same `--pill-*` / `--portal-*`
+   tokens, and `.theme-dark` has already swapped what those tokens
+   resolve to, so the light rules alone would produce the dark palette.
+   They are kept deliberately, as the documented seam where a priority
+   hue can be given a dark-only value that is NOT just the status
+   token's dark twin. Delete them only together with that decision;
+   until then, any edit here must be mirrored above or the two modes
+   part company. */
 .theme-dark .portal .oneline.p-low,
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(0, 98, 177)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(0, 123, 255)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(108, 117, 125)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(40, 167, 69)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(104, 188, 0)"]) {
-    --p-bg: rgba(52, 211, 153, 0.18);
-    --p-ink: #61DDAF;
-    --p-dot: #34D399;
+    --p-bg: var(--pill-resolved-bg);
+    --p-ink: var(--pill-resolved-ink);
+    --p-dot: var(--portal-ok);
 }
 .theme-dark .portal .oneline.p-medium,
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(164, 221, 0)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(252, 220, 0)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 193, 7)"]) {
-    --p-bg: rgba(251, 146, 60, 0.18);
-    --p-ink: #FCA259;
-    --p-dot: #FB923C;
+    --p-bg: var(--pill-new-bg);
+    --p-ink: var(--pill-new-ink);
+    --p-dot: var(--portal-warn);
 }
 .theme-dark .portal .oneline.p-high,
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(251, 158, 0)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 152, 0)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 87, 34)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(254, 146, 0)"]) {
-    --p-bg: rgba(250, 130, 86, 0.20);
-    --p-ink: #FA8C64;
-    --p-dot: #FA8256;
+    --p-bg: var(--pill-high-bg);
+    --p-ink: var(--pill-high-ink);
+    --p-dot: var(--pill-high-dot);
 }
 .theme-dark .portal .oneline.p-critical,
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(220, 53, 69)"]),
@@ -2472,9 +2505,9 @@ html body .portal .oneline:has(> .priority-block[style*="rgb(244, 78, 59)"]) {
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(255, 46, 0)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(183, 28, 28)"]),
 .theme-dark .portal .oneline:has(> .priority-block[style*="rgb(244, 78, 59)"]) {
-    --p-bg: rgba(248, 113, 113, 0.18);
-    --p-ink: #F97F7F;
-    --p-dot: #F87171;
+    --p-bg: var(--pill-rejected-bg);
+    --p-ink: var(--pill-rejected-ink);
+    --p-dot: var(--portal-err);
 }
 
 /* Respect users with reduced-motion preferences, drop the pulse, keep
@@ -2500,14 +2533,23 @@ html body .portal .priority-chip {
 /* Legacy .priority-avatar.{p1..p4}, HaloPSA doesn't emit these on
    our current pages (the priority column uses `.oneline >
    .priority-block` swatch + text pattern, styled elsewhere) but we
-   keep a rule here as a safety net. Remapped to the new pill token
-   names so nothing references the old --pill-open/waiting/etc. */
+   keep a rule here as a safety net.
+
+   p1..p4 are HaloPSA's priority ids, Critical down to Low, which the
+   two inline-rgb selectors below corroborate: `rgb(220, 53, 69)` sits
+   in the Critical fallback list of the live pill and `rgb(255, 152, 0)`
+   in the High list. Each id therefore points at the SAME token its
+   live `.oneline` counterpart uses, so the safety net can never paint
+   a priority a different colour from the pill it is standing in for.
+   Previously p2 reached amber through `--pill-review-*` and p3/p4 were
+   an unrelated blue and grey, left over from a mechanical rename; they
+   agreed with the live palette only by luck, and only for p1/p2. */
 html body .portal .priority-avatar[style*="rgb(220, 53, 69)"],
 html body .portal .priority-avatar.p1 { background-image: linear-gradient(var(--pill-rejected-bg), var(--pill-rejected-bg)) !important; background-color: var(--pill-rejected-bg) !important; color: var(--pill-rejected-ink) !important; }
 html body .portal .priority-avatar[style*="rgb(255, 152, 0)"],
-html body .portal .priority-avatar.p2 { background-image: linear-gradient(var(--pill-review-bg), var(--pill-review-bg)) !important; background-color: var(--pill-review-bg) !important; color: var(--pill-review-ink) !important; }
-html body .portal .priority-avatar.p3 { background-image: linear-gradient(var(--pill-assigned-bg), var(--pill-assigned-bg)) !important; background-color: var(--pill-assigned-bg) !important; color: var(--pill-assigned-ink) !important; }
-html body .portal .priority-avatar.p4 { background-image: linear-gradient(var(--pill-closed-bg), var(--pill-closed-bg)) !important; background-color: var(--pill-closed-bg) !important; color: var(--pill-closed-ink) !important; }
+html body .portal .priority-avatar.p2 { background-image: linear-gradient(var(--pill-high-bg), var(--pill-high-bg)) !important; background-color: var(--pill-high-bg) !important; color: var(--pill-high-ink) !important; }
+html body .portal .priority-avatar.p3 { background-image: linear-gradient(var(--pill-new-bg), var(--pill-new-bg)) !important; background-color: var(--pill-new-bg) !important; color: var(--pill-new-ink) !important; }
+html body .portal .priority-avatar.p4 { background-image: linear-gradient(var(--pill-resolved-bg), var(--pill-resolved-bg)) !important; background-color: var(--pill-resolved-bg) !important; color: var(--pill-resolved-ink) !important; }
 
 /* ─── SLA countdown bar ─────────────────────────────────────
    Used on Home ticket cards AND inside the ticket-list `SLA Time
@@ -2581,8 +2623,8 @@ html body .portal .rt-td .sla-perc-bar {
    with the raw string "On Hold" when a ticket's SLA is paused. The
    text ships with no class hook to target, so `iframe-theme.js`
    wraps it in a `<span data-on-hold-indicator>`, this rule paints
-   that span as a pill matching the `.status-avatar.s-awaiting-user`
-   shape (uppercase 700 Figtree, 999px radius, letter-spaced)
+   that span as a pill matching the `.status-avatar.*` shape
+   (uppercase 600 Figtree, 999px radius, letter-spaced, `3px 12px`)
    but in a red palette that pairs with the SLA-overdue countdown
    colour (`--portal-err` family) from `.sla-perc-bar` above. This is
    a deliberate exception to the status-pill bucket mapping: the
@@ -2590,7 +2632,17 @@ html body .portal .rt-td .sla-perc-bar {
    not a failure), but THIS element replaces the SLA countdown bar
    itself on home-page tiles: "the clock isn't running" reads closer
    to the overdue/blocked semantic than a plain awaiting-state, so it
-   stays in the red family.
+   stays in the red family. The red is `--pill-rejected-*`, the same
+   token the Rejected status pill and the Critical priority pill use,
+   so the exception is a deliberate reuse of an existing hue rather
+   than a fourth red invented in place.
+
+   Geometry, by contrast, is NOT an exception. It previously ran 700
+   weight and `5px 12px 5px 11px` padding with nothing anywhere
+   justifying either, which made this pill visibly taller and heavier
+   than the status pill it sits beside on the same tile. It now takes
+   the shared `.status-avatar.*` geometry, weight 600 and `3px 12px`.
+   The colour exception above is the only exception here.
 
    `\23F8` (U+23F8, pause) as a `::before` glyph. `font-variant-emoji:
    text` forces monochrome rendering, without it macOS/iOS Safari
@@ -2598,18 +2650,26 @@ html body .portal .rt-td .sla-perc-bar {
    pill. Same icon-font shim pattern as the ADF panel icons earlier
    in the file.
 
-   Dark mode uses the compound `.portal.theme-dark` selector because
-   HaloPSA stamps BOTH classes on the same `.app-container` element, a descendant combinator (`.portal .theme-dark`) never matches. */
+   Dark mode is written with `.theme-dark` as an ANCESTOR. Per
+   AGENTS.md gotcha 1 HaloPSA stamps `.theme-dark` on
+   `div.app-container`, which is above `.portal`, not the same element,
+   so the compound `.portal.theme-dark` this rule used to carry never
+   matched. While the colours here were literals, that left the pill
+   stuck on its light-mode pink in dark mode. The panel blocks later in
+   this file record the same finding. Now that the light rule reads
+   `--pill-rejected-*` it already flips on its own, so the dark rule
+   below is belt-and-braces: it is kept in the corrected ancestor form
+   as the seam for any future dark-only value. */
 html body .portal [data-on-hold-indicator] {
     display: inline-flex !important;
     align-items: center;
     gap: 6px;
-    padding: 5px 12px 5px 11px !important;
-    background-color: #F7E4E4 !important;
-    color: #9D1818 !important;
+    padding: 3px 12px !important;
+    background-color: var(--pill-rejected-bg) !important;
+    color: var(--pill-rejected-ink) !important;
     font-family: var(--ic-font-body) !important;
     font-size: 10.5px !important;
-    font-weight: 700 !important;
+    font-weight: 600 !important;
     letter-spacing: 0.06em !important;
     text-transform: uppercase;
     line-height: 1 !important;
@@ -2623,9 +2683,9 @@ html body .portal [data-on-hold-indicator]::before {
     display: inline-block;
     font-variant-emoji: text;
 }
-html body .portal.theme-dark [data-on-hold-indicator] {
-    background-color: rgba(248, 113, 113, 0.20) !important;
-    color: #F97F7F !important;
+html body .theme-dark [data-on-hold-indicator] {
+    background-color: var(--pill-rejected-bg) !important;
+    color: var(--pill-rejected-ink) !important;
 }
 
 
@@ -2664,10 +2724,15 @@ html body .portal .rt-thead.-header .rt-th {
     text-transform: uppercase;
     color: var(--portal-text-muted) !important;
     font-weight: 700 !important;
-    /* Match the body-cell 12px 14px so header text aligns with the
-       body column content below. HaloPSA default is 5px on all sides,
-       which pulled the header text 9px to the left of each body cell. */
-    padding: 12px 14px !important;
+    /* 16px horizontal matches `.rt-td`'s `9px 16px` below, so header
+       text sits on the same left edge as the body column content.
+       HaloPSA's default is 5px on all sides, which pulled the header
+       text 11px to the left of each body cell. Vertical stays tighter
+       than the horizontal at 12px: the header carries one short
+       uppercase label and does not need the body row's breathing
+       room. Declared once, here, for every react-table on the portal;
+       `.ReactTable.main-table` used to restate it as `14px 16px`. */
+    padding: 12px 16px !important;
     text-align: left;
     display: flex !important;
     align-items: center !important;
@@ -2719,8 +2784,6 @@ html body .portal .ReactTable.main-table {
 }
 html body .portal .ReactTable.main-table .rt-thead.-header {
     background: var(--portal-table-header-bg) !important;
-    border-bottom: 1px solid var(--portal-border) !important;
-    box-shadow: none !important;
 }
 html body .portal .ReactTable.main-table .rt-thead.-header .rt-th {
     color: var(--portal-text-muted) !important;
@@ -2730,7 +2793,6 @@ html body .portal .ReactTable.main-table .rt-thead.-header .rt-th {
     letter-spacing: 0.08em !important;
     text-transform: uppercase;
     border-right: 1px solid var(--portal-border-soft) !important;
-    padding: 14px 16px !important;
     display: flex !important;
     align-items: center !important;
     gap: 6px;
@@ -2836,9 +2898,18 @@ html body .portal .rt-thead.-filters input[type="date"]::-webkit-calendar-picker
 html body .portal .rt-thead.-filters input[type="date"]::-webkit-calendar-picker-indicator:hover {
     opacity: 0.9;
 }
-/* Header row above filters, drop the double separator. */
+/* Header row above filters: one 1px hairline, and nothing else.
+   react-table v6 ships `.rt-thead.-header` with a heavy drop shadow,
+   which stacked with the border read as a double separator, so the
+   shadow is killed here. The hairline itself is declared ONLY here,
+   for every react-table on the portal. This rule used to say
+   `border-bottom: 0` and was out-specified on every real list by
+   `.ReactTable.main-table .rt-thead.-header`, so the separator it
+   meant to remove shipped anyway; the hairline is the look we want,
+   so it is now stated once, plainly, at the level that reaches all
+   tables rather than just the main one. */
 html body .portal .rt-thead.-header {
-    border-bottom: 0 !important;
+    border-bottom: 1px solid var(--portal-border) !important;
     box-shadow: none !important;
 }
 
@@ -2931,8 +3002,11 @@ html body .portal .buttons-container .ui.button.dropdown {
    of its inner `<input>` (~36-38px depending on padding), so the row
    showed a 2-3px height drift between dropdowns and search. Flex
    centring keeps the inner input vertically centred regardless of its
-   own padding. The hero-page searchbox keeps its 60px override via the
-   `.searchscreen .searchbox` selector higher in the file (more specific). */
+   own padding. The home hero keeps its taller 64px via the
+   `.searchscreen:not(.searchscreen-full) .searchbox` selector higher in
+   the file, which carries `!important` for exactly this reason. The
+   other `.searchscreen .searchbox` rule up there sets chrome only, no
+   height, so the search-results page lands on this 40px too. */
 html body .portal .searchbox {
     height: 40px !important;
     display: flex !important;
@@ -3003,10 +3077,21 @@ html body .portal .Select__control--is-focused {
     border-color: var(--portal-accent) !important;
     box-shadow: 0 0 0 3px var(--portal-accent-subtle) !important;
 }
+/* Menu chrome. This is the ONLY place `.Select__menu`,
+   `.Select__menu-list` and `.Select__option` are declared portal-wide,
+   so every react-select dropdown (My Tickets filter, form selects,
+   toolbar search) is one component. The toolbar-search section later
+   in the file keeps only the rules that are genuinely search-specific,
+   scoped under `.buttoncontainer.nav-search`.
+
+   `--portal-radius-md` and `--portal-shadow-sm` put the menu on the
+   same material as the cards it drops over; a heavier shadow made a
+   filter dropdown read as a modal. `margin-top: 4px` detaches it from
+   the control so the two edges don't fuse. */
 html body .portal .Select__menu {
-    border-radius: var(--portal-radius-sm) !important;
+    border-radius: var(--portal-radius-md) !important;
     border: 1px solid var(--portal-border) !important;
-    box-shadow: var(--portal-shadow-hover) !important;
+    box-shadow: var(--portal-shadow-sm) !important;
     overflow: hidden;
     background: var(--portal-surface) !important;
     margin-top: 4px !important;
@@ -3022,10 +3107,13 @@ html body .portal .Select__menu-list {
    three states (default / focused / selected) as brand-tinted rows
    with our radius token so the menu reads as part of the same
    surface family as dropdown menus, KB rows and account sidebar nav.
+   The 4px menu-list padding plus 2px row margin is what lets a row's
+   `--portal-radius-xs` corners actually show against the menu edge.
    `!important` is needed because react-select applies its emotion
    classes inline at runtime with high priority. */
 html body .portal .Select__option {
     background: transparent !important;
+    background-color: transparent !important;
     color: var(--portal-text) !important;
     padding: 8px 12px !important;
     border-radius: var(--portal-radius-xs) !important;
@@ -3036,17 +3124,30 @@ html body .portal .Select__option {
 }
 /* Hover tint matches `.ui.dropdown .menu .item:hover` (view-mode menu):
    both use `accent-soft` bg + `accent` ink so every dropdown on the
-   portal shares one hover signature. Previously react-select options
-   used a flat `surface-hover` grey that read as "unstyled OS menu"
-   next to the tinted Semantic UI menu, the asymmetry the user
-   flagged on the tickets-vs-KB hover screenshots. */
-html body .portal .Select__option--is-focused {
+   portal shares one hover signature. A flat `surface-hover` grey reads
+   as an "unstyled OS menu" next to the tinted Semantic UI menu, the
+   asymmetry the user flagged on the tickets-vs-KB hover screenshots.
+
+   Specificity note, HaloPSA ships
+   `.theme-dark .Select__option.Select__option--is-focused` at (0,3,0)
+   with `bg: rgb(102,102,102) !important`, and a plain
+   `.Select__option--is-focused` loses to it in dark mode. So the two
+   interactive states chain `.Select__option` onto their own state
+   class (two classes on the same element), reaching (0,3,2). A copy of
+   this block used to live in the toolbar-search section painting these
+   same states grey; it out-specified the rule here and put every
+   dropdown on the portal back on the grey this comment describes as
+   the bug. There is now one declaration, and it is this one. */
+html body .portal .Select__option.Select__option--is-focused,
+html body .portal .Select__option:hover {
     background: var(--portal-accent-soft) !important;
+    background-color: var(--portal-accent-soft) !important;
     color: var(--portal-accent) !important;
 }
-html body .portal .Select__option--is-selected,
-html body .portal .Select__option--is-selected.Select__option--is-focused {
+html body .portal .Select__option.Select__option--is-selected,
+html body .portal .Select__option.Select__option--is-selected.Select__option--is-focused {
     background: var(--portal-accent-subtle) !important;
+    background-color: var(--portal-accent-subtle) !important;
     color: var(--portal-accent) !important;
     font-weight: 600 !important;
 }
@@ -3115,8 +3216,14 @@ html body .portal .-pagination .-totalPages {
 }
 
 /* Prev / Next / page-jump buttons, share ghost-family chrome with
-   the rest of the portal. Width shrinks to content (not 100% of the
-   flex parent). */
+   the rest of the portal (`website-portal-mapping.md` section 6 lists
+   `.-pagination .-btn` under `<Button variant="ghost">`). Width shrinks
+   to content (not 100% of the flex parent). Radius and height are set
+   here, which is now their only source: `button.-btn:hover` used to be
+   listed in the primary-button group as well, which never gave these
+   the solid fill it intended (the ghost hover below is later and won
+   the colours) but did pull their padding from 22px to 18px on hover
+   alone, so the button narrowed 8px under the cursor. */
 html body .portal .-pagination .-btn,
 html body .portal button.-btn {
     background-color: transparent !important;
@@ -3372,78 +3479,22 @@ html body .portal .smooth-dnd-container {
     background: transparent !important;
 }
 
-html body .portal .react-kanban-column {
-    background: var(--portal-surface) !important;
-    border: 1px solid var(--portal-border) !important;
-    border-radius: var(--portal-radius-md) !important;
-    padding: 18px 14px !important;
-    box-shadow: none !important;
-    min-width: 280px;
-}
+/* HaloPSA's Kanban ships `.board-card` > `.board-card-content`. It does
+   NOT ship `.react-kanban-card` or `.react-kanban-column`, those are the
+   library's own classes and they are not in this DOM. A full column and
+   card treatment written against those classes used to sit above this
+   comment. It was inert, and it was not a harmless spare: it carried a
+   DIFFERENT card (bg `--portal-bg`, 14px padding) from the live one
+   below, so had HaloPSA ever emitted the library markup the board would
+   have quietly changed appearance. Removed, so that a future DOM change
+   gets styled deliberately rather than by a stale fallback nobody
+   reviewed.
 
-html body .portal .react-kanban-column > div:first-child,
-html body .portal .react-kanban-column-header {
-    font-family: var(--ic-font-mono) !important;
-    font-size: 11px !important;
-    font-weight: 500 !important;
-    letter-spacing: 0.14em !important;
-    text-transform: uppercase;
-    color: var(--portal-text-muted) !important;
-    margin-bottom: 14px !important;
-    padding: 0 4px !important;
-    border: none !important;
-    background: transparent !important;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-html body .portal .react-kanban-column > div:first-child::after,
-html body .portal .react-kanban-column-header::after {
-    content: '';
-    flex: 1;
-    margin-left: 12px;
-    height: 1px;
-    background: var(--portal-border-soft);
-}
-
-html body .portal .react-kanban-card {
-    background: var(--portal-bg) !important;
-    border: 1px solid var(--portal-border) !important;
-    border-radius: var(--portal-radius-sm) !important;
-    padding: 14px !important;
-    margin-bottom: 10px !important;
-    box-shadow: var(--portal-shadow-sm) !important;
-    transition: transform var(--ic-dur) var(--ic-ease),
-                border-color var(--ic-dur) var(--ic-ease),
-                box-shadow var(--ic-dur) var(--ic-ease);
-    font-family: var(--ic-font-body) !important;
-}
-html body .portal .react-kanban-card:hover {
-    transform: translateY(-1px);
-    border-color: var(--portal-accent) !important;
-    box-shadow: var(--portal-shadow) !important;
-}
-html body .portal .react-kanban-card__title {
-    font-size: 14px !important;
-    font-weight: 500 !important;
-    color: var(--portal-heading) !important;
-    border: none !important;
-    padding: 0 0 6px !important;
-    letter-spacing: -0.005em;
-}
-html body .portal .react-kanban-card__description {
-    font-size: 12.5px !important;
-    color: var(--portal-text-secondary) !important;
-    line-height: 1.5;
-}
-
-/* HaloPSA's Kanban actually ships `.board-card` > `.board-card-content`
-   (NOT `.react-kanban-card`, that's the library's own class which
-   isn't present here). The `.board-card-content` default is a flat
-   grey (#484848) with 3px radius and a 1px dark-grey border, reads
-   as unstyled chrome next to the tokenised column surface around it.
-   Reskin to portal tokens so each ticket card reads as a peer of the
-   KB/activity tiles. */
+   The `.board-card-content` default is a flat grey (#484848) with 3px
+   radius and a 1px dark-grey border, which reads as unstyled chrome
+   next to the tokenised column surface around it. Reskin to portal
+   tokens so each ticket card reads as a peer of the KB/activity
+   tiles. */
 html body .portal .board-card {
     background: transparent !important;
     border: 0 !important;
@@ -3872,10 +3923,13 @@ html body .portal .details-form label {
     display: inline-block;
 }
 
+/* Field chrome, shared by inputs and textarea. Height is NOT set
+   here: the single-line fields take 42px from the form-control-height
+   rule further down, and textarea overrides to `height: auto` just
+   below. A 40px pair used to sit here and was dead in both cases. */
 html body .portal .details-form input[type="text"]:not(.Select__input),
 html body .portal .details-form input:not([type]):not(.Select__input),
 html body .portal .details-form textarea {
-    height: 40px !important;
     border-radius: var(--portal-radius-sm) !important;
     border: 1px solid var(--portal-border) !important;
     background-color: var(--portal-bg) !important;
@@ -3904,7 +3958,6 @@ html body .portal .details-form textarea:focus {
 }
 
 html body .portal .details-form .Select__control {
-    min-height: 40px !important;
     border-radius: var(--portal-radius-sm) !important;
     border: 1px solid var(--portal-border) !important;
     background-color: var(--portal-bg) !important;
@@ -4654,12 +4707,23 @@ html body .portal .tabsheet.tabselected {
 }
 
 /* Workflow stages wrapper, surface card so the step row reads as a
-   contained visual unit rather than floating glyphs on the bg. */
+   contained visual unit rather than floating glyphs on the bg.
+
+   The stepper is a card, so it is drawn like the other cards on the
+   page: `--portal-radius-md` (12px) and `--portal-border` (#E2E5EE),
+   the same as the activity and sidebar cards, and 20px padding all
+   round rather than 24px at the sides. It previously used radius-sm,
+   border-soft and 20px 24px, three near misses in a row against its
+   neighbours, which read as sloppy rather than as a deliberate
+   variant. The connector geometry is unaffected: the tail is
+   positioned off the item box (`50% + 20px` by `100% - 40px`) which
+   is padding independent, re-verified on the 2-step and 6-step
+   steppers. */
 html body .portal .workflow-steps-wrap {
     background: var(--portal-surface) !important;
-    border: 1px solid var(--portal-border-soft) !important;
-    border-radius: var(--portal-radius-sm) !important;
-    padding: 20px 24px !important;
+    border: 1px solid var(--portal-border) !important;
+    border-radius: var(--portal-radius-md) !important;
+    padding: 20px !important;
     margin-bottom: 16px !important;
 }
 
@@ -4882,22 +4946,11 @@ html body .portal .content > .col-md-8:empty {
     display: none !important;
 }
 
-/* 3. The stepper is a card, so draw it like the other cards.
-   It was the only card on the page in different material:
-   `--portal-radius-sm` (10px) against `--portal-radius-md`
-   (12px) on the activity and sidebar cards, `--portal-border-
-   soft` (#ECEEF4) against `--portal-border` (#E2E5EE), and
-   24px side padding against 20px everywhere else. Three near
-   misses in a row read as sloppy rather than as a deliberate
-   variant. The connector geometry is unaffected: the tail is
-   positioned off the item box (`50% + 20px` by `100% - 40px`)
-   which is padding independent, re-verified on the 2-step and
-   6-step steppers after the change. */
-html body .portal .workflow-steps-wrap {
-    border-color: var(--portal-border) !important;
-    border-radius: var(--portal-radius-md) !important;
-    padding: 20px !important;
-}
+/* 3. The stepper card's radius, border and padding used to be
+   corrected here, in a second `.workflow-steps-wrap` rule that
+   overrode the one in section 12. Both the values and the reasoning
+   now live in that single rule, so this override was removed rather
+   than left to be read as a live decision. */
 
 @media (min-width: 769px) {
 
@@ -5457,11 +5510,14 @@ html body .portal .kbdetails .kbmeta {
 /* KB tags (`span.kbtags`): Spline Sans Mono uppercase pill. Shape +
    typography are shared; COLOUR cycles through a 5-hue palette
    (blue → green → orange → red → purple) using status-pill tokens
-   so each article's tag row reads as distinct chips instead of a
-   wall of identical blue. The five tokens flip automatically between
-   light and dark mode via the `:root` / `.theme-dark` definitions
-   (pastel-bg + dark-ink in light; translucent-rgba-bg + light-ink in
-   dark), exactly matching the status pill pattern.
+   chosen for their HUE, not their workflow meaning; a tag carries no
+   status, these are simply the five hues the file already defines.
+   The point is that each article's tag row reads as distinct chips
+   instead of a wall of identical blue. The five tokens flip
+   automatically between light and dark mode via the `:root` /
+   `.theme-dark` definitions (pastel-bg + dark-ink in light;
+   translucent-rgba-bg + light-ink in dark), exactly matching the
+   status pill pattern.
 
    HaloPSA emits `<span class="kbtags">text</span>` with no per-tag
    class or inline style to signal colour, so there's no deterministic
@@ -5513,11 +5569,15 @@ html body .portal .kbtags:nth-of-type(5n+1) {
     background: var(--pill-assigned-bg) !important;
     color: var(--pill-assigned-ink) !important;
 }
-/* Position 2 (5n+2); green (--pill-progress-*) */
+/* Position 2 (5n+2); green (--pill-resolved-*). Was --pill-progress-*,
+   which is byte-identical to the --pill-assigned-* on position 1 (In
+   Progress is deliberately blue, see the token comment), so positions
+   1 and 2 rendered the same blue and the five-hue cycle shipped as
+   four. --pill-resolved-* is the true green the label promised. */
 html body .portal span.kbtags:nth-of-type(5n+2),
 html body .portal .kbtags:nth-of-type(5n+2) {
-    background: var(--pill-progress-bg) !important;
-    color: var(--pill-progress-ink) !important;
+    background: var(--pill-resolved-bg) !important;
+    color: var(--pill-resolved-ink) !important;
 }
 /* Position 3 (5n+3); orange (--pill-action-required-*) */
 html body .portal span.kbtags:nth-of-type(5n+3),
@@ -5966,17 +6026,39 @@ html body .portal .kbdetails .status-macro.aui-lozenge {
     text-transform: uppercase !important;
     letter-spacing: 0.06em !important;
 }
-html body .portal .kbdetails .status-macro.aui-lozenge-complete { background: #E4EAFC !important; color: #192C66 !important; }
-html body .portal .kbdetails .status-macro.aui-lozenge-success  { background: #E3F0E8 !important; color: #093A1B !important; }
-html body .portal .kbdetails .status-macro.aui-lozenge-current  { background: #F8E8E2 !important; color: #882E08 !important; }
-html body .portal .kbdetails .status-macro.aui-lozenge-error    { background: #F7E4E4 !important; color: #9D1818 !important; }
-html body .portal .kbdetails .status-macro.aui-lozenge-progress { background: #EFE9FB !important; color: #321E60 !important; }
+/* Colours come from the shared `--pill-*` tokens, the same ones the
+   ticket status pills use: an Atlassian lozenge and a HaloPSA status
+   pill are the same object to a reader, so they should never be two
+   palettes. The five literals these replaced were byte-identical to
+   the light tokens, so light mode is unchanged.
 
-html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-complete { background: rgba(126,156,255,0.15) !important; color: #8EA8FF !important; }
-html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-success  { background: rgba(52,211,153,0.15) !important; color: #61DDAF !important; }
-html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-current  { background: rgba(251,146,60,0.15) !important; color: #FCA259 !important; }
-html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-error    { background: rgba(248,113,113,0.15) !important; color: #F97F7F !important; }
-html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-progress { background: rgba(155,123,245,0.15) !important; color: #B898FF !important; }
+   Dark mode DOES change, deliberately: the literals here carried a
+   0.15 background wash against the tokens' 0.18, which left every KB
+   lozenge three percentage points paler than the equivalent ticket
+   pill on the same screen. Taking the token adopts 0.18 and closes
+   that gap. The inks were already identical.
+
+   Selector position: `.theme-dark` sits on `div.app-container`, an
+   ancestor of both `.portal` and `.kbdetails` (AGENTS.md gotcha 1),
+   so the dark set is written as an ancestor, never as the compound
+   `.portal.theme-dark`, which would not match.
+
+   Now that both sets name tokens rather than literals the dark set is
+   strictly redundant, `.theme-dark` has already swapped what those
+   token names resolve to. It is kept as the seam where a lozenge could
+   be given a dark-only value that is not the light token's dark twin;
+   until that happens, edit the two sets together. */
+html body .portal .kbdetails .status-macro.aui-lozenge-complete { background: var(--pill-assigned-bg) !important;  color: var(--pill-assigned-ink) !important; }
+html body .portal .kbdetails .status-macro.aui-lozenge-success  { background: var(--pill-resolved-bg) !important;  color: var(--pill-resolved-ink) !important; }
+html body .portal .kbdetails .status-macro.aui-lozenge-current  { background: var(--pill-new-bg) !important;       color: var(--pill-new-ink) !important; }
+html body .portal .kbdetails .status-macro.aui-lozenge-error    { background: var(--pill-rejected-bg) !important;  color: var(--pill-rejected-ink) !important; }
+html body .portal .kbdetails .status-macro.aui-lozenge-progress { background: var(--pill-scheduled-bg) !important; color: var(--pill-scheduled-ink) !important; }
+
+html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-complete { background: var(--pill-assigned-bg) !important;  color: var(--pill-assigned-ink) !important; }
+html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-success  { background: var(--pill-resolved-bg) !important;  color: var(--pill-resolved-ink) !important; }
+html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-current  { background: var(--pill-new-bg) !important;       color: var(--pill-new-ink) !important; }
+html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-error    { background: var(--pill-rejected-bg) !important;  color: var(--pill-rejected-ink) !important; }
+html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-progress { background: var(--pill-scheduled-bg) !important; color: var(--pill-scheduled-ink) !important; }
 
 
 /* ─────────────────────────────────────────────────────────
@@ -6106,9 +6188,17 @@ html body .portal .page-title:has(> .listwidget-icon.fa-desktop) + div {
    ships with a CSS-in-JS hash class painting the focused option at
    `bg: #666; color: rgb(74, 116, 240)` (link-blue on medium grey).
    On a dark theme that combination drops AA contrast and renders as
-   washed-out text inside a light bar. Reskin the menu chrome to
-   match the portal surface tokens, and force focused/hovered options
-   to white-on-surface-hover so the result text reads clearly.
+   washed-out text inside a light bar.
+
+   Menu, menu-list and option chrome are NOT redeclared here. This
+   block used to carry its own copies, written for this one dropdown
+   but selected globally, and being later in the file they redefined
+   the menu radius and shadow and repainted every option row on the
+   portal grey. Everything shared now lives in the single react-select
+   block in section 10; what stays below is only what is genuinely
+   specific to the toolbar search, scoped under
+   `.buttoncontainer.nav-search` or to this dropdown's own result
+   markup.
 
    Inner result text inherits the global link colour from
    `.agent-dropdown-option` / `.single-line-text.oneline`, so we
@@ -6124,14 +6214,6 @@ html body .portal .nhd-nav-search,
 html body .portal .buttoncontainer.nav-search {
     width: 600px !important;
     max-width: 600px !important;
-}
-
-html body .portal .Select__menu {
-    background: var(--portal-surface) !important;
-    border: 1px solid var(--portal-border) !important;
-    border-radius: var(--portal-radius-md) !important;
-    box-shadow: var(--portal-shadow-sm) !important;
-    overflow: hidden;
 }
 
 /* Toolbar-search dropdown only, widen to 600px and right-anchor so
@@ -6166,45 +6248,20 @@ html body .portal .Select__option .single-line-text.oneline {
     flex: 1 1 auto !important;
     min-width: 0;
 }
-html body .portal .Select__menu-list {
-    background: transparent !important;
-    padding: 4px 0 !important;
-}
-html body .portal .Select__option {
-    background: transparent !important;
-    background-color: transparent !important;
-    color: var(--portal-text) !important;
-    cursor: pointer;
-    transition: background-color var(--ic-dur) var(--ic-ease),
-                color var(--ic-dur) var(--ic-ease) !important;
-}
-/* Specificity note, HaloPSA ships
-   `.theme-dark .Select__option.Select__option--is-focused` at (0,0,3,0)
-   with `bg: rgb(102,102,102) !important`. To beat it we chain
-   `.Select__option.Select__option--is-focused` (two classes on the
-   same element), bringing our selector to (0,0,3,2); three classes
-   + two elements. Same trick for `--is-selected` and the keyboard-
-   `:focus` pseudo. Hover doesn't need the chain because there's no
-   class-stacked theme-dark equivalent. */
-html body .portal .Select__option.Select__option--is-focused,
-html body .portal .Select__option.Select__option--is-selected,
-html body .portal .Select__option:hover {
-    background: var(--portal-surface-hover) !important;
-    background-color: var(--portal-surface-hover) !important;
-    color: var(--portal-text) !important;
-}
 /* Inner result text, `.agent-dropdown-option` and
    `.single-line-text.oneline` carry the link-blue at rest from the
    global anchor rule. On hover/focus we want them to inherit the
-   parent option's contrast colour rather than render as link-blue
-   on the hover bg. Same specificity bump as above. */
+   parent option's ink rather than render as link-blue on the tinted
+   bg. That ink is `--portal-accent` (see the option states in section
+   10), so these follow it. Selectors chain `.Select__option` onto the
+   state class for the same reason the option rules do. */
 html body .portal .Select__option.Select__option--is-focused .agent-dropdown-option,
 html body .portal .Select__option.Select__option--is-focused .single-line-text,
 html body .portal .Select__option.Select__option--is-focused .oneline,
 html body .portal .Select__option:hover .agent-dropdown-option,
 html body .portal .Select__option:hover .single-line-text,
 html body .portal .Select__option:hover .oneline {
-    color: var(--portal-text) !important;
+    color: var(--portal-accent) !important;
 }
 
 /* Strip the "https://" prefix from the website link in the footer.

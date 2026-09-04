@@ -8087,6 +8087,155 @@ html body .portal .tree-menu input[type="text"] {
     html body .portal .react-calendar-timeline {
         overflow-x: auto !important;
     }
+
+    /* ── Nav logo, size it against the hamburger ────────────────
+       Joel, 2026-09-04: "on mobile the logo is too big compared to
+       hamburger menu icon and spaced too far to the right."
+
+       Measured at a 430px Chrome window: the hamburger button is a
+       50x60 box at x=0 and its glyph is about 18px, while the logo
+       link `a[href="/portal/"]` is a 240x50 box starting at x=55 whose
+       artwork renders about 205px wide by 28px tall. So the artwork is
+       10px taller than the glyph is wide, and it carries about 35px of
+       slack inside its own link box, which is what pushes the visible
+       logo well right of the hamburger instead of sitting beside it.
+
+       Two changes and only two. The artwork drops to 22px tall with
+       `width: auto`, so it scales on its own ratio to roughly 160px
+       and reads as a sibling of the 18px glyph rather than the loudest
+       thing in the bar. The link box then hugs that artwork
+       (`inline-flex`, `width: auto`, no horizontal padding) and takes
+       an 8px left margin, which is the gap to the hamburger.
+
+       The bar itself is untouched: no background, no height, no button
+       styling. That is the locked spec in website-portal-mapping.md
+       section 10, and none of it is in reach of these two selectors.
+       The hamburger is not addressed at all: it has no class here or
+       anywhere else in this file, and the 5px that currently sits
+       between the two boxes is small enough to leave alone. If that
+       5px turns out to be the hamburger's own trailing margin rather
+       than the link's leading one, the gap lands at 13px rather than
+       8px; a screenshot decides, and 13px is not a regression on the
+       measured starting point.
+
+       Gating. Neither element has a class, so the link is addressed by
+       its `href`, scoped to `.nhd-nav`. The box rule is additionally
+       gated on the link actually containing an `img` or `svg`: if
+       HaloPSA emits the logo as a CSS background on the link instead,
+       a hugging box would collapse to nothing and the logo would
+       disappear outright, so with no artwork child the link keeps the
+       240x50 box it has today and this rule does nothing.
+
+       Vertical centring is deliberately over-specified because the
+       bar's layout mode cannot be read from outside the DOM.
+       `height: 60px` matches the measured bar, `align-items: center`
+       centres the artwork inside the link if the link is a flex box,
+       `align-self: center` centres the link inside the bar if the bar
+       is one, and `vertical-align: middle` covers the inline-block
+       case. All four agree on the same result, and none of them can
+       change the bar's own height. */
+    html body .portal .nhd-nav a[href="/portal/"]:has(img, svg) {
+        display: inline-flex !important;
+        align-items: center !important;
+        align-self: center !important;
+        vertical-align: middle !important;
+        flex: 0 0 auto !important;
+        height: 60px !important;
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin: 0 0 0 8px !important;
+    }
+    html body .portal .nhd-nav a[href="/portal/"] img,
+    html body .portal .nhd-nav a[href="/portal/"] svg {
+        height: 22px !important;
+        width: auto !important;
+        max-width: 100% !important;
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* ── Dashboards list, let the table use its container ───────
+       /portal/dashboards renders a one-column react-table whose only
+       header is NAME. Measured at a 430px Chrome window: the table
+       came out about 335px wide inside a 402px container and truncated
+       its second row, so the list reads as narrower than everything
+       else on the page and loses content off its own right edge.
+
+       react-table v6 stamps an inline `min-width` on `.rt-thead` and
+       `.rt-tbody` computed from its column widths, and the table
+       resolves against that rather than against the container.
+       Releasing that floor and asking for the container width is the
+       whole change: no column is hidden, no row is re-laid out,
+       nothing is card-ified. `!important` at the same weight the
+       ticket-list and invoices blocks above use, because the floor
+       being overridden is an inline style.
+
+       Gated on the NAME header carrying the `data-col` stamp that
+       `Portal/iframe-theme.js` writes from the header's own text, the
+       same hook the two card blocks above use. With the shim not
+       running there is no stamp, the rule never matches, and the page
+       keeps exactly the width behaviour it has today.
+
+       The stamp is not unique to this page: any other react-table that
+       grows a NAME column matches too. That is tolerable here because
+       the rule only releases a width floor rather than imposing one,
+       and react-table's per-cell `flex-shrink: 0` means a genuinely
+       wide table would still overflow into its existing horizontal
+       scroll rather than squash its columns. */
+    html body .portal .ReactTable:has(.rt-thead .rt-th[data-col="name"]),
+    html body .portal .ReactTable:has(.rt-thead .rt-th[data-col="name"]) .rt-table,
+    html body .portal .ReactTable:has(.rt-thead .rt-th[data-col="name"]) .rt-thead,
+    html body .portal .ReactTable:has(.rt-thead .rt-th[data-col="name"]) .rt-tbody {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    /* ── Invoices header, stack the Stripe controls ────────────
+       Measured at a 430px Chrome window: the Pay All and Add Payment
+       Method controls above the invoice list sit indented about 40px
+       from the left with about 40px of vertical gap between them, so
+       the pair reads as floating mid-page and neither lines up with
+       the invoice cards below.
+
+       Full width and an 8px gap instead. `width: 100%` makes each
+       control reach the same edges as the cards, and also forces them
+       onto separate lines whatever their display mode. The horizontal
+       margins go, so the indent cannot survive on the controls
+       themselves. `margin-top: 0` with `margin-bottom: 8px` closes the
+       40px gap from either side, because the measurement does not say
+       whether that gap is the first control's trailing margin or the
+       second's leading one. `box-sizing` is pinned so a control with
+       its own padding cannot turn `width: 100%` into an overflow.
+
+       Element type is the open question, and it is why nothing here
+       sets `display`. The desktop invoice comment near line 3270 names
+       `#input-field-for-stripePayAll` as the Pay All button and
+       `#input-field-for-stripePaymentMethod` as the payment-method
+       select, but both ids are used only as `:has()` scope hooks
+       there, so no rule in this file has ever styled either element
+       directly and neither is confirmed to be the control itself
+       rather than a wrapper around it. A button, a select and a
+       wrapper div all take a width and margins identically; `display`
+       is the one property that would behave differently on a wrapper
+       laying its children out in a row, so it is left alone.
+
+       Scoped to `.container.ticket-list` because that is where the
+       same desktop comment places both controls, which keeps the rule
+       inert anywhere else those ids might later appear. */
+    html body .portal .container.ticket-list #input-field-for-stripePayAll,
+    html body .portal .container.ticket-list #input-field-for-stripePaymentMethod {
+        box-sizing: border-box !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        margin-top: 0 !important;
+        margin-bottom: 8px !important;
+    }
 }
 
 /* KB article column overflow fix, HaloPSA's React runtime injects

@@ -6852,6 +6852,24 @@ html body .portal .tree-menu input[type="text"] {
         padding-right: 0 !important;
     }
 
+    /* Date-and-time field pair, stack instead of sharing a row.
+       The desktop rules pair `.SingleDatePicker` at `flex: 1 1 220px`
+       with `input.browser-time-input` at `flex: 0 0 148px`, whose own
+       comment explains the split ("a date-only row gets a full-width
+       control while a date-and-time row leaves 148px for the time
+       input"). Those two bases plus the 10px column gap need 378px of
+       row, which no phone in the tuning set can give once the gutters
+       are taken off: at 386px the container's 14px each side leaves
+       358px, and the form card's own 10px padding takes it to about
+       338px. The date control is then squeezed below its 220px base
+       while the fixed 148px time box refuses to give any width back.
+       Let both take a full row of their own. Selectors are copied from
+       the desktop rules so only the flex basis changes. */
+    html body .portal .details-form .SingleDatePicker,
+    html body .portal .details-form input.browser-time-input {
+        flex: 1 1 100% !important;
+    }
+
     /* Page-title block (H1 + optional subheading + mandatory-hint); per Joel's mobile review: page titles should sit FLUSH with
        the viewport's left edge (no left inset). Right padding stays
        at 14px to give a gutter against the viewport right edge.
@@ -6866,6 +6884,38 @@ html body .portal .tree-menu input[type="text"] {
         padding-left: 0 !important;
         padding-right: 14px !important;
         max-width: none !important;
+    }
+
+    /* Page H1 on phones, one size for every surface. The KB article
+       already drops its H1 from 2.25rem to 1.5rem further down this
+       block, with the reason "desktop is 2.25rem (36px) which dominates
+       the mobile card". That reason applies just as hard to the 1.75rem
+       (28px) H1 every other page keeps, so home, tickets, ticket detail,
+       forms, services, invoices, kanban and profile all sat one step
+       larger than the article for no stated reason. Bring them onto the
+       article's 1.5rem (24px).
+
+       The selector list is copied verbatim from the desktop H1 rule near
+       the top of the file, so this matches exactly the same elements at
+       exactly the same specificity and wins purely on source order. That
+       also keeps `.search-title` out of it: the home hero title is a
+       `clamp()` of its own and is deliberately not part of this family.
+
+       The KB article H1 is inside `.kbdetails .page-title` so it matches
+       here too, but its own `.kbdetails.kbdetails h1` rule is more
+       specific and keeps its 1.2 line-height; the font-size is the same
+       1.5rem either way, so nothing is duplicated and nothing fights.
+
+       `overflow-wrap: anywhere` is the same protection the article H1
+       already carries: a long unbroken ticket subject or asset name must
+       wrap rather than push the page into a horizontal scroll. */
+    html body .portal .page-title h1,
+    html body .portal h1.profile-full-name,
+    html body .portal h1.profile-full-name.oneline,
+    html body .portal .details-form .details-group-header.title {
+        font-size: 1.5rem !important;
+        line-height: 1.15 !important;
+        overflow-wrap: anywhere !important;
     }
 
     /* KB article view (`/kb?faqlist=1&id=N`); the index renders the
@@ -6998,6 +7048,69 @@ html body .portal .tree-menu input[type="text"] {
         line-height: 1.6 !important;
     }
 
+    /* The rest of the article's own furniture, brought down in the same
+       spirit as the H2 and paragraph rules above. Every one of these
+       sits inside the same article card this block spends most of its
+       length narrowing, and each was still running at its desktop value
+       on a phone: h3 at 1.125rem with an 18px top margin, blockquote at
+       20px serif with a 22px indent, pre at 13.5px with `18px 20px` of
+       padding, and hr at `40px 0`. On a 351px card those add up to an
+       article that reads as a desktop page shrunk down rather than one
+       laid out for the screen it is on.
+       Doubled `.kbdetails.kbdetails` throughout, the same cascade
+       priority the H1/H2/p rules above need against HaloPSA's
+       runtime-injected article styles. */
+    html body .portal .kbdetails.kbdetails h3 {
+        font-size: 1rem !important;
+        margin-top: 12px !important;
+        margin-bottom: 4px !important;
+    }
+    /* Blockquote loses the desktop 22px text indent as well as the size:
+       at this width the 3px accent rule on its left is enough of a
+       signal, and the indent was eating a tenth of the reading column.
+       `10px 14px` keeps the quote clear of the rule without it. */
+    html body .portal .kbdetails.kbdetails blockquote {
+        padding: 10px 14px !important;
+        font-size: 15px !important;
+        margin: 12px 0 !important;
+    }
+    /* Code blocks keep their own horizontal scroll (`overflow-x: auto`
+       from the desktop rule), so the only thing to win back here is the
+       padding and a step of type size; a narrower gutter means fewer
+       lines of code wrap out of view. */
+    html body .portal .kbdetails.kbdetails pre {
+        padding: 12px 14px !important;
+        font-size: 12.5px !important;
+        margin: 12px 0 !important;
+    }
+    html body .portal .kbdetails.kbdetails hr {
+        margin: 20px 0 !important;
+    }
+
+    /* Confluence panel bodies, both families. The desktop treatment is
+       `12px 18px` of padding with the left side then overridden to a
+       46px icon reserve, and none of it was reduced for phones.
+       The icon itself does NOT move with the padding: Family-A pins its
+       20px icon box at `left: 16px` and Family-B its 18px glyph at
+       `left: 18px`, both absolutely positioned against the panel
+       wrapper, so both end at x=36 whatever the body padding is. That is
+       what makes it safe to cut the reserve alone: 40px still clears the
+       icon with a 4px gap, and 6px of every panel's width comes back to
+       the text.
+       The icons' `top` offsets stay where they are and the first text
+       line rises about 2px with the reduced padding-top, which leaves
+       the glyph a couple of pixels below the line's optical centre
+       rather than on it. Visible only side by side, and worth less than
+       the width; revisit the `top: 14px` / `top: 15px` values if it ever
+       reads wrong on a real phone.
+       Doubled class names because these rules have to beat the
+       platform-injected white-background rule described in AGENTS.md
+       section 4 as well as the file's own desktop padding. */
+    html body .portal .kbdetails.kbdetails [class*="confluence-information-macro-"] > .confluence-information-macro-body,
+    html body .portal .kbdetails.kbdetails .panel.panel .panelContent {
+        padding: 10px 14px 10px 40px !important;
+    }
+
     /* Tables on mobile, switched from `table-layout: fixed` (forces
        equal column width regardless of content) to `table-layout:
        auto` (columns size to content). The fixed-layout pass made
@@ -7086,16 +7199,13 @@ html body .portal .tree-menu input[type="text"] {
         margin: 0 0 6px !important;
     }
 
-    /* Generic safety net for any wide child that might escape the
-       card (long URLs, embedded iframes, oversized images, code
-       blocks). `max-width: 100%` keeps each capped to its container,
-       `overflow-wrap: anywhere` lets long unbroken strings wrap. */
-    html body .portal .kbdetails img,
-    html body .portal .kbdetails pre,
-    html body .portal .kbdetails iframe {
-        max-width: 100% !important;
-        height: auto;
-    }
+    /* The `max-width: 100%` guard for `.kbdetails img / pre / iframe`
+       that used to sit here was promoted out of this block; the live copy
+       is the unconditional rule under "Desktop overflow safety for KB
+       content" later in the file, so the phone copy was a dead duplicate
+       and is removed.
+       What remains is the long-string guard: `overflow-wrap: anywhere`
+       lets an unbroken URL wrap instead of pushing the card off screen. */
     html body .portal .kbdetails a {
         overflow-wrap: anywhere !important;
         word-break: break-word !important;
@@ -7206,6 +7316,12 @@ html body .portal .tree-menu input[type="text"] {
         display: block !important;
         overflow: visible !important;
     }
+    /* Card chrome: surface, hairline border, `--portal-radius-md` and no
+       resting shadow, which is the same treatment `.main-tile-item` gets
+       (the tile template real phones are served) and the same as every
+       other card on a phone. This row used `--portal-radius-sm` with
+       `--portal-shadow-sm` until 2026-09-04; that made the list-view card
+       a 10px shadowed outlier next to the 12px flat tile beside it. */
     html body .portal .container.ticket-list .rt-tbody .rt-tr-group:has(.rt-td[data-col="summary"]) {
         display: block !important;
         flex: none !important;
@@ -7213,8 +7329,8 @@ html body .portal .tree-menu input[type="text"] {
         width: 100% !important;
         background: var(--portal-surface) !important;
         border: 1px solid var(--portal-border) !important;
-        border-radius: var(--portal-radius-sm) !important;
-        box-shadow: var(--portal-shadow-sm) !important;
+        border-radius: var(--portal-radius-md) !important;
+        box-shadow: none !important;
         margin-bottom: 10px !important;
         padding: 12px 14px !important;
     }
@@ -7283,6 +7399,191 @@ html body .portal .tree-menu input[type="text"] {
        the unit. The shim has already rounded it to one decimal. */
     html body .portal .container.ticket-list .rt-tbody .rt-td[data-col="age"]::after {
         content: " days";
+    }
+
+    /* ── Invoices, card layout at phone width ──────────────
+       /invoices renders the SAME react-table list component as My
+       Tickets, `.container.ticket-list > .ReactTable.main-table`, with
+       no invoice-specific class in its ancestor chain. So the phone
+       treatment is the ticket-list card conversion further up this
+       block, rebuilt column for column against the invoice columns.
+
+       Two scopes are in play and both are load bearing:
+
+       1. The SURFACE scope is the same Stripe `:has()` hook the desktop
+          invoice rules use, the Pay All button and the payment-method
+          select. Those two ids exist only on this page, inside this same
+          `.ticket-list` container, so they are what separate invoices
+          from the tickets list and from any other ReactTable. Both are
+          listed so the scope survives one of the two being absent.
+       2. The ROW guard is `.rt-td[data-col="invoice-reference"]`, the
+          same stamped-attribute mechanism the ticket cards use.
+          `Portal/iframe-theme.js` stamps `data-col` on every `.rt-th`
+          and `.rt-td` of every `.ReactTable, .main-table` from that
+          column's header text, so the invoice columns arrive as `id`,
+          `invoice-date`, `agreement`, `value`, `total-tax`, `total`,
+          `due`, `date-sent`, `payment-status` and `invoice-reference`.
+          The Pay column's header is blank, `slug('')` is empty and the
+          shim skips it, which is why the Pay cell is the one cell
+          selected as `.rt-td:not([data-col])`.
+
+       Both guard lessons from the ticket block carry over verbatim,
+       because they are properties of `:has()` and not of that surface:
+
+       - The guard sits on the hide rule AND on the show rules equally.
+         `:has()` contributes its argument's specificity, so guarding
+         only the hide rule lifts it above the show rules and every cell
+         in every card disappears, silently.
+       - The title cell needs `flex: 1 0 100%`, guard included. With
+         shrink enabled, or at lower specificity than the `flex: 0 0
+         auto` in the show rule, a short value collapses to its text
+         width and the meta line rides up onto the title line.
+
+       Card contents: the invoice `id` is the title on its own line,
+       then the date, the total, the payment status and the Pay button
+       share the meta line. Everything else is hidden, including the two
+       columns the desktop rules already hide.
+
+       Fallback and dormancy, both deliberate. With no stamp there is no
+       hide and no min-width release, so the page degrades to today's
+       horizontal scroll rather than to a broken grid. And if HaloPSA
+       swaps invoices to a tile template on real phones the way it does
+       the ticket list, this whole block simply never matches; that is
+       acceptable, and the gating is what makes it harmless. It still
+       fires for anyone who meets the invoice table at a narrow width, a
+       tablet or a resized desktop window. */
+
+    /* (a) Release the desktop 1430px floor. The desktop rule sets that
+       min-width on `.rt-thead` and `.rt-tbody` with `!important` as the
+       one shared width the header and every row resolve their `width:
+       100%` against; once the rows below become cards there is no grid
+       left to hold in line, and the floor is the only thing still
+       forcing the container to scroll at phone width. Same `!important`
+       weight, and `.main-table` plus the `:has()` row guard put this
+       rule three steps above the desktop one, so it does not depend on
+       source order.
+       Gated like everything else here: without the stamp the floor
+       stays and the page keeps its horizontal scroll rather than
+       collapsing thirteen columns into a phone width. */
+    html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable.main-table:has(.rt-td[data-col="invoice-reference"]) .rt-thead,
+    html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable.main-table:has(.rt-td[data-col="invoice-reference"]) .rt-tbody {
+        min-width: 0 !important;
+    }
+    html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .split:has(.rt-td[data-col="invoice-reference"]) {
+        overflow-x: visible !important;
+    }
+    html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable.main-table:has(.rt-td[data-col="invoice-reference"]) .rt-thead {
+        display: none !important;
+    }
+    html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .ReactTable.main-table:has(.rt-td[data-col="invoice-reference"]) .rt-tbody {
+        width: 100% !important;
+        display: block !important;
+        overflow: visible !important;
+    }
+    /* (b) Each row group becomes the card. Same chrome as the ticket
+       card and `.main-tile-item`: surface, hairline border, 12px radius,
+       no resting shadow. */
+    html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .rt-tbody .rt-tr-group:has(.rt-td[data-col="invoice-reference"]) {
+        display: block !important;
+        flex: none !important;
+        min-width: 0 !important;
+        width: 100% !important;
+        background: var(--portal-surface) !important;
+        border: 1px solid var(--portal-border) !important;
+        border-radius: var(--portal-radius-md) !important;
+        box-shadow: none !important;
+        margin-bottom: 10px !important;
+        padding: 12px 14px !important;
+    }
+    html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .rt-tbody .rt-tr:has(> .rt-td[data-col="invoice-reference"]) {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        gap: 8px !important;
+        min-width: 0 !important;
+        width: 100% !important;
+        padding: 0 !important;
+        border: 0 !important;
+    }
+    /* Hide every cell, then re-show the five that matter. Both rules
+       carry the SAME `:has()` guard on `.rt-tbody`, for the reason in
+       the block comment above: the guard adds its argument's
+       specificity, so carrying it on both leaves the show rules ahead
+       by exactly the trailing `[data-col=...]`, which is the margin
+       that makes them win. */
+    html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .rt-tbody:has(.rt-td[data-col="invoice-reference"]) .rt-td {
+        display: none !important;
+    }
+    html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .rt-tbody:has(.rt-td[data-col="invoice-reference"]) .rt-td[data-col="id"],
+    html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .rt-tbody:has(.rt-td[data-col="invoice-reference"]) .rt-td[data-col="invoice-date"],
+    html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .rt-tbody:has(.rt-td[data-col="invoice-reference"]) .rt-td[data-col="total"],
+    html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .rt-tbody:has(.rt-td[data-col="invoice-reference"]) .rt-td[data-col="payment-status"],
+    html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .rt-tbody:has(.rt-td[data-col="invoice-reference"]) .rt-td:not([data-col]) {
+        display: block !important;
+        flex: 0 0 auto !important;
+        width: auto !important;
+        max-width: 100% !important;
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        text-align: left !important;
+        padding: 0 !important;
+        border: 0 !important;
+    }
+    /* The invoice number is the card title and takes the full first
+       line, for the same reason and with the same `flex: 1 0 100%` the
+       ticket card's summary needs. */
+    html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .rt-tbody:has(.rt-td[data-col="invoice-reference"]) .rt-td[data-col="id"] {
+        flex: 1 0 100% !important;
+        font-weight: 600 !important;
+        font-size: 15px !important;
+        line-height: 1.35 !important;
+        color: var(--portal-heading) !important;
+        margin-bottom: 2px !important;
+    }
+    /* Date and total share the meta line under it; the payment status
+       is left alone because it carries its own pill. */
+    html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .rt-tbody:has(.rt-td[data-col="invoice-reference"]) .rt-td[data-col="invoice-date"],
+    html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .rt-tbody:has(.rt-td[data-col="invoice-reference"]) .rt-td[data-col="total"] {
+        font-size: 12px !important;
+        color: var(--portal-text-secondary) !important;
+    }
+    /* The amount is the one figure a customer scans an invoice list
+       for, so it keeps the body ink and tabular figures while the rest
+       of the meta line stays secondary. */
+    html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .rt-tbody:has(.rt-td[data-col="invoice-reference"]) .rt-td[data-col="total"] {
+        color: var(--portal-text) !important;
+        font-weight: 600 !important;
+        font-variant-numeric: tabular-nums;
+    }
+    /* Name the two unlabelled values. With the header row hidden, a
+       card reading "12/08/2026  $1,320.00" says nothing about which
+       number is which, exactly the problem the ticket card's Age cell
+       has. That one appends its unit with a `::after` because "days"
+       follows the figure; a label precedes its value, so these two use
+       `::before`, and both carry the same guard as the show rules so a
+       label can never appear in a plain table cell. The secondary tone
+       and normal weight keep the label subordinate to the figure. */
+    html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .rt-tbody:has(.rt-td[data-col="invoice-reference"]) .rt-td[data-col="invoice-date"]::before {
+        content: "Date ";
+    }
+    html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .rt-tbody:has(.rt-td[data-col="invoice-reference"]) .rt-td[data-col="total"]::before {
+        content: "Total ";
+        font-weight: 400;
+        color: var(--portal-text-secondary);
+    }
+    /* Pay button cell. The desktop rules pin this column sticky to the
+       card's right edge and paint it with the surface colour so the
+       other columns can scroll under it. Inside a card there is nothing
+       to scroll under it and the paint shows as a tinted patch on row
+       hover, so both are undone. `.rt-td.rt-td` is the extra class
+       repetition this needs: the desktop hover rule reaches (1,9,2)
+       through `.rt-tr-group:hover .rt-td:last-child`, so without the
+       repeat this selector sits one step short at (1,8,2) and loses.
+       With it the two tie and this one wins on source order. */
+    html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) .rt-tbody:has(.rt-td[data-col="invoice-reference"]) .rt-td.rt-td:not([data-col]) {
+        position: static !important;
+        background: transparent !important;
     }
 
     /* ── Ticket detail, key facts above the thread ────────────
@@ -7454,6 +7755,22 @@ html body .portal .tree-menu input[type="text"] {
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
+    /* Catalogue artwork, 64px to 48px. Now that each card spans the full
+       container the cards stack one per row, so the artwork repeats down
+       the whole screen and 64px of it costs a card's worth of scroll on a
+       phone. These are signposts, not illustrations, which is the
+       reasoning the desktop rule already gives for taking them from
+       HaloPSA's 100px to 64px.
+       Scoped under `.main-tile-item` exactly as the desktop rule is,
+       because `.svcatalog-item*` is also used by the category picker,
+       which has a different DOM. The image cap moves with the box: left
+       at 64px it would simply overflow the 48px frame. */
+    html body .portal .main-tile-item .svcatalog-item-pic {
+        height: 48px !important;
+    }
+    html body .portal .main-tile-item .svcatalog-item-pic img {
+        max-height: 48px !important;
+    }
 
     /* ── Service request page, drop the masthead artwork ──
        The catalogue artwork is reused as a 110px masthead above the
@@ -7465,8 +7782,13 @@ html body .portal .tree-menu input[type="text"] {
        from y=621 to y=495 at 386px.
        If it should be kept but shrunk instead, swap the `display: none`
        for a smaller `width`/`height`; the desktop rule near the top of
-       the file is the one that sets 110px. */
-    html body .portal .service-pic {
+       the file is the one that sets 110px.
+       Both classes are hidden. The desktop rule sizes `.service-pic` AND
+       `.service-img` to 110px, so hiding only the first left the artwork
+       standing at full height on any service that emits the other one,
+       which silently cost back the whole y=621 to y=495 gain. */
+    html body .portal .service-pic,
+    html body .portal .service-img {
         display: none !important;
     }
 
@@ -7557,7 +7879,14 @@ html body .portal .tree-menu input[type="text"] {
        customer sees it either way. Verified at 386px by rebuilding the
        banner exactly as HaloPSA emits it (navy inline background plus
        `position: absolute`), which reproduced the original overlap
-       numbers before the fix and cleared them after. */
+       numbers before the fix and cleared them after.
+
+       `box-shadow: none` clears the desktop pill's `0 10px 24px` drop
+       shadow, which this rule had left in place: on a full-bleed strip
+       that shadow paints down all four edges instead of lifting a
+       floating pill, so the strip read as detached from the nav above
+       it. It carries `!important` like every other declaration here
+       because the rule is fighting HaloPSA's inline styles. */
     html body .portal .app-notice,
     html body .portal div.app-notice[style*="background-color: rgb(47, 53, 94)"],
     html body .portal div.app-notice[style*="position: absolute"] {
@@ -7577,7 +7906,129 @@ html body .portal .tree-menu input[type="text"] {
         font-size: 12px !important;
         line-height: 1.35 !important;
         text-align: center !important;
+        box-shadow: none !important;
         box-sizing: border-box !important;
+    }
+
+    /* ── Footer ───────────────────────────────────────────────
+       The desktop footer runs `40px 24px 20px`, and its own comment
+       says that value "applies across all views, not scoped to
+       mobile", which was true until this rule: the phone value now
+       overrides it below 769px and the desktop comment describes the
+       desktop only. The 40px top was set to balance the 20px padding
+       plus HaloPSA's 20px row margin-bottom, an argument about a wide
+       footer with its links on one line. On a phone the links stack,
+       the strip is already tall, and 40px of navy above them is dead
+       space at the very end of every page. 24/16 keeps the same
+       top-heavier balance at phone scale, and 14px sides match the
+       page gutter every other surface in this block uses. */
+    html body .portal footer {
+        padding: 24px 14px 16px !important;
+    }
+
+    /* ── My account drawer ────────────────────────────────────
+       A phone-first component that had no phone rules at all: the 24px
+       panel padding, the 1.25rem header and the 52px avatar are all
+       desktop values and all of them come straight off the width of a
+       drawer that is itself only as wide as the phone. Bring the three
+       onto the same scale the rest of this block works at. These are
+       proportions rather than measurements; nobody has yet rendered
+       this drawer at phone width, so treat the exact numbers as a first
+       pass to review on a real screen.
+       Every selector list below is copied verbatim from the desktop
+       rule it overrides, so specificity is identical on both sides and
+       these win purely on source order, the same arrangement the page
+       H1 rule at the top of this block uses. Copying rather than
+       trimming matters here: `#sidemenu` in that first list carries an
+       id, so a shortened selector would silently lose. */
+    html body .portal #sidemenu,
+    html body .portal .sidemenu,
+    html body .portal .sidemenu.sidemenu-enter-active,
+    html body .portal .ui.sidebar,
+    html body .portal .ui.sidebar.visible,
+    html body .portal .ui.right.sidebar,
+    html body .portal .ui.right.sidebar.visible,
+    html body .portal .app-nav-menu {
+        padding: 18px !important;
+    }
+    html body .portal .sidemenu .sidemenu-header,
+    html body .portal .sidemenu h1,
+    html body .portal .sidemenu h2,
+    html body .portal .sidemenu h3,
+    html body .portal .ui.sidebar h1,
+    html body .portal .ui.sidebar h2,
+    html body .portal .ui.sidebar h3,
+    html body .portal .ui.sidebar .header,
+    html body .portal .ui.sidebar .sidebar-header,
+    html body .portal .ui.sidebar > div:first-child > span,
+    html body .portal .ui.sidebar > div:first-child > div {
+        font-size: 1.125rem !important;
+    }
+    html body .portal .sidemenu img,
+    html body .portal .sidemenu .user-avatar,
+    html body .portal .sidemenu .initials-avatar,
+    html body .portal .sidemenu img.rounded-circle,
+    html body .portal .ui.sidebar img,
+    html body .portal .ui.sidebar .user-avatar,
+    html body .portal .ui.sidebar .initials-avatar,
+    html body .portal .ui.sidebar img.rounded-circle {
+        width: 44px !important;
+        height: 44px !important;
+        min-width: 44px !important;
+    }
+
+    /* ── Semantic UI popup / share sheet ──────────────────────
+       The popup mounts as a direct child of `body`, outside
+       `.app-container`, which is why its rules are not `.portal`
+       scoped; the selector here is copied from that desktop rule for
+       the same reason. It ships with `min-width: 200px` and no maximum,
+       so its content decides its width: a long share URL or a wide
+       button row can overhang the edge of a phone screen, and the popup
+       is positioned rather than in flow, so nothing else on the page
+       makes room for it. Cap it instead. `calc(100vw - 28px)` leaves
+       the same 14px each side that every page container in this block
+       uses. Nothing else about the popup changes at this width. */
+    html body .ui.popup,
+    html body .ui.popup.transition.visible {
+        max-width: calc(100vw - 28px) !important;
+    }
+
+    /* ── Home, My Assets empty state ──────────────────────────
+       The empty-state card is sized against the My Tickets column
+       beside it: 220px tall so it has "visual weight comparable to a
+       single ticket row". On a phone the two columns stack, there is no
+       neighbour to match, and a 220px card holding one line of muted
+       text is a screenful of nothing between the ticket list and the
+       footer. 140px still reads as a deliberate card rather than
+       stranded text, and 18px puts its inset in the same range as the
+       dashboard cards' `16px 18px` a few rules up.
+       Selector copied from the desktop rule, which hangs off the
+       Assets section's own `.listwidget-icon.fa-desktop`, so this stays
+       on the Assets empty state and off Recent Activity or News. */
+    html body .portal .page-title:has(> .listwidget-icon.fa-desktop) + div {
+        min-height: 140px !important;
+        padding: 18px !important;
+    }
+
+    /* ── Gantt timeline ───────────────────────────────────────
+       react-calendar-timeline sizes its canvas from the time range it
+       is showing, not from its container, so on a narrow screen the
+       canvas is wider than the card holding it. The card carries
+       `overflow: hidden` from the desktop rule, which means the excess
+       is clipped outright with no way to reach it.
+       Let the card scroll its own contents on the horizontal axis
+       instead. That is the whole change: the timeline becomes
+       reachable, and because the scroll is contained by the card it
+       cannot widen the page. `overflow-y` stays `hidden`, and neither
+       axis is `visible`, so the card still clips to its own rounded
+       corners.
+       Not yet measured at phone width, this view has never been
+       rendered there. The rule is written to be inert if the canvas
+       does fit, which is why it is the only thing changed here; the
+       rest of the Gantt chrome (row heights, sidebar width, item bars)
+       is untouched and still desktop-scaled. */
+    html body .portal .react-calendar-timeline {
+        overflow-x: auto !important;
     }
 }
 

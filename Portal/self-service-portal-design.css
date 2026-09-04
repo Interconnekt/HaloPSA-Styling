@@ -510,6 +510,28 @@ html body .portal .page-subtitle::before {
     background: currentColor;
     opacity: 0.5;
 }
+/* Orphan eyebrow. HaloPSA emits `.page-subtitle` on routes that have
+   no subtitle text (KB index, KB article, Services, Approvals), and
+   the `::before` rule above then paints an 18px dash sitting on its
+   own under the H1 with nothing after it. Hide the whole element when
+   it has no content, so its 10px bottom margin and its line box go
+   with the dash.
+
+   `:not(:has(*))` is deliberately NOT used here even though it was
+   suggested: it matches any element with no ELEMENT children, which
+   is every subtitle that holds plain text, so it would hide the
+   working eyebrows too. `:empty` is the only safe test, and it is
+   exact for an element with no child nodes at all.
+
+   Known gap: if HaloPSA ever emits a whitespace-only subtitle
+   (`<div class="page-subtitle"> </div>`), `:empty` does not match it,
+   because a whitespace text node still counts as a child. There is no
+   CSS selector for "whitespace only"; that case would need the
+   Worker's `iframe-theme.js` shim to strip the node. Screenshot the
+   four routes above to confirm which case is live. */
+html body .portal .page-subtitle:empty {
+    display: none !important;
+}
 
 /* H1 page title: Bricolage Grotesque 700 display + coloured headings.
    Keep HaloPSA's `.profile-full-name` variant covered too. */
@@ -535,10 +557,19 @@ html body .portal .details-form .details-group-header.title {
 
    The `.kbdetails .page-title` rule later in the file zeroes this
    for the inner H1+meta block inside a reading-view article, that
-   rule is more specific and wins. */
+   rule is more specific and wins.
+
+   Bottom margin is the first half of one shared section rhythm:
+   16px from the title block to the controls under it (filter strip,
+   invoice buttons, dashboard switcher), then 16px from those controls
+   to the table or list card. It was 4px here, which left the three
+   surfaces that have a filter strip (ticket list, KB index, search)
+   on three different gaps: 8px, 0 and 20/24px. The other half lives
+   on `.searchandview` in section 12b; the KB index's `.kblist` stays
+   at `margin-top: 0` precisely because this 16px is now the gap. */
 html body .portal .page-title {
     margin-top: 12px !important;
-    margin-bottom: 4px !important;
+    margin-bottom: 16px !important;
 }
 
 /* Italic-serif underlay for emphasised word(s) in page titles.
@@ -795,9 +826,17 @@ html body .portal .searchscreen .search-title {
    hero benchmarks (GitHub Docs, Shopify Help, Algolia DocSearch hero).
    `:not(.searchscreen-full)` scopes this ONLY to the home hero, the
    search RESULTS page reuses `.searchbox` too, and a hero-scale pill
-   there would compete with the results list below. */
+   there would compete with the results list below.
+
+   The dark-mode selector is the ANCESTOR form. HaloPSA puts
+   `.theme-dark` on `div.app-container`, which sits ABOVE `.portal`
+   (AGENTS.md gotcha 1), so the descendant form
+   `.portal .theme-dark .searchscreen` this rule used to carry never
+   matched anything. It was invisible only because it repeated the
+   light-mode declarations beside it. Both selectors now resolve, and
+   every value here is a token that flips on its own. */
 html body .portal .searchscreen:not(.searchscreen-full) .searchbox,
-html body .portal .theme-dark .searchscreen:not(.searchscreen-full) .searchbox {
+html body .theme-dark .searchscreen:not(.searchscreen-full) .searchbox {
     background: var(--portal-surface) !important;
     border: 1px solid var(--portal-border) !important;
     border-radius: 16px !important;
@@ -812,13 +851,15 @@ html body .portal .theme-dark .searchscreen:not(.searchscreen-full) .searchbox {
     transition: border-color var(--ic-dur) var(--ic-ease),
                 box-shadow var(--ic-dur) var(--ic-ease);
 }
-/* Generic fallback (results-page search + legacy selector). Chrome
+/* Generic fallback, the results-page search box, plus the same
+   ancestor-form dark selector as the rule above (it also used to be
+   written `.portal .theme-dark …` and so never matched). Chrome
    only: this rule sets NO height, so the search-results page falls
    through to the 40px on the generic `.searchbox` rule further down
    and matches the list-top filter controls. Only the home hero
    above is taller, at 64px. */
 html body .portal .searchscreen .searchbox,
-html body .portal .theme-dark .searchscreen .searchbox {
+html body .theme-dark .searchscreen .searchbox {
     background: var(--portal-surface) !important;
     border: 1px solid var(--portal-border) !important;
     border-radius: 14px !important;
@@ -830,6 +871,44 @@ html body .portal .theme-dark .searchscreen .searchbox {
 html body .portal .searchscreen .searchbox:focus-within {
     border-color: var(--portal-accent) !important;
     box-shadow: 0 0 0 4px var(--portal-accent-subtle), var(--portal-shadow-hover) !important;
+}
+
+/* ─── Services route: demote the hero, it is not the page title ───
+   `/services` renders TWO headings. The page H1 "Service Catalogue"
+   is 1.75rem (28px) like every other page title, and HaloPSA's own
+   hero `.search-title` "Service Categories" is
+   `clamp(2rem, 3.5vw, 3rem)`, so at desktop a secondary heading
+   renders at 48px directly under a 28px page title, with the 64px
+   hero search box under that. On the home page that hero IS the
+   page, which is why the rule above is right there and stays.
+
+   Route scope, and the reused-class trap (AGENTS.md, HANDOFF §7):
+   `.svcatalog-item` is the one class that appears on both service
+   routes and on neither the home hero nor the ticket Tile view,
+   which shares `.main-tile-item` and `.table-tr` with the catalogue
+   but never emits `.svcatalog-item`. The `:has()` is hung on `.main`
+   rather than on `.searchscreen` because the catalogue renders
+   through two different DOMs (`.svcatalog-item.varheight` straight
+   in `.dashbuttons` on the picker, and nested inside
+   `.inlinetile > .main-tile-item.table-tr` on the item list) and only
+   `.main` is proven to contain both the hero and the cards. If the
+   cards do turn out to sit inside `.searchscreen`, this still
+   matches; the looser ancestor cannot make it fire on a page with no
+   catalogue on it.
+
+   The search box drops to the 40px list-filter height and the 14px
+   radius, which is exactly what the search-results page already
+   renders, so the two non-home `.searchscreen` surfaces now agree.
+   Specificity is (0,5,2) against the hero rules' (0,4,2), so this
+   wins on weight rather than on source order. */
+html body .portal .main:has(.svcatalog-item) .searchscreen .search-title {
+    font-size: 1.375rem !important;
+    font-weight: 700 !important;
+    margin: 0 0 16px !important;
+}
+html body .portal .main:has(.svcatalog-item) .searchscreen .searchbox {
+    height: 40px !important;
+    border-radius: 14px !important;
 }
 html body .portal .searchscreen .searchbox input[type=text] {
     font-family: var(--ic-font-body) !important;
@@ -864,8 +943,13 @@ html body .portal .card.dashbtn,
 html body .portal .dashbtn {
     background: var(--portal-surface) !important;
     border: 1px solid var(--portal-border) !important;
+    /* Feature card: keeps `--portal-radius` (16px) and a resting
+       shadow by design, alongside the New Ticket form card and the KB
+       article card. */
     border-radius: var(--portal-radius) !important;
-    padding: 28px 24px 24px !important;
+    /* Feature step, was 28px 24px 24px. Even 28px means the icon chip,
+       the label and the bottom edge all sit on one inset. */
+    padding: 28px !important;
     box-shadow: var(--portal-shadow-sm) !important;
     transition: transform 220ms var(--ic-ease),
                 border-color 220ms var(--ic-ease),
@@ -1047,12 +1131,13 @@ html body .portal .main-tile-item {
     border: 1px solid var(--portal-border) !important;
     border-radius: var(--portal-radius-md) !important;
     margin: 8px 0 !important;
-    /* Asymmetric vertical padding, the pill on row 3 has its own
-       implicit visual weight (uppercase, coloured bg) and sits closer
-       to the card's bottom edge than the user name does to the top.
-       Bumping bottom padding to 18px gives the pill the breathing
-       room it needs without expanding the whole card. */
-    padding: 14px 18px 18px !important;
+    /* Compact step (16/18), with the one documented asymmetry: the
+       pill on row 3 has its own implicit visual weight (uppercase,
+       coloured bg) and sits closer to the card's bottom edge than the
+       user name does to the top, so bottom padding stays at 18px. The
+       top value moves 14 to 16 so this card matches its KB index and
+       Recent Activity siblings on the very same page. */
+    padding: 16px 18px 18px !important;
     color: var(--portal-text) !important;
     transition: border-color var(--ic-dur) var(--ic-ease),
                 transform var(--ic-dur) var(--ic-ease),
@@ -1312,6 +1397,37 @@ html body .portal .main-tile-item td {
    8 · Cards, panels, generic containers
    ───────────────────────────────────────────────────────── */
 
+/* ─── CARD INNER PADDING: A THREE STEP SCALE ───────────────
+   One card role, one padding, so the portal stops shipping seven
+   values for the same job (14/18/18, 15/18, 18/22, 12/14, 14/18, 20,
+   24, 28/24/24 and 36/40 were all live). Every card rule below now
+   picks one of three steps and says which:
+
+     compact  16px vertical / 18px horizontal
+              list-row cards: ticket tile `.main-tile-item`, KB index
+              `.article`, Recent Activity `.action-history-item
+              .tile-item`, search result row `.article.searchlist`,
+              kanban `.board-card-content`.
+     content  20px all round
+              things you read inside: ticket sidebar
+              `.details-group.card-panel` (already HaloPSA's 20px, the
+              sidebar field rail rule further down is written against
+              it), the workflow stepper card, the Next Appointment
+              notice, the Assets empty state.
+     feature  28px, with a 32px side variant where the card holds a
+              full form or an article
+              dashboard tile `.card.dashbtn`, the New Ticket form card
+              and the KB article card.
+
+   `.main-tile-item` is the one asymmetry that survives, 16/18/18: the
+   status pill on its last row carries its own visual weight and needs
+   the extra 2px underneath. That was already documented at the rule
+   itself and is unchanged in spirit; only the top value moves 14 to
+   16 to join the compact step.
+
+   Radius and resting shadow follow the same idea: list and content
+   cards are `--portal-radius-md` with no resting shadow; only the
+   three feature cards keep `--portal-radius` (16px) and a shadow. */
 html body .portal .card,
 html body .portal .details-group.card-panel,
 html body .portal .action-history-item {
@@ -2785,17 +2901,16 @@ html body .portal .ReactTable.main-table {
 html body .portal .ReactTable.main-table .rt-thead.-header {
     background: var(--portal-table-header-bg) !important;
 }
+/* Column separator only. Every other declaration this rule used to
+   carry (colour, display font, 11.5px, weight 700, 0.08em tracking,
+   uppercase, flex, align-items, gap) was a byte-for-byte restatement
+   of `.rt-thead.-header .rt-th` above, which already matches these
+   same cells at lower specificity, so the copies changed nothing and
+   made the header look like it had two owners. Removed; the vertical
+   rule between columns is the one thing that is genuinely specific to
+   the main list table. */
 html body .portal .ReactTable.main-table .rt-thead.-header .rt-th {
-    color: var(--portal-text-muted) !important;
-    font-family: var(--ic-font-display) !important;
-    font-size: 11.5px !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.08em !important;
-    text-transform: uppercase;
     border-right: 1px solid var(--portal-border-soft) !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 6px;
 }
 html body .portal .ReactTable.main-table .rt-thead.-header .rt-th:last-child {
     border-right: 0 !important;
@@ -3232,7 +3347,10 @@ html body .portal button.-btn {
     border-radius: 999px !important;
     width: auto !important;
     height: 36px !important;
-    padding: 0 22px !important;
+    /* 18px matches the View All / View More / Back ghost family in
+       section 9 (`padding: 8px 18px`). 22px here was the last
+       unexplained split in the ghost button family. */
+    padding: 0 18px !important;
     font-family: var(--ic-font-body) !important;
     font-weight: 500 !important;
     font-size: 13px !important;
@@ -3471,7 +3589,7 @@ html body .portal .container.ticket-list:has(#input-field-for-stripePayAll, #inp
 
 
 /* ─────────────────────────────────────────────────────────
-   11 · Kanban board (react-kanban)
+   11 · Kanban board (`.board-card` / `.board-card-content`)
    ───────────────────────────────────────────────────────── */
 
 html body .portal .react-kanban-board,
@@ -3499,13 +3617,19 @@ html body .portal .board-card {
     background: transparent !important;
     border: 0 !important;
 }
+/* Card chrome brought onto the list-card family: `--portal-radius-md`
+   and no resting shadow, the same as the KB index article, the ticket
+   tile, the search result row and the list-view table card. It was the
+   last card still on `--portal-radius-sm` with a resting shadow, which
+   read as a near-miss rather than a variant. Padding takes the compact
+   step (was 12px 14px). The hover lift is unchanged. */
 html body .portal .board-card-content {
     background: var(--portal-surface) !important;
     border: 1px solid var(--portal-border) !important;
-    border-radius: var(--portal-radius-sm) !important;
-    padding: 12px 14px !important;
+    border-radius: var(--portal-radius-md) !important;
+    padding: 16px 18px !important;
     margin: 0 0 8px !important;
-    box-shadow: var(--portal-shadow-sm) !important;
+    box-shadow: none !important;
     font-family: var(--ic-font-body) !important;
     color: var(--portal-text) !important;
     transition: border-color var(--ic-dur) var(--ic-ease),
@@ -3529,8 +3653,9 @@ html body .portal .board-card-content .board-card-bar {
     left: 0;
     right: 0;
     height: 3px;
-    border-top-left-radius: var(--portal-radius-sm);
-    border-top-right-radius: var(--portal-radius-sm);
+    /* Follows the card radius above, both move together. */
+    border-top-left-radius: var(--portal-radius-md);
+    border-top-right-radius: var(--portal-radius-md);
 }
 /* Summary line, ticket # + priority lozenge. Bold, slight size
    bump so it reads as the card's title. */
@@ -3703,9 +3828,14 @@ html body .portal .react-calendar-timeline .rct-items .rct-item .rct-drag-right 
    above) and reskin the entity-selection pill tabs. */
 
 html body .portal .searchscreen.searchscreen-full {
-    max-width: 1160px;
+    /* Width and side padding are NOT set here any more. This used to
+       carry its own 1160px / `0 24px` measure, a third page width
+       alongside the 1240px cap and the 85% list rule. The page shell
+       in section 12b now owns the horizontal measure on every route,
+       and the defusal rule beside it flattens this wrapper if it
+       turns out to sit inside one of the shell containers. Only the
+       vertical rhythm stays local. */
     margin: 24px auto 40px;
-    padding: 0 24px;
     /* HaloPSA ships `.searchscreen-full` with a hardcoded dark-grey
        background (#212529) and 0 border-radius, a flat square panel
        that read as "out-of-theme" next to the tokenised portal
@@ -3823,7 +3953,8 @@ html body .portal .search-result-item:hover {
 html body .portal .search-result-item .article.searchlist {
     background: transparent !important;
     border: 0 !important;
-    padding: 18px 22px !important;
+    /* Compact step, was 18px 22px. */
+    padding: 16px 18px !important;
     display: flex !important;
     align-items: flex-start !important;
     gap: 18px;
@@ -3884,10 +4015,14 @@ html body .portal .page-title:has(.mandatory-hint) {
     padding: 0 36px;
 }
 
+/* Stays at its own 1040px centred measure, the documented exception to
+   the page shell in section 12b: this is a form to fill in, not page
+   chrome, and a 1376px-wide field rail is unusable. Padding takes the
+   feature step's wide variant (was 36px 40px). */
 html body .portal:has(.mandatory-hint) .details-form.readeditform {
     max-width: 1040px !important;
     margin: 24px auto 40px !important;
-    padding: 36px 40px !important;
+    padding: 28px 32px !important;
     background: var(--portal-surface) !important;
     border: 1px solid var(--portal-border) !important;
     border-radius: var(--portal-radius) !important;
@@ -4562,7 +4697,9 @@ html body .portal .nextappointmentbox.nextappointmentbox {
     border: 1px solid var(--panel-info-border) !important;
     border-radius: var(--portal-radius-md) !important;
     box-shadow: none !important;
-    padding: 14px 18px !important;
+    /* Content step, was 14px 18px. It sits directly above the activity
+       cards and beside the sidebar panels, both of which are on 20px. */
+    padding: 20px !important;
 }
 html body .portal .nextappointmentbox.nextappointmentbox > label {
     margin: 0 !important;
@@ -4727,29 +4864,79 @@ html body .portal .workflow-steps-wrap {
     margin-bottom: 16px !important;
 }
 
-/* Content-width guard, HaloPSA ships `.container` at max-width: 80%
-   which bloats to ~1434px on a 1793px monitor. Cap at 1240px so the
-   ticket detail form (which wraps in `.container-max > .container`)
-   feels proportionate. The split-view tickets page sits at
-   `.main > .container.ticket-list` (no `.container-max` ancestor) and
-   gets its own wider rule below to match the KB page. */
-html body .portal .container-max > .container,
-html body .portal .main > .container {
-    max-width: 1240px !important;
+/* ─── ONE PAGE SHELL ───────────────────────────────────────
+   Unifies the page gutter across every route. This replaces two
+   competing measures that between them gave the portal five
+   different left edges: a 1240px cap on `.container-max > .container`
+   and `.main > .container`, and an 85% width on
+   `.main > .container.ticket-list`, on top of HaloPSA's own
+   `.container-large` 85% (KB, services) and Bootstrap's
+   `.container-fluid` (home, invoices, approvals, settings, assets,
+   profile). Measured at a 1800px viewport before this change: list
+   and KB about 156px, services about 145px, home grid about 208px,
+   ticket detail and approvals about 319px, settings about 297px.
+
+   One measure now: 1440px, centred, with a 32px inner gutter, so the
+   back button, the H1 and the page content share one left edge on
+   every non-form route (212px at 1800px, 32px at 1440px).
+
+   Container chains, all verified from this file's own DOM notes:
+     ticket detail   `.main > .container-max > .container`
+     ticket lists    `.main > .container.ticket-list`
+     KB, services    `.main > .container-large`
+     everything else `.main > .container-fluid`
+   The direct-child combinator is deliberate. It puts the shell on the
+   OUTERMOST wrapper only, and it keeps every one of these rules out
+   of `.portal-ticket-splitter`, whose inner containers are handled by
+   their own 100%-width rule further down and must keep their own
+   asymmetric padding.
+
+   `width` and `max-width` are both set because HaloPSA ships
+   `.container` with `width: 80%` AND `max-width: 80%`; overriding
+   only max-width leaves the smaller width in effect, since max-width
+   can shrink a box but never grow it. `box-sizing` is stated because
+   the 32px gutter has to sit inside the 1440px, not on top of it.
+
+   Two documented exceptions keep a narrower centred measure, because
+   both are reading or form surfaces rather than page chrome:
+     - the New Ticket / service-request form and its title, 1040px
+       centred (`.page-title:has(.mandatory-hint)` and
+       `.details-form.readeditform` in section 12);
+     - the KB article reading measure, `.kbdetails` at 1100px centred
+       in section 13.
+   Everything else lands on the shell. */
+html body .portal .main > .container,
+html body .portal .main > .container.ticket-list,
+html body .portal .main > .container-fluid,
+html body .portal .main > .container-large,
+html body .portal .main > .container-max,
+html body .portal .main > .searchscreen.searchscreen-full {
+    width: 100% !important;
+    max-width: 1440px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 32px !important;
+    padding-right: 32px !important;
+    box-sizing: border-box !important;
 }
 
-/* Ticket list views (Table / Tile / Kanban); match the KB page's
-   `.container-large` (85% width / max-width) so the `My Tickets`
-   table doesn't get clipped on the right and the page left-edge
-   aligns with `/portal/kb`. Both `width` and `max-width` are set
-   because HaloPSA ships `.container` with `width: 80%` AND
-   `max-width: 80%`, overriding only max-width leaves the smaller
-   width in effect (max-width can only shrink, not grow). Higher
-   specificity than the 1240px cap above (extra `.ticket-list`
-   class), so this overrides even though both rules carry !important. */
-html body .portal .main > .container.ticket-list {
-    width: 85% !important;
-    max-width: 85% !important;
+/* Nested-measure defusal, same logic as the phone block's tripled
+   `.container` rule. Ticket detail nests `.container` inside
+   `.container-max`, and the search-results page carries its own
+   1160px measure on `.searchscreen-full`; without this the two
+   gutters stack and those routes end up 32px further in than every
+   other page. The outer wrapper owns the shell, anything carrying a
+   second measure inside it is flattened to 100% with no side padding.
+   Specificity beats the shell above on both paths. */
+html body .portal .main > .container-max > .container,
+html body .portal .main > .container .searchscreen.searchscreen-full,
+html body .portal .main > .container-fluid .searchscreen.searchscreen-full,
+html body .portal .main > .container-large .searchscreen.searchscreen-full,
+html body .portal .main > .container-max .searchscreen.searchscreen-full {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
 /* Split-view pane ratio, HaloPSA's splitter defaults the non-primary
@@ -4767,6 +4954,17 @@ html body .portal .main > .container.ticket-list {
 html body .portal .portal-ticket-splitter > .layout-pane {
     width: 30% !important;
     min-width: 0 !important;
+}
+
+/* Filter strip to list gap, the second half of the section rhythm
+   set on `.page-title` in section 3: 16px from the title block down
+   to this control row, 16px from this control row down to the table
+   or list card below it. HaloPSA leaves this to Bootstrap's row
+   defaults, which is why the ticket list, the KB index and the search
+   page each had a different gap here. Margin only, no padding, so the
+   30/70 column split below is untouched. */
+html body .portal .searchandview {
+    margin-bottom: 16px !important;
 }
 
 /* Search-row column alignment, HaloPSA renders the filter dropdown
@@ -4822,6 +5020,11 @@ html body .portal .portal-ticket-splitter .container-large,
 html body .portal .portal-ticket-splitter .container-max {
     max-width: 100% !important;
     width: 100% !important;
+    /* Left padding is now stated rather than left to Bootstrap's
+       default, so the pane owns both of its gutters outright and no
+       page-level shell rule can reach in and change one of them. 15px
+       is the value this pane has always computed to. */
+    padding-left: 15px !important;
     padding-right: 0 !important;
 }
 
@@ -4970,7 +5173,9 @@ html body .portal .content > .col-md-8:empty {
        cluster grow pushes the two utility chips to the column's
        right edge (1048.2), where they land on the activity
        cards' right rail and the timestamp column. The chips go
-       32px to 36px so the row has a single height.
+       32px to 36px so the row has a single height; that size rule
+       now sits just below this media block so it holds at every
+       width, see 4b.
 
        `margin: 20px 20px 0` puts the row's own box exactly on
        the card rail: the activity cards carry `margin: 15px
@@ -5005,11 +5210,6 @@ html body .portal .content > .col-md-8:empty {
         align-items: center !important;
         gap: 10px !important;
     }
-    html body .portal:not(:has(.portal-ticket-splitter)) .content > .col-md-8 .history-options-portal .solidbutton.fabtn {
-        width: 36px !important;
-        height: 36px !important;
-        margin: 0 !important;
-    }
 
     /* 5. Sidebar field rail.
        HaloPSA nests three Bootstrap boxes per field:
@@ -5035,6 +5235,24 @@ html body .portal .content > .col-md-8:empty {
         margin-left: 0 !important;
         margin-right: 0 !important;
     }
+}
+
+/* 4b. The chips are 36px at EVERY width, not just above 769px.
+   This rule used to live inside the media block above, next to the
+   flex toolbar it belongs to. The toolbar layout is genuinely
+   width-dependent and stays in there; the chip SIZE is not. Leaving
+   it behind the breakpoint meant that at 768px and below the two
+   utility chips fell back to the generic 32px `.solidbutton.fabtn`
+   while the Add Note / Time Entry pills beside them stayed at 36px,
+   which is the exact mismatch the comment above says the 36px was
+   introduced to remove ("The chips go 32px to 36px so the row has a
+   single height"). The phone block never restated it, so the reason
+   held on desktop and was silently abandoned on phones.
+   Scope is unchanged, so the Tile split pane is still excluded. */
+html body .portal:not(:has(.portal-ticket-splitter)) .content > .col-md-8 .history-options-portal .solidbutton.fabtn {
+    width: 36px !important;
+    height: 36px !important;
+    margin: 0 !important;
 }
 
 /* 6. Sidebar section headers: hierarchy, not a second title.
@@ -5375,16 +5593,26 @@ html body .portal .kbdetails {
     font-family: var(--ic-font-body) !important;
     /* Wider than the old 760px reading measure, KB articles carry
        tables + screenshots that need room. Still bounded for
-       comfortable long-form reading on ultrawide displays. */
+       comfortable long-form reading on ultrawide displays. This is
+       the second of the two documented exceptions to the page shell
+       in section 12b: a reading measure, so it stays centred and
+       narrower than the 1440px shell rather than sharing the page's
+       left edge. */
     max-width: 1100px;
-    /* Second tightening pass after Joel's KB-page red-box review, the inner `.article.nohover` wrapper inherits 15px padding
-       from the `.portal .article` rule (KB index list styling),
-       and that compounds with kbdetails's own padding-top to push
-       the H1 ~31px below the card edge. We zero the inner wrapper's
-       padding (rule below) and trim kbdetails's own top padding to
-       4px so the title sits close to the card edge. */
+    /* Top padding stays at 4px, from Joel's KB-page red-box review:
+       the card's own top inset plus this one were between them
+       pushing the H1 about 31px below the card edge. The rest of that
+       note used to claim the inner `.article.nohover` wrapper's
+       padding was zeroed here; it never was, see the note where that
+       dead rule used to sit, just below. */
     margin: 8px auto 24px;
-    padding: 4px 32px 20px;
+    /* Side padding removed. This box is transparent chrome; its 32px
+       sides only inset the card inside it, and the card then had no
+       inner padding of its own on the left or right worth the name.
+       The card now carries the feature step (28px 32px, set in the
+       desktop block at the end of this file) and this wrapper only
+       supplies the vertical gap above and below it. */
+    padding: 4px 0 20px;
     line-height: 1.7;
     color: var(--portal-text);
     font-size: 16px;
@@ -5398,25 +5626,30 @@ html body .portal .kbdetails {
     box-shadow: none !important;
 }
 
-/* Inner article wrapper, `.kbdetails > .article.nohover` inherits
-   15px padding from the KB-index `.portal .article` rule. In the
-   reading view that padding is dead weight: kbdetails already
-   provides the card padding. Zero it so the title + meta + body
-   chain starts flush with the kbdetails edge instead of inset by
-   another 15px on every side. */
-html body .portal .kbdetails > .article {
-    padding: 0 !important;
-    margin: 0 !important;
-}
+/* The rule that used to sit here (`.kbdetails > .article { padding: 0;
+   margin: 0 }`) has been removed because it never took effect. It is
+   (0,3,2), exactly the same weight as the generic KB-index card rule
+   `.article:not(.search-result-item)` further down the file, and that
+   one is later, so the card has always computed to the generic
+   `16px 18px` and `margin: 0 0 10px`, not to zero. The comment above
+   it claimed the opposite, which is why the KB card's real padding
+   was hard to find. The article card's padding is now set once, in
+   the desktop block at the end of this file, at a specificity that
+   actually wins. */
 
 /* Article H1 + metadata stack, the tightest-wound block in the
    reading view, because three separately-spaced elements (h1
    margins + padding-bottom + border + kbmeta margin-top) used to
    compound into ~40-50px of gap between title and date/author.
    Collapsed to ~20px total. */
+/* Size joins the portal H1 ladder: every other page title is
+   1.75rem/700 (`.page-title h1` in section 3), and the KB article was
+   the only 2.25rem H1 in the portal, with no comment ever justifying
+   it. The phone block still drops this to 1.5rem, which is now a 4px
+   step rather than a 12px one. */
 html body .portal .kbdetails h1 {
     font-family: var(--ic-font-display) !important;
-    font-size: 2.25rem !important;
+    font-size: 1.75rem !important;
     font-weight: 700 !important;
     letter-spacing: -0.02em !important;
     line-height: 1.1;
@@ -5456,16 +5689,22 @@ html body .portal .kbdetails h1 em {
    24px still reads as a clear section break (body is 16px with
    1.7 line-height so ~24px is ~1 line of blank space) without
    giving up as much above-the-fold real estate. */
+/* Weight 500 broke the global heading ladder, where h2 and h3 are 700
+   (section 2). 600 rather than 700 is a deliberate middle: Bricolage
+   at 700 and 1.375rem inside a 16px article reads heavier than the
+   ticket sidebar's own section headers, while 500 read lighter than
+   every other heading in the portal. If a screenshot says 700 is
+   right, both of these move together. */
 html body .portal .kbdetails h2 {
     font-size: 1.375rem !important;
-    font-weight: 500 !important;
+    font-weight: 600 !important;
     margin-top: 24px !important;
     margin-bottom: 8px !important;
     letter-spacing: -0.015em;
 }
 html body .portal .kbdetails h3 {
     font-size: 1.125rem !important;
-    font-weight: 500 !important;
+    font-weight: 600 !important;
     margin-top: 18px !important;
     margin-bottom: 8px !important;
 }
@@ -5611,9 +5850,12 @@ html body .portal .kbtags:hover {
    dropped all type differentiation and the earlier "4px left stripe"
    treatment which felt dated. Text stays on `--portal-text` so
    readability is guaranteed in both modes (past bug: a hardcoded
-   light bg won over a `.theme-dark .portal` selector that never
-   matched because `.theme-dark` is INSIDE `.portal`, not above, white text on light bg = unreadable. Token-based flip dodges that
-   entirely).
+   light bg won over a dark-mode selector that never matched, because
+   it was written `.portal .theme-dark …`. `.theme-dark` sits on
+   `div.app-container`, ABOVE `.portal`, so the ancestor form
+   `.theme-dark .portal …` is the one that resolves. White text on a
+   light bg = unreadable. The token-based flip dodges the whole
+   question).
 
    Style Profile note (per AGENTS.md §1): HaloPSA auto-scopes Style
    Profile rules under `.kbdetails`, which can't reach `.theme-dark`
@@ -6065,10 +6307,12 @@ html body .theme-dark .portal .kbdetails .status-macro.aui-lozenge-progress { ba
    14 · Announcements + footer
    ───────────────────────────────────────────────────────── */
 
+/* Radius joins the list-card family (`--portal-radius-md`); it was the
+   only remaining `--portal-radius-sm` wrapper on the home page. */
 html body .portal .web-announcement {
     background: transparent;
     padding: 0;
-    border-radius: var(--portal-radius-sm);
+    border-radius: var(--portal-radius-md);
     overflow: hidden;
     border: 1px solid var(--portal-border);
 }
@@ -6171,7 +6415,9 @@ html body .portal .page-title:has(> .listwidget-icon.fa-desktop) + div {
     background: var(--portal-surface) !important;
     border: 1px solid var(--portal-border) !important;
     border-radius: var(--portal-radius-md) !important;
-    padding: 24px !important;
+    /* Content step, was 24px. `min-height` below, not padding, is what
+       gives this card its visual weight. */
+    padding: 20px !important;
     min-height: 220px;
     display: flex !important;
     align-items: center;
@@ -6321,7 +6567,8 @@ html body .portal .article.searchlist:not(.search-result-item) {
     background: var(--portal-surface) !important;
     border: 1px solid var(--portal-border) !important;
     border-radius: var(--portal-radius-md) !important;
-    padding: 15px 18px !important;
+    /* Compact step, 15px to 16px vertical. */
+    padding: 16px 18px !important;
     margin: 0 0 10px !important;
     transition: border-color var(--ic-dur) var(--ic-ease),
                 transform var(--ic-dur) var(--ic-ease),
@@ -6350,7 +6597,9 @@ html body .portal .search-result-item .article.searchlist:hover {
     box-shadow: none !important;
     margin: 0 !important;
     transform: none !important;
-    padding: 18px 22px !important;
+    /* Compact step, restated here because this rule has to win against
+       the generic `.article` card chrome above it. */
+    padding: 16px 18px !important;
 }
 
 /* ARTICLE pill on the right edge, hide. It's just a category label
@@ -6368,7 +6617,9 @@ html body .portal .articleInfoSmall.kb .articleRight .status-avatar {
    extra left indent no longer makes sense. */
 html body .portal .action-history-item.tile-item,
 html body .portal .listwidget .action-history-item.tile-item {
-    padding: 15px 18px !important;
+    /* Compact step, 15px to 16px vertical, same as the articles it
+       sits beside. */
+    padding: 16px 18px !important;
     transition: border-color var(--ic-dur) var(--ic-ease),
                 transform var(--ic-dur) var(--ic-ease),
                 box-shadow var(--ic-dur) var(--ic-ease) !important;
@@ -6480,8 +6731,9 @@ html body .portal .article > div:first-child:has(> .articleRight) {
    per-chip style here. */
 
 /* KB sidebar wrapper, HaloPSA adds a large default top-margin
-   between the page-title H1 and the kblist block. Zero it out so
-   the search box sits close under the heading divider. */
+   between the page-title H1 and the kblist block. Zero it out so the
+   16px `.page-title` bottom margin is the only gap, which is the same
+   title-to-controls step the ticket list and the search page use. */
 html body .portal .kblist {
     margin-top: 0 !important;
 }
@@ -7665,6 +7917,25 @@ html body .portal .tree-menu input[type="text"] {
     html body .portal .container-large > div:has(> .col-md-9):has(> .kblist) > .col-md-9 {
         width: 70% !important;
         box-sizing: border-box !important;
+    }
+
+    /* KB article card, the feature step (28px, 32px sides because the
+       card holds an article). This is the only place the article
+       card's padding is set. Before, it fell through to the generic
+       KB-index `.article` card rule at `16px 18px`, which is a list-
+       row inset on a full reading surface, and the `.kbdetails`
+       wrapper's own 32px side padding was doing the visual job from
+       outside the card instead. That wrapper padding is gone (section
+       13) and the inset now sits where it belongs.
+
+       Desktop only, and stated here rather than beside the card
+       chrome further down, because that chrome block sits AFTER the
+       phone block and a padding declaration there would out-cascade
+       the phone rule's 14px 16px on every phone. Reading measure is
+       unchanged in spirit: the `.kbdetails` box is still 1100px, so
+       the text column goes from about 998px to about 1034px. */
+    html body .portal .kbdetails > .article.nohover {
+        padding: 28px 32px !important;
     }
 }
 

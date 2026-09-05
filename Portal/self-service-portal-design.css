@@ -523,13 +523,11 @@ html body .portal .page-subtitle::before {
    working eyebrows too. `:empty` is the only safe test, and it is
    exact for an element with no child nodes at all.
 
-   Known gap: if HaloPSA ever emits a whitespace-only subtitle
-   (`<div class="page-subtitle"> </div>`), `:empty` does not match it,
-   because a whitespace text node still counts as a child. There is no
-   CSS selector for "whitespace only"; that case would need the
-   Worker's `iframe-theme.js` shim to strip the node. Screenshot the
-   four routes above to confirm which case is live. */
-html body .portal .page-subtitle:empty {
+   HaloPSA also emits empty nested divs. The shim marks subtitles with
+   no text or interactive/media content using `data-portal-empty`, so
+   their dash and spacing disappear without hiding populated subtitles. */
+html body .portal .page-subtitle:empty,
+html body .portal .page-subtitle[data-portal-empty] {
     display: none !important;
 }
 
@@ -6105,6 +6103,8 @@ html body .portal .kbdetails .panel .panelContent {
 html body .portal .kbdetails .panel[style*="#EAE6FF"]::before,
 html body .portal .kbdetails .panel[style*="#eae6ff"]::before,
 html body .portal .kbdetails .panel[style*="#FFFAE6"]::before,
+html body .portal .kbdetails .panel[style*="#FDF7CD"]::before,
+html body .portal .kbdetails .panel[style*="#fdf7cd"]::before,
 html body .portal .kbdetails .panel[style*="#fffae6"]::before,
 html body .portal .kbdetails .panel[style*="#E6FCFF"]::before,
 html body .portal .kbdetails .panel[style*="#e6fcff"]::before,
@@ -6129,6 +6129,8 @@ html body .portal .kbdetails .panel[style*="#eae6ff"]::before {
     color: var(--panel-note-icon);
 }
 html body .portal .kbdetails .panel[style*="#FFFAE6"]::before,
+html body .portal .kbdetails .panel[style*="#FDF7CD"]::before,
+html body .portal .kbdetails .panel[style*="#fdf7cd"]::before,
 html body .portal .kbdetails .panel[style*="#fffae6"]::before {
     content: "\26A0\FE0E";
     color: var(--panel-warnyellow-icon);
@@ -6897,9 +6899,10 @@ html body .portal .tree-menu input[type="text"] {
    (HaloPSA's KB markup wraps the search + tree in unlabeled flex/
    inline-block divs that can't be targeted by class).
 
-   Scoped to `max-width: 900px` because at desktop widths the sidebar
-   lives in a fixed Bootstrap column and the issue doesn't surface. */
-@media (max-width: 900px) {
+   Use the same 768px breakpoint as the stacked KB layout below.
+   At 769-900px the tree is still fixed beside the 70% article column;
+   making it 100% wide there overlays the article and its controls. */
+@media (max-width: 768px) {
     html body .portal .kblist,
     html body .portal .tree-menu,
     html body .portal .kblist > .sidebar,
@@ -8245,57 +8248,6 @@ html body .portal .tree-menu input[type="text"] {
         padding: 24px 14px 16px !important;
     }
 
-    /* ── My account drawer ────────────────────────────────────
-       A phone-first component that had no phone rules at all: the 24px
-       panel padding, the 1.25rem header and the 52px avatar are all
-       desktop values and all of them come straight off the width of a
-       drawer that is itself only as wide as the phone. Bring the three
-       onto the same scale the rest of this block works at. These are
-       proportions rather than measurements; nobody has yet rendered
-       this drawer at phone width, so treat the exact numbers as a first
-       pass to review on a real screen.
-       Every selector list below is copied verbatim from the desktop
-       rule it overrides, so specificity is identical on both sides and
-       these win purely on source order, the same arrangement the page
-       H1 rule at the top of this block uses. Copying rather than
-       trimming matters here: `#sidemenu` in that first list carries an
-       id, so a shortened selector would silently lose. */
-    html body .portal #sidemenu,
-    html body .portal .sidemenu,
-    html body .portal .sidemenu.sidemenu-enter-active,
-    html body .portal .ui.sidebar,
-    html body .portal .ui.sidebar.visible,
-    html body .portal .ui.right.sidebar,
-    html body .portal .ui.right.sidebar.visible,
-    html body .portal .app-nav-menu {
-        padding: 18px !important;
-    }
-    html body .portal .sidemenu .sidemenu-header,
-    html body .portal .sidemenu h1,
-    html body .portal .sidemenu h2,
-    html body .portal .sidemenu h3,
-    html body .portal .ui.sidebar h1,
-    html body .portal .ui.sidebar h2,
-    html body .portal .ui.sidebar h3,
-    html body .portal .ui.sidebar .header,
-    html body .portal .ui.sidebar .sidebar-header,
-    html body .portal .ui.sidebar > div:first-child > span,
-    html body .portal .ui.sidebar > div:first-child > div {
-        font-size: 1.125rem !important;
-    }
-    html body .portal .sidemenu img,
-    html body .portal .sidemenu .user-avatar,
-    html body .portal .sidemenu .initials-avatar,
-    html body .portal .sidemenu img.rounded-circle,
-    html body .portal .ui.sidebar img,
-    html body .portal .ui.sidebar .user-avatar,
-    html body .portal .ui.sidebar .initials-avatar,
-    html body .portal .ui.sidebar img.rounded-circle {
-        width: 44px !important;
-        height: 44px !important;
-        min-width: 44px !important;
-    }
-
     /* ── Semantic UI popup / share sheet ──────────────────────
        The popup mounts as a direct child of `body`, outside
        `.app-container`, which is why its rules are not `.portal`
@@ -8454,6 +8406,22 @@ html body .portal .tree-menu input[type="text"] {
     html body .portal .ReactTable:has(.rt-thead .rt-th[data-col="name"]) .rt-tbody {
         width: 100% !important;
         min-width: 0 !important;
+    }
+
+    /* Stripe controls sit inside padded form/row wrappers. Size the
+       wrappers too, so the buttons align with the invoice cards. */
+    html body .portal .container.ticket-list > .col-md-6:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    html body .portal .container.ticket-list .details-group:has(#input-field-for-stripePayAll, #input-field-for-stripePaymentMethod) {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+    html body .portal .container.ticket-list .row > div:has(> #input-field-for-stripePayAll, > #input-field-for-stripePaymentMethod) {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
     }
 
     /* ── Invoices header, stack the Stripe controls ────────────
@@ -9261,6 +9229,8 @@ html body .portal .sidemenu-links {
 }
 
 /* Sidebar header ("My account" + close button) */
+html body .portal .sidemenu .sidemenu-title,
+html body .portal .sidemenu .sidemenu-title > span,
 html body .portal .sidemenu .sidemenu-header,
 html body .portal .sidemenu h1,
 html body .portal .sidemenu h2,
@@ -9380,6 +9350,7 @@ html body .portal .ui.sidebar .user-email {
    accent on hover. */
 html body .portal .sidemenu-links a,
 html body .portal .sidemenu-links > a,
+html body .portal .sidemenu .sidemenu-links button.link-button,
 html body .portal .sidemenu a,
 html body .portal .ui.sidebar a,
 html body .portal .ui.sidebar .item,
@@ -9404,6 +9375,7 @@ html body .portal .ui.sidebar ul li a {
 }
 html body .portal .sidemenu-links a:hover,
 html body .portal .sidemenu-links > a:hover,
+html body .portal .sidemenu .sidemenu-links button.link-button:hover,
 html body .portal .sidemenu a:hover,
 html body .portal .ui.sidebar a:hover,
 html body .portal .ui.sidebar .item:hover,
@@ -9413,6 +9385,26 @@ html body .portal .ui.sidebar nav a:hover,
 html body .portal .ui.sidebar ul li a:hover {
     background: var(--portal-accent-soft) !important;
     color: var(--portal-accent) !important;
+}
+
+/* The account drawer mixes buttons and anchors inside row wrappers.
+   Remove the platform's anchor-only indent and give every row a target
+   that fills the drawer, including keyboard focus. */
+html body .portal .sidemenu-links > div {
+    padding-left: 0 !important;
+}
+html body .portal .sidemenu .sidemenu-links .link-button {
+    box-sizing: border-box;
+    width: calc(100% + 28px) !important;
+    text-align: left !important;
+    cursor: pointer;
+}
+html body .portal .sidemenu .sidemenu-links .link-button:focus-visible {
+    outline: 2px solid var(--portal-accent) !important;
+    outline-offset: 2px;
+}
+html body .portal .sidemenu .contact-card-email {
+    color: var(--portal-text-secondary) !important;
 }
 
 /* Dimmer behind the sidebar (Semantic UI ships a semi-opaque overlay) */
@@ -9499,4 +9491,48 @@ html body .portal .menu.transition.visible .item svg {
     text-align: center;
     margin: 0 !important;
     font-size: 14px !important;
+}
+
+/* Drawer sizing follows the same breakpoint as the page layout. */
+@media (max-width: 768px) {
+    /* Keep these overrides after the drawer base rules: equal-specificity
+       declarations earlier in the file lose to the desktop defaults. */
+    html body .portal #sidemenu,
+    html body .portal .sidemenu,
+    html body .portal .sidemenu.sidemenu-enter-active,
+    html body .portal .ui.sidebar,
+    html body .portal .ui.sidebar.visible,
+    html body .portal .ui.right.sidebar,
+    html body .portal .ui.right.sidebar.visible,
+    html body .portal .app-nav-menu {
+        padding: 18px !important;
+    }
+    html body .portal .sidemenu .sidemenu-title,
+    html body .portal .sidemenu .sidemenu-title > span,
+    html body .portal .sidemenu .sidemenu-header,
+    html body .portal .sidemenu h1,
+    html body .portal .sidemenu h2,
+    html body .portal .sidemenu h3,
+    html body .portal .ui.sidebar h1,
+    html body .portal .ui.sidebar h2,
+    html body .portal .ui.sidebar h3,
+    html body .portal .ui.sidebar .header,
+    html body .portal .ui.sidebar .sidebar-header,
+    html body .portal .ui.sidebar > div:first-child > span,
+    html body .portal .ui.sidebar > div:first-child > div {
+        font-size: 1.125rem !important;
+    }
+    html body .portal .sidemenu img,
+    html body .portal .sidemenu .user-avatar,
+    html body .portal .sidemenu .initials-avatar,
+    html body .portal .sidemenu img.rounded-circle,
+    html body .portal .ui.sidebar img,
+    html body .portal .ui.sidebar .user-avatar,
+    html body .portal .ui.sidebar .initials-avatar,
+    html body .portal .ui.sidebar img.rounded-circle {
+        width: 44px !important;
+        height: 44px !important;
+        min-width: 44px !important;
+    }
+
 }

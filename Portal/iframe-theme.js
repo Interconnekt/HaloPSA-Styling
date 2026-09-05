@@ -1,7 +1,7 @@
 /**
  * Self-Service Portal, chrome JS shims
  *
- * Five independent IIFEs in this file:
+ * Seven independent IIFEs in this file:
  *
  * 1. iframe theming, HaloPSA renders email bodies inside
  *    `<iframe class="halo-html-renderer">`, a same-origin iframe with
@@ -13,7 +13,7 @@
  * 2. Ticket list formatting, HaloPSA renders the `Age` column as a
  *    raw float of days ("4.1446736001620375"). CSS cannot round
  *    numeric text content, so we post-process the DOM to format each
- *    Age cell to 2 decimal places. Runs on load + MutationObserver so
+ *    Age cell to 1 decimal place. Runs on load + MutationObserver so
  *    sort/filter/pagination don't leave stale raw floats.
  *
  * 3. Status-chip class stamping, HaloPSA ships status pills as
@@ -35,6 +35,9 @@
  *    class hook, so we walk candidate tiles, find the leaf element
  *    whose trimmed textContent is exactly "On Hold", and wrap it in
  *    a `data-on-hold-indicator` span that CSS paints as a red pill.
+ *
+ * 6. Table-column hooks, semantic data-col attributes for responsive cards.
+ * 7. Empty subtitles, hide orphan eyebrow decoration and spacing.
  */
 (function () {
     'use strict';
@@ -262,7 +265,7 @@
 
 
 /**
- * Ticket list, format the `Age` column to 2 decimal places.
+ * Ticket list, format the `Age` column to 1 decimal place.
  *
  * HaloPSA renders the Age column as a raw Number that represents days
  * since the ticket was opened, e.g. "4.1446736001620375". CSS cannot
@@ -270,17 +273,12 @@
  *
  * Strategy: locate the Age column by its header text (order varies per
  * user's saved ticket view), then sweep tbody cells in that column.
- * On every react-table re-render (sort, filter, page change) the cells
- * lose our formatting and reset to raw floats, so a MutationObserver
- * on the tbody catches those and re-formats. A data-attribute marker
- * stops repeated re-formatting on the same cell, which would otherwise
- * trigger an infinite loop (each format mutates tbody, which fires the
- * observer, which formats again).
+ * React can replace rows or update text inside existing cells. Observe
+ * both cases and format only raw values with two or more decimal places;
+ * the one-decimal output does not qualify again, so the sweep is idempotent.
  */
 (function () {
     'use strict';
-
-    var MARKER = 'data-age-fmt';
 
     function findAgeColIndex(table) {
         // `.rt-th` headers are visual order, same as `.rt-td` cells in
@@ -294,7 +292,6 @@
     }
 
     function formatCell(td) {
-        if (td.getAttribute(MARKER)) return;
         var raw = (td.textContent || '').trim();
         // Format any float with 2+ decimals down to a single decimal place.
         // Skip blanks, whole numbers, and non-numeric text (e.g. "N/A",
@@ -303,7 +300,6 @@
         if (!/^-?\d+\.\d{2,}$/.test(raw)) return;
         var n = parseFloat(raw);
         if (!isFinite(n)) return;
-        td.setAttribute(MARKER, '1');
         td.textContent = n.toFixed(1);
     }
 
@@ -324,14 +320,17 @@
     function start() {
         sweep();
         if (!document.body) return;
-        // Global subtree observer, the ticket list may not exist at
-        // script start (SPA route change). Re-sweep on any DOM change
-        // that adds .rt-tr rows. Marker on formatted cells prevents
-        // re-format loops; react-table re-creates cells on render, so
-        // a fresh cell has no marker and gets formatted once.
+        // Observe row insertion and text updates in reused cells. The
+        // decimal guard prevents our own formatting from looping.
         var obs = new MutationObserver(function (muts) {
             var needsSweep = false;
             for (var i = 0; i < muts.length; i++) {
+                var target = muts[i].target;
+                var element = target.nodeType === 1 ? target : target.parentElement;
+                if (element && element.closest('.ReactTable, .main-table')) {
+                    needsSweep = true;
+                    break;
+                }
                 var added = muts[i].addedNodes;
                 for (var j = 0; j < added.length; j++) {
                     var node = added[j];
@@ -349,7 +348,7 @@
             }
             if (needsSweep) sweep();
         });
-        obs.observe(document.body, { childList: true, subtree: true });
+        obs.observe(document.body, { childList: true, characterData: true, subtree: true });
     }
 
     if (document.readyState === 'loading') {
@@ -776,10 +775,9 @@
  * `[data-col="summary"]` and friends and stays correct whatever order
  * the view puts them in.
  *
- * Re-render safety mirrors the Age formatter: react-table rebuilds
- * cells on sort, filter and page change, so a MutationObserver
- * re-sweeps. Writing the attribute is skipped when the value is already
- * correct, which is what stops the observer retriggering itself.
+ * Re-sweep when rows, cells or header text change, including updates in
+ * place. Blank or removed headers clear old stamps. Attribute writes are
+ * skipped when already correct and are not observed by this observer.
  */
 (function () {
     'use strict';
@@ -793,8 +791,12 @@
     }
 
     function stamp(el, value) {
-        // Only write when it would actually change, otherwise every
-        // sweep mutates the tbody and wakes the observer again.
+        // A reused column can become blank (for example an action cell).
+        // Remove its old semantic hook so mobile CSS cannot mislabel it.
+        if (!value) {
+            if (el.hasAttribute('data-col')) el.removeAttribute('data-col');
+            return;
+        }
         if (el.getAttribute('data-col') !== value) {
             el.setAttribute('data-col', value);
         }
@@ -810,13 +812,13 @@
         }
 
         for (var h = 0; h < heads.length; h++) {
-            if (slugs[h]) stamp(heads[h], slugs[h]);
+            stamp(heads[h], slugs[h]);
         }
 
         table.querySelectorAll('.rt-tbody .rt-tr').forEach(function (row) {
             var cells = row.querySelectorAll('.rt-td');
             for (var c = 0; c < cells.length; c++) {
-                if (slugs[c]) stamp(cells[c], slugs[c]);
+                stamp(cells[c], slugs[c]);
             }
         });
     }
@@ -831,6 +833,12 @@
         var obs = new MutationObserver(function (muts) {
             var needsSweep = false;
             for (var i = 0; i < muts.length; i++) {
+                var target = muts[i].target;
+                var element = target.nodeType === 1 ? target : target.parentElement;
+                if (element && element.closest('.ReactTable, .main-table')) {
+                    needsSweep = true;
+                    break;
+                }
                 var added = muts[i].addedNodes;
                 for (var j = 0; j < added.length; j++) {
                     var node = added[j];
@@ -848,7 +856,7 @@
             }
             if (needsSweep) sweep();
         });
-        obs.observe(document.body, { childList: true, subtree: true });
+        obs.observe(document.body, { childList: true, characterData: true, subtree: true });
     }
 
     if (document.readyState === 'loading') {
@@ -856,4 +864,47 @@
     } else {
         start();
     }
+})();
+
+
+/* Empty page subtitles may contain whitespace or an empty wrapper div.
+   CSS :empty misses both. Preserve controls and media even without text. */
+(function () {
+    'use strict';
+
+    function sweep() {
+        document.querySelectorAll('.portal .page-subtitle').forEach(function (el) {
+            var empty = !(el.textContent || '').trim() &&
+                !el.querySelector('img, svg, video, audio, iframe, input, select, textarea, button, a[href], [role="button"]');
+            if (empty !== el.hasAttribute('data-portal-empty')) {
+                el.toggleAttribute('data-portal-empty', empty);
+            }
+        });
+    }
+
+    function start() {
+        sweep();
+        if (!document.body) return;
+        var observer = new MutationObserver(function (muts) {
+            for (var i = 0; i < muts.length; i++) {
+                var target = muts[i].target;
+                var element = target.nodeType === 1 ? target : target.parentElement;
+                if (element && element.closest('.page-subtitle')) {
+                    sweep();
+                    return;
+                }
+                for (var j = 0; j < muts[i].addedNodes.length; j++) {
+                    var node = muts[i].addedNodes[j];
+                    if (node.nodeType === 1 && (node.matches('.page-subtitle') || node.querySelector('.page-subtitle'))) {
+                        sweep();
+                        return;
+                    }
+                }
+            }
+        });
+        observer.observe(document.body, { childList: true, characterData: true, subtree: true });
+    }
+
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+    else start();
 })();

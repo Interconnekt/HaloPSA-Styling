@@ -43,13 +43,25 @@ CSS previews and did not deploy them.
   into character fragments. Wrapped tables now have a 32rem minimum measure and
   scroll inside their existing `.table-wrap`; two-column tables still fit the card.
   Tables retain square edges, thin borders and no zebra stripes.
+- Jeremy's grouped project list used bright blue phase rows and opaque grey
+  nested rows in dark mode. Phase headers now use the accent surface, disclosure
+  arrows use theme text, and task names wrap instead of truncating. Main-table
+  rows also receive the surface token directly, fixing grey invoice rows.
+- Tile View retained its desktop 30/70 split on phones and small tablets. At
+  <=1024px it now shows one full-width pane: the list when nothing is selected,
+  or the ticket preview after selection. The existing preview Back button returns
+  to the list. Desktop keeps both panes and its existing proportions.
 
 ## Verification performed
 
-The in-app session was Joel's. Jeremy's Chrome session was confirmed available,
+The initial in-app session was Joel's. Jeremy's Chrome session was confirmed available,
 but Chrome DevTools is blocked by organisation policy. No policy bypass was used.
 Edge was also checked as a fallback: its portal session is Jacob Kino, not Jeremy.
 The temporary Edge tab was closed, restoring the user's previous tab.
+The user subsequently opened Jeremy's IDA session in the in-app browser, allowing
+the additional checks below. During the continuation the session returned to the
+agent account; browser policy blocked opening Jeremy's user record to restore it.
+The user restored the session, and the remaining tablet checks completed there.
 
 | Surface | Checks completed this session |
 | --- | --- |
@@ -64,6 +76,22 @@ The temporary Edge tab was closed, restoring the user's previous tab.
 | JavaScript | `node --check Portal/iframe-theme.js`; all ten browser regression checks in `tests/chip-updates.html` passed. |
 | Patch integrity | `git diff --check` passed. No customer tickets, approvals, assets or requests were modified. |
 
+### Additional checks with Jeremy's IDA session
+
+| Surface | Checks completed |
+| --- | --- |
+| Grouped projects (`tickets?btn=65&includeprojects=2&viewid=1`) | 43 records; light/dark phase headers and nested rows; wrapped task names; desktop and phone table layouts. Wide columns remain inside the scrolling table. |
+| Project Tile View | 320px dark list: 292px list width and 320px page width. Selected preview: list hidden, preview 286px, Back returns to the list. Light phone cards inspected. At an actual 834px CSS viewport, list 771px and selected preview 765px; Back works. At 1440px, both desktop panes remain visible. |
+| Project Kanban View | Dark phone columns and cards inspected; the 3659px board scrolls inside its 342px container. No cards dragged or statuses changed. |
+| Invoices | 114 records including paid/unpaid rows. 390px light and 320px dark cards; all payment controls fit and page width stays within the viewport. 834px dark table inspected. Corrected row surfaces verified at 1440px dark with computed surface/text colours. No payment or payment-method actions invoked. |
+| Incident 358840 | Long Japanese subject and two-step workflow at 390px light; dark history and tablet email content inspected. All five email frames measured 336px wide with 336px document scroll width on phone and received the Figtree font. |
+| Opportunity 358925 | 390px dark four-step workflow: 592px scrollable strip inside a 280px viewport; page stays 390px. 1440px light heading, workflow, sidebar and email history inspected. |
+| Approvals | Jeremy's home and approvals page both report no pending approvals. Populated approval cards could not be exercised with this account. |
+
+Some browser captures were affected by its current zoom and viewport changes.
+Final breakpoint assertions above use measured `innerWidth`, not just the requested
+emulation width. The tablet check explicitly matched the 769–1024px media range.
+
 CSS previews were applied with `CSS.setStyleSheetText` to the imported stylesheet.
 Simply adding a style tag to the head can lose to Halo's later stylesheet on equal
 specificity, so that is insufficient for final verification. Phone testing used
@@ -75,16 +103,15 @@ its application setting when drawing chart text. A class-only preview initially
 showed black legends, but the real Dark setting rendered them correctly. Do not
 add a white chart background based on that false positive.
 
-## Remaining work requiring Jeremy's session
+## Coverage limits and deployment
 
-The in-app browser still needed switching to Jeremy at the end of this pass.
-Do not consider the complete cross-account sweep finished:
+The representative IDA review is complete. Populated approvals remain unverified
+because Jeremy has none; Gantt View was not exercised. This is representative
+coverage across the listed layouts and widths, not every possible record/state.
 
-- Review IDA's populated approvals, projects and broader ticket/opportunity types.
-- Recheck Jeremy's invoice list and payment controls at desktop, tablet and phone
-  widths without invoking payment actions.
-- Cover the ticket list's alternate Tile/Kanban views using Jeremy's available data.
-- Recheck these fixes after merge and Worker cache expiry.
+The fixes remain on the review branch in PR #24 and are not deployed. Recheck the
+live Worker stylesheet after merge and cache expiry. Temporary CSS/theme/viewport
+previews were cleared and Jeremy's home page was left open.
 
 Some assets in the available source data have no tag/name. Their detail heading is
 therefore blank. The responsive cards retain the type and serial number for

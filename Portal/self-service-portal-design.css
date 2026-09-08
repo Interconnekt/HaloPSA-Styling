@@ -2961,6 +2961,15 @@ html body .portal .rt-tbody .rt-tr-group:last-child {
 html body .portal .rt-tbody .rt-tr-group:hover {
     background: var(--portal-surface-hover) !important;
 }
+/* Halo also paints individual rows grey in dark mode. An outer
+   table background alone cannot theme those opaque row surfaces. */
+html body .portal .ReactTable.main-table .rt-tbody .rt-tr-group > .rt-tr {
+    background: var(--portal-surface) !important;
+    color: var(--portal-text) !important;
+}
+html body .portal .ReactTable.main-table .rt-tbody .rt-tr-group > .rt-tr:hover {
+    background: var(--portal-surface-hover) !important;
+}
 /* Left accent bar on hover, appears/hides via border-color so there's
    no layout shift. Priority/status stamping (see section 7) runs on
    `.rt-td` children and tints the pills; the accent bar here just
@@ -2976,6 +2985,28 @@ html body .portal .rt-tbody .rt-tr-group::before {
 }
 html body .portal .rt-tbody .rt-tr-group:hover::before {
     opacity: 1;
+}
+
+/* Project lists nest row groups under phase pivots. Halo paints the
+   pivot's own row blue and nested groups grey, independently of the
+   outer table surface. Target direct rows so a hovered parent does
+   not highlight its entire subtree. Keep the wide table scrollable;
+   project phases and budget columns must remain associated. */
+html body .portal .ReactTable.main-table:has(.rt-th[data-col="task-name"]) .rt-tr-group {
+    background: transparent !important;
+}
+html body .portal .ReactTable.main-table:has(.rt-th[data-col="task-name"]) .rt-tr-group.pivot > .rt-tr {
+    background: var(--portal-accent-soft) !important;
+    color: var(--portal-text) !important;
+    font-weight: 600 !important;
+}
+html body .portal .ReactTable.main-table:has(.rt-th[data-col="task-name"]) .rt-td[data-col="task-name"] {
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+    line-height: 1.4 !important;
+}
+html body .portal .ReactTable.main-table:has(.rt-th[data-col="task-name"]) .rt-expander::after {
+    border-top-color: var(--portal-text-secondary) !important;
 }
 
 /* ─── Asset selector filter row ──
@@ -5063,6 +5094,37 @@ html body .portal .searchandview > .col-md-6.search {
    pane. Applied to both panes so neither side bleeds. */
 html body .portal .portal-ticket-splitter > .layout-pane {
     overflow-x: clip;
+}
+
+/* Tile view also keeps the splitter on phones and small tablets.
+   Its 30% list pane is too narrow at those widths. Show one full-width
+   pane at a time; the existing preview Back button returns to the
+   list. The .subscreen hook distinguishes a selected ticket from
+   the empty "Select a Ticket to view" placeholder. */
+@media (max-width: 1024px) {
+    html body .portal .portal-ticket-splitter.hasPreview {
+        position: relative !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+    html body .portal .portal-ticket-splitter.hasPreview > .layout-pane {
+        width: 100% !important;
+        flex: 0 0 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+    html body .portal .portal-ticket-splitter.hasPreview > .layout-splitter,
+    html body .portal .portal-ticket-splitter.hasPreview > .layout-pane:has(#ticketpreview):not(:has(#ticketpreview .subscreen)),
+    html body .portal .portal-ticket-splitter.hasPreview:has(#ticketpreview .subscreen) > .layout-pane:has(#mainlist) {
+        display: none !important;
+    }
+    html body .portal .portal-ticket-splitter.hasPreview #mainlist,
+    html body .portal .portal-ticket-splitter.hasPreview #ticketpreview {
+        width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+    }
 }
 
 /* Detail-pane content width, HaloPSA wraps the ticket detail inside

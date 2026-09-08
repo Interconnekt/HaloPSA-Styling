@@ -448,7 +448,6 @@
 
     function stampChip(el) {
         var text = (el.textContent || '').trim().toLowerCase();
-        if (!text) return;
         var key = matchStatusKey(text);
         var cls = key ? STATUS_MAP[key] : null;
         // If the chip already has the correct class and marker, skip.
@@ -496,6 +495,11 @@
         if (!document.body) return;
         var obs = new MutationObserver(function (muts) {
             for (var i = 0; i < muts.length; i++) {
+                // React can reuse a chip and change only its text node.
+                var target = muts[i].target;
+                var element = target.nodeType === 1 ? target : target.parentElement;
+                var chip = element && element.closest('.status-avatar');
+                if (chip) stampChip(chip);
                 var added = muts[i].addedNodes;
                 for (var j = 0; j < added.length; j++) {
                     var node = added[j];
@@ -506,12 +510,9 @@
                         sweep(node);
                     }
                 }
-                // Also catch textContent changes on an existing chip
-                // (characterData mutations don't surface here; the
-                // next added-node sweep will catch the re-render).
             }
         });
-        obs.observe(document.body, { childList: true, subtree: true });
+        obs.observe(document.body, { childList: true, characterData: true, subtree: true });
     }
 
     if (document.readyState === 'loading') {
@@ -610,7 +611,6 @@
         var parent = swatch.parentElement;
         if (!parent) return;
         var text = readSiblingText(parent, swatch);
-        if (!text) return;
         var key = matchPriorityKey(text);
         stampWrapper(parent, key);
     }
@@ -624,6 +624,11 @@
         if (!document.body) return;
         var obs = new MutationObserver(function (muts) {
             for (var i = 0; i < muts.length; i++) {
+                // Labels may be nested spans or siblings of the swatch.
+                var target = muts[i].target;
+                var element = target.nodeType === 1 ? target : target.parentElement;
+                var wrapper = element && element.closest('.oneline, [data-priority-stamped]');
+                if (wrapper) sweep(wrapper);
                 var added = muts[i].addedNodes;
                 for (var j = 0; j < added.length; j++) {
                     var node = added[j];
@@ -636,7 +641,7 @@
                 }
             }
         });
-        obs.observe(document.body, { childList: true, subtree: true });
+        obs.observe(document.body, { childList: true, characterData: true, subtree: true });
     }
 
     if (document.readyState === 'loading') {

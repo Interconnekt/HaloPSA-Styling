@@ -1,0 +1,58 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Portal chip update regression checks</title>
+<h1>Portal chip update regression checks</h1>
+<p>Serve the repository over HTTP and open this page. It uses synthetic data only.</p>
+<pre id="results">Running…</pre>
+<div id="fixtures">
+  <span id="status" class="status-avatar">New</span>
+  <div id="priority" class="oneline"><span class="priority-block"></span><span id="priority-label">Low</span></div>
+  <div id="unrelated" class="oneline">Low balance</div>
+</div>
+<script src="../iframe-theme.js"></script>
+<script>
+addEventListener('DOMContentLoaded', async () => {
+  const status = document.querySelector('#status');
+  const priority = document.querySelector('#priority');
+  const label = document.querySelector('#priority-label');
+  const lines = [];
+  // A new task allows MutationObservers to finish before assertions.
+  const settle = () => new Promise(resolve => setTimeout(resolve, 0));
+  const check = (condition, message) => {
+    lines.push(`${condition ? 'PASS' : 'FAIL'} ${message}`);
+    document.querySelector('#results').textContent = lines.join('\n');
+  };
+  check(status.classList.contains('s-new') && priority.classList.contains('p-low'), 'Initial labels receive colours');
+  status.firstChild.data = 'Resolved';
+  label.firstChild.data = 'Critical';
+  await settle();
+  check(status.classList.contains('s-resolved') && !status.classList.contains('s-new'), 'Status text-node update replaces old colour');
+  check(priority.classList.contains('p-critical') && !priority.classList.contains('p-low'), 'Nested priority text-node update replaces old colour');
+  status.textContent = 'Awaiting User';
+  label.textContent = 'High';
+  await settle();
+  check(status.classList.contains('s-awaiting-user') && priority.classList.contains('p-high'), 'Replacing existing label content updates both colours');
+  status.textContent = 'Unmapped state';
+  label.textContent = 'Unmapped priority';
+  await settle();
+  check(!status.hasAttribute('data-status-stamped') && ![...status.classList].some(c => c.startsWith('s-')), 'Unknown status clears the mapped colour and permits CSS fallback');
+  check(![...priority.classList].some(c => c.startsWith('p-')), 'Unknown priority clears the mapped colour');
+  status.textContent = 'New';
+  label.textContent = 'Low';
+  await settle();
+  status.textContent = '';
+  label.textContent = '';
+  await settle();
+  check(!status.hasAttribute('data-status-stamped') && ![...status.classList].some(c => c.startsWith('s-')), 'Blank status clears its old colour');
+  check(![...priority.classList].some(c => c.startsWith('p-')), 'Blank priority clears its old colour');
+  document.querySelector('#unrelated').firstChild.data = 'Critical balance';
+  await settle();
+  check(!document.querySelector('#unrelated').hasAttribute('data-priority-stamped'), 'Unrelated text without a priority swatch stays unchanged');
+  const added = document.createElement('div');
+  added.innerHTML = '<span class="status-avatar">Approved</span><div class="oneline"><span class="priority-block"></span>Medium</div>';
+  document.querySelector('#fixtures').append(added);
+  await settle();
+  check(!!added.querySelector('.s-approved') && !!added.querySelector('.p-medium'), 'Newly inserted rows still receive colours');
+  document.title = lines.some(line => line.startsWith('FAIL')) ? 'FAIL: chip updates' : 'PASS: chip updates';
+});
+</script>

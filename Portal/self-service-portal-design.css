@@ -904,6 +904,19 @@ html body .portal .main:has(.svcatalog-item) .searchscreen .search-title {
     font-weight: 700 !important;
     margin: 0 0 16px !important;
 }
+/* The category picker and category list also render an unclassed H2
+   directly under the live region, with inline 2.5rem/50px styling. */
+html body .portal .main:has(.svcatalog-item) [aria-live] > h2 {
+    font-size: 1.375rem !important;
+    font-weight: 700 !important;
+    margin: 24px 0 16px !important;
+}
+html body .portal .main:has(.svcatalog-item) [aria-live] > h2 + br {
+    display: none;
+}
+html body .portal .main:has(.svcatalog-item) [aria-live] > .link-button {
+    color: var(--portal-accent) !important;
+}
 html body .portal .main:has(.svcatalog-item) .searchscreen .searchbox {
     height: 40px !important;
     border-radius: 14px !important;
@@ -921,8 +934,13 @@ html body .portal .searchscreen .searchbox input[type=text]::placeholder {
     color: var(--portal-text-muted);
     font-weight: 400;
 }
+/* Halo emits a near-black SVG colour attribute in KB/catalogue
+   filters too. A theme token keeps the search affordance readable. */
+html body .portal .searchbox svg.searchbutton {
+    color: var(--portal-text-secondary) !important;
+}
 html body .portal .searchscreen .searchbox svg.searchbutton {
-    color: var(--portal-accent);
+    color: var(--portal-accent) !important;
 }
 html body .portal .searchholder:focus-within,
 html body .portal .searchholder input:focus,
@@ -1204,6 +1222,7 @@ html body .portal .inlinetile > .main-tile-item {
    these are category signposts, not illustrations, and the tile
    should read as a compact row of choices rather than four posters. */
 html body .portal .main-tile-item .svcatalog-item {
+    background: transparent !important;
     padding: 0 !important;
     /* HaloPSA hardcodes `height: 245px` here. With the artwork and
        padding reduced the content stops around 130px, so the rest was
@@ -1263,6 +1282,22 @@ html body .portal .service-img {
 }
 html body .portal .service-img {
     object-fit: contain;
+}
+
+/* Service descriptions contain request actions inside `.page-subtitle`.
+   They are body copy, so the shared flex/eyebrow treatment would squeeze
+   the text beside a 280px button and clip the action on phones. */
+html body .portal .container:has(> .col-md-3 .service-pic) .page-subtitle {
+    display: block !important;
+    font-family: var(--ic-font-body) !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    color: var(--portal-text-secondary) !important;
+}
+html body .portal .container:has(> .col-md-3 .service-pic) .page-subtitle::before {
+    display: none !important;
 }
 
 /* On-hold state, HaloPSA ships `.main-tile-item.hold` with a
@@ -2926,6 +2961,15 @@ html body .portal .rt-tbody .rt-tr-group:last-child {
 html body .portal .rt-tbody .rt-tr-group:hover {
     background: var(--portal-surface-hover) !important;
 }
+/* Halo also paints individual rows grey in dark mode. An outer
+   table background alone cannot theme those opaque row surfaces. */
+html body .portal .ReactTable.main-table .rt-tbody .rt-tr-group > .rt-tr {
+    background: var(--portal-surface) !important;
+    color: var(--portal-text) !important;
+}
+html body .portal .ReactTable.main-table .rt-tbody .rt-tr-group > .rt-tr:hover {
+    background: var(--portal-surface-hover) !important;
+}
 /* Left accent bar on hover, appears/hides via border-color so there's
    no layout shift. Priority/status stamping (see section 7) runs on
    `.rt-td` children and tints the pills; the accent bar here just
@@ -2941,6 +2985,28 @@ html body .portal .rt-tbody .rt-tr-group::before {
 }
 html body .portal .rt-tbody .rt-tr-group:hover::before {
     opacity: 1;
+}
+
+/* Project lists nest row groups under phase pivots. Halo paints the
+   pivot's own row blue and nested groups grey, independently of the
+   outer table surface. Target direct rows so a hovered parent does
+   not highlight its entire subtree. Keep the wide table scrollable;
+   project phases and budget columns must remain associated. */
+html body .portal .ReactTable.main-table:has(.rt-th[data-col="task-name"]) .rt-tr-group {
+    background: transparent !important;
+}
+html body .portal .ReactTable.main-table:has(.rt-th[data-col="task-name"]) .rt-tr-group.pivot > .rt-tr {
+    background: var(--portal-accent-soft) !important;
+    color: var(--portal-text) !important;
+    font-weight: 600 !important;
+}
+html body .portal .ReactTable.main-table:has(.rt-th[data-col="task-name"]) .rt-td[data-col="task-name"] {
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+    line-height: 1.4 !important;
+}
+html body .portal .ReactTable.main-table:has(.rt-th[data-col="task-name"]) .rt-expander::after {
+    border-top-color: var(--portal-text-secondary) !important;
 }
 
 /* ─── Asset selector filter row ──
@@ -4465,6 +4531,12 @@ html body .portal .rc-steps-item-tail::after {
 html body .portal .rc-steps.rc-steps-horizontal {
     display: flex !important;
     width: 100%;
+    overflow-x: auto !important;
+}
+/* Longer workflows need room per step; short two-step workflows can
+   still fit together on a phone without unnecessary scrolling. */
+html body .portal .rc-steps:has(> .rc-steps-item:nth-child(3)) .rc-steps-item {
+    min-width: 148px !important;
 }
 html body .portal .rc-steps .rc-steps-item {
     flex: 1 1 0 !important;
@@ -4543,7 +4615,7 @@ html body .portal .rc-steps-item-wait .rc-steps-item-icon {
     color: var(--portal-text-muted) !important;
 }
 html body .portal .rc-steps-item-wait .rc-steps-item-icon .rc-steps-icon {
-    color: var(--portal-text-muted) !important;
+    color: var(--portal-text-secondary) !important;
 }
 
 /* Titles: Bricolage Grotesque (NOT mono) so the label reads as
@@ -4563,7 +4635,7 @@ html body .portal .rc-steps-item-process .rc-steps-item-title {
     color: var(--portal-action) !important;
 }
 html body .portal .rc-steps-item-wait .rc-steps-item-title {
-    color: var(--portal-text-muted) !important;
+    color: var(--portal-text-secondary) !important;
 }
 
 
@@ -4854,6 +4926,13 @@ html body .portal .tabsheet.tabselected {
    positioned off the item box (`50% + 20px` by `100% - 40px`) which
    is padding independent, re-verified on the 2-step and 6-step
    steppers. */
+/* The platform translates the scroll strip upwards on phones, which
+   puts the active circle on the card border. Keep it within the padding
+   and leave clearance for the active ring and horizontal scrollbar. */
+html body .portal .workflow-steps-wrap > .rc-steps {
+    transform: none !important;
+    padding: 4px 0 8px !important;
+}
 html body .portal .workflow-steps-wrap {
     background: var(--portal-surface) !important;
     border: 1px solid var(--portal-border) !important;
@@ -4915,6 +4994,8 @@ html body .portal .main > .container,
 html body .portal .main > .container.ticket-list,
 html body .portal .main > .container-fluid,
 html body .portal .main > .container-large,
+/* Halo currently emits `classname`, not `class`, on this wrapper. */
+html body .portal .main > [classname="service-background"] > .container-large,
 html body .portal .main > .container-max,
 html body .portal .main > .searchscreen.searchscreen-full {
     width: 100% !important;
@@ -4924,6 +5005,22 @@ html body .portal .main > .searchscreen.searchscreen-full {
     padding-left: 32px !important;
     padding-right: 32px !important;
     box-sizing: border-box !important;
+}
+
+/* Asset tables must clear the floated paging controls. Otherwise the
+   grid shrinks beside them, losing roughly 200px at every viewport. */
+html body .portal .container.ticket-list .ReactTable.main-table:has([data-col="asset-tag"]):has([data-col="asset-type"]) {
+    clear: both;
+    width: 100% !important;
+}
+
+/* Approvals adds a second title gutter inside the shared page shell. */
+html body .portal .approval > .main_table_title {
+    padding: 0 !important;
+}
+html body .portal .approval .thumbs,
+html body .portal .approval .thumbs svg {
+    color: var(--portal-text) !important;
 }
 
 /* Nested-measure defusal, same logic as the phone block's tripled
@@ -4997,6 +5094,37 @@ html body .portal .searchandview > .col-md-6.search {
    pane. Applied to both panes so neither side bleeds. */
 html body .portal .portal-ticket-splitter > .layout-pane {
     overflow-x: clip;
+}
+
+/* Tile view also keeps the splitter on phones and small tablets.
+   Its 30% list pane is too narrow at those widths. Show one full-width
+   pane at a time; the existing preview Back button returns to the
+   list. The .subscreen hook distinguishes a selected ticket from
+   the empty "Select a Ticket to view" placeholder. */
+@media (max-width: 1024px) {
+    html body .portal .portal-ticket-splitter.hasPreview {
+        position: relative !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+    html body .portal .portal-ticket-splitter.hasPreview > .layout-pane {
+        width: 100% !important;
+        flex: 0 0 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+    html body .portal .portal-ticket-splitter.hasPreview > .layout-splitter,
+    html body .portal .portal-ticket-splitter.hasPreview > .layout-pane:has(#ticketpreview):not(:has(#ticketpreview .subscreen)),
+    html body .portal .portal-ticket-splitter.hasPreview:has(#ticketpreview .subscreen) > .layout-pane:has(#mainlist) {
+        display: none !important;
+    }
+    html body .portal .portal-ticket-splitter.hasPreview #mainlist,
+    html body .portal .portal-ticket-splitter.hasPreview #ticketpreview {
+        width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+    }
 }
 
 /* Detail-pane content width, HaloPSA wraps the ticket detail inside
@@ -7488,9 +7616,9 @@ html body .portal .tree-menu input[type="text"] {
 
        `:has(tr > *:nth-child(3))` releases `nowrap` only for tables
        that actually have a third column, so every two column table
-       keeps the behaviour it was tuned for. After this the same table
-       lays out at 317px inside a 365px article with no cell text
-       overflow. */
+       keeps the behaviour it was tuned for. Unwrapped tables retain
+       this fit-to-card fallback. Wrapped dense tables now receive a
+       readable minimum measure and their own scroller below. */
     html body .portal .kbdetails.kbdetails table:has(tr > *:nth-child(3)) th.confluenceTh.confluenceTh,
     html body .portal .kbdetails.kbdetails table:has(tr > *:nth-child(3)) th {
         white-space: normal !important;
@@ -7503,6 +7631,23 @@ html body .portal .tree-menu input[type="text"] {
         word-break: break-word !important;
         overflow-wrap: anywhere !important;
     }
+    /* Dense Confluence tables need a readable measure on phones.
+       Keep two-column key/value tables fitted; tables with three or
+       more columns scroll inside their existing wrapper instead of
+       crushing labels such as "eDiscovery" into character fragments.
+       Only wrapped tables receive a minimum width so an unwrapped
+       export cannot create page overflow. */
+    html body .portal .kbdetails .table-wrap {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+    html body .portal .kbdetails.kbdetails .table-wrap > table:has(tr > *:nth-child(3)) {
+        min-width: 32rem !important;
+    }
+    html body .portal .kbdetails.kbdetails .table-wrap > table:has(tr > *:nth-child(3)) tr > :first-child {
+        min-width: 6em !important;
+    }
+
     /* Zero any HaloPSA `<col>` width hints so auto layout is free
        to size columns by content. */
     html body .portal .kbdetails.kbdetails table colgroup,
@@ -7585,6 +7730,74 @@ html body .portal .tree-menu input[type="text"] {
     html body .portal button.-btn {
         padding: 0 12px !important;
     }
+
+    /* Asset lists use the same grid as tickets, but have their own
+       semantic columns. Keep identifying fields readable on phones;
+       the existing row opens the full asset record for further details.
+       Both hooks are required so ticket/invoice grids are untouched. */
+    html body .portal .container.ticket-list .ReactTable.main-table:has(.rt-td[data-col="asset-tag"]):has(.rt-td[data-col="asset-type"]),
+    html body .portal .container.ticket-list .ReactTable.main-table:has(.rt-td[data-col="asset-tag"]):has(.rt-td[data-col="asset-type"]) .rt-table,
+    html body .portal .container.ticket-list .ReactTable.main-table:has(.rt-td[data-col="asset-tag"]):has(.rt-td[data-col="asset-type"]) .rt-tbody {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        clear: both;
+    }
+    html body .portal .container.ticket-list .ReactTable.main-table:has(.rt-td[data-col="asset-tag"]):has(.rt-td[data-col="asset-type"]) .rt-thead {
+        display: none !important;
+    }
+    html body .portal .container.ticket-list .ReactTable.main-table:has(.rt-td[data-col="asset-tag"]):has(.rt-td[data-col="asset-type"]) .rt-tbody {
+        display: block !important;
+        overflow: visible !important;
+    }
+    html body .portal .container.ticket-list .ReactTable.main-table:has(.rt-td[data-col="asset-tag"]):has(.rt-td[data-col="asset-type"]) .rt-tr-group {
+        display: block !important;
+        flex: none !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        background: var(--portal-surface) !important;
+        border: 1px solid var(--portal-border) !important;
+        border-radius: var(--portal-radius-md) !important;
+        margin-bottom: 10px !important;
+        padding: 14px !important;
+        box-shadow: none !important;
+    }
+    html body .portal .container.ticket-list .ReactTable.main-table:has(.rt-td[data-col="asset-tag"]):has(.rt-td[data-col="asset-type"]) .rt-tr {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 6px;
+        width: 100% !important;
+        padding: 0 !important;
+        border: 0 !important;
+    }
+    html body .portal .container.ticket-list .ReactTable.main-table:has(.rt-td[data-col="asset-tag"]):has(.rt-td[data-col="asset-type"]) .rt-td {
+        display: none !important;
+    }
+    html body .portal .container.ticket-list .ReactTable.main-table:has(.rt-td[data-col="asset-tag"]):has(.rt-td[data-col="asset-type"]) .rt-td:is([data-col="asset-tag"], [data-col="asset-type"], [data-col="model"], [data-col="serial-number"], [data-col="client"], [data-col="user"], [data-col="status"]):not(:empty) {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        border: 0 !important;
+        white-space: normal !important;
+        overflow-wrap: anywhere;
+        color: var(--portal-text) !important;
+    }
+    html body .portal .container.ticket-list .ReactTable.main-table:has(.rt-td[data-col="asset-tag"]):has(.rt-td[data-col="asset-type"]) .rt-td[data-col="asset-tag"],
+    html body .portal .container.ticket-list .ReactTable.main-table:has(.rt-td[data-col="asset-tag"]):has(.rt-td[data-col="asset-type"]) .rt-td[data-col="asset-type"] {
+        order: -1;
+        font-weight: 600;
+    }
+    html body .portal .container.ticket-list .ReactTable.main-table:has(.rt-td[data-col="asset-tag"]):has(.rt-td[data-col="asset-type"]) .rt-td:is([data-col="client"], [data-col="user"], [data-col="status"], [data-col="serial-number"])::before {
+        color: var(--portal-text-secondary);
+        font-weight: 400;
+    }
+    html body .portal .container.ticket-list .ReactTable.main-table:has(.rt-td[data-col="asset-tag"]):has(.rt-td[data-col="asset-type"]) .rt-td[data-col="client"]::before { content: "Client: "; }
+    html body .portal .container.ticket-list .ReactTable.main-table:has(.rt-td[data-col="asset-tag"]):has(.rt-td[data-col="asset-type"]) .rt-td[data-col="user"]::before { content: "User: "; }
+    html body .portal .container.ticket-list .ReactTable.main-table:has(.rt-td[data-col="asset-tag"]):has(.rt-td[data-col="asset-type"]) .rt-td[data-col="status"]::before { content: "Status: "; }
+    html body .portal .container.ticket-list .ReactTable.main-table:has(.rt-td[data-col="asset-tag"]):has(.rt-td[data-col="asset-type"]) .rt-td[data-col="serial-number"]::before { content: "Serial: "; }
 
     /* ── Ticket list, card layout at phone width ──────────────
        In LIST view the ticket list is a react-table grid, and measured
@@ -8112,6 +8325,23 @@ html body .portal .tree-menu input[type="text"] {
     html body .portal .service-pic,
     html body .portal .service-img {
         display: none !important;
+    }
+
+    /* Hiding the artwork must also remove its empty Bootstrap column. */
+    html body .portal .container:has(> .col-md-3 .service-pic) > .col-md-3 {
+        display: none !important;
+    }
+    html body .portal .container:has(> .col-md-3 .service-pic) > .col-md-9 {
+        width: 100% !important;
+        padding: 0 !important;
+    }
+    html body .portal .container:has(> .col-md-3 .service-pic) .page-subtitle button {
+        min-width: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        height: auto !important;
+        white-space: normal !important;
+        padding: 10px 16px !important;
     }
 
     /* Service request and New Ticket forms share a component but were

@@ -48,6 +48,8 @@ CSS previews and did not deploy them.
 
 The in-app session was Joel's. Jeremy's Chrome session was confirmed available,
 but Chrome DevTools is blocked by organisation policy. No policy bypass was used.
+Edge was also checked as a fallback: its portal session is Jacob Kino, not Jeremy.
+The temporary Edge tab was closed, restoring the user's previous tab.
 
 | Surface | Checks completed this session |
 | --- | --- |

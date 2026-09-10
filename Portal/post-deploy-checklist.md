@@ -43,6 +43,9 @@ different left edges at 1800px (156, 145, 208, 319, 297 and 412px).
       as the cards below it
 - [ ] KB index: tree on the left, article cards on the right, no clipping
       of the card's right edge (the `.container-large` overflow trap)
+- [ ] KB index and article at 1440px and 2560px: sidebar search and
+      selected rows end before the article column. The fixed tree must
+      fit the page shell's 30% sidebar allocation even on wider monitors.
 - [ ] My Tickets table still fits without a horizontal scrollbar at 1440px
       and 1800px
 

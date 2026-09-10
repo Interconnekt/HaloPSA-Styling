@@ -8722,6 +8722,19 @@ html body .portal .tree-menu input[type="text"] {
    col-md-9 to order: -1 in a vertical stack, at mobile both
    columns want full width, not 70/30. */
 @media (min-width: 769px) {
+    /* The fixed tree's Bootstrap width resolves against the viewport,
+       while the article's 30% left margin resolves against the capped
+       page shell. On wide screens the tree therefore grows underneath
+       the article. Measure its maximum against this shared row instead.
+       A cap preserves the existing narrower laptop sidebar, and inline
+       size containment keeps its fixed positioning and scroll behaviour. */
+    html body .portal .container-large > div:has(> .col-md-9):has(> .kblist) {
+        container-type: inline-size;
+    }
+    html body .portal .container-large > div:has(> .col-md-9):has(> .kblist) > .tree-menu.kblist {
+        max-width: 30cqw !important;
+        box-sizing: border-box !important;
+    }
     html body .portal .container-large > div:has(> .col-md-9):has(> .kblist) > .col-md-9 {
         width: 70% !important;
         box-sizing: border-box !important;

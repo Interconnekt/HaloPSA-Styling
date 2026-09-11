@@ -47,13 +47,13 @@ The Custom CSS field in HaloPSA contains a single line:
 @import url('https://portal.interconnekt.com.au/__interconnekt/self-service-portal-design.css');
 ```
 
-That path is served by the Cloudflare Worker in [`Portal/worker/`](Portal/worker/README.md), which fetches the file from GitHub Pages and caches it at the edge for 60 seconds. Before 2026-09-02 the field pointed straight at `https://interconnekt.github.io/HaloPSA-Styling/Portal/self-service-portal-design.css`; that URL still works and is the fallback if the Worker route is ever removed.
+That path is served by the Cloudflare Worker in [`Portal/worker/`](Portal/worker/README.md), which serves assets bundled during `npm run deploy` with a 60 second browser cache. Before 2026-09-02 the field pointed straight at `https://interconnekt.github.io/HaloPSA-Styling/Portal/self-service-portal-design.css`; that URL still works and is the fallback if the Worker route is ever removed.
 
 `self-service-portal-design.css` is the **live** file, rebuilt for the 2026 Interconnekt website refresh (Montserrat + Instrument Serif + JetBrains Mono, neutral-grey dark mode, brand gradient accents, ghost-button family).
 
-`self-service-portal.css` remains in the repo as a **legacy fallback**: same token names + same visual chrome, maintained to parity but not loaded by default. If anything goes wrong with the design file, swap the `@import` URL to the legacy one.
+`self-service-portal.css` is **legacy and unused**. Do not mirror changes into it.
 
-Both files are published by GitHub Pages and reach the portal through the Worker. Edit, commit, merge to `main`, and the change is live within about a minute (GitHub Pages alone holds a 10 minute cache). On the Self-Service Portal, `Portal/iframe-theme.js` is injected by the same Worker.
+GitHub Pages publishes a fallback copy. To update the live portal, edit, commit, merge to `main`, then run `npm ci && npm run deploy` in `Portal/worker/`. This bundles the current stylesheet and `Portal/iframe-theme.js`; merging alone does not update the Worker assets. The same Worker injects the shim into the Self-Service Portal.
 
 ### Layer 3, Iframe JS shim (email bodies)
 
@@ -97,7 +97,7 @@ Add once in HaloPSA admin:
    ```css
    @import url('https://<your-github-username>.github.io/<your-repo>/Portal/self-service-portal-design.css');
    ```
-5. To update: edit `self-service-portal-design.css`, commit, push. Live within ~10 minutes, or about a minute if you put the Cloudflare Worker in `Portal/worker/` in front of your portal hostname and import from its `/__interconnekt/` path.
+5. To update: edit `self-service-portal-design.css`, commit, push. Live within ~10 minutes, if using GitHub Pages directly. The Cloudflare Worker path requires a separate `npm run deploy` in `Portal/worker/` after source changes.
 
 ### Style Profiles, Manual Entry
 

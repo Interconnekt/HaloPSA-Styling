@@ -11,6 +11,15 @@
     "workers_dev": false,
     "preview_urls": false,
 
+    // Generated from the two portal source files by `npm run build:assets`.
+    "assets": {
+        "directory": "./.assets",
+        "binding": "ASSETS",
+        "run_worker_first": true,
+        "html_handling": "none",
+        "not_found_handling": "none"
+    },
+
     // The route only takes effect once the DNS record for
     // portal.interconnekt.com.au is proxied (orange cloud).
     "routes": [

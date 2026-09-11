@@ -2,8 +2,12 @@
 
 Cloudflare Worker for `portal.interconnekt.com.au`. It is the delivery
 mechanism for `Portal/iframe-theme.js` on the Self-Service Portal, which
-HaloPSA gives us no other way to load, and it serves the stylesheet with a
-one minute cache instead of GitHub Pages' ten minutes.
+HaloPSA gives us no other way to load, and it serves the stylesheet and shim as bundled assets with a one minute browser cache.
+
+**Deployment correction (2026-09-11):** the active Worker has used an
+`ASSETS` binding since 2026-09-05. GitHub Pages updates do not reach that
+bundle. The repository now matches that setup; `npm run deploy` rebuilds
+the asset bundle from the two portal source files before uploading.
 
 Background, the options that were ruled out and the decision log live in
 [`../email-iframe-theming.md`](../email-iframe-theming.md). This file is
@@ -17,7 +21,7 @@ Every request to the portal hostname passes through `src/index.js`:
 |---|---|---|
 | Top-level HTML page (any route, including deep links) | Fetched from HaloPSA, one `<script src="/__interconnekt/iframe-theme.js">` appended to `<body>` with HTMLRewriter | `html-injected` |
 | Anything else from HaloPSA (JSON, static chunks, redirects, WebSocket upgrades, HTML requested by an iframe, non-2xx pages) | Passed through untouched | `passthrough` |
-| `/__interconnekt/self-service-portal-design.css` and `/__interconnekt/iframe-theme.js` | Fetched from GitHub Pages, cached at the edge for 60s, served with `max-age=60, stale-while-revalidate=540` and the upstream ETag (304 on revalidation) | `asset` |
+| `/__interconnekt/self-service-portal-design.css` and `/__interconnekt/iframe-theme.js` | Bundled with the Worker, served with `max-age=60, stale-while-revalidate=540` and the asset ETag (304 on revalidation) | `asset` |
 
 The header is there so `curl -I` tells you which branch handled a request.
 
@@ -33,7 +37,8 @@ Only top-level documents get the script: the `content-type` must be
 | `src/index.js` | The Worker |
 | `wrangler.jsonc` | Name, route (`portal.interconnekt.com.au/*` on zone `interconnekt.com.au`), compatibility date |
 | `test/smoke.mjs` | Anonymous smoke test; run against `wrangler dev` or the live portal |
-| `package.json` | `dev`, `deploy`, `smoke`, `smoke:prod` scripts |
+| `package.json` | `build:assets`, `dev`, `deploy`, `smoke`, `smoke:prod` scripts |
+| `scripts/build-assets.mjs` | Copies the portal CSS and shim into ignored `.assets/__interconnekt/`; runs before dev/deploy |
 
 ## Prerequisites
 
@@ -59,14 +64,20 @@ cd Portal/worker && npm run smoke
 
 `wrangler dev` runs the Worker on `http://localhost:8787` and the Worker
 talks to the real HaloPSA origin over HTTPS, so the smoke test exercises
-the genuine HTML shell, the genuine JSON endpoints and the genuine GitHub
-Pages assets. It needs no login. All checks passed on 2026-09-02.
+the genuine HTML shell, the genuine JSON endpoints and the bundled portal
+assets. It needs no login. All checks passed on 2026-09-02.
 
 ## Deploy
 
 ```bash
 cd Portal/worker && npm run deploy
 ```
+
+`npm run deploy` first copies `../self-service-portal-design.css` and
+`../iframe-theme.js` into the asset bundle. Always use this command rather
+than calling `wrangler deploy` with a potentially stale bundle. After
+deployment run `npm run smoke:prod` and compare both live asset hashes
+with their source files. Hard-refresh the portal to clear its browser cache.
 
 Deploying is safe at any time. The route only carries traffic once the
 DNS record for `portal.interconnekt.com.au` is proxied, and until then the
@@ -164,8 +175,8 @@ Custom CSS, replace the `@import` line with:
 @import url('https://portal.interconnekt.com.au/__interconnekt/self-service-portal-design.css');
 ```
 
-A merge to `main` is then visible to every browser within about a minute
-instead of ten. Confirm with:
+After merging, run `npm run deploy` in this directory. Confirm the new
+asset ETag and file contents, then hard-refresh the browser:
 
 ```bash
 curl -sI https://portal.interconnekt.com.au/__interconnekt/self-service-portal-design.css | grep -iE 'cache-control|etag|x-interconnekt-worker'
@@ -197,9 +208,12 @@ time:
 
 ## Day to day
 
-- **Changing the stylesheet or the shim** needs no Worker deploy. The
-  Worker reads both from GitHub Pages on each edge-cache miss, so a merge
-  to `main` is live within about a minute.
+- **Changing the stylesheet or the shim** requires `npm run deploy` after
+  merging to `main`. Both source files are bundled together. GitHub Pages
+  remains the fallback URL and does not update the live Worker bundle.
+- **Rollback**: revert the source change and run `npm run deploy` again,
+  or use Wrangler to roll back to the previous Worker version (including
+  its assets). A Git revert alone does not change the live portal.
 - **Changing the Worker**: edit `src/index.js`, `npm run smoke` against
   `npm run dev`, then `npm run deploy`.
 - **Cost**: Workers Free covers the estimated traffic; see item 5 above

@@ -4,7 +4,11 @@
     "type": "module",
     "description": "Cloudflare Worker that injects the portal shim and serves the stylesheet with a short TTL",
     "scripts": {
+        "build:assets": "node scripts/build-assets.mjs",
+        "test": "npm run build:assets && node test/assets.mjs",
+        "predev": "npm run build:assets",
         "dev": "wrangler dev --port 8787",
+        "predeploy": "npm run build:assets",
         "deploy": "wrangler deploy",
         "smoke": "node test/smoke.mjs",
         "smoke:prod": "node test/smoke.mjs https://portal.interconnekt.com.au"

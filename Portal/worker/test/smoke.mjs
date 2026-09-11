@@ -9,6 +9,8 @@
  * pages HaloPSA serves to anonymous visitors.
  */
 
+import { readFile } from 'node:fs/promises';
+
 const base = (process.argv[2] || 'http://localhost:8787').replace(/\/$/, '');
 const HEADER = 'x-interconnekt-worker';
 let failures = 0;
@@ -69,7 +71,7 @@ async function get(path, headers = {}, method = 'GET') {
     check('static css: body untouched', body.length > 1000 && !body.includes('__interconnekt'));
 }
 
-/* 5. Proxied assets from GitHub Pages with the short TTL. */
+/* 5. Bundled assets must match the repository, not just return 200. */
 {
     const { res, body } = await get('/__interconnekt/self-service-portal-design.css');
     check('asset css: 200', res.status === 200, String(res.status));
@@ -77,6 +79,7 @@ async function get(path, headers = {}, method = 'GET') {
     check('asset css: 60s cache-control', res.headers.get('cache-control') === 'public, max-age=60, stale-while-revalidate=540', res.headers.get('cache-control'));
     check('asset css: marked asset', res.headers.get(HEADER) === 'asset', res.headers.get(HEADER));
     check('asset css: is our stylesheet', body.includes('--portal-'), body.length + ' bytes');
+    check('asset css: matches source', body === await readFile(new URL('../../self-service-portal-design.css', import.meta.url), 'utf8'));
     const etag = res.headers.get('etag');
     check('asset css: has etag', !!etag, etag);
     if (etag) {
@@ -88,6 +91,7 @@ async function get(path, headers = {}, method = 'GET') {
     const { res, body } = await get('/__interconnekt/iframe-theme.js');
     check('asset js: 200 text/javascript', res.status === 200 && (res.headers.get('content-type') || '').startsWith('text/javascript'), res.status + ' ' + res.headers.get('content-type'));
     check('asset js: is the shim', body.includes('halo-html-renderer'), body.length + ' bytes');
+    check('asset js: matches source', body === await readFile(new URL('../../iframe-theme.js', import.meta.url), 'utf8'));
 }
 {
     const { res } = await get('/__interconnekt/iframe-theme.js', {}, 'HEAD');

@@ -13,9 +13,9 @@
  *    is passed through untouched.
  *
  * 2. Asset delivery. `/__interconnekt/<name>` serves the stylesheet and
- *    the shim from GitHub Pages with a 60 second TTL instead of the
- *    600 second TTL GitHub Pages sets. Pointing the HaloPSA Custom CSS
- *    `@import` at this path removes the ten minute lag after a merge.
+ *    the shim from the assets bundled with this Worker deployment.
+ *    Run `npm run deploy` after changing either portal source file;
+ *    publishing to GitHub Pages alone does not update these assets.
  *
  * Runbook, cutover steps and kill switch: ../README.md.
  * Background and decision log: ../../email-iframe-theming.md.
@@ -25,18 +25,16 @@ const ORIGIN_HOST = 'portal.interconnekt.com.au';
 
 /* Assets served from the portal origin. Anything not listed is a 404. */
 const ASSET_PREFIX = '/__interconnekt/';
-const UPSTREAM_BASE = 'https://interconnekt.github.io/HaloPSA-Styling/Portal/';
 const ASSETS = {
     'self-service-portal-design.css': 'text/css; charset=utf-8',
     'iframe-theme.js': 'text/javascript; charset=utf-8'
 };
 const SCRIPT_PATH = ASSET_PREFIX + 'iframe-theme.js';
 
-/* Edge cache TTL for the upstream fetch, and what browsers are told.
+/* Browser cache policy for the deployed assets.
    A browser revalidates after 60s and may use a stale copy for a
-   further 9 minutes while it does so, so a merge is visible within
+   further 9 minutes while it does so, so a deployment is visible within
    about a minute without any flash of unstyled content. */
-const EDGE_TTL_SECONDS = 60;
 const BROWSER_CACHE_CONTROL = 'public, max-age=60, stale-while-revalidate=540';
 
 /* Diagnostic header so `curl -I` shows which branch handled a request:
@@ -44,10 +42,10 @@ const BROWSER_CACHE_CONTROL = 'public, max-age=60, stale-while-revalidate=540';
 const WORKER_HEADER = 'x-interconnekt-worker';
 
 export default {
-    async fetch(request) {
+    async fetch(request, env) {
         const url = new URL(request.url);
         if (url.pathname.startsWith(ASSET_PREFIX)) {
-            return serveAsset(request, url);
+            return serveAsset(request, url, env);
         }
         return proxyPortal(request, url);
     }
@@ -113,7 +111,7 @@ function shouldInject(request, response) {
     return true;
 }
 
-async function serveAsset(request, url) {
+async function serveAsset(request, url, env) {
     if (request.method !== 'GET' && request.method !== 'HEAD') {
         return new Response('Method not allowed', {
             status: 405,
@@ -132,14 +130,14 @@ async function serveAsset(request, url) {
 
     let upstream;
     try {
-        upstream = await fetch(UPSTREAM_BASE + name, {
-            cf: { cacheTtl: EDGE_TTL_SECONDS, cacheEverything: true }
-        });
+        upstream = await env.ASSETS.fetch(
+            new Request('https://assets.local' + ASSET_PREFIX + name, { method: 'GET' })
+        );
     } catch (err) {
-        return assetError('Upstream unavailable');
+        return assetError('Asset store unavailable');
     }
     if (!upstream.ok) {
-        return assetError('Upstream responded ' + upstream.status);
+        return assetError('Asset store responded ' + upstream.status);
     }
 
     const headers = new Headers({
@@ -154,15 +152,24 @@ async function serveAsset(request, url) {
     const lastModified = upstream.headers.get('last-modified');
     if (lastModified) headers.set('last-modified', lastModified);
 
-    /* Cheap revalidation: GitHub Pages sends a strong ETag, so a browser
-       that already holds the current file gets a 304 with no body. */
-    if (etag && request.headers.get('if-none-match') === etag) {
+    /* Preserve the deployed Worker's weak/list ETag handling. */
+    if (etagMatches(request.headers.get('if-none-match'), etag)) {
         return new Response(null, { status: 304, headers });
     }
 
     return new Response(request.method === 'HEAD' ? null : upstream.body, {
         status: 200,
         headers
+    });
+}
+
+function etagMatches(ifNoneMatch, etag) {
+    if (!ifNoneMatch || !etag) return false;
+    const normalise = value => value.trim().replace(/^W\//, '');
+    const target = normalise(etag);
+    return ifNoneMatch.split(',').some(candidate => {
+        const trimmed = candidate.trim();
+        return trimmed === '*' || normalise(trimmed) === target;
     });
 }
 

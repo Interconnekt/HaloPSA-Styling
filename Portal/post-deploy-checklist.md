@@ -1,9 +1,10 @@
 # Post-deploy checklist, consistency pass (2026-09-04)
 
 Tokens and duplicate rules, phone block, desktop shell and padding scale.
-Written before the merge. Merging to `main` IS the deploy: GitHub Pages
-publishes and the Worker edge cache expires within 60 seconds, so this is
-in front of customers about a minute after the merge.
+Deployment correction (2026-09-11): merging to `main` only publishes the
+GitHub Pages fallback. Run `npm run deploy` in `Portal/worker/` to bundle
+and publish the current CSS and shim to the live portal. Verify both live
+files against their repository sources before testing in the browser.
 
 Work top to bottom. Items 1 and 2 are the two changes with the widest blast
 radius and the only ones that could justify a revert on their own.
@@ -116,4 +117,5 @@ Revert first, diagnose after; the file is in front of customers.
 git revert -m 1 <merge-commit-sha> && git push origin HEAD:main
 ```
 
-The revert is live within about a minute on the same cache timing.
+After reverting, run `npm run deploy` in `Portal/worker/` and verify the
+live asset hashes. A Git revert alone does not update the live portal.

@@ -10,7 +10,7 @@ CSS styling for a HaloPSA Self-Service Portal and Knowledge Base articles. Artic
 
 There are **two separate CSS layers** in HaloPSA, each with different deployment mechanics and scope.
 
-**Live CSS file:** `Portal/self-service-portal-design.css` (loaded via HaloPSA Custom CSS `@import` from the Cloudflare Worker path `https://portal.interconnekt.com.au/__interconnekt/self-service-portal-design.css`, which proxies GitHub Pages with a one minute cache; confirmed via `document.styleSheets` inspection on 2026-09-02).
+**Live CSS file:** `Portal/self-service-portal-design.css` (loaded via HaloPSA Custom CSS `@import` from the Cloudflare Worker path `https://portal.interconnekt.com.au/__interconnekt/self-service-portal-design.css`, which serves bundled Worker assets with a one minute browser cache; live deployment inspected on 2026-09-11).
 
 **`Portal/self-service-portal.css` is UNUSED**, a legacy file kept in the repo only for historical reference. HaloPSA's Custom CSS slot contains a single `@import url('https://portal.interconnekt.com.au/__interconnekt/self-service-portal-design.css');` line; no second stylesheet is loaded. **Do not mirror changes into `self-service-portal.css`**, edits made there have zero effect on the live portal and just create drift.
 
@@ -34,7 +34,7 @@ There are **two separate CSS layers** in HaloPSA, each with different deployment
 ### Layer 2: Custom CSS
 
 - **Scope:** Self-Service Portal ONLY
-- **Deployment:** Edit `self-service-portal-design.css`, commit, merge to `main` → GitHub Pages publishes it → the Cloudflare Worker serves it at `/__interconnekt/` with a 60 second edge cache → live in about 1 minute. If the Worker is ever removed, the `@import` must go back to the GitHub Pages URL (10 minute cache); see `Portal/worker/README.md`
+- **Deployment:** Edit `self-service-portal-design.css`, commit, merge to `main`, then run `npm ci && npm run deploy` in `Portal/worker/`. The deploy bundles the stylesheet and shim under `/__interconnekt/`. GitHub Pages is a fallback; merging alone does not update the live portal. If the Worker is ever removed, the `@import` must go back to the GitHub Pages URL (10 minute cache); see `Portal/worker/README.md`
 - **Not auto-scoped:** Selectors are used exactly as written
 - **HaloPSA field contains:** A single `@import url('https://portal.interconnekt.com.au/__interconnekt/self-service-portal-design.css');` line (since 2026-09-02; before that the GitHub Pages URL `https://interconnekt.github.io/HaloPSA-Styling/Portal/self-service-portal-design.css`)
 - **Source:** `self-service-portal-design.css` (ONLY, `self-service-portal.css` is legacy and unused, see note at top)
@@ -136,7 +136,7 @@ Both inline `code` and `pre` blocks use a dark background with light text (Catpp
 
 1. Edit `self-service-portal-design.css` (the live file, only file the portal actually loads)
 2. Commit and push
-3. GitHub Pages publishes within about a minute and the Cloudflare Worker's edge cache expires within 60 seconds, so the file is fresh within about a minute. Hard-refresh the portal (Cmd+Shift+R) to bust the browser CSS cache. Check the server before believing the browser: `curl -sI https://portal.interconnekt.com.au/__interconnekt/self-service-portal-design.css` shows the ETag
+3. In `Portal/worker/`, run `npm ci` if dependencies are missing, then `npm run deploy`. Its predeploy step bundles the current stylesheet and shim. Run `npm run smoke:prod` and compare the live file with the repository before calling the change live. Hard-refresh the portal (Cmd+Shift+R). Check the server before believing the browser: `curl -sI https://portal.interconnekt.com.au/__interconnekt/self-service-portal-design.css` shows the ETag
 
 **Do NOT edit `self-service-portal.css`.** It's legacy, unused, and changes there don't propagate to the portal. If you find yourself about to "mirror" a change into it, stop, you're doubling the maintenance burden for zero runtime benefit.
 
